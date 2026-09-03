@@ -1,0 +1,2 @@
+window.LIBRARY_ENTRIES=[];
+window.LIBRARY_COLLECTIONS={};
