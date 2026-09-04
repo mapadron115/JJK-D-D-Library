@@ -1,0 +1,1 @@
+QA targets include all 244 dossier routes plus focused checks for Ten Shadows/Mahoraga, Omnitrix/Way Big, Wyrdscript, Infinite Retail, full Player Guide, full Advanced Sorcery, and Witch Hat exclusion.
