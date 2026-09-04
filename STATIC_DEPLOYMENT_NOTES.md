@@ -1,1 +1,0 @@
-Deployment plan: stage the complete static 244-dossier build on this branch, validate representative dossiers and link routing, then fast-forward main only after the staging tree is complete.

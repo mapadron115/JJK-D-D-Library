@@ -1,0 +1,203 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08090c"><title>Pachinko Fever · Ritual Archive</title><link rel="stylesheet" href="../assets/dossier-static.css"></head><body style="--accent:#ed5f67"><header class="bar"><a class="brand" href="../index.html#library"><span>呪</span>Ritual Archive</a><a class="back" href="../index.html#library">← Back to catalogue</a></header><main class="shell"><article><header class="hero"><div class="eyebrow">Jujutsu Kaisen</div><h1>Pachinko Fever</h1><p class="summary">A playable Idle Death Gamble loop with expectation, events, jackpot dice, Fever points, and temporary immortality.</p><div class="chips"><span>Canon technique revision</span><span>Tier IV · Special Grade</span></div><div class="actions"><button type="button" onclick="window.print()">Print / Save PDF</button></div></header><div class="source-note">Project V3 catalogue · Ritual Codex clarification</div><section class="dossier-content"><div class="source-intro"><p>A playable Idle Death Gamble loop with expectation, events, jackpot dice, Fever points, and temporary immortality.</p><p class="source-meta">Very high • Gambling engine / immortality • Project pp. 102–104</p></div>
+<section class="review-panel canonical-quick-reference"><div class="review-kicker">Recovered printed values &amp; campaign clarifications</div><h2 id="at-the-table-character-reference">At-the-table character reference</h2><div class="table-scroll"><table><thead><tr><th>Event roll</th><th>Event</th><th>Jackpot die</th></tr></thead><tbody><tr><td>1–9</td><td>Transport Gate</td><td>d12</td></tr><tr><td>10–14</td><td>Seat Argument</td><td>d10</td></tr><tr><td>15–18</td><td>Tight Squeeze</td><td>d8</td></tr><tr><td>19–20</td><td>Last Train</td><td>d6</td></tr></tbody></table></div><div class="table-scroll"><table><thead><tr><th>Multiplier roll</th><th>Result</th></tr></thead><tbody><tr><td>1–12</td><td>3 rerolls</td></tr><tr><td>13–15</td><td>4 rerolls</td></tr><tr><td>16–17</td><td>5 rerolls</td></tr><tr><td>18–19</td><td>10 rerolls</td></tr><tr><td>20</td><td>Rainbow: automatic jackpot</td></tr></tbody></table></div><p>Expectation adds +1 per 10%, maximum +19 at 190%. The reviewed event duration is <strong>1d4 rounds</strong>; that deliberate campaign revision replaces the original 1d10.</p></section><div class="tech-body">
+<div class="rule-grid">
+<section class="feature-map">
+<h4>Feature map</h4>
+<ul>
+<li><strong>1 — Great Luck.</strong></li>
+<li><strong>3 — Idle Death Gamble.</strong></li>
+<li><strong>6 — On a Roll.</strong></li>
+<li><strong>11 — The Fever.</strong></li>
+<li><strong>18 — Luckiest Sorcerer Alive.</strong></li>
+</ul>
+</section>
+<section class="rulings">
+<h4>Completed rules</h4>
+<ul>
+<li>
+<strong>Great Luck:</strong> before making one attack
+                          roll, use it to treat the d20 as a natural 20. It is a
+                          critical hit if the attack lands but cannot trigger
+                          Black Flash. Recharge on a long rest.
+                        </li>
+<li>
+<strong>Idle Death Gamble:</strong> once per long
+                          rest, use an action to expand it with the source’s
+                          chosen-creature rule. It otherwise follows current
+                          Domain range and clash rules; the “400 refinement”
+                          sentence is replaced by the shared Domain clash
+                          procedure. Once the free use is gone, a new expansion
+                          costs 25 CE. The Domain lasts 1 minute unless a
+                          pending event needs longer; it may remain only until
+                          that event resolves.
+                        </li>
+<li>
+                          Inside, the three printed Pachinko attacks are bonus
+                          actions. On a hit, add their expectation: Green +10%,
+                          Red +25%, Gold +50%, to a maximum of 190%. Track one
+                          shared expectation total.
+                        </li>
+<li>
+<strong>Place a bet:</strong> as a bonus action
+                          consume all expectation. Roll
+                          <span class="formula">d20 + floor(expectation/10)</span>, treating a result above 20 as 20, to select the
+                          printed event and its jackpot die (d12/d10/d8/d6). The
+                          event lasts 1d4 rounds; this replaces the source d10
+                          so it can resolve within a combat Domain. Only one
+                          event may run at a time.
+                        </li>
+<li>
+                          At its end, roll another d20 with the same bonus for
+                          multiplier: 1–12 = 3; 13–15 = 4; 16–17 = 5; 18–19 =
+                          10; 20+ = Rainbow. Roll three jackpot dice. You may
+                          reroll any or all of them up to the multiplier,
+                          keeping any dice between rerolls. Three matching
+                          values win; Rainbow wins automatically. Failure resets
+                          expectation to 0 and permits a new cycle while the
+                          Domain remains.
+                        </li>
+<li>
+<strong>Jackpot:</strong> the Domain ends and benefits
+                          last four rounds. At the start of each turn, CE
+                          becomes maximum and automatic RCT spends up to CE
+                          modifier. Damage cannot reduce you below 1 HP and
+                          injuries heal. Destruction of the brain/body or a
+                          feature that kills without reducing HP can still kill
+                          you. Regain one free Domain use.
+                        </li>
+<li>
+<strong>On a Roll:</strong> after completing one
+                          Jackpot, you have advantage on event and multiplier
+                          d20 rolls until the next long rest.
+                          <strong>Fever:</strong> each time Jackpot prevents you
+                          dropping below 1 HP, gain one Fever point, maximum PB,
+                          lost when Jackpot ends. Spend one for a critical hit,
+                          +10 to one save/check, or one restricted extra action;
+                          only one Fever action per turn.
+                        </li>
+<li>
+<strong>Luckiest Sorcerer Alive:</strong> this is the
+                          level-18 feature. Roll three d20s for the multiplier
+                          and choose one. Automatic RCT may spend twice CE
+                          modifier; Jackpot lasts CE modifier minutes (minimum
+                          one), and you may initiate that RCT with no action
+                          when damage is received.
+                        </li>
+</ul>
+</section>
+<aside class="identity">
+<h4>Power identity</h4>
+<p>
+<strong>Why Tier IV:</strong> its average state is
+                        intentionally uncertain, but the rules engine itself and
+                        repeatable periods of practical immortality demand
+                        Special Grade encounter planning.
+                      </p>
+</aside>
+</div>
+</div>
+<section class="review-panel character-feats-panel"><div class="review-kicker">Recovered character-build options</div><h2 id="innate-technique-feats-3">Innate Technique Feats <span class="feat-count">3</span></h2><p>These are optional character-building feats. You must meet each listed prerequisite before selecting it.</p><div class="feat-grid"><article class="feat-card" data-feat-name="Contagious Luck"><div class="feat-card-top"><h3 id="contagious-luck">Contagious Luck</h3><span class="feat-impact impact-standard">Standard</span></div><p class="feat-prerequisite"><strong>Prerequisite:</strong> Great Luck</p><p>When using Great Luck, you may choose one willing creature within 30 feet instead of yourself. The use, duration, die, and any cost are unchanged; you do not also gain the benefit.</p></article><article class="feat-card" data-feat-name="Pachinko Manifest"><div class="feat-card-top"><h3 id="pachinko-manifest">Pachinko Manifest</h3><span class="feat-impact impact-high">High impact</span></div><p class="feat-prerequisite"><strong>Prerequisite:</strong> Idle Death Gamble</p><p>You may use the technique’s Pachinko Attacks outside the Domain at a 30-foot range. Use their normal actions, attack/DC, and CE costs; they gain no sure-hit, expectation modifier, jackpot roll, or Domain-only event unless an entry expressly grants it.</p></article><article class="feat-card" data-feat-name="Maximum: Love Train"><div class="feat-card-top"><h3 id="maximum-love-train">Maximum: Love Train</h3><span class="feat-impact impact-pinnacle">Pinnacle</span></div><p class="feat-prerequisite"><strong>Prerequisite:</strong> The Fever and Pachinko Manifest</p><p>Action, 10 CE: choose an origin within 30 feet and a 200-by-20-foot line. Creatures make Dexterity saves. Failure takes 15d6 bludgeoning, is carried to the line’s far end, and falls prone; success takes half and does not move. A solid obstacle stops movement but does not add damage.</p></article></div></section><details class="legacy-source-panel"><summary><span>Original feature descriptions &amp; printed numbers</span><span class="source-page-label">Project pp. 102–104</span></summary><div class="legacy-warning"><strong>Rules priority:</strong> the reviewed rulings, explicit codex clarifications, and character reference above always control when original wording conflicts. Legacy Domain auto-hit language, action terminology, event timing, missing saves, and older scaling never override revised player rules.</div><pre class="legacy-source-text">Pachinko Fever
+Did you know most gamblers stop before their big hit? Let's hope you
+don’t, as failing may mean death, but your luck has got you.
+Cursed Energy
+Starting at 1st level, you can harness your negative feelings into a
+usable source of energy, called cursed energy. These feelings can be
+harnessed into attacks or abilities. The number of cursed energy you
+possess is based on your class, some classes use a modifier that
+being charisma or wisdom (Player’s choice)
+Your cursed energy DC is 8 + user cursed energy ability modifier +
+proficiency bonus.
+Great Luck
+Beginning at 1st level, luck has sided with you, and you may use it
+against your foes. Once per long rest you can force one of your rolls
+to be critical. You can not activate a black flash on this forced
+critical.
+Domain Expansion: Idle Death Gamble
+At 3rd level, you gain access to your domain expansion. Once per
+long rest, as an action, you and all creatures of your choice within
+175 feet of you are taken to a demiplane that resembles a subway
+station as music starts playing. This domain cannot be reacted to
+unless the opposing user has a domain with at least 400 refinement
+points and has higher refinement than you.
+You gain three types of Pachinko attacks that can be used as a bonus
+action, each attack increases the "expectation" by a percentage.
+● Green Balls. As a bonus action for 1 cursed energy, make a
+ranged cursed energy attack roll against a target within 30ft.
+It deals 1d4 bludgeoning damage on a hit and raises
+expectations by 10%.
+● Red Rod. As a bonus action for 3 cursed energy, make a melee
+cursed energy attack roll against a target. It deals 1d8
+bludgeoning damage on a hit and raises expectations by 25%.
+● Golden Train Door Attack. As a bonus action for 4 cursed energy,
+make a ranged cursed energy attack roll against a target within
+30ft. of you or a melee cursed energy attack roll. On a hit,
+the target takes 1d12 bludgeoning damage and must make a
+Strength saving throw or be restrained. This attack increases
+expectations by 50%.
+You can consume the expectation at any time by using your bonus
+action to place your bet and an event takes place.
+There are 4 possible types of events, to know which event will
+happen you must roll a d20 + your expectation bonus. You get a +1 for
+every 10% in expectation, to a maximum of +19 at 190%.
+Number Event Type Description Jackpot Dice
+1-9 Transport Gate Will they make it in? d12
+10-14 Seat Argument Can she get the seat? d10
+15-18 Tight Squeeze Can they get to the bathroom? d8
+19-20 Last Train Can they catch the train? d6
+Once an event starts, you roll a d10 to see how many rounds will the
+event last.
+At the end of the event, you must
+roll a d20 (also adding
+expectation to this roll as with
+the other one, 10% per +1) to find
+out if you win the multiplier
+bonus or the rare "Rainbow" bonus.
+You can reroll all jackpot dice an
+amount of times equal to your
+multiplier, if "Rainbow" lands you
+have an automatic jackpot in that
+event. At the end of the event you
+will roll 3dX, with the value of
+the dice will be defined by the
+event. If 3 equal numbers land,
+you will win a jackpot. When you
+hit a jackpot the domain expansion
+is undone, your cursed energy
+becomes infinite and you become immortal.
+You will gain the following benefits for 4 Rounds:
+● Your cursed energy fully refuels at the
+beginning of your turn.
+● You will receive the effects of Reverse Cursed
+Technique as if you have spent cursed energy up to
+your Cursed Energy modifier at the beginning of your
+turns. In addition, you cannot go below 1 hit point.
+You also heal all injuries.
+● You regain one free use of Idle Death Gamble.
+After you spent all of your uses, you may summon
+your domain again by spending 25 Cursed Energy.
+Number Rolled Multiplier
+1-12 3
+13-15 4
+16-17 5
+18-19 10
+20 Rainbow
+On a Roll
+Once you reach 6th level, after activating Idle Death Gamble, after
+leaving a Jackpot, you gain advantage on all of your rolls related to
+achieving a Jackpot.
+The Fever
+When you achieve the 11th level, after entering your jackpot, you
+start gathering the fever points. Every time you are lowered to one
+hit point, you gain a fever point. You can use one of your fever
+points to do one of the following effects:
+● You can choose to land a critical hit
+● You gain an extra action
+● Add a +10 to a saving throw or ability check
+Luckiest Sorcerer Alive
+You now roll 3d20 when deciding your multiplier, and can choose
+which roll you want. Your reverse cursed technique makes you regain
+hit points as if you had spent a number of cursed energy equal to
+your Cursed Energy modifier added twice, and you can use Reverse
+Cursed Technique as a free action while you have the jackpot bonus.
+In addition, your jackpot duration will now be a number of minutes
+equal to your Cursed Energy modifier.</pre></details></section><div class="endcap"><a href="../index.html#library">← Return to complete library</a></div></article></main></body></html>

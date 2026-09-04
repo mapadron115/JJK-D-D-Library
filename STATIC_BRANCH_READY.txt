@@ -1,1 +1,0 @@
-Bulk static upload can proceed from this branch head.

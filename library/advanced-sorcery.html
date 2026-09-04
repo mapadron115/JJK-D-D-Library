@@ -1,1 +1,477 @@
-<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Advanced Sorcery — Ritual Archive</title><style>body{margin:0;background:#090b0f;color:#eee;font:15px/1.65 system-ui}.wrap{max-width:980px;margin:auto;padding:35px 18px 70px}h1{font:3rem Georgia;margin:.2em 0;color:#e9cb83}h2{font:2rem Georgia;color:#e8d6ac;margin-top:2em}.card{border:1px solid #303741;background:#11161d;border-radius:14px;padding:18px;margin:12px 0}.k{color:#d95e68;text-transform:uppercase;letter-spacing:.14em;font-size:.75rem;font-weight:800}a{color:#e9cb83}.back{position:sticky;top:10px;display:inline-block;background:#11161d;border:1px solid #3a424c;border-radius:999px;padding:8px 12px;text-decoration:none}</style><div class="wrap"><a class="back" href="../index.html#rules">← Complete Library</a><div class="k">2026 Canon · Advanced Sorcery</div><h1>Advanced Sorcery Systems</h1><p>This compact web reference exposes the repaired canon used by every dossier in the library. The complete source guide remains part of the project archive.</p><section id="domains"><h2>Domain Expansion</h2><div class="card"><b>Complete Domain baseline.</b> Full-turn action, 20 CE, 60-foot enclosed radius, up to 1 minute, Technique Focus. A technique may explicitly override the radius, cost, shape, or timing.</div><div class="card"><b>Sure-hit procedure.</b> Ordinary attacks inside a Domain still roll. The Domain's unique autonomous sure-hit resolves at initiative count 20. Rule-based Domains instead enforce the procedural law printed in their own dossier.</div><div class="card"><b>Counterplay.</b> Domain clashes, Simple Domain, Hollow Wicker Basket, barrier refinement, explicit anti-domain abilities, and technique-specific procedures remain valid. Early Domains are legal when their own Binding Vows justify them.</div></section><section id="rct"><h2>Reverse Cursed Technique</h2><div class="card"><b>Healing Reserve:</b> 10 × total character level. Reserve represents tissue that can be rebuilt and returns on a long rest.</div><div class="card"><b>No passive healing pulse.</b> RCT is actively invoked under the revised procedure; CE controls burst speed while Healing Reserve controls total reconstructable damage.</div><div class="card"><b>Injuries:</b> severe limb and organ damage follows the campaign injury thresholds. RCT can repair them only when the character has the required reserve, CE, access, and time specified by the injury rules.</div></section><section id="black-flash"><h2>Black Flash</h2><div class="card"><b>Preserved Project V3 procedure:</b> score a qualifying critical hit, then roll the campaign's unmodified Black Flash confirmation d20. A natural 20 triples the completed critical damage.</div><div class="card">Rolled weapon, unarmed, and eligible direct CE attacks can qualify. Autonomous Domain events, damage-over-time, passive hazards, and unrolled pulses cannot Black Flash.</div></section><section id="maximum-output"><h2>Maximum Output</h2><div class="card">Generic Maximum Output applies only to eligible ordinary technique features under the campaign procedure. Named Maximum Techniques, Domains, Extreme Magic, Sacred Treasure Releases, and other printed pinnacle effects do not stack generic Maximum Output unless they explicitly say otherwise.</div></section><section id="focus"><h2>Technique Focus</h2><div class="card">Effects marked Focus occupy the shared Technique Focus slot. Opening a Domain normally ends another Focus effect unless the Domain or feature explicitly preserves it.</div></section></div>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08090c"><title>Advanced Sorcery Systems · Ritual Archive</title><link rel="stylesheet" href="../assets/dossier-static.css"></head><body style="--accent:#67c48d"><header class="bar"><a class="brand" href="../index.html#library"><span>呪</span>Ritual Archive</a><a class="back" href="../index.html#library">← Back to catalogue</a></header><main class="shell"><article><header class="hero"><div class="eyebrow">Complete source guide</div><h1>Advanced Sorcery Systems</h1><p class="summary">Full player-facing source material retained for the 2026 canon library.</p><div class="chips"><span>Rules / Collection Guide</span></div><div class="actions"><button type="button" onclick="window.print()">Print / Save PDF</button></div></header><div class="source-note">jjk5e_advanced_sorcery_systems_guide_canon.html</div><section class="dossier-content">
+<section class="chapter" data-tone="domain" id="domains">
+<header class="chapter-head">
+<div><span class="kicker">System 1 • Domain Expansion</span><h2 id="make-contact-inevitable-not-resistance-impossible">Make contact inevitable—not resistance impossible.</h2></div>
+<p>A complete Domain remains a fight-defining commitment. Its imbued technique becomes oppressive, but defenses, barrier damage, anti-domain techniques, and opposing Domains all create real counterplay.</p>
+</header>
+<div class="grid">
+<article class="card half">
+<span class="term">Complete Domain • Baseline</span>
+<h3 id="expanding-the-innate-domain">Expanding the innate domain</h3>
+<ul>
+<li><strong>Activation:</strong> full-turn action and the required hands or signs.</li>
+<li><strong>Cost:</strong> 20 CE.</li>
+<li><strong>Area:</strong> 60-foot-radius enclosed space centered on you.</li>
+<li><strong>Duration:</strong> 1 minute, or until it collapses.</li>
+<li><strong>Targets:</strong> choose perceived creatures in the area when it opens. Every other creature is moved harmlessly to the nearest space outside.</li>
+</ul>
+<p class="micro">A technique-specific Domain may change its action, cost, shape, range, target rule, or duration. Its explicit wording wins.</p>
+</article>
+<article class="card half">
+<span class="term">Domain Stability</span>
+<h3 id="supreme-but-not-concentration-proof">Supreme, but not concentration-proof</h3>
+<p>Opening a Domain ends your current Technique Focus, and the Domain occupies that Focus slot. It does not use ordinary Focus checks. Instead, if one damage source deals at least 20% of your hit point maximum to you, make a Constitution save with DC 10 or half the damage taken, whichever is higher. On a failure, the Domain collapses.</p>
+<p>It also collapses if you are incapacitated, die, dismiss it without an action on your turn, its barrier or anchor reaches 0 HP, or another rule breaks it.</p>
+<span class="rule">A Domain ending for any reason causes Technique Burnout.</span>
+</article>
+<article class="card wide">
+<span class="term">Signature Sure-Hit Event</span>
+<h3 id="one-domain-specific-effect-resolves-at-initiative-20">One Domain-specific effect resolves at initiative 20</h3>
+<p>Every complete lethal Domain names one self-contained Sure-Hit Event. At initiative count 20 each round—after Domain clash checks—the event resolves once against every eligible chosen target still inside. It is a manifestation of the Domain itself, not an activation of the user’s ordinary attack or technique.</p>
+<ul>
+<li>An unprotected chosen target receives the event’s complete printed result without an attack roll or initial saving throw.</li>
+<li>A creature protected by an anti-domain defense uses the fallback attack or saving throw printed in that Domain. If none is printed, use the most relevant save; success halves damage and prevents movement, conditions, and secondary riders.</li>
+<li>Every attack, summon attack, and saving-throw feature used outside that named event resolves normally, even when it shares the Domain’s technique.</li>
+</ul>
+</article>
+<article class="card">
+<span class="term">Event timing</span>
+<h3 id="one-inevitable-moment-per-round">One inevitable moment per round</h3>
+<p>The Sure-Hit Event resolves once at initiative count 20 and loses ties to other initiative-20 effects. A creature entering after that count waits until the next round. The event is not a critical hit and cannot trigger Black Flash unless its own entry explicitly creates a rolled critical.</p>
+</article>
+<article class="card">
+<span class="term">Ordinary activations</span>
+<h3 id="the-rest-of-the-character-sheet-still-rolls">The rest of the character sheet still rolls</h3>
+<p>The Sure-Hit Event costs no extra action or CE unless its entry says otherwise. Separately used techniques retain their printed actions, CE costs, attack rolls, and saving throws. Domain terrain, origins, summons, and movement benefits can still modify how those ordinary features are used.</p>
+</article>
+<article class="card">
+<span class="term">Anti-domain protection</span>
+<h3 id="suppress-the-guarantee">Suppress the guarantee</h3>
+<p>Simple Domain, Hollow Wicker Basket, and similar defenses suppress sure-hit against protected creatures. They do not end the Domain, erase its terrain, prevent ordinary attacks, or automatically negate its separate environmental rules.</p>
+</article>
+<article class="card">
+<span class="term">Lethal thresholds</span>
+<h3 id="the-named-event-governs-its-own-ceiling">The named event governs its own ceiling</h3>
+<p>A Sure-Hit Event applies its full printed effect, including control, confiscation, soul alteration, limb loss, maximum-HP damage, or death when that event expressly says so. The Domain cannot invent an effect absent from its entry, but there is no universal damage ceiling or low-HP gate.</p>
+</article>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Refinement tier</th><th>Suggested eligibility</th><th>Benefits</th><th>Burnout</th></tr></thead>
+<tbody>
+<tr><td><strong>0 • Incomplete</strong></td><td>Technique feature or breakthrough</td><td>Action, 10 CE, 30-foot radius, 3 rounds, no barrier or sure-hit. Once each turn choose advantage on the first imbued attack or disadvantage on the first save against it.</td><td>Until the end of your next turn.</td></tr>
+<tr><td><strong>1 • Complete</strong></td><td>Normally level 11+ and a Domain feature</td><td>Uses the complete baseline above.</td><td>10 rounds.</td></tr>
+<tr><td><strong>2 • Refined</strong></td><td>Normally level 13+ and a breakthrough</td><td>Expansion becomes an action rather than a full-turn action.</td><td>10 rounds.</td></tr>
+<tr><td><strong>3 • Mastered</strong></td><td>Normally level 15+ and a breakthrough</td><td>Cost becomes <span class="formula">20 − CE modifier</span>, minimum 15. Choose a standard or inverted barrier; pay +5 CE for a balanced barrier.</td><td>5 rounds.</td></tr>
+<tr><td><strong>4 • Supreme</strong></td><td>Normally level 17+ and a major breakthrough</td><td>Unlock 0.2-second expansion and one Burnout Recovery attempt per long rest.</td><td>5 rounds.</td></tr>
+<tr><td><strong>5 • Calamity</strong></td><td>Level 20 or campaign-defining breakthrough</td><td>Normal expansion becomes a bonus action. May create an open-barrier Domain. Repeatable Burnout Recovery, with rising danger.</td><td>3 rounds.</td></tr>
+</tbody>
+</table>
+</div>
+<article class="card half">
+<span class="term">0.2-second expansion • Tier 4</span>
+<h3 id="one-impossible-instant">One impossible instant</h3>
+<p>As an action, spend 10 CE to expand until the end of the current turn and immediately resolve the Domain’s Sure-Hit Event once against every eligible creature in its area, including allies. Reactions cannot be used after the expansion begins but may still be used against its announced activation if their trigger permits.</p>
+<p>When it ends, suffer your normal Tier 4 Burnout. This option cannot be extended or made open-barrier.</p>
+</article>
+<article class="card half">
+<span class="term">Non-lethal Domain</span>
+<h3 id="a-disclosed-rule-a-fair-procedure">A disclosed rule, a fair procedure</h3>
+<p>A non-lethal Domain replaces sure-hit with a specific rule, trigger, consequence, and completion condition established by its feature. The rule is understood by every trapped creature when the Domain opens. A creature that knowingly violates it makes the listed save; on a success it avoids that consequence until the start of its next turn.</p>
+<p>Its procedure must offer meaningful choices. Without explicit text, it cannot cause instant death, permanent resource loss, or unavoidable violence. It clashes and burns out normally.</p>
+</article>
+<article class="card half">
+<span class="term">Enclosed barrier</span>
+<h3 id="statistics-and-weak-points">Statistics and weak points</h3>
+<p><strong>AC:</strong> <span class="formula">12 + proficiency bonus</span><br/><strong>HP:</strong> <span class="formula">5 × character level + 10 × refinement tier</span></p>
+<p>The barrier is immune to psychic and poison damage. By default it resists damage from inside and is vulnerable to damage from outside. It automatically fails saving throws and is immune to conditions.</p>
+<p>From inside, a creature must first use an action and succeed on Wisdom (Perception) against the creator’s CE save DC. Success exposes a weak point to that creature until the end of its next turn.</p>
+</article>
+<article class="card half">
+<span class="term">Barrier configuration • Tier 3</span>
+<h3 id="choose-where-it-is-vulnerable">Choose where it is vulnerable</h3>
+<ul>
+<li><strong>Standard:</strong> resistance inside, vulnerability outside.</li>
+<li><strong>Inverted:</strong> vulnerability inside, resistance outside.</li>
+<li><strong>Balanced (+5 CE):</strong> neither resistance nor vulnerability on either side.</li>
+</ul>
+<p>A closed barrier blocks physical passage and teleportation across it unless an effect expressly crosses planar barriers. Destroying it collapses the Domain; ordinary damage does not leave a lasting hole.</p>
+</article>
+<article class="card full">
+<span class="term">Open-barrier Domain • Tier 5</span>
+<h3 id="a-divine-technique-with-an-escape-route">A divine technique with an escape route</h3>
+<p>When expanding, you may omit the outer barrier and choose a visible point on the ground as the Domain’s anchor. The Domain has a 120-foot radius and lasts 1 minute. Creatures can enter or leave normally, but an eligible creature inside remains subject to its effect.</p>
+<p>The anchor has AC equal to your CE save DC, HP equal to <span class="formula">5 × your character level</span>, immunity to psychic and poison damage, and no vulnerability. Destroying it collapses the Domain. During a clash with a closed Domain, the open Domain attacks the closed barrier from outside at initiative 20, dealing <span class="formula">4d10 + CE modifier</span> force damage before outside vulnerability is applied. Two open Domains do not make this barrier attack.</p>
+</article>
+<article class="card wide">
+<span class="term">Technique Burnout</span>
+<h3 id="the-technique-goes-dark-not-the-entire-character">The technique goes dark—not the entire character</h3>
+<p>During Burnout you cannot activate an Innate Technique feature, Cursed Technique Reversal, Maximum Output, Maximum Technique, or Domain Expansion. You may still move, attack with weapons, use class features independent of your Innate Technique, reinforce yourself with generic CE, use anti-domain techniques, and use generic RCT.</p>
+<p>Existing manifestations remain and may receive ordinary commands, but cannot activate a burned-out technique through the creator. Burnout is not exhaustion, cannot be removed by ordinary condition cleansing, and no longer ends when Black Flash occurs.</p>
+</article>
+<article class="card">
+<span class="term">Burnout Recovery</span>
+<h3 id="destroy-and-rebuild">Destroy and rebuild</h3>
+<p>At Tier 4 with RCT, use an action and spend 8 CE to make a DC 15 Constitution save. Success ends Burnout. Failure deals 6d6 psychic damage that cannot be reduced, leaves Burnout intact, and prevents actions and reactions until the start of your next turn.</p>
+<p>Tier 4 permits one attempt per long rest. At Tier 5 you may retry until a failure; each prior success since your long rest raises the DC by 5.</p>
+</article>
+<div class="callout">
+<p><strong>Refinement is a milestone, not a currency.</strong> The GM awards a tier after a meaningful breakthrough, a decisive clash, sustained narrative training, or technique evolution. Repeatedly defeating trivial creatures, spending unused CE before bed, or staging friendly clashes never generates refinement.</p>
+</div>
+</div>
+</section>
+<section class="chapter" data-tone="domain" id="clashes">
+<header class="chapter-head">
+<div><span class="kicker">Domain procedure</span><h2 id="clashes-resolve-through-momentum">Clashes resolve through momentum.</h2></div>
+<p>Refinement matters, but it does not automatically erase a close rival. Each round creates visible progress and gives both sorcerers time to change the battle.</p>
+</header>
+<div class="grid">
+<div aria-label="Domain clash sequence" class="sequence">
+<div><strong>Answer the expansion</strong>When a perceived Domain opens within 120 feet, an eligible creature may use its reaction and pay its own Domain cost to expand.</div>
+<div><strong>Build the check</strong>Each creator’s Clash modifier is <span class="formula">PB + CE modifier + refinement tier</span>. This is a special check, not an ability check.</div>
+<div><strong>Roll at initiative 20</strong>All clashing creators roll d20 + Clash modifier. Sure-hit is suppressed in the contested space while the clash continues.</div>
+<div><strong>Gain Dominance</strong>Beat a rival by 1–4 to gain 1 Dominance against it; beat it by 5+ to gain 2. At 3 Dominance, that rival’s Domain collapses.</div>
+</div>
+<article class="card">
+<span class="term">Unequal mastery</span>
+<h3 id="a-head-start-not-an-auto-win">A head start, not an auto-win</h3>
+<p>If one Domain’s refinement tier exceeds another by 3 or more, the stronger Domain begins with 1 Dominance against the weaker. A tie on a Clash check awards no Dominance.</p>
+</article>
+<article class="card">
+<span class="term">Breaking or withdrawing</span>
+<h3 id="burnout-follows">Burnout follows</h3>
+<p>A defeated or voluntarily dismissed Domain collapses immediately and its creator suffers Burnout. The winner’s sure-hit resumes at the next initiative count 20, not during the roll that broke the rival.</p>
+</article>
+<article class="card">
+<span class="term">Keep fighting</span>
+<h3 id="the-casters-are-still-targets">The casters are still targets</h3>
+<p>Creators act normally during the clash. Damage can trigger Domain Stability, barriers and open anchors can be attacked, and anti-domain techniques still suppress sure-hit locally.</p>
+</article>
+<article class="card half">
+<span class="term">Three or more Domains</span>
+<h3 id="compare-every-rival">Compare every rival</h3>
+<p>All creators roll once. Compare every pair and track Dominance separately. A creator can gain against one rival while losing to another. When any Domain collapses, erase only its tracks; the remaining Domains continue clashing.</p>
+</article>
+<article class="card half">
+<span class="term">Non-lethal and open Domains</span>
+<h3 id="one-common-engine">One common engine</h3>
+<p>Non-lethal Domains use the same Clash check. Open Domains also use it and make their barrier attack at initiative 20 after Clash checks. An open Domain can lose by Dominance even if its anchor remains intact.</p>
+</article>
+</div>
+</section>
+<section class="chapter" data-tone="rct" id="rct">
+<header class="chapter-head">
+<div><span class="kicker">System 2 • Reverse Cursed Technique</span><h2 id="regeneration-needs-a-visible-limit">Regeneration needs a visible limit.</h2></div>
+<p>RCT is powerful emergency healing, not a second infinite health bar. CE controls burst speed; the Healing Reserve controls how much tissue can be rebuilt before a long rest.</p>
+</header>
+<div class="grid">
+<article class="card half">
+<span class="term">Unlocking RCT</span>
+<h3 id="a-feature-or-genuine-breakthrough">A feature or genuine breakthrough</h3>
+<p>You gain RCT from a class or technique feature, a feat, or a GM-awarded breakthrough after a near-death or exceptional CE insight. Remove the random d100 roll. Surviving danger can create the opportunity, but never guarantees the ability.</p>
+<span class="rule">Healing Reserve maximum = 10 × total character level.</span>
+</article>
+<article class="card half">
+<span class="term">Reserve</span>
+<h3 id="one-pool-restored-on-a-long-rest">One pool, restored on a long rest</h3>
+<p>Your Healing Reserve is separate from HP and CE. It returns to its maximum when you finish a long rest, not a short rest. RCT has no automatic healing pulse. If a feature increases the reserve, apply that increase once to this formula.</p>
+<p>Reserve spent on healing or repairs does not return until the long rest, even if CE is restored sooner.</p>
+</article>
+<article class="card wide">
+<span class="term">Self-healing</span>
+<h3 id="ten-hit-points-per-ce">Ten hit points per CE</h3>
+<p>Once per round while conscious, use a bonus action—or a reaction immediately after taking damage—to spend from 1 CE up to your CE ability modifier. Heal up to 10 HP per CE spent, limited by your missing HP and remaining Healing Reserve. Deduct only the HP actually restored from the reserve.</p>
+<p>If the triggering damage reduced you to 0 HP, you cannot use the reaction unless a feature expressly permits RCT while unconscious or at 0 HP. Unspent healing from an activation is lost; CE cannot be refunded.</p>
+</article>
+<article class="card">
+<span class="term">Positive Energy Output</span>
+<h3 id="others-require-mastery">Others require mastery</h3>
+<p>Base RCT targets only you. A feature granting RCT Output lets you touch another creature as an action, spending up to your CE ability modifier at a rate of 2 CE per 10 HP restored and deducting the healing from your reserve. A class feature may improve this rate or action.</p>
+</article>
+<article class="card">
+<span class="term">What RCT cannot do</span>
+<h3 id="clear-boundaries">Clear boundaries</h3>
+<p>RCT cannot restore CE, revive a dead creature, recreate a destroyed brain or torso, remove Technique Burnout, repair soul damage, or end a curse or supernatural condition unless a feature expressly says it can.</p>
+</article>
+<article class="card">
+<span class="term">Positive damage</span>
+<h3 id="not-part-of-basic-healing">Not part of basic healing</h3>
+<p>You do not automatically weaponize positive energy. If RCT Output lets you harm Cursed Spirits, Undead, or another listed creature, use that feature’s revised damage or the legacy conversion below.</p>
+</article>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Repair</th><th>Reserve cost</th><th>CE cost</th><th>Time</th><th>Requirements and result</th></tr></thead>
+<tbody>
+<tr><td><strong>Physical poison, disease, blindness, or deafness</strong></td><td>20</td><td>2</td><td>Action</td><td>Ends one condition caused by ordinary physical damage or disease. Curses and technique effects use their own rules.</td></tr>
+<tr><td><strong>One exhaustion level</strong></td><td>30</td><td>3</td><td>1 minute</td><td>Once per long rest per creature. Cannot remove Burnout.</td></tr>
+<tr><td><strong>Repair a broken limb</strong></td><td>20</td><td>2</td><td>Action</td><td>Ends the broken-limb penalty.</td></tr>
+<tr><td><strong>Reattach a severed limb</strong></td><td>40</td><td>4</td><td>1 minute</td><td>The intact limb must be present and held in place.</td></tr>
+<tr><td><strong>Repair an eye, organ, head wound, or torso wound</strong></td><td>60</td><td>6</td><td>10 minutes</td><td>Ends one Major Wound or restores one destroyed nonfatal organ.</td></tr>
+<tr><td><strong>Regrow a severed limb</strong></td><td>80</td><td>8</td><td>10 minutes</td><td>Restores one limb without needing the original.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout">
+<p><strong>Repair costs do not also heal HP.</strong> Deduct their Reserve and CE separately. An RCT activation can either restore HP or perform one listed repair unless a feature explicitly combines them.</p>
+</div>
+</div>
+</section>
+<section class="chapter" data-tone="injury" id="injuries">
+<header class="chapter-head">
+<div><span class="kicker">System 3 • Critical Injury</span><h2 id="injuries-come-from-catastrophic-hits">Injuries come from catastrophic hits.</h2></div>
+<p>The original Constitution modifier × proficiency formula could become 0 and did not say whether damage accumulated. This version keys injury severity to the victim’s actual durability and checks one hit at a time.</p>
+</header>
+<div class="grid">
+<div aria-label="Critical injury sequence" class="sequence">
+<div><strong>Qualify the attack</strong>A limb-tagged feature, declared targeted strike, or catastrophic hazard can cause an injury. An ordinary targeted strike is declared before rolling and has disadvantage.</div>
+<div><strong>Measure one hit</strong>Use damage actually lost after resistance and temporary HP. Never accumulate damage across attacks.</div>
+<div><strong>Compare thresholds</strong>Break at 25% of maximum HP; sever at 50%. Round both thresholds up.</div>
+<div><strong>Make the save</strong>Roll Constitution against the attacker’s CE save DC, or <span class="formula">8 + PB + attack ability modifier</span> for a non-technique attack.</div>
+</div>
+<article class="card half">
+<span class="term">Threshold result</span>
+<h3 id="break-sever-or-endure">Break, sever, or endure</h3>
+<ul>
+<li><strong>Below Break:</strong> no lasting injury.</li>
+<li><strong>Break to below Sever:</strong> failed save breaks the body part; success prevents the injury.</li>
+<li><strong>At or above Sever:</strong> failed save severs a limb; success breaks it instead.</li>
+</ul>
+<p>A broken limb does not escalate from repeated lesser hits. A later attack must independently meet the Sever threshold to remove it.</p>
+</article>
+<article class="card half">
+<span class="term">Legacy automatic injuries</span>
+<h3 id="still-respect-durability">Still respect durability</h3>
+<p>A feature that says it automatically breaks or severs a body part must still deal at least the Break threshold in one hit. If it lists no damage, a failed save can break the part only. It can sever without damage only if it expressly says so and the target is at or below 25% of its hit point maximum.</p>
+<p>A Black Flash can meet a threshold, but never severs merely because it is a Black Flash.</p>
+</article>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Body part</th><th>Broken or Major Wound</th><th>Severed or destroyed</th></tr></thead>
+<tbody>
+<tr><td><strong>Arm</strong></td><td>Disadvantage on attacks and checks using it. Cannot use two-handed weapons, a shield with that arm, or signs requiring both hands.</td><td>That arm cannot hold, attack, perform signs, or manipulate objects.</td></tr>
+<tr><td><strong>Leg</strong></td><td>Speed is halved; cannot Dash; disadvantage on Dexterity saves. With two broken legs, speed becomes 5 feet.</td><td>Speed becomes 10 feet and standing requires a support or prosthesis. With both legs gone, speed becomes 5 feet while crawling.</td></tr>
+<tr><td><strong>Eye</strong></td><td>Disadvantage on sight-based Perception and ranged attacks beyond 30 feet. Two injured eyes cause the blinded condition.</td><td>Same penalty until the eye is restored; losing both eyes causes blindness.</td></tr>
+<tr><td><strong>Head</strong></td><td><span class="pill">Major Wound</span> Stunned until the end of the target’s next turn, then disadvantage on Intelligence and Wisdom checks and Domain Stability or Technique Focus saves until repaired.</td><td>Cannot be destroyed while the target remains above 0 HP; use the Major Wound result.</td></tr>
+<tr><td><strong>Torso</strong></td><td><span class="pill">Major Wound</span> Hit point maximum is reduced by 25%, and Constitution saves are made with disadvantage until repaired. This maximum reduction does not stack.</td><td>Cannot be destroyed while the target remains above 0 HP; use the Major Wound result.</td></tr>
+</tbody>
+</table>
+</div>
+<article class="card half">
+<span class="term">Fatal head or torso damage</span>
+<h3 id="only-at-0-hp">Only at 0 HP</h3>
+<p>If an attack that meets the Sever threshold reduces a creature to 0 HP and the failed injury save would destroy its head or torso, the creature dies unless it can survive without that body part. A creature with Legendary Resistance may spend one use to suffer the Major Wound and begin death saves instead.</p>
+</article>
+<article class="card half">
+<span class="term">Recovery</span>
+<h3 id="healing-hp-is-not-repair">Healing HP is not repair</h3>
+<p>Ordinary healing restores HP but does not end an injury. With appropriate medical treatment, a broken limb heals after 7 days of downtime and a Major Wound after 14 days. A severed limb or destroyed eye does not naturally regrow. RCT uses the repair table above.</p>
+</article>
+</div>
+</section>
+<section class="chapter" data-tone="maximum" id="maximum">
+<header class="chapter-head">
+<div><span class="kicker">System 4 • Maximum Output</span><h2 id="overcharge-one-dimension">Overcharge one dimension.</h2></div>
+<p>Maximum Output is the universal act of forcing an ordinary technique above its safe operating level. It is not a named Maximum Technique and no longer turns a normal attack bonus into an accuracy-breaking number.</p>
+</header>
+<div class="grid">
+<article class="card half">
+<span class="term">Prerequisite and activation</span>
+<h3 id="20-ce-ability-score-level-11">20 CE ability score, level 11</h3>
+<p>You must have a CE ability score of 20 and either a feature or breakthrough that unlocks Maximum Output. As a bonus action, declare one eligible technique you will activate before the end of the current turn and pay its Output surcharge. You pay and activate the technique normally afterward.</p>
+<p>If you do not activate it before the turn ends, the surcharge is lost. The base technique must be legal at your Output Rank; the surcharge itself does not make an otherwise legal technique exceed that rank.</p>
+</article>
+<article class="card half">
+<span class="term">Output surcharge</span>
+<h3 id="double-the-base-not-every-option">Double the base—not every option</h3>
+<p>The surcharge equals the technique’s printed fixed base CE cost, minimum 2 CE. A variable-cost technique uses the X you choose as its surcharge. Optional overcharge, extra targets, or other add-on CE is paid once and is not doubled.</p>
+<span class="rule">Total CE = base cost + Output surcharge + optional CE.</span>
+<p class="micro">A normally free technique has a 2 CE surcharge. Cost reduction applies to the base activation only, not the surcharge.</p>
+</article>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Choose one mode</th><th>Maximum Output benefit</th><th>Limits</th></tr></thead>
+<tbody>
+<tr><td><strong>Power</strong></td><td>Add damage dice equal to half the technique’s original damage dice, rounded up.</td><td>Uses the same die size. Counts as the attack’s one damage amplifier and does not copy flat damage or riders.</td></tr>
+<tr><td><strong>Reach</strong></td><td>Increase range, radius, cone length, or line length by 50%, rounded up to the nearest 5 feet.</td><td>Choose one measurement. Does not change touch range or independently increase every dimension.</td></tr>
+<tr><td><strong>Duration</strong></td><td>Increase a non-instant duration by 50%.</td><td>Technique Focus remains required. Does not extend a condition beyond the Core Glossary’s hard-control limits.</td></tr>
+<tr><td><strong>Pressure</strong></td><td>Gain +2 to its attack roll or +1 to its save DC.</td><td>Choose one. This obeys the core accuracy ceiling and never imposes disadvantage as well.</td></tr>
+</tbody>
+</table>
+</div>
+<article class="card half">
+<span class="term">Eligible technique</span>
+<h3 id="what-can-be-overcharged">What can be overcharged</h3>
+<p>Maximum Output can enhance one activation of an Innate Technique that has a CE cost or a measurable attack, save, damage, range, or duration. A technique-specific Maximum Output feature replaces one or more modes only where it explicitly differs.</p>
+</article>
+<article class="card half">
+<span class="term">Excluded systems</span>
+<h3 id="no-recursive-pinnacle-stacking">No recursive pinnacle stacking</h3>
+<p>It cannot enhance Domain Expansion, RCT, anti-domain techniques, Binding Vows, a named Maximum Technique, Black Flash, or a manifestation’s stat block unless a specific feature says otherwise. It cannot be combined with Chanting or another Maximum Output on the same activation.</p>
+</article>
+<div class="callout">
+<p><strong>Worked example:</strong> a technique has a 4 CE base and can spend 3 optional CE for extra dice. Maximum Output costs 4 CE as its surcharge. Activating at full overcharge costs <span class="formula">4 base + 4 surcharge + 3 optional = 11 CE</span>. Power adds half of the original printed dice; the optional dice are not copied.</p>
+</div>
+</div>
+</section>
+<section class="chapter" data-tone="flash" id="black-flash">
+<header class="chapter-head">
+<div><span class="kicker">System 5 • Black Flash</span><h2 id="the-original-miracle-stays-rare">The original miracle stays rare.</h2></div>
+<p>This campaign preserves Project V3's Black Flash procedure: first land a critical hit, then confirm the millionth-of-a-second alignment on a second d20. The Zone is revised separately so Black Flash never refills RCT or erases Technique Burnout.</p>
+</header>
+<div class="grid">
+<article class="card wide">
+<span class="term">Black Flash check</span>
+<h3 id="critical-hit-then-a-second-d20">Critical hit, then a second d20</h3>
+<p>Whenever a creature capable of using cursed energy lands a critical hit with an attack, roll a second unmodified d20 before damage. On a natural 20, the attack becomes a Black Flash.</p>
+<p>There is no universal once-per-turn or once-per-round limit on Black Flash attempts or successes. Every qualifying critical may attempt the confirmation roll. A saving throw, automatic hit, passive effect, initiative-20 Domain event, or manifestation attack does not qualify unless a specific feature explicitly creates a qualifying critical hit.</p>
+</article>
+<article class="card">
+<span class="term">Forced and expanded criticals</span>
+<h3 id="a-critical-is-a-critical-unless-the-feature-says-otherwise">A critical is a critical unless the feature says otherwise</h3>
+<p>A forced critical or expanded critical range qualifies if the triggering feature permits Black Flash. An explicit restriction such as Great Luck's non-qualifying critical still wins. A feature that says an attack is automatically a Black Flash skips the confirmation roll.</p>
+</article>
+<article class="card">
+<span class="term">Declared riders</span>
+<h3 id="finish-building-the-critical-first">Finish building the critical first</h3>
+<p>Choose and pay any damage rider that must be declared before damage is rolled, then resolve the complete critical hit. Effects that trigger only after damage is dealt remain separate and are not multiplied.</p>
+</article>
+<article class="card half">
+<span class="term">Black Flash damage</span>
+<h3 id="triple-the-completed-critical">Triple the completed critical</h3>
+<p>Roll the qualifying critical hit normally, including its critical dice, flat modifiers, and eligible declared riders. Multiply that completed critical-hit damage by 3.</p>
+<span class="rule">Black Flash damage = 3 × completed critical-hit damage.</span>
+<p>This is multiplication of the final critical damage, not one extra set of dice.</p>
+</article>
+<article class="card half">
+<span class="term">Defense and injury</span>
+<h3 id="bypass-resistance-not-immunity">Bypass resistance, not immunity</h3>
+<p>The complete Black Flash hit ignores resistance to its damage types. Immunity still applies unless another feature separately says it ignores immunity. Use final HP lost from the full Black Flash when checking the revised injury thresholds.</p>
+</article>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Zone state</th><th>Confirmation range</th><th>Benefits</th><th>How it changes</th></tr></thead>
+<tbody>
+<tr><td><strong>Outside the Zone</strong></td><td>Natural 20</td><td>None.</td><td>A natural Black Flash grants Stage 1 for 1 minute. Once per round, a natural Black Flash also restores CE equal to PB, subject to any campaign recovery cap.</td></tr>
+<tr><td><strong>Stage 1 • Focused</strong></td><td>19–20</td><td>Once per turn, add 1d4 to one CE attack roll, CE ability check, Clash check, Technique Focus save, or Domain Stability save.</td><td>Another natural Black Flash resets the duration and advances to Stage 2.</td></tr>
+<tr><td><strong>Stage 2 • Awakened</strong></td><td>18–20</td><td>Retains the Stage 1 d4. No further numerical stacking.</td><td>Another natural Black Flash resets the 1-minute duration. Stage 2 is the ceiling.</td></tr>
+</tbody>
+</table>
+</div>
+<article class="card half">
+<span class="term">Blessed by Black Sparks</span>
+<h3 id="born-close-to-the-sparks">Born close to the sparks</h3>
+<p>After any qualifying critical hit, your Black Flash confirmation succeeds on 18–20. The Zone cannot improve this feat beyond 18–20.</p>
+</article>
+<article class="card half">
+<span class="term">Natural versus forced</span>
+<h3 id="only-genuine-timing-deepens-the-zone">Only genuine timing deepens the Zone</h3>
+<p>An automatic or forced Black Flash deals the normal Project V3 Black Flash damage and grants Stage 1 if you are outside the Zone. If already in the Zone, it only resets the current stage's duration. It does not advance the Zone or restore CE.</p>
+</article>
+<article class="card full">
+<span class="term">What the Zone never does</span>
+<h3 id="no-free-regeneration-or-burnout-reset">No free regeneration or Burnout reset</h3>
+<p>Black Flash and the Zone never restore Healing Reserve, never end Technique Burnout, never remove exhaustion or injuries by themselves, and never create a second Technique Focus slot. A separate explicit feature may still create its own exception.</p>
+</article>
+<article class="card half">
+<span class="term">Breakthroughs</span>
+<h3 id="the-sparks-can-still-teach">The sparks can still teach</h3>
+<p>The first meaningful natural Black Flash may justify a GM-awarded breakthrough, including eligibility to learn RCT, Domain refinement, or a technique evolution. A breakthrough changes what the character understands; it does not refill spent resources unless the granted feature says so.</p>
+</article>
+</div>
+</section>
+<section aria-labelledby="lab-title" class="lab" id="lab">
+<div class="lab-shell">
+<header class="lab-head">
+<div class="eyebrow">Interactive reference</div>
+<h2 id="lab-title">Advanced Sorcery Rules Lab</h2>
+<p>Check clash momentum, RCT expenditure, injury thresholds, Maximum Output costs, and Black Flash averages at the table.</p>
+</header>
+<div aria-label="Rules calculators" class="tabs" role="tablist">
+<span class="static-button-label">Domain clash</span>
+<span class="static-button-label">RCT</span>
+<span class="static-button-label">Injury</span>
+<span class="static-button-label">Maximum Output</span>
+<span class="static-button-label">Black Flash</span>
+</div>
+<section aria-labelledby="tab-clash" class="lab-panel active" id="panel-clash" role="tabpanel">
+<div class="controls">
+<div class="control"><label for="aPb">Sorcerer A proficiency</label><input id="aPb" max="6" min="2" type="number" value="5"/></div>
+<div class="control"><label for="bPb">Sorcerer B proficiency</label><input id="bPb" max="6" min="2" type="number" value="5"/></div>
+<div class="control"><label for="aCe">A CE modifier</label><input id="aCe" max="10" min="1" type="number" value="5"/></div>
+<div class="control"><label for="bCe">B CE modifier</label><input id="bCe" max="10" min="1" type="number" value="5"/></div>
+<div class="control"><label for="aTier">A refinement tier</label><input id="aTier" max="5" min="0" type="number" value="3"/></div>
+<div class="control"><label for="bTier">B refinement tier</label><input id="bTier" max="5" min="0" type="number" value="2"/></div>
+<div class="control"><label for="aRoll">A d20 roll</label><input id="aRoll" max="20" min="1" type="number" value="12"/></div>
+<div class="control"><label for="bRoll">B d20 roll</label><input id="bRoll" max="20" min="1" type="number" value="9"/></div>
+</div>
+<output aria-live="polite" class="result" id="clashResult"></output>
+</section>
+<section aria-labelledby="tab-rct" class="lab-panel" hidden="" id="panel-rct" role="tabpanel">
+<div class="controls">
+<div class="control"><label for="rctLevel">Character level</label><input id="rctLevel" max="20" min="1" type="number" value="12"/></div>
+<div class="control"><label for="rctReserve">Current Healing Reserve</label><input id="rctReserve" max="1000" min="0" type="number" value="120"/></div>
+<div class="control"><label for="rctSpend">CE spent</label><input id="rctSpend" max="10" min="1" type="number" value="4"/></div>
+<div class="control"><label for="rctMissing">Missing HP</label><input id="rctMissing" max="1000" min="0" type="number" value="44"/></div>
+<div class="control full"><label for="rctTarget">Target</label><select id="rctTarget"><option value="self">Self (10 HP per CE)</option><option value="other">Other creature (2 CE per 10 HP)</option></select></div>
+</div>
+<output aria-live="polite" class="result" id="rctResult"></output>
+</section>
+<section aria-labelledby="tab-injury" class="lab-panel" hidden="" id="panel-injury" role="tabpanel">
+<div class="controls">
+<div class="control"><label for="injuryMax">Target maximum HP</label><input id="injuryMax" max="2000" min="1" type="number" value="120"/></div>
+<div class="control"><label for="injuryDamage">HP lost from one hit</label><input id="injuryDamage" max="2000" min="0" type="number" value="38"/></div>
+<div class="control"><label for="injuryPart">Body part</label><select id="injuryPart"><option value="limb">Arm, leg, or eye</option><option value="vital">Head or torso</option></select></div>
+<div class="control"><label for="injuryHp">HP after the hit</label><input id="injuryHp" max="2000" min="0" type="number" value="60"/></div>
+</div>
+<output aria-live="polite" class="result" id="injuryResult"></output>
+</section>
+<section aria-labelledby="tab-output" class="lab-panel" hidden="" id="panel-output" role="tabpanel">
+<div class="controls">
+<div class="control"><label for="outputBase">Printed base CE cost</label><input id="outputBase" max="50" min="0" type="number" value="4"/></div>
+<div class="control"><label for="outputOptional">Optional extra CE</label><input id="outputOptional" max="50" min="0" type="number" value="3"/></div>
+<div class="control"><label for="outputDice">Original damage dice</label><input id="outputDice" max="100" min="0" type="number" value="8"/></div>
+<div class="control"><label for="outputRange">Original range or size (ft.)</label><input id="outputRange" max="5000" min="0" type="number" value="60"/></div>
+<div class="control full"><label for="outputDuration">Original duration (rounds)</label><input id="outputDuration" max="1000" min="0" type="number" value="10"/></div>
+</div>
+<output aria-live="polite" class="result" id="outputResult"></output>
+</section>
+<section aria-labelledby="tab-flash" class="lab-panel" hidden="" id="panel-flash" role="tabpanel">
+<div class="controls">
+<div class="control"><label for="flashDice">Completed critical damage dice</label><input id="flashDice" max="200" min="1" type="number" value="6"/></div>
+<div class="control"><label for="flashSides">Die size</label><select id="flashSides"><option value="4">d4</option><option value="6">d6</option><option selected="" value="8">d8</option><option value="10">d10</option><option value="12">d12</option></select></div>
+<div class="control full"><label for="flashFlat">Flat damage already included in the completed critical</label><input id="flashFlat" max="200" min="-50" type="number" value="5"/></div>
+</div>
+<output aria-live="polite" class="result" id="flashResult"></output>
+<p class="micro">Enter the dice and flat modifier of the <strong>completed critical hit</strong> after all eligible pre-damage riders are included. Black Flash triples that completed critical total.</p>
+</section>
+</div>
+</section>
+<section class="conversion" id="conversion">
+<h2 id="legacy-conversion-notes">Legacy conversion notes</h2>
+<div class="grid">
+<div class="table-wrap">
+<table>
+<thead><tr><th>Project V3 wording</th><th>Use this revised rule</th></tr></thead>
+<tbody>
+<tr><td><strong>Domain Refinement points</strong></td><td>1–199 = Tier 1; 200–499 = Tier 2; 500–799 = Tier 3; 800–949 = Tier 4; 950–1000 = Tier 5. Delete point farming and use milestones thereafter.</td></tr>
+<tr><td><strong>All techniques auto-hit / all saves auto-fail</strong></td><td>Replace the blanket guarantee with one named, self-contained Sure-Hit Event that resolves at initiative count 20. All ordinary attacks and saving throws inside the Domain resolve normally.</td></tr>
+<tr><td><strong>Domain grants extra damage dice, extra actions, or 655-foot limitless area</strong></td><td>Remove the generic benefit. Keep only a technique-specific Domain feature that expressly grants it. Open barriers use the Tier 5 baseline.</td></tr>
+<tr><td><strong>Burnout gives exhaustion or ends on Black Flash</strong></td><td>Use revised Technique Burnout. It has its own duration and restrictions and does not interact with Black Flash.</td></tr>
+<tr><td><strong>RCT pool = 5 × level × Charisma modifier</strong></td><td>Healing Reserve = 10 × total character level, restored on a long rest.</td></tr>
+<tr><td><strong>RCT restores 20 / 30 / 35 HP per CE</strong></td><td>Convert those rates to 15 / 20 / 25 HP per CE respectively, still limited by remaining Healing Reserve and once per round.</td></tr>
+<tr><td><strong>Support’s pool multiplied by CE modifier / doubled</strong></td><td>At Reverse Technique Understanding, add 5 × Support level to maximum Reserve. At Mastered Reverse Technique, instead add 10 × Support level.</td></tr>
+<tr><td><strong>Support feature heals another creature “instead of you”</strong></td><td>You may use your normal once-per-round RCT activation on a willing creature within reach at your current self-healing rate. A reaction must be triggered by that creature taking damage while it remains conscious.</td></tr>
+<tr><td><strong>RCT Output has no damage rate</strong></td><td>Once per turn on a qualifying unarmed or natural-weapon hit, spend 1–CE modifier CE and 10 Reserve per CE to add 1d10 radiant damage per CE against a listed Cursed Spirit, Undead, or Monstrosity.</td></tr>
+<tr><td><strong>Limb threshold = Constitution modifier × proficiency</strong></td><td>Break = 25% maximum HP; Sever = 50% maximum HP; one hit only. Use the revised injury save and effects.</td></tr>
+<tr><td><strong>Maximum Output doubles CE / adds half the original attack bonus</strong></td><td>Pay the revised base-cost surcharge and choose Power, Reach, Duration, or Pressure.</td></tr>
+<tr><td><strong>Black Flash</strong></td><td>Project V3 procedure is retained: land a critical hit, roll a second unmodified d20, and on a natural 20 multiply the completed critical-hit damage by 3. The hit bypasses resistance, not immunity.</td></tr>
+<tr><td><strong>Zone</strong></td><td>Use the bounded two-stage Zone table. It grants a once-per-turn d4, improves Black Flash confirmation to 19–20 then 18–20, and never clears Burnout or restores Healing Reserve.</td></tr>
+<tr><td><strong>Blessed by Black Sparks feat</strong></td><td>After a qualifying critical hit, the second d20 succeeds on 18–20. The Zone cannot improve this feat beyond 18–20.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout" style="--chapter: var(--gold)">
+<p><strong>Rule priority:</strong> a newly revised technique or class feature comes first, then this guide, then the Core Rules Glossary, then unaltered Project V3 text, then ordinary 5e. A specific feature overrides a baseline only where it clearly identifies the exception.</p>
+</div>
+</div>
+</section>
+</section><div class="endcap"><a href="../index.html#library">← Return to complete library</a></div></article></main></body></html>

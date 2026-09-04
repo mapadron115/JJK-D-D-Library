@@ -22,3 +22,8 @@ The site is pure static HTML/CSS/JavaScript. In repository **Settings → Pages*
 Newest explicit dossier text → 2026 Comprehensive Player Guide / Advanced Sorcery → unchanged Project V3 → ordinary 5e.
 
 Major repairs include the 60-foot complete Domain baseline, initiative-count-20 sure-hit events, revised RCT Healing Reserve, explicit Dual Technique variant, and level-1 Ten Shadows subjugation access.
+
+
+## Full dossier architecture
+
+Every catalogue card routes through `dossier.html`, which loads the complete source for that option from compressed static source-data chunks. This avoids the previous compact-summary regression while keeping GitHub Pages fast enough to serve the 200+ entry archive. Ten Shadows supplements, the complete Omnitrix, Wyrdscript, and rules guides are stored the same way.

@@ -1,1 +1,0 @@
-Static staging active. Full dossier pages are being transferred and validated before main is updated.

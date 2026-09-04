@@ -1,1 +1,0 @@
-Static rebuild staging branch. Complete local build contains 244 dossier HTML pages plus full Player Guide, Advanced Sorcery, and supporting codices. This branch is for staged verification before main is moved.
