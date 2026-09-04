@@ -26,7 +26,7 @@ jobs:
           shopt -s nullglob
           parts=(bootstrap-static/part-*.txt)
           echo "count=${#parts[@]}" >> "$GITHUB_OUTPUT"
-          if [ "${#parts[@]}" -eq 33 ]; then
+          if [ "${#parts[@]}" -eq 111 ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
