@@ -24,7 +24,7 @@ jobs:
         run: |
           set -euo pipefail
           python -m pip install --quiet gdown
-          gdown --id '1ZADKAKKLDBfJbE96XXgJm-tH5ebTTZu1' -O /tmp/jjk_static_final.zip
+          gdown '1ZADKAKKLDBfJbE96XXgJm-tH5ebTTZu1' -O /tmp/jjk_static_final.zip
           unzip -t /tmp/jjk_static_final.zip >/dev/null
           rm -rf /tmp/jjk-site
           mkdir -p /tmp/jjk-site
@@ -107,4 +107,4 @@ jobs:
           curl -fsSL "$base/dossiers/e244.html" | grep -qi 'Bindrunes'
           curl -fsSL "$base/dossiers/e162.html" | grep -qi 'Infinite Retail'
 
-# Drive-aware trigger 2026-09-04.
+# Drive-aware trigger syntax fix 2026-09-04.
