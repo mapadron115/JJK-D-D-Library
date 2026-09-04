@@ -4,7 +4,7 @@ on:
   push:
     branches: [ static-dossier-final ]
     paths:
-      - 'bootstrap-static/**'
+      - 'bootstrap-static-xz/**'
       - '.github/workflows/bootstrap-static-final.yml'
 
 permissions:
@@ -24,9 +24,9 @@ jobs:
         run: |
           set -euo pipefail
           shopt -s nullglob
-          parts=(bootstrap-static/part-*.txt)
+          parts=(bootstrap-static-xz/part-*.txt)
           echo "count=${#parts[@]}" >> "$GITHUB_OUTPUT"
-          if [ "${#parts[@]}" -eq 111 ]; then
+          if [ "${#parts[@]}" -eq 46 ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
@@ -36,16 +36,18 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat bootstrap-static/part-*.txt | base64 -d > /tmp/jjk_static_final.zip
-          echo '23c72c8debeb0df0ca896a25cdc1c8d4446e29890b50bba9e20d295acc986bc2  /tmp/jjk_static_final.zip' | sha256sum -c -
+          cat bootstrap-static-xz/part-*.txt | base64 -d > /tmp/jjk_static_final.tar.xz
+          echo 'b2d7324aae587bbc6759e8bff96705078a5c871c0de82a8aa1b7b9fefec105d6  /tmp/jjk_static_final.tar.xz' | sha256sum -c -
           rm -rf /tmp/site
           mkdir -p /tmp/site
-          unzip -q /tmp/jjk_static_final.zip -d /tmp/site
+          tar -xJf /tmp/jjk_static_final.tar.xz -C /tmp/site
           test "$(find /tmp/site -type f | wc -l)" -eq 268
           test -f /tmp/site/dossiers/e035.html
+          test -f /tmp/site/dossiers/e162.html
           test -f /tmp/site/dossiers/e243.html
           test -f /tmp/site/dossiers/e244.html
           grep -q 'Legendary Resistance' /tmp/site/dossiers/e035.html
+          grep -q 'Infinite Retail' /tmp/site/dossiers/e162.html
           grep -q 'Way Big' /tmp/site/dossiers/e243.html
           grep -q 'Bindrunes' /tmp/site/dossiers/e244.html
           ! grep -Rqi 'Witch Hat' /tmp/site/dossiers || exit 1
