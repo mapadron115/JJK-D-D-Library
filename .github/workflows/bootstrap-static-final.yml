@@ -1,65 +1,123 @@
-name: Bootstrap validated static library
+name: Install validated static library
 
 on:
   push:
-    branches: [ static-dossier-final ]
+    branches: [static-dossier-final]
     paths:
-      - 'BOOTSTRAP_READY'
-      - '.github/workflows/bootstrap-static-final.yml'
+      - BOOTSTRAP_READY
+      - .github/workflows/bootstrap-static-final.yml
 
 permissions:
   contents: write
 
 jobs:
-  rebuild:
+  install:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: static-dossier-final
           fetch-depth: 0
-      - name: Check archive pieces
-        id: parts
+
+      - name: Reconstruct exact archive
         shell: bash
         run: |
           set -euo pipefail
           shopt -s nullglob
           parts=(bootstrap-static-xz/part-*.txt)
-          echo "count=${#parts[@]}" >> "$GITHUB_OUTPUT"
-          if [ "${#parts[@]}" -eq 47 ]; then
-            echo "ready=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "ready=false" >> "$GITHUB_OUTPUT"
-          fi
-      - name: Reconstruct and verify validated build
-        if: steps.parts.outputs.ready == 'true'
+          test "${#parts[@]}" -eq 46
+          cat $(printf 'bootstrap-static-xz/part-%03d.txt ' $(seq 0 45)) | base64 -d > /tmp/jjk-static.tar.xz
+          echo '4811b7bf3ad1cd31148c8f34ecd2f4b615adf9fc75fe3ba4fcf0c81f9c354894  /tmp/jjk-static.tar.xz' | sha256sum -c -
+          mkdir -p /tmp/jjk-site
+          tar -xJf /tmp/jjk-static.tar.xz -C /tmp/jjk-site
+
+      - name: Validate all dossiers and routes
         shell: bash
         run: |
           set -euo pipefail
-          cat $(printf 'bootstrap-static-xz/part-%03d.txt ' $(seq 0 46)) | base64 -d > /tmp/jjk_static_final.tar.xz
-          echo '33a54bd6c6503eb5930f658a4abc63de7a9f01e00a5c8c270586a2ccfea8c2eb  /tmp/jjk_static_final.tar.xz' | sha256sum -c -
-          rm -rf /tmp/site
-          mkdir -p /tmp/site
-          tar -xJf /tmp/jjk_static_final.tar.xz -C /tmp/site
-          test "$(find /tmp/site -type f | wc -l)" -eq 268
-          test -f /tmp/site/dossiers/e035.html
-          test -f /tmp/site/dossiers/e162.html
-          test -f /tmp/site/dossiers/e243.html
-          test -f /tmp/site/dossiers/e244.html
-          grep -q 'Legendary Resistance' /tmp/site/dossiers/e035.html
-          grep -q 'Infinite Retail' /tmp/site/dossiers/e162.html
-          grep -q 'Way Big' /tmp/site/dossiers/e243.html
-          grep -q 'Bindrunes' /tmp/site/dossiers/e244.html
-          ! grep -Rqi 'Witch Hat' /tmp/site/dossiers || exit 1
-      - name: Replace staging tree with validated build
-        if: steps.parts.outputs.ready == 'true'
+          test "$(find /tmp/jjk-site -type f | wc -l | tr -d ' ')" = 269
+          test "$(find /tmp/jjk-site/dossiers -maxdepth 1 -type f -name 'e*.html' | wc -l | tr -d ' ')" = 244
+          test -s /tmp/jjk-site/assets/styles.css
+          test -s /tmp/jjk-site/assets/dossier-static.css
+          node --check /tmp/jjk-site/assets/app.js
+          node --check /tmp/jjk-site/data/library.js
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from urllib.parse import urlsplit, unquote
+          from html.parser import HTMLParser
+
+          root = Path('/tmp/jjk-site').resolve()
+          js = (root / 'data/library.js').read_text(encoding='utf-8')
+          prefix = 'window.LIBRARY_ENTRIES='
+          marker = ';\nwindow.LIBRARY_COLLECTIONS='
+          entries = json.loads(js[len(prefix):js.index(marker)])
+          assert len(entries) == 244
+          assert [e['id'] for e in entries] == [f'e{i:03d}' for i in range(1, 245)]
+          assert len({e['href'] for e in entries}) == 244
+          assert not any('witch hat' in (e['title'] + ' ' + e['collection'] + ' ' + e.get('aliases', '')).casefold() for e in entries)
+
+          class Scan(HTMLParser):
+              def __init__(self):
+                  super().__init__(); self.links=[]; self.ids=set(); self.h1=[]; self.in_h1=False
+              def handle_starttag(self, tag, attrs):
+                  data=dict(attrs)
+                  if data.get('id'): self.ids.add(data['id'])
+                  if data.get('name'): self.ids.add(data['name'])
+                  if tag == 'h1': self.in_h1=True
+                  for key in ('href','src'):
+                      if data.get(key): self.links.append(data[key])
+              def handle_endtag(self, tag):
+                  if tag == 'h1': self.in_h1=False
+              def handle_data(self, data):
+                  if self.in_h1: self.h1.append(data)
+
+          files={p.relative_to(root).as_posix():p for p in root.rglob('*') if p.is_file()}
+          scans={}
+          for rel,path in files.items():
+              if path.suffix.lower() == '.html':
+                  scan=Scan(); scan.feed(path.read_text(encoding='utf-8')); scans[rel]=scan
+
+          for entry in entries:
+              path=root / entry['href']
+              assert path.is_file(), entry['href']
+              assert path.stat().st_size >= 3000, entry['href']
+              assert entry['title'].casefold() in ' '.join(scans[entry['href']].h1).casefold(), entry['id']
+
+          for rel,scan in scans.items():
+              source=files[rel]
+              for value in scan.links:
+                  if not value or value.startswith(('http://','https://','mailto:','tel:','javascript:','data:')): continue
+                  parsed=urlsplit(value)
+                  if parsed.scheme or parsed.netloc: continue
+                  target=source if not parsed.path else (source.parent / unquote(parsed.path)).resolve()
+                  assert target.exists(), (rel,value)
+                  if parsed.fragment and target.suffix.lower() == '.html':
+                      target_rel=target.relative_to(root).as_posix()
+                      assert unquote(parsed.fragment) in scans[target_rel].ids, (rel,value)
+          PY
+          grep -qi 'Legendary Resistance' /tmp/jjk-site/dossiers/e035.html
+          grep -qi '400 + 5PB' /tmp/jjk-site/dossiers/e035.html
+          grep -qi 'Shadow Wearing' /tmp/jjk-site/dossiers/e035.html
+          grep -Eqi "Well.?s Unknown Abyss" /tmp/jjk-site/dossiers/e035.html
+          grep -qi 'Chimerafication' /tmp/jjk-site/dossiers/e035.html
+          grep -qi 'Infinite Retail' /tmp/jjk-site/dossiers/e162.html
+          grep -qi 'Heatblast' /tmp/jjk-site/dossiers/e243.html
+          grep -qi 'Four Arms' /tmp/jjk-site/dossiers/e243.html
+          grep -qi 'Way Big' /tmp/jjk-site/dossiers/e243.html
+          grep -qi 'Fehu' /tmp/jjk-site/dossiers/e244.html
+          grep -qi 'Bindrunes' /tmp/jjk-site/dossiers/e244.html
+          ! grep -Rqi 'Witch Hat' /tmp/jjk-site/dossiers
+
+      - name: Replace staging branch with clean site
         shell: bash
         run: |
           set -euo pipefail
           find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
-          cp -a /tmp/site/. .
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          cp -a /tmp/jjk-site/. .
+          git config user.name 'JJK Library Build Bot'
+          git config user.email 'actions@users.noreply.github.com'
           git add -A
-          git commit -m 'Deploy validated 244-dossier static library'
+          git commit -m 'Install repaired 244-dossier static library'
           git push origin HEAD:static-dossier-final
+
