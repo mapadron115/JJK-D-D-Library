@@ -114,3 +114,5 @@ jobs:
           curl -fsSL "$base/dossiers/e244.html" | grep -qi 'Bindrunes'
           curl -fsSL "$base/dossiers/e162.html" | grep -qi 'Infinite Retail'
           echo 'main contains the validated dossier build.'
+
+# Triggered from the final static-rebuild checkpoint on 2026-09-04.
