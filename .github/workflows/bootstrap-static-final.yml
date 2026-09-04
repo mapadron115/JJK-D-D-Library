@@ -1,0 +1,63 @@
+name: Bootstrap validated static library
+
+on:
+  push:
+    branches: [ static-dossier-final ]
+    paths:
+      - 'bootstrap-static/**'
+      - '.github/workflows/bootstrap-static-final.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: static-dossier-final
+          fetch-depth: 0
+      - name: Check archive pieces
+        id: parts
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          parts=(bootstrap-static/part-*.txt)
+          echo "count=${#parts[@]}" >> "$GITHUB_OUTPUT"
+          if [ "${#parts[@]}" -eq 33 ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Reconstruct and verify validated build
+        if: steps.parts.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat bootstrap-static/part-*.txt | base64 -d > /tmp/jjk_static_final.zip
+          echo '23c72c8debeb0df0ca896a25cdc1c8d4446e29890b50bba9e20d295acc986bc2  /tmp/jjk_static_final.zip' | sha256sum -c -
+          rm -rf /tmp/site
+          mkdir -p /tmp/site
+          unzip -q /tmp/jjk_static_final.zip -d /tmp/site
+          test "$(find /tmp/site -type f | wc -l)" -eq 268
+          test -f /tmp/site/dossiers/e035.html
+          test -f /tmp/site/dossiers/e243.html
+          test -f /tmp/site/dossiers/e244.html
+          grep -q 'Legendary Resistance' /tmp/site/dossiers/e035.html
+          grep -q 'Way Big' /tmp/site/dossiers/e243.html
+          grep -q 'Bindrunes' /tmp/site/dossiers/e244.html
+          ! grep -Rqi 'Witch Hat' /tmp/site/dossiers || exit 1
+      - name: Replace staging tree with validated build
+        if: steps.parts.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -a /tmp/site/. .
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Deploy validated 244-dossier static library'
+          git push origin HEAD:static-dossier-final
