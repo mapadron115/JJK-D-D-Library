@@ -23,9 +23,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          curl -fL --retry 4 --retry-delay 2 \
-            'https://drive.usercontent.google.com/download?id=1ZADKAKKLDBfJbE96XXgJm-tH5ebTTZu1&export=download&confirm=t' \
-            -o /tmp/jjk_static_final.zip
+          python -m pip install --quiet gdown
+          gdown --id '1ZADKAKKLDBfJbE96XXgJm-tH5ebTTZu1' -O /tmp/jjk_static_final.zip
           unzip -t /tmp/jjk_static_final.zip >/dev/null
           rm -rf /tmp/jjk-site
           mkdir -p /tmp/jjk-site
@@ -61,10 +60,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          rsync -a --delete \
-            --exclude='.git/' \
-            --exclude='.github/' \
-            /tmp/jjk-site/ ./
+          rsync -a --delete --exclude='.git/' --exclude='.github/' /tmp/jjk-site/ ./
 
       - name: Revalidate installed tree
         shell: bash
@@ -84,9 +80,7 @@ jobs:
           git config user.name 'JJK Library Build Bot'
           git config user.email 'actions@users.noreply.github.com'
           git add -A
-          if ! git diff --cached --quiet; then
-            git commit -m 'Install validated 244-dossier static library'
-          fi
+          if ! git diff --cached --quiet; then git commit -m 'Install validated 244-dossier static library'; fi
           git push origin HEAD:static-dossier-final
 
       - name: Guard main fast-forward
@@ -95,7 +89,6 @@ jobs:
           set -euo pipefail
           git fetch origin main
           git merge-base --is-ancestor origin/main HEAD
-          echo 'main is an ancestor of the validated staging build.'
 
       - name: Publish validated commit to main
         shell: bash
@@ -113,6 +106,5 @@ jobs:
           curl -fsSL "$base/dossiers/e243.html" | grep -qi 'Way Big'
           curl -fsSL "$base/dossiers/e244.html" | grep -qi 'Bindrunes'
           curl -fsSL "$base/dossiers/e162.html" | grep -qi 'Infinite Retail'
-          echo 'main contains the validated dossier build.'
 
-# Triggered from the final static-rebuild checkpoint on 2026-09-04.
+# Drive-aware trigger 2026-09-04.
