@@ -31,6 +31,41 @@ jobs:
           mkdir -p /tmp/jjk-site
           tar -xJf /tmp/jjk-static.tar.xz -C /tmp/jjk-site
 
+      - name: Repair legacy source links
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          fixes = {
+              '/tmp/jjk-site/library/canon-repair-ledger.html': {
+                  'href="jjk5e_comprehensive_player_guide_canon.html"': 'href="player-guide.html"',
+                  'href="jjk5e_advanced_sorcery_systems_guide_canon.html"': 'href="advanced-sorcery.html"',
+                  'href="jjk5e_ritual_codex_reviewed_player_edition_canon.html"': 'href="../index.html#library"',
+                  'href="ten_shadows_technique_guide_canon.html"': 'href="../dossiers/e035.html"',
+                  'href="bestiary_codex_set_two_mythology_jjk5e_canon.html"': 'href="bestiary-set-two.html"',
+              },
+              '/tmp/jjk-site/library/player-guide.html': {
+                  'href="jjk5e_advanced_sorcery_systems_guide_canon.html"': 'href="advanced-sorcery.html"',
+                  'href="../ten_shadows_guides/ten_shadows_technique_guide.html"': 'href="../dossiers/e035.html#technique-progression"',
+                  'href="../ten_shadows_guides/ten_shadows_shikigami_guide.html"': 'href="../dossiers/e035.html#ten-shadows-shikigami-stat-blocks"',
+                  'href="../ten_shadows_guides/wells_unknown_abyss_fusion_guide.html"': 'href="../dossiers/e035.html#ten-shadows-well-s-unknown-abyss"',
+                  'href="../ten_shadows_guides/ten_shadows_shadow_wearing_guide.html"': 'href="../dossiers/e035.html#ten-shadows-shadow-wearing"',
+              },
+              '/tmp/jjk-site/dossiers/e035.html': {
+                  'href="ten_shadows_shadow_wearing_guide.html"': 'href="#ten-shadows-shadow-wearing"',
+              },
+          }
+          for filename, replacements in fixes.items():
+              path = Path(filename)
+              text = path.read_text(encoding='utf-8')
+              for old, new in replacements.items():
+                  assert old in text, (filename, old)
+                  text = text.replace(old, new)
+              path.write_text(text, encoding='utf-8')
+          PY
+
       - name: Validate all dossiers and routes
         shell: bash
         run: |
@@ -120,4 +155,3 @@ jobs:
           git add -A
           git commit -m 'Install repaired 244-dossier static library'
           git push origin HEAD:static-dossier-final
-
