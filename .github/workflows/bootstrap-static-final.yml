@@ -4,7 +4,7 @@ on:
   push:
     branches: [ static-dossier-final ]
     paths:
-      - 'bootstrap-static-xz/**'
+      - 'BOOTSTRAP_READY'
       - '.github/workflows/bootstrap-static-final.yml'
 
 permissions:
@@ -26,7 +26,7 @@ jobs:
           shopt -s nullglob
           parts=(bootstrap-static-xz/part-*.txt)
           echo "count=${#parts[@]}" >> "$GITHUB_OUTPUT"
-          if [ "${#parts[@]}" -eq 46 ]; then
+          if [ "${#parts[@]}" -eq 47 ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
@@ -36,8 +36,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat bootstrap-static-xz/part-*.txt | base64 -d > /tmp/jjk_static_final.tar.xz
-          echo 'b2d7324aae587bbc6759e8bff96705078a5c871c0de82a8aa1b7b9fefec105d6  /tmp/jjk_static_final.tar.xz' | sha256sum -c -
+          cat $(printf 'bootstrap-static-xz/part-%03d.txt ' $(seq 0 46)) | base64 -d > /tmp/jjk_static_final.tar.xz
+          echo '33a54bd6c6503eb5930f658a4abc63de7a9f01e00a5c8c270586a2ccfea8c2eb  /tmp/jjk_static_final.tar.xz' | sha256sum -c -
           rm -rf /tmp/site
           mkdir -p /tmp/site
           tar -xJf /tmp/jjk_static_final.tar.xz -C /tmp/site
