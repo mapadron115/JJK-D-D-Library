@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ritual Archive field manual: guided D&D Beyond-style character builder for the Jujutsu Kaisen 5e homebrew.">
-<title>Character Builder — Ritual Archive Field Manual</title>
+<meta name="description" content="Ritual Archive illustrated edition: guided D&D Beyond-style character builder for the Jujutsu Kaisen 5e homebrew.">
+<title>Character Builder — Ritual Archive Illustrated</title>
 <style>
 :root{
   --paper:#f4efe2; --paper2:#ece4cf; --card:#fbf8ee; --card2:#f6f1e1;
@@ -237,13 +237,156 @@ h1 .amp{color:var(--red)}
   .sheet-sec{break-inside:avoid}
   a{color:#000;text-decoration:none}
 }
+
+/* ═══ Illustrated edition art layer ═══ */
+
+/* ════════════════════════════════════════════════════════════════
+   ILLUSTRATED EDITION — art-book layer (appended after root styles)
+   Warm paper surfaces · cinematic dark heroes · gold accents
+   Art: real JJK manga/anime panels © Gege Akutami / Shueisha / MAPPA
+   ════════════════════════════════════════════════════════════════ */
+:root{
+  --gold:#c9972f; --gold-deep:#8f6c1d; --gold-pale:#e9cf87;
+  --ivory:#f8f3e6; --night:#14100b;
+}
+/* ── dark cinematic topbar ── */
+.topbar{background:linear-gradient(180deg,#1a1410,#251c12);border-bottom:3px solid var(--gold);box-shadow:0 4px 20px rgba(20,12,6,.4)}
+.topbar .brand{color:var(--ivory)}
+.topbar .brand:hover{color:var(--gold-pale)}
+.topbar .brand-mark{background:linear-gradient(160deg,#dcb04a,#a5761f);color:#1d150a;box-shadow:inset 0 0 0 2px rgba(29,21,10,.4),0 1px 10px rgba(220,176,74,.35)}
+.topbar .navlinks a{color:#cfc2a4}
+.topbar .navlinks a:hover{color:var(--gold-pale)}
+.topbar .navlinks a.is-current{color:var(--gold-pale);border-bottom:2px solid var(--gold);padding-bottom:2px}
+.topbar .doc-tag{color:#9d8f6d}
+/* ── hero art component: real <img> under a gradient scrim; text never sits on bare art ── */
+.hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hero-art img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,12,7,.68) 0%,rgba(18,12,7,.36) 45%,rgba(18,12,7,.90) 100%)}
+.doc-head,.hero{position:relative;background:var(--night);overflow:hidden}
+.doc-head{padding:90px 0 70px;margin-bottom:36px}
+.doc-head .shell,.hero .shell{position:relative;z-index:1}
+.doc-head .eyebrow,.hero .eyebrow{color:var(--gold-pale)}
+.doc-head h1,.hero h1{color:var(--ivory);text-shadow:0 2px 26px rgba(0,0,0,.65)}
+.doc-head h1 .amp,.hero h1 .amp{color:var(--gold-pale)}
+.doc-head .lede,.hero .lede{color:#e3d9bf}
+.doc-head .statstrip{background:rgba(18,12,8,.55);border:1px solid rgba(201,151,47,.5)}
+.doc-head .stat{border-right:1px solid rgba(201,151,47,.25)}
+.doc-head .stat:last-child{border-right:none}
+.doc-head .stat b{color:var(--ivory)}
+.doc-head .stat span{color:var(--gold-pale)}
+/* ── plate divider (below-the-fold, lazy-loaded <img>) ── */
+.plate{position:relative;height:150px;border-radius:6px;overflow:hidden;margin:0 0 26px;border:1px solid var(--line2);box-shadow:0 6px 18px rgba(34,29,20,.16)}
+.plate img{width:100%;height:100%;object-fit:cover;display:block}
+.plate::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,12,7,.08),rgba(18,12,7,.60))}
+/* ── footer with edition switcher + art credit ── */
+.footer{background:linear-gradient(180deg,#1a1410,#0f0b07);border-top:3px solid var(--gold);color:#b3a586;padding:30px 0 46px}
+.footer .brand{color:var(--ivory)}
+.footer a{color:var(--gold-pale)}
+.footer .tiny{color:#8f8163}
+.footer .editions{display:block;width:100%;margin-top:14px;font-size:.78rem;letter-spacing:1px;color:#8f8163}
+.ed-current{color:var(--gold-pale);border:1px solid var(--gold);border-radius:2px;padding:1px 8px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+.footer .art-credit{display:block;width:100%;margin-top:10px;font-size:.72rem;color:#7d7057;max-width:100ch}
+
+/* ── Illustrated builder: art banner + ancestry/class portraits ── */
+main .doc-head{position:relative;overflow:hidden;border-radius:10px;background:var(--night);color:var(--ivory);padding:64px 44px;margin-bottom:32px}
+main .doc-head .hero-art{position:absolute;inset:0;z-index:0}
+main .doc-head>*{position:relative;z-index:1}
+main .doc-head .eyebrow{color:var(--gold-pale)}
+main .doc-head h1{color:var(--ivory);text-shadow:0 2px 26px rgba(0,0,0,.65)}
+main .doc-head h1 .amp{color:var(--gold-pale)}
+main .doc-head .lede{color:#e3d9bf}
+/* portraits on the ancestry (data-h) and class (data-c) option cards */
+.opt-card[data-h],.opt-card[data-c]{padding-right:112px;min-height:108px}
+.opt-card[data-h]::after,.opt-card[data-c]::after{content:"";position:absolute;top:0;right:0;bottom:0;width:100px;background-image:var(--port);background-size:cover;background-position:center 15%;background-repeat:no-repeat;border-radius:0 3px 3px 0;-webkit-mask-image:linear-gradient(270deg,#000 55%,transparent 100%);mask-image:linear-gradient(270deg,#000 55%,transparent 100%)}
+.opt-card[data-h] .check,.opt-card[data-c] .check{right:auto;left:12px}
+.opt-card[data-h="ordinary"]{--port:url('assets/img/portrait-todo-seated.jpg')}
+.opt-card[data-h="sorcerer"]{--port:url('assets/img/portrait-gojo-color.jpg')}
+.opt-card[data-h="superhuman"]{--port:url('assets/img/portrait-maki-color.jpg')}
+.opt-card[data-h="vengeful"]{--port:url('assets/img/portrait-mahito.jpg')}
+.opt-card[data-h="imaginary"]{--port:url('assets/img/portrait-megumi-shadow.jpg')}
+.opt-card[data-h="disease"]{--port:url('assets/img/portrait-kenjaku.jpg')}
+.opt-card[data-h="womb"]{--port:url('assets/img/portrait-sukuna-color.jpg')}
+.opt-card[data-c="Juggernaut"]{--port:url('assets/img/portrait-todo-flex.jpg')}
+.opt-card[data-c="Scout"]{--port:url('assets/img/portrait-megumi-stance.jpg')}
+.opt-card[data-c="Warrior"]{--port:url('assets/img/portrait-maki-bandaged.jpg')}
+.opt-card[data-c="Shikigami User"]{--port:url('assets/img/portrait-megumi-shadow.jpg')}
+.opt-card[data-c="Support Specialist"]{--port:url('assets/img/portrait-nanami.jpg')}
+.opt-card[data-c="Strategist"]{--port:url('assets/img/portrait-sage.jpg')}
+.opt-card[data-c="Heavenly Restriction"]{--port:url('assets/img/portrait-toji.jpg')}
+
+/* ── responsive nav: hamburger below 860px (added 2026-09-11) ── */
+.nav-toggle{display:none}
+@media (max-width:860px){
+  .topbar .nav{position:relative}
+  .topbar .doc-tag{display:none}
+  .nav-toggle{display:inline-grid;place-items:center;width:44px;height:44px;background:transparent;border:1px solid var(--gold,#c9972f);border-radius:4px;color:var(--gold-pale,#e9cf87);font-size:1.3rem;line-height:1;cursor:pointer;flex-shrink:0}
+  .topbar .navlinks{display:none}
+  .topbar.nav-open .navlinks{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:linear-gradient(180deg,#1a1410,#0f0b07);border-top:1px solid rgba(201,151,47,.35);border-bottom:3px solid var(--gold,#c9972f);padding:8px 24px 16px;z-index:60;margin:0}
+  .topbar.nav-open .navlinks a{padding:13px 4px;border-bottom:1px solid rgba(201,151,47,.25);font-size:.88rem;letter-spacing:2px}
+  .topbar.nav-open .navlinks a.is-current{border-bottom:1px solid var(--gold,#c9972f)}
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Responsive overhaul (2026-09-11) — CSS/layout only.
+   Every rule below lives inside a @media block (desktop ≥861px
+   renders exactly as before). No JS, copy, or data changes.
+   ════════════════════════════════════════════════════════════════ */
+/* image guard: scoped .hero-art/.plate img rules (0,1,1) outrank this,
+   so desktop heroes are pixel-identical */
+img{max-width:100%;height:auto}
+
+@media (max-width:860px){
+  /* hero: 64px/44px padding eats a 390px screen */
+  main .doc-head{padding:44px 20px}
+  /* touch targets ≥44px effective height */
+  .btn{min-height:44px;padding-top:12px;padding-bottom:12px}
+  .btn-small{min-height:44px;padding-top:10px;padding-bottom:10px}
+  .seg-btn{min-height:44px}
+  .die{min-width:44px;min-height:44px}
+  .field input,.field select,.field textarea{min-height:44px}
+  .assign-table select,.lvl-table select{min-height:44px;padding-top:10px;padding-bottom:10px}
+}
+
+@media (max-width:700px){
+  /* wide level-up / assignment tables scroll instead of breaking layout */
+  .assign-table,.lvl-table{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
+
+@media (max-width:600px){
+  /* technique filter controls: single column */
+  .ctrl-grid{grid-template-columns:1fr}
+  /* ancestry/class portraits shrink so the text column survives */
+  .opt-card[data-h],.opt-card[data-c]{padding-right:84px;min-height:84px}
+  .opt-card[data-h]::after,.opt-card[data-c]::after{width:72px}
+}
+
+@media (max-width:560px){
+  .shell{padding:0 16px}
+  .panel-pad{padding:20px 16px}
+  /* 8 wizard steps: horizontal scroll strip, not a wrapping stack */
+  .steps{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+  .step-item{flex:0 0 auto;min-width:104px}
+  /* segmented controls wrap full-width instead of overflowing */
+  .seg{display:flex;flex-wrap:wrap}
+  .seg-btn{flex:1 1 140px}
+  .resultline{flex-wrap:wrap}
+  .tech-head{padding:16px}
+  .sheet-head{padding:22px 18px}
+  .sheet-sec{padding:18px 16px}
+}
+
+@media (max-width:480px){
+  .ab-grid{grid-template-columns:repeat(2,1fr)}
+  h1{font-size:1.9rem}
+}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="shell nav">
-<a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-<nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html" class="is-current">Character Builder</a><a href="codex.html">Technique Codex</a><a href="lore.html">Story So Far</a></nav>
-<span class="doc-tag">Field Manual · Builder</span>
+  <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
+  <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html" class="is-current">Character Builder</a><a href="codex.html">Technique Codex</a><a href="lore.html">Story So Far</a></nav>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  <span class="doc-tag">Illustrated · Builder</span>
 </div></header>
 
 <main class="shell">
@@ -251,6 +394,7 @@ h1 .amp{color:var(--red)}
 <!-- ══════════ MANAGER VIEW ══════════ -->
 <section id="view-manager">
   <div class="doc-head">
+<div class="hero-art" aria-hidden="true"><img src="assets/img/hero-pagoda-battle.jpg" alt="" loading="eager"></div>
     <div class="eyebrow"><span class="orn">❖</span> Field Manual · FM-RA-02 · Character Builder <span class="orn">❖</span></div>
     <h1>Character <span class="amp">Builder</span></h1>
     <p class="lede">Walk from concept to finished character sheet in eight steps — D&amp;D Beyond order, Ritual Archive canon. Roll your dice, pick any technique from the full codex, and the sheet builds itself.</p>
@@ -267,6 +411,7 @@ h1 .amp{color:var(--red)}
 <!-- ══════════ WIZARD VIEW ══════════ -->
 <section id="view-wizard" style="display:none">
   <div class="doc-head">
+<div class="hero-art" aria-hidden="true"><img src="assets/img/hero-pagoda-battle.jpg" alt="" loading="eager"></div>
     <div class="eyebrow"><span class="orn">❖</span> Field Manual · FM-RA-02 · Character Builder <span class="orn">❖</span></div>
     <h1 id="wizTitle">New <span class="amp">Sorcerer</span></h1>
   </div>
@@ -281,8 +426,9 @@ h1 .amp{color:var(--red)}
 
 <footer class="footer no-print"><div class="shell">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <span>FM-RA-02 · Character Builder · fan-made JJK 5e homebrew reference. CE Reserve per the campaign canon — Reserve Dice, one CE ability modifier, permanent bonuses added after.</span>
-  <span class="tiny">Editions: <b>Field Manual</b> · <a href="grimoire/index.html">Grimoire</a> · <a href="illustrated/index.html">Illustrated</a></span>
+  <span class="tiny">FM-RA-02 · Character Builder · fan-made JJK 5e homebrew reference. CE Reserve per the campaign canon — Reserve Dice, one CE ability modifier, permanent bonuses added after.</span>
+  <span class="editions">Editions: <a href="field-manual/index.html">Field Manual</a> · <a href="grimoire/index.html">Grimoire</a> · <span class="ed-current">Illustrated · current</span></span>
+  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA — manga &amp; anime art from the author's JJK 5e PDFs, used for personal, non-commercial fan purposes only. No AI art.</span>
 </div></footer>
 
 <script src="data/codex.js"></script>
@@ -445,7 +591,7 @@ function tTier(e){ return e ? (e.tier || '') : ''; }
 function tRole(e){ return e ? (e.role || e.kind || '') : ''; }
 function tCe(e){ return e ? (e.ce_ability || '') : ''; }
 function tConcept(e){ return e ? (e.concept || e.summary || '') : ''; }
-function tHref(e){ return e ? (e.href || '') : ''; }
+function tHref(e){ var h = e ? (e.href || '') : ''; return (h.indexOf('dossiers/')===0) ? '../'+h : h; }
 
 /* ── character state ── */
 var LS_KEY = 'ritual-archive-characters';
@@ -1373,5 +1519,10 @@ function sheetHTML(){
 renderManager();
 })();
 </script>
+<script>
+/* responsive nav toggle (added 2026-09-11) */
+(function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(open){t.classList.toggle('nav-open',open);b.setAttribute('aria-expanded',open?'true':'false');b.textContent=open?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});t.querySelectorAll('.navlinks a').forEach(function(a){a.addEventListener('click',function(){set(false);});});document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});})();
+</script>
+
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ritual Archive illustrated edition: the player-facing rulebook for the JJK 5e homebrew — cursed energy, techniques, vows, domains, RCT, Black Flash, clashes, attunement.">
+<meta name="description" content="Ritual Archive field manual: the player-facing rulebook for the JJK 5e homebrew — cursed energy, techniques, vows, domains, RCT, Black Flash, clashes, attunement.">
 <title>Field Guide · Rules — Ritual Archive</title>
 <style>
 :root{
@@ -113,70 +113,17 @@ b.k{font-family:var(--serif)}
   h1{font-size:2.4rem}
   .navlinks{display:none}
 }
-
-/* ═══ Illustrated edition art layer ═══ */
-
-/* ════════════════════════════════════════════════════════════════
-   ILLUSTRATED EDITION — art-book layer (appended after root styles)
-   Warm paper surfaces · cinematic dark heroes · gold accents
-   Art: real JJK manga/anime panels © Gege Akutami / Shueisha / MAPPA
-   ════════════════════════════════════════════════════════════════ */
-:root{
-  --gold:#c9972f; --gold-deep:#8f6c1d; --gold-pale:#e9cf87;
-  --ivory:#f8f3e6; --night:#14100b;
-}
-/* ── dark cinematic topbar ── */
-.topbar{background:linear-gradient(180deg,#1a1410,#251c12);border-bottom:3px solid var(--gold);box-shadow:0 4px 20px rgba(20,12,6,.4)}
-.topbar .brand{color:var(--ivory)}
-.topbar .brand:hover{color:var(--gold-pale)}
-.topbar .brand-mark{background:linear-gradient(160deg,#dcb04a,#a5761f);color:#1d150a;box-shadow:inset 0 0 0 2px rgba(29,21,10,.4),0 1px 10px rgba(220,176,74,.35)}
-.topbar .navlinks a{color:#cfc2a4}
-.topbar .navlinks a:hover{color:var(--gold-pale)}
-.topbar .navlinks a.is-current{color:var(--gold-pale);border-bottom:2px solid var(--gold);padding-bottom:2px}
-.topbar .doc-tag{color:#9d8f6d}
-/* ── hero art component: real <img> under a gradient scrim; text never sits on bare art ── */
-.hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.hero-art img{width:100%;height:100%;object-fit:cover;display:block}
-.hero-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,12,7,.68) 0%,rgba(18,12,7,.36) 45%,rgba(18,12,7,.90) 100%)}
-.doc-head,.hero{position:relative;background:var(--night);overflow:hidden}
-.doc-head{padding:90px 0 70px;margin-bottom:36px}
-.doc-head .shell,.hero .shell{position:relative;z-index:1}
-.doc-head .eyebrow,.hero .eyebrow{color:var(--gold-pale)}
-.doc-head h1,.hero h1{color:var(--ivory);text-shadow:0 2px 26px rgba(0,0,0,.65)}
-.doc-head h1 .amp,.hero h1 .amp{color:var(--gold-pale)}
-.doc-head .lede,.hero .lede{color:#e3d9bf}
-.doc-head .statstrip{background:rgba(18,12,8,.55);border:1px solid rgba(201,151,47,.5)}
-.doc-head .stat{border-right:1px solid rgba(201,151,47,.25)}
-.doc-head .stat:last-child{border-right:none}
-.doc-head .stat b{color:var(--ivory)}
-.doc-head .stat span{color:var(--gold-pale)}
-/* ── plate divider (below-the-fold, lazy-loaded <img>) ── */
-.plate{position:relative;height:150px;border-radius:6px;overflow:hidden;margin:0 0 26px;border:1px solid var(--line2);box-shadow:0 6px 18px rgba(34,29,20,.16)}
-.plate img{width:100%;height:100%;object-fit:cover;display:block}
-.plate::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,12,7,.08),rgba(18,12,7,.60))}
-/* ── footer with edition switcher + art credit ── */
-.footer{background:linear-gradient(180deg,#1a1410,#0f0b07);border-top:3px solid var(--gold);color:#b3a586;padding:30px 0 46px}
-.footer .brand{color:var(--ivory)}
-.footer a{color:var(--gold-pale)}
-.footer .tiny{color:#8f8163}
-.footer .editions{display:block;width:100%;margin-top:14px;font-size:.78rem;letter-spacing:1px;color:#8f8163}
-.ed-current{color:var(--gold-pale);border:1px solid var(--gold);border-radius:2px;padding:1px 8px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
-.footer .art-credit{display:block;width:100%;margin-top:10px;font-size:.72rem;color:#7d7057;max-width:100ch}
-
-/* ── Illustrated field guide ── */
-.rule-sec,.cheat{scroll-margin-top:84px}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="shell nav">
-  <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <nav class="navlinks"><a href="rules.html" class="is-current">Field Guide</a><a href="builder.html">Character Builder</a><a href="codex.html">Technique Codex</a><a href="lore.html">Story So Far</a></nav>
-  <span class="doc-tag">Illustrated · Rules</span>
+<a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
+<nav class="navlinks"><a href="rules.html" class="is-current">Field Guide</a><a href="builder.html">Character Builder</a><a href="codex.html">Technique Codex</a><a href="lore.html">Story So Far</a></nav>
+<span class="doc-tag">Field Manual · Rules</span>
 </div></header>
 
 <main>
-<section class="doc-head">
-<div class="hero-art" aria-hidden="true"><img src="../assets/img/hero-shibuya-bridge.jpg" alt="" loading="eager"></div><div class="shell">
+<section class="doc-head"><div class="shell">
   <div class="eyebrow"><span class="orn">❖</span> Field Manual · FM-RA-02 · Player Reference <span class="orn">❖</span></div>
   <h1>Field Guide <span class="amp">·</span> Rules</h1>
   <p class="lede">You already know Dungeons &amp; Dragons 5th Edition. This manual teaches only the adaptation layer — the sorcery. Cursed energy, innate techniques, binding vows, domains, reverse cursed technique, Black Flash, clashes, and attunement: everything a sorcerer needs at the table, and nothing else.</p>
@@ -210,7 +157,6 @@ b.k{font-family:var(--serif)}
 
 <!-- ═══════════ I. CE ═══════════ -->
 <section class="rule-sec" id="ce">
-<div class="plate" aria-hidden="true"><img src="../assets/img/panel-yuji-cursed-energy.jpg" alt="" loading="lazy"></div>
 <div class="sec-head">
   <span class="sec-kicker">Section I</span>
   <h2>Cursed Energy &amp; the CE Reserve</h2>
@@ -256,7 +202,6 @@ b.k{font-family:var(--serif)}
 
 <!-- ═══════════ II. TECHNIQUES ═══════════ -->
 <section class="rule-sec" id="techniques">
-<div class="plate" aria-hidden="true"><img src="../assets/img/panel-shikigami-clash.jpg" alt="" loading="lazy"></div>
 <div class="sec-head">
   <span class="sec-kicker">Section II</span>
   <h2>Innate Techniques</h2>
@@ -291,7 +236,6 @@ b.k{font-family:var(--serif)}
 
 <!-- ═══════════ III. VOWS ═══════════ -->
 <section class="rule-sec" id="vows">
-<div class="plate" aria-hidden="true"><img src="../assets/img/hero-talisman-wall.jpg" alt="" loading="lazy"></div>
 <div class="sec-head">
   <span class="sec-kicker">Section III</span>
   <h2>Binding Vows</h2>
@@ -323,7 +267,6 @@ b.k{font-family:var(--serif)}
 
 <!-- ═══════════ IV. DOMAINS ═══════════ -->
 <section class="rule-sec" id="domains">
-<div class="plate" aria-hidden="true"><img src="../assets/img/panel-divine-lightning.jpg" alt="" loading="lazy"></div>
 <div class="sec-head">
   <span class="sec-kicker">Section IV</span>
   <h2>Domains</h2>
@@ -390,7 +333,6 @@ b.k{font-family:var(--serif)}
 
 <!-- ═══════════ V. RCT ═══════════ -->
 <section class="rule-sec" id="rct">
-<div class="plate" aria-hidden="true"><img src="../assets/img/panel-gojo-playful.jpg" alt="" loading="lazy"></div>
 <div class="sec-head">
   <span class="sec-kicker">Section V</span>
   <h2>Reverse Cursed Technique</h2>
@@ -423,7 +365,6 @@ b.k{font-family:var(--serif)}
 
 <!-- ═══════════ VI. BLACK FLASH & OUTPUT ═══════════ -->
 <section class="rule-sec" id="blackflash">
-<div class="plate" aria-hidden="true"><img src="../assets/img/panel-curse-maw.jpg" alt="" loading="lazy"></div>
 <div class="sec-head">
   <span class="sec-kicker">Section VI</span>
   <h2>Black Flash &amp; Output</h2>
@@ -469,7 +410,6 @@ b.k{font-family:var(--serif)}
 
 <!-- ═══════════ VII. CLASHES ═══════════ -->
 <section class="rule-sec" id="clashes">
-<div class="plate" aria-hidden="true"><img src="../assets/img/hero-pagoda-battle.jpg" alt="" loading="lazy"></div>
 <div class="sec-head">
   <span class="sec-kicker">Section VII</span>
   <h2>Clashes</h2>
@@ -495,7 +435,6 @@ b.k{font-family:var(--serif)}
 
 <!-- ═══════════ VIII. ATTUNEMENT ═══════════ -->
 <section class="rule-sec" id="attunement">
-<div class="plate" aria-hidden="true"><img src="../assets/img/panel-cursed-tools.jpg" alt="" loading="lazy"></div>
 <div class="sec-head">
   <span class="sec-kicker">Section VIII</span>
   <h2>Attunement</h2>
@@ -520,7 +459,6 @@ b.k{font-family:var(--serif)}
 
 <!-- ═══════════ IX. SPECIAL SYSTEMS ═══════════ -->
 <section class="rule-sec" id="special">
-<div class="plate" aria-hidden="true"><img src="../assets/img/divider-crow-shikigami.jpg" alt="" loading="lazy"></div>
 <div class="sec-head">
   <span class="sec-kicker">Section IX</span>
   <h2>Ten Shadows &amp; Special Systems</h2>
@@ -535,7 +473,7 @@ b.k{font-family:var(--serif)}
 <li>Manifest as an action at the listed cost. A manifestation acts immediately after you; one bonus action commands one manifestation, and uncommanded ones Dodge. A shadow reduced to 0 disperses until the next long rest.</li>
 <li>Fusions use the fifteen prebuilt <b>Wells Unknown Abyss</b> recipes (or Chimera rules: one intact base plus up to three donors). <b>Shadow Wearing</b> (level 8) and the <b>Wheel Wearing</b> capstone (level 17, once per long rest) follow their own entries.</li>
 </ul>
-<p>Full dossiers: <a href="library/ten_shadows_technique_guide.html">Technique Guide</a> · <a href="library/ten_shadows_shikigami_guide.html">Shikigami Roster</a> · <a href="library/wells_unknown_abyss_fusion_guide.html">Fusion Catalog</a> · <a href="library/ten_shadows_shadow_wearing_guide.html">Shadow Wearing</a>.</p>
+<p>Full dossiers: <a href="../library/ten_shadows_technique_guide.html">Technique Guide</a> · <a href="../library/ten_shadows_shikigami_guide.html">Shikigami Roster</a> · <a href="../library/wells_unknown_abyss_fusion_guide.html">Fusion Catalog</a> · <a href="../library/ten_shadows_shadow_wearing_guide.html">Shadow Wearing</a>.</p>
 <div class="canon-note"><div class="cn-head">❖ Canon note</div><div class="cn-body"><p>The old guide's Ten Shadows entry lists the ritual under its level-3 feature ("challenge any untamed shadow"). The campaign canon is that <b>every</b> subjugation ritual is attemptable from level 1 — Mahoraga included — with the ritual's own danger, not a level gate, as the price of ambition.</p></div></div>
 <h3>Other special systems</h3>
 <ul>
@@ -548,7 +486,6 @@ b.k{font-family:var(--serif)}
 
 <!-- ═══════════ X. TOOLS ═══════════ -->
 <section class="rule-sec" id="tools">
-<div class="plate" aria-hidden="true"><img src="../assets/img/panel-cursed-dagger.jpg" alt="" loading="lazy"></div>
 <div class="sec-head">
   <span class="sec-kicker">Section X</span>
   <h2>Cursed Tools</h2>
@@ -565,13 +502,12 @@ b.k{font-family:var(--serif)}
 </table></div>
 <p>Named tools are intentionally stronger than generic equipment: the Inverted Spear of Heaven suppresses spells and CE features on a hit, the Soul Split Katana wounds the soul itself, Dragon Bone banks a third of the damage it deals into the next strike, and the Sword of Extermination exorcises cursed spirits and undead outright — no save, HP irrelevant. Every named tool has exact rules text; use it as written.</p>
 <p>Heavenly Restriction users may wield cursed tools and benefit from passive weapon properties, but cannot fuel a tool with CE or activate a property whose cost or prerequisite requires CE unless the tool supplies its own independent charge.</p>
-<p>The full arsenal — every named tool with complete rules — is catalogued in <a href="library/cursed-tool-arsenal.html">library/cursed-tool-arsenal.html</a>.</p>
+<p>The full arsenal — every named tool with complete rules — is catalogued in <a href="../library/cursed-tool-arsenal.html">library/cursed-tool-arsenal.html</a>.</p>
 </div>
 </section>
 
 <!-- ═══════════ CHEAT SHEET ═══════════ -->
 <section class="cheat" id="cheat">
-<div class="plate" aria-hidden="true"><img src="../assets/img/panel-cursed-spirits.jpg" alt="" loading="lazy"></div>
 <h2>❖ Quick Reference</h2>
 <p class="sub">Cut this out. Tape it to your character sheet.</p>
 <div class="cheat-grid">
@@ -641,9 +577,8 @@ b.k{font-family:var(--serif)}
 
 <footer class="footer"><div class="shell">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <span class="tiny">FM-RA-02 · Field Guide · Rules · fan-made JJK 5e homebrew reference. Clashes resolve deterministically by refinement points — dice do not.</span>
-  <span class="editions">Editions: <a href="../index.html">Field Manual</a> · <a href="../grimoire/index.html">Grimoire</a> · <span class="ed-current">Illustrated · current</span></span>
-  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA — manga &amp; anime art from the author's JJK 5e PDFs, used for personal, non-commercial fan purposes only. No AI art.</span>
+  <span>FM-RA-02 · Field Guide · Rules · fan-made JJK 5e homebrew reference. Clashes resolve deterministically by refinement points — dice do not.</span>
+  <span class="tiny">Editions: <b>Field Manual</b> · <a href="../grimoire/index.html">Grimoire</a> · <a href="../index.html">Illustrated</a></span>
 </div></footer>
 </body>
 </html>

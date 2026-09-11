@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ritual Archive illustrated edition: the Story So Far — the acceptance letter, the school, and the memorandum, everything the players know.">
-<title>Story So Far — Ritual Archive Illustrated</title>
+<meta name="description" content="Ritual Archive field manual: the Story So Far — the acceptance letter, the school, and the memorandum, everything the players know.">
+<title>Story So Far — Ritual Archive Field Manual</title>
 <style>
 :root{
   --paper:#f4efe2; --paper2:#ece4cf; --card:#fbf8ee; --card2:#f6f1e1;
@@ -114,74 +114,17 @@ h1 .amp{color:var(--red)}
   .school-name{font-size:1.15rem}
   .story{padding:30px 22px}
 }
-
-/* ═══ Illustrated edition art layer ═══ */
-
-/* ════════════════════════════════════════════════════════════════
-   ILLUSTRATED EDITION — art-book layer (appended after root styles)
-   Warm paper surfaces · cinematic dark heroes · gold accents
-   Art: real JJK manga/anime panels © Gege Akutami / Shueisha / MAPPA
-   ════════════════════════════════════════════════════════════════ */
-:root{
-  --gold:#c9972f; --gold-deep:#8f6c1d; --gold-pale:#e9cf87;
-  --ivory:#f8f3e6; --night:#14100b;
-}
-/* ── dark cinematic topbar ── */
-.topbar{background:linear-gradient(180deg,#1a1410,#251c12);border-bottom:3px solid var(--gold);box-shadow:0 4px 20px rgba(20,12,6,.4)}
-.topbar .brand{color:var(--ivory)}
-.topbar .brand:hover{color:var(--gold-pale)}
-.topbar .brand-mark{background:linear-gradient(160deg,#dcb04a,#a5761f);color:#1d150a;box-shadow:inset 0 0 0 2px rgba(29,21,10,.4),0 1px 10px rgba(220,176,74,.35)}
-.topbar .navlinks a{color:#cfc2a4}
-.topbar .navlinks a:hover{color:var(--gold-pale)}
-.topbar .navlinks a.is-current{color:var(--gold-pale);border-bottom:2px solid var(--gold);padding-bottom:2px}
-.topbar .doc-tag{color:#9d8f6d}
-/* ── hero art component: real <img> under a gradient scrim; text never sits on bare art ── */
-.hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.hero-art img{width:100%;height:100%;object-fit:cover;display:block}
-.hero-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,12,7,.68) 0%,rgba(18,12,7,.36) 45%,rgba(18,12,7,.90) 100%)}
-.doc-head,.hero{position:relative;background:var(--night);overflow:hidden}
-.doc-head{padding:90px 0 70px;margin-bottom:36px}
-.doc-head .shell,.hero .shell{position:relative;z-index:1}
-.doc-head .eyebrow,.hero .eyebrow{color:var(--gold-pale)}
-.doc-head h1,.hero h1{color:var(--ivory);text-shadow:0 2px 26px rgba(0,0,0,.65)}
-.doc-head h1 .amp,.hero h1 .amp{color:var(--gold-pale)}
-.doc-head .lede,.hero .lede{color:#e3d9bf}
-.doc-head .statstrip{background:rgba(18,12,8,.55);border:1px solid rgba(201,151,47,.5)}
-.doc-head .stat{border-right:1px solid rgba(201,151,47,.25)}
-.doc-head .stat:last-child{border-right:none}
-.doc-head .stat b{color:var(--ivory)}
-.doc-head .stat span{color:var(--gold-pale)}
-/* ── plate divider (below-the-fold, lazy-loaded <img>) ── */
-.plate{position:relative;height:150px;border-radius:6px;overflow:hidden;margin:0 0 26px;border:1px solid var(--line2);box-shadow:0 6px 18px rgba(34,29,20,.16)}
-.plate img{width:100%;height:100%;object-fit:cover;display:block}
-.plate::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,12,7,.08),rgba(18,12,7,.60))}
-/* ── footer with edition switcher + art credit ── */
-.footer{background:linear-gradient(180deg,#1a1410,#0f0b07);border-top:3px solid var(--gold);color:#b3a586;padding:30px 0 46px}
-.footer .brand{color:var(--ivory)}
-.footer a{color:var(--gold-pale)}
-.footer .tiny{color:#8f8163}
-.footer .editions{display:block;width:100%;margin-top:14px;font-size:.78rem;letter-spacing:1px;color:#8f8163}
-.ed-current{color:var(--gold-pale);border:1px solid var(--gold);border-radius:2px;padding:1px 8px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
-.footer .art-credit{display:block;width:100%;margin-top:10px;font-size:.72rem;color:#7d7057;max-width:100ch}
-
-/* ── Illustrated story: the letter rests on the golden talisman wall ── */
-.letter-wrap{overflow:hidden;border-radius:2px}
-.letter-bg{position:absolute;inset:0}
-.letter-bg img{width:100%;height:100%;object-fit:cover;display:block}
-.letter-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(251,248,238,.93),rgba(246,240,224,.96))}
-.letter{position:relative;z-index:1;background:transparent}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="shell nav">
-  <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html">Character Builder</a><a href="codex.html">Technique Codex</a><a href="lore.html" class="is-current">Story So Far</a></nav>
-  <span class="doc-tag">Illustrated · Story</span>
+<a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
+<nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html">Character Builder</a><a href="codex.html">Technique Codex</a><a href="lore.html" class="is-current">Story So Far</a></nav>
+<span class="doc-tag">Field Manual · Story</span>
 </div></header>
 
 <main>
-<section class="doc-head">
-<div class="hero-art" aria-hidden="true"><img src="../assets/img/hero-curse-hallway.jpg" alt="" loading="eager"></div><div class="shell">
+<section class="doc-head"><div class="shell">
   <div class="eyebrow"><span class="orn">❖</span> Field Manual · FM-RA-04 · Player Record <span class="orn">❖</span></div>
   <h1>Story So <span class="amp">Far</span></h1>
   <p class="lede">Everything the players know — the letter that summoned you, the school that took you in, the rules you live under, and the record of what has happened since. Nothing here is forbidden to player eyes; if it isn't on this page, your character doesn't know it yet.</p>
@@ -190,7 +133,6 @@ h1 .amp{color:var(--red)}
 <section id="letter"><div class="shell">
   <h2 class="section-subhead">The Acceptance Letter <span class="sub-n">— a document your character received</span></h2>
   <div class="letter-wrap">
-<div class="letter-bg" aria-hidden="true"><img src="../assets/img/hero-talisman-wall.jpg" alt="" loading="lazy"></div>
     <div class="wax-seal" aria-hidden="true"><span>呪</span></div>
     <article class="letter">
       <div class="letterhead">
@@ -322,7 +264,6 @@ h1 .amp{color:var(--red)}
 <section id="story"><div class="shell">
   <h2 class="section-subhead">Story So Far <span class="sub-n">— the campaign record</span></h2>
   <div class="story">
-<div class="plate" aria-hidden="true"><img src="../assets/img/divider-crow-shikigami.jpg" alt="" loading="lazy"></div>
     <div class="ch">Chapter 1 · In Play</div>
     <p>The gates of Tokyo Jujutsu High are open. Your training begins.</p>
     <p>This record fills as sessions happen — nothing more, and nothing before its time.</p>
@@ -333,9 +274,8 @@ h1 .amp{color:var(--red)}
 
 <footer class="footer"><div class="shell">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <span class="tiny">FM-RA-04 · Story So Far · player-safe record only. Fan-made JJK 5e homebrew reference.</span>
-  <span class="editions">Editions: <a href="../index.html">Field Manual</a> · <a href="../grimoire/index.html">Grimoire</a> · <span class="ed-current">Illustrated · current</span></span>
-  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA — manga &amp; anime art from the author's JJK 5e PDFs, used for personal, non-commercial fan purposes only. No AI art.</span>
+  <span>FM-RA-04 · Story So Far · player-safe record only. Fan-made JJK 5e homebrew reference.</span>
+  <span class="tiny">Editions: <b>Field Manual</b> · <a href="../grimoire/index.html">Grimoire</a> · <a href="../index.html">Illustrated</a></span>
 </div></footer>
 </body>
 </html>

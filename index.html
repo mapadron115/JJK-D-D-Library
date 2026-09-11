@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ritual Archive field manual: the complete Jujutsu Kaisen D&D 5e homebrew — rules, character builder, technique codex, and the story so far.">
-<title>Ritual Archive — Jujutsu Kaisen 5e Field Manual</title>
+<meta name="description" content="Ritual Archive illustrated edition: the complete Jujutsu Kaisen D&D 5e homebrew — rules, character builder, technique codex, and the story so far.">
+<title>Ritual Archive — Jujutsu Kaisen 5e Illustrated</title>
 <style>
 :root{
   --paper:#f4efe2; --paper2:#ece4cf; --card:#fbf8ee; --card2:#f6f1e1;
@@ -53,19 +53,114 @@ h1 .amp{color:var(--red)}
 .footer .shell{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
 .footer .tiny{font-size:.8rem;color:var(--ink3)}
 @media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}h1{font-size:2.6rem}}
+
+/* ═══ Illustrated edition art layer ═══ */
+
+/* ════════════════════════════════════════════════════════════════
+   ILLUSTRATED EDITION — art-book layer (appended after root styles)
+   Warm paper surfaces · cinematic dark heroes · gold accents
+   Art: real JJK manga/anime panels © Gege Akutami / Shueisha / MAPPA
+   ════════════════════════════════════════════════════════════════ */
+:root{
+  --gold:#c9972f; --gold-deep:#8f6c1d; --gold-pale:#e9cf87;
+  --ivory:#f8f3e6; --night:#14100b;
+}
+/* ── dark cinematic topbar ── */
+.topbar{background:linear-gradient(180deg,#1a1410,#251c12);border-bottom:3px solid var(--gold);box-shadow:0 4px 20px rgba(20,12,6,.4)}
+.topbar .brand{color:var(--ivory)}
+.topbar .brand:hover{color:var(--gold-pale)}
+.topbar .brand-mark{background:linear-gradient(160deg,#dcb04a,#a5761f);color:#1d150a;box-shadow:inset 0 0 0 2px rgba(29,21,10,.4),0 1px 10px rgba(220,176,74,.35)}
+.topbar .navlinks a{color:#cfc2a4}
+.topbar .navlinks a:hover{color:var(--gold-pale)}
+.topbar .navlinks a.is-current{color:var(--gold-pale);border-bottom:2px solid var(--gold);padding-bottom:2px}
+.topbar .doc-tag{color:#9d8f6d}
+/* ── hero art component: real <img> under a gradient scrim; text never sits on bare art ── */
+.hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hero-art img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,12,7,.68) 0%,rgba(18,12,7,.36) 45%,rgba(18,12,7,.90) 100%)}
+.doc-head,.hero{position:relative;background:var(--night);overflow:hidden}
+.doc-head{padding:90px 0 70px;margin-bottom:36px}
+.doc-head .shell,.hero .shell{position:relative;z-index:1}
+.doc-head .eyebrow,.hero .eyebrow{color:var(--gold-pale)}
+.doc-head h1,.hero h1{color:var(--ivory);text-shadow:0 2px 26px rgba(0,0,0,.65)}
+.doc-head h1 .amp,.hero h1 .amp{color:var(--gold-pale)}
+.doc-head .lede,.hero .lede{color:#e3d9bf}
+.doc-head .statstrip{background:rgba(18,12,8,.55);border:1px solid rgba(201,151,47,.5)}
+.doc-head .stat{border-right:1px solid rgba(201,151,47,.25)}
+.doc-head .stat:last-child{border-right:none}
+.doc-head .stat b{color:var(--ivory)}
+.doc-head .stat span{color:var(--gold-pale)}
+/* ── plate divider (below-the-fold, lazy-loaded <img>) ── */
+.plate{position:relative;height:150px;border-radius:6px;overflow:hidden;margin:0 0 26px;border:1px solid var(--line2);box-shadow:0 6px 18px rgba(34,29,20,.16)}
+.plate img{width:100%;height:100%;object-fit:cover;display:block}
+.plate::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,12,7,.08),rgba(18,12,7,.60))}
+/* ── footer with edition switcher + art credit ── */
+.footer{background:linear-gradient(180deg,#1a1410,#0f0b07);border-top:3px solid var(--gold);color:#b3a586;padding:30px 0 46px}
+.footer .brand{color:var(--ivory)}
+.footer a{color:var(--gold-pale)}
+.footer .tiny{color:#8f8163}
+.footer .editions{display:block;width:100%;margin-top:14px;font-size:.78rem;letter-spacing:1px;color:#8f8163}
+.ed-current{color:var(--gold-pale);border:1px solid var(--gold);border-radius:2px;padding:1px 8px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+.footer .art-credit{display:block;width:100%;margin-top:10px;font-size:.72rem;color:#7d7057;max-width:100ch}
+
+/* ── Illustrated home ── */
+.hero{padding:120px 0 100px;text-align:center}
+.hero .seal-mark{color:var(--gold-pale);text-shadow:0 0 30px rgba(201,151,47,.4)}
+.cards .card{position:relative;overflow:hidden;color:var(--ivory);background:var(--night);border:1px solid #3a2f22;border-top:4px solid var(--gold)}
+.card-art{position:absolute;inset:0}
+.card-art img{width:100%;height:100%;object-fit:cover;display:block}
+.card-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,12,9,.52) 0%,rgba(16,12,9,.94) 100%)}
+.cards .card .num,.cards .card h2,.cards .card p,.cards .card .go{position:relative;z-index:1}
+.cards .card .num{color:var(--gold-pale)}
+.cards .card h2{color:var(--ivory)}
+.cards .card p{color:#d9cfb8}
+.cards .card .go{color:var(--gold-pale)}
+.cards .card:hover{color:var(--ivory);box-shadow:0 10px 26px rgba(20,12,6,.45)}
+.about{border-top:4px solid var(--gold)}
+
+/* ── responsive nav: hamburger below 860px (added 2026-09-11) ── */
+.nav-toggle{display:none}
+@media (max-width:860px){
+  .topbar .nav{position:relative}
+  .topbar .doc-tag{display:none}
+  .nav-toggle{display:inline-grid;place-items:center;width:44px;height:44px;background:transparent;border:1px solid var(--gold,#c9972f);border-radius:4px;color:var(--gold-pale,#e9cf87);font-size:1.3rem;line-height:1;cursor:pointer;flex-shrink:0}
+  .topbar .navlinks{display:none}
+  .topbar.nav-open .navlinks{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:linear-gradient(180deg,#1a1410,#0f0b07);border-top:1px solid rgba(201,151,47,.35);border-bottom:3px solid var(--gold,#c9972f);padding:8px 24px 16px;z-index:60;margin:0}
+  .topbar.nav-open .navlinks a{padding:13px 4px;border-bottom:1px solid rgba(201,151,47,.25);font-size:.88rem;letter-spacing:2px}
+  .topbar.nav-open .navlinks a.is-current{border-bottom:1px solid var(--gold,#c9972f)}
+}
+
+/* ── mobile/tablet responsive overhaul (2026-09-11) ──
+   @media only — desktop ≥861px renders exactly as before. */
+@media (max-width:860px){
+  .topbar .nav{padding:12px 16px}
+  .hero{padding:96px 0 72px}
+}
+@media (max-width:560px){
+  img{max-width:100%;height:auto}
+  .shell{padding:0 16px}
+  .hero{padding:64px 0 44px}
+  .hero .seal-mark{font-size:3rem}
+  .hero h1{font-size:2.15rem}
+  .lede{font-size:1.02rem}
+  .cards{grid-template-columns:1fr;gap:14px;margin-bottom:40px}
+  .about{padding:24px 20px;margin-bottom:40px}
+}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="shell nav">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
   <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html">Character Builder</a><a href="codex.html">Technique Codex</a><a href="lore.html">Story So Far</a></nav>
-  <span class="doc-tag">Field Manual · FM-RA-00</span>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  <span class="doc-tag">Illustrated · IL-RA-00</span>
 </div></header>
 
 <main>
-<section class="hero"><div class="shell">
+<section class="hero">
+<div class="hero-art" aria-hidden="true"><img src="assets/img/hero-talisman-wall.jpg" alt="" loading="eager"></div><div class="shell">
   <div class="seal-mark">呪</div>
-  <div class="eyebrow"><span>❖</span> Field Manual · FM-RA-00 · Player Edition <span>❖</span></div>
+  <div class="eyebrow"><span>❖</span> Field Manual · IL-RA-00 · Player Edition <span>❖</span></div>
   <h1>Ritual <span class="amp">Archive</span></h1>
   <p class="lede">The complete Jujutsu Kaisen 5e homebrew in one field manual: the rules of the adaptation, a guided character builder, every technique in the library, and the story so far. You know D&amp;D 5e — this is everything else.</p>
 </div></section>
@@ -73,24 +168,28 @@ h1 .amp{color:var(--red)}
 <section><div class="shell">
   <div class="cards">
     <a class="card" href="rules.html">
+<span class="card-art" aria-hidden="true"><img src="assets/img/panel-cursed-tools.jpg" alt="" loading="lazy"></span>
       <div class="num">FM-RA-02 · Rules</div>
       <h2>Field Guide</h2>
       <p>Cursed Energy and the CE Reserve, techniques, binding vows, Domains and sure-hits, RCT, clashes, Ten Shadows — the whole JJK layer, table-ready.</p>
       <span class="go">Open the field guide →</span>
     </a>
     <a class="card" href="builder.html">
+<span class="card-art" aria-hidden="true"><img src="assets/img/panel-megumi-strike.jpg" alt="" loading="lazy"></span>
       <div class="num">FM-RA-03 · Builder</div>
       <h2>Character Builder</h2>
       <p>Guided creation in D&amp;D Beyond order: ancestry, class, rolled ability scores, per-level HP and CE Reserve, technique selection, finished sheet. Stored on your device.</p>
       <span class="go">Build a sorcerer →</span>
     </a>
     <a class="card" href="codex.html">
+<span class="card-art" aria-hidden="true"><img src="assets/img/panel-gojo-infinity.jpg" alt="" loading="lazy"></span>
       <div class="num">FM-RA-01 · Codex</div>
       <h2>Technique Codex</h2>
       <p>Every technique in the archive — historical figures' full level-by-level progressions and the original library — searchable and filterable.</p>
       <span class="go">Search the codex →</span>
     </a>
     <a class="card" href="lore.html">
+<span class="card-art" aria-hidden="true"><img src="assets/img/panel-umbrella-shore.jpg" alt="" loading="lazy"></span>
       <div class="num">FM-RA-04 · Story</div>
       <h2>Story So Far</h2>
       <p>It begins with a letter. Your acceptance to Tokyo Jujutsu High, the control-not-combat curriculum, and everything a new student would know.</p>
@@ -108,8 +207,14 @@ h1 .amp{color:var(--red)}
 
 <footer class="footer"><div class="shell">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <span class="tiny">FM-RA-00 · Fan-made JJK 5e homebrew reference · <a href="legacy-library.html">Legacy library browser</a></span>
-  <span class="tiny">Editions: <b>Field Manual</b> · <a href="grimoire/index.html">Grimoire</a> · <a href="illustrated/index.html">Illustrated</a></span>
+  <span class="tiny">IL-RA-00 · Fan-made JJK 5e homebrew reference · <a href="legacy-library.html">Legacy library browser</a></span>
+  <span class="editions">Editions: <a href="field-manual/index.html">Field Manual</a> · <a href="grimoire/index.html">Grimoire</a> · <span class="ed-current">Illustrated · current</span></span>
+  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA — manga &amp; anime art from the author's JJK 5e PDFs, used for personal, non-commercial fan purposes only. No AI art.</span>
 </div></footer>
+<script>
+/* responsive nav toggle (added 2026-09-11) */
+(function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(open){t.classList.toggle('nav-open',open);b.setAttribute('aria-expanded',open?'true':'false');b.textContent=open?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});t.querySelectorAll('.navlinks a').forEach(function(a){a.addEventListener('click',function(){set(false);});});document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});})();
+</script>
+
 </body>
 </html>

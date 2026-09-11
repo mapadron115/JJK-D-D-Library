@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ritual Archive field manual: the player-facing technique codex — every campaign technique with full level-by-level mechanics.">
-<title>Technique Codex — Ritual Archive Field Manual</title>
+<meta name="description" content="Ritual Archive illustrated edition: the player-facing technique codex — every campaign technique with full level-by-level mechanics.">
+<title>Technique Codex — Ritual Archive Illustrated</title>
 <style>
 :root{
   --paper:#f4efe2; --paper2:#ece4cf; --card:#fbf8ee; --card2:#f6f1e1;
@@ -152,17 +152,130 @@ h1 .amp{color:var(--red)}
   .ctrl-grid{grid-template-columns:1fr}
   .resultline{flex-direction:column;align-items:flex-start;gap:4px}
 }
+
+/* ═══ Illustrated edition art layer ═══ */
+
+/* ════════════════════════════════════════════════════════════════
+   ILLUSTRATED EDITION — art-book layer (appended after root styles)
+   Warm paper surfaces · cinematic dark heroes · gold accents
+   Art: real JJK manga/anime panels © Gege Akutami / Shueisha / MAPPA
+   ════════════════════════════════════════════════════════════════ */
+:root{
+  --gold:#c9972f; --gold-deep:#8f6c1d; --gold-pale:#e9cf87;
+  --ivory:#f8f3e6; --night:#14100b;
+}
+/* ── dark cinematic topbar ── */
+.topbar{background:linear-gradient(180deg,#1a1410,#251c12);border-bottom:3px solid var(--gold);box-shadow:0 4px 20px rgba(20,12,6,.4)}
+.topbar .brand{color:var(--ivory)}
+.topbar .brand:hover{color:var(--gold-pale)}
+.topbar .brand-mark{background:linear-gradient(160deg,#dcb04a,#a5761f);color:#1d150a;box-shadow:inset 0 0 0 2px rgba(29,21,10,.4),0 1px 10px rgba(220,176,74,.35)}
+.topbar .navlinks a{color:#cfc2a4}
+.topbar .navlinks a:hover{color:var(--gold-pale)}
+.topbar .navlinks a.is-current{color:var(--gold-pale);border-bottom:2px solid var(--gold);padding-bottom:2px}
+.topbar .doc-tag{color:#9d8f6d}
+/* ── hero art component: real <img> under a gradient scrim; text never sits on bare art ── */
+.hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hero-art img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,12,7,.68) 0%,rgba(18,12,7,.36) 45%,rgba(18,12,7,.90) 100%)}
+.doc-head,.hero{position:relative;background:var(--night);overflow:hidden}
+.doc-head{padding:90px 0 70px;margin-bottom:36px}
+.doc-head .shell,.hero .shell{position:relative;z-index:1}
+.doc-head .eyebrow,.hero .eyebrow{color:var(--gold-pale)}
+.doc-head h1,.hero h1{color:var(--ivory);text-shadow:0 2px 26px rgba(0,0,0,.65)}
+.doc-head h1 .amp,.hero h1 .amp{color:var(--gold-pale)}
+.doc-head .lede,.hero .lede{color:#e3d9bf}
+.doc-head .statstrip{background:rgba(18,12,8,.55);border:1px solid rgba(201,151,47,.5)}
+.doc-head .stat{border-right:1px solid rgba(201,151,47,.25)}
+.doc-head .stat:last-child{border-right:none}
+.doc-head .stat b{color:var(--ivory)}
+.doc-head .stat span{color:var(--gold-pale)}
+/* ── plate divider (below-the-fold, lazy-loaded <img>) ── */
+.plate{position:relative;height:150px;border-radius:6px;overflow:hidden;margin:0 0 26px;border:1px solid var(--line2);box-shadow:0 6px 18px rgba(34,29,20,.16)}
+.plate img{width:100%;height:100%;object-fit:cover;display:block}
+.plate::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,12,7,.08),rgba(18,12,7,.60))}
+/* ── footer with edition switcher + art credit ── */
+.footer{background:linear-gradient(180deg,#1a1410,#0f0b07);border-top:3px solid var(--gold);color:#b3a586;padding:30px 0 46px}
+.footer .brand{color:var(--ivory)}
+.footer a{color:var(--gold-pale)}
+.footer .tiny{color:#8f8163}
+.footer .editions{display:block;width:100%;margin-top:14px;font-size:.78rem;letter-spacing:1px;color:#8f8163}
+.ed-current{color:var(--gold-pale);border:1px solid var(--gold);border-radius:2px;padding:1px 8px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+.footer .art-credit{display:block;width:100%;margin-top:10px;font-size:.72rem;color:#7d7057;max-width:100ch}
+
+/* ── Illustrated codex: panel watermarks on entry cards (JS untouched) ── */
+.entry{position:relative}
+.entry::before{content:"";position:absolute;top:0;right:0;bottom:0;width:260px;pointer-events:none;background-repeat:no-repeat;background-position:right center;background-size:auto 140%;opacity:.5;-webkit-mask-image:linear-gradient(90deg,transparent 25%,#000 78%);mask-image:linear-gradient(90deg,transparent 25%,#000 78%)}
+.entry-head,.lib-link,.entry-body{position:relative;z-index:1}
+.entry:nth-child(8n+1)::before{background-image:url('assets/img/panel-curse-maw.jpg')}
+.entry:nth-child(8n+2)::before{background-image:url('assets/img/panel-shikigami-clash.jpg')}
+.entry:nth-child(8n+3)::before{background-image:url('assets/img/panel-cursed-spirits.jpg')}
+.entry:nth-child(8n+4)::before{background-image:url('assets/img/panel-cursed-tools.jpg')}
+.entry:nth-child(8n+5)::before{background-image:url('assets/img/panel-divine-lightning.jpg')}
+.entry:nth-child(8n+6)::before{background-image:url('assets/img/panel-gojo-infinity.jpg')}
+.entry:nth-child(8n+7)::before{background-image:url('assets/img/panel-megumi-strike.jpg')}
+.entry:nth-child(8n+8)::before{background-image:url('assets/img/panel-yuji-cursed-energy.jpg')}
+.entry.lib-card:nth-child(4n+1)::before{background-image:url('assets/img/panel-umbrella-shore.jpg')}
+.entry.lib-card:nth-child(4n+2)::before{background-image:url('assets/img/panel-gojo-playful.jpg')}
+.entry.lib-card:nth-child(4n+3)::before{background-image:url('assets/img/panel-cursed-dagger.jpg')}
+.entry.lib-card:nth-child(4n+4)::before{background-image:url('assets/img/portrait-megumi-stance.jpg')}
+
+/* ── responsive nav: hamburger below 860px (added 2026-09-11) ── */
+.nav-toggle{display:none}
+@media (max-width:860px){
+  .topbar .nav{position:relative}
+  .topbar .doc-tag{display:none}
+  .nav-toggle{display:inline-grid;place-items:center;width:44px;height:44px;background:transparent;border:1px solid var(--gold,#c9972f);border-radius:4px;color:var(--gold-pale,#e9cf87);font-size:1.3rem;line-height:1;cursor:pointer;flex-shrink:0}
+  .topbar .navlinks{display:none}
+  .topbar.nav-open .navlinks{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:linear-gradient(180deg,#1a1410,#0f0b07);border-top:1px solid rgba(201,151,47,.35);border-bottom:3px solid var(--gold,#c9972f);padding:8px 24px 16px;z-index:60;margin:0}
+  .topbar.nav-open .navlinks a{padding:13px 4px;border-bottom:1px solid rgba(201,151,47,.25);font-size:.88rem;letter-spacing:2px}
+  .topbar.nav-open .navlinks a.is-current{border-bottom:1px solid var(--gold,#c9972f)}
+}
+
+/* ── mobile/tablet responsive overhaul (2026-09-11) ──
+   @media only — desktop ≥861px renders exactly as before. */
+@media (max-width:860px){
+  .topbar .nav{padding:12px 16px}
+  /* touch targets ≥44px */
+  .seg-btn{padding:12px 20px;min-height:44px}
+  #clearAll{min-height:44px}
+  .field input,.field select{min-height:44px}
+}
+@media (max-width:560px){
+  img{max-width:100%;height:auto}
+  .shell{padding:0 16px}
+  .doc-head{padding:56px 0 36px;margin-bottom:24px}
+  .doc-head h1{font-size:2.1rem}
+  .stat{padding:12px 14px}
+  .source-row{padding:16px 16px 0}
+  .ctrl-grid{padding:16px 16px 4px;gap:12px}
+  .resultline{padding:10px 16px 14px}
+  #entries{padding:16px 0 48px}
+  .entry{margin-bottom:14px}
+  .entry-head{padding:18px 16px;gap:14px}
+  .head-side{align-items:flex-start}
+  .entry-body{padding:20px 16px}
+  .lib-link{padding:18px 16px}
+  .lvl{margin:18px 0 4px}
+  .feat{margin:0 0 14px;padding-bottom:12px}
+  .callout{margin:20px 0}
+  .callout-head{padding:12px 16px 8px}
+  .callout .cost{padding:8px 16px}
+  .callout .body{padding:4px 16px 14px}
+  .domain-data>div{padding:10px 16px}
+}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="shell nav">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
   <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html">Character Builder</a><a href="codex.html" class="is-current">Technique Codex</a><a href="lore.html">Story So Far</a></nav>
-  <span class="doc-tag">Field Manual · Technique Codex</span>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  <span class="doc-tag">Illustrated · Technique Codex</span>
 </div></header>
 
 <main>
-<section class="doc-head"><div class="shell">
+<section class="doc-head">
+<div class="hero-art" aria-hidden="true"><img src="assets/img/hero-curse-hallway.jpg" alt="" loading="eager"></div><div class="shell">
   <div class="eyebrow"><span class="orn">❖</span> Field Manual · FM-RA-01 · Player Reference <span class="orn">❖</span></div>
   <h1>Technique <span class="amp">Codex</span></h1>
   <p class="lede">Two catalogues, one codex: the historical figures' techniques with full level-by-level mechanics, and the original techniques from the library — each with its full dossier. Search across both, then open a figure entry for the progression or follow a card to its dossier.</p>
@@ -212,12 +325,18 @@ h1 .amp{color:var(--red)}
 
 <footer class="footer"><div class="shell">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <span>FM-RA-01 · Technique Codex · fan-made JJK 5e homebrew reference. Domain profiles per the audited canon — figure Domains are Specific Domains.</span>
-  <span class="tiny">Editions: <b>Field Manual</b> · <a href="grimoire/index.html">Grimoire</a> · <a href="illustrated/index.html">Illustrated</a></span>
+  <span class="tiny">FM-RA-01 · Technique Codex · fan-made JJK 5e homebrew reference. Domain profiles per the audited canon — figure Domains are Specific Domains.</span>
+  <span class="editions">Editions: <a href="field-manual/index.html">Field Manual</a> · <a href="grimoire/index.html">Grimoire</a> · <span class="ed-current">Illustrated · current</span></span>
+  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA — manga &amp; anime art from the author's JJK 5e PDFs, used for personal, non-commercial fan purposes only. No AI art.</span>
 </div></footer>
 
 <script src="data/library.js"></script>
 <script src="data/codex.js"></script>
 <script src="assets/codex.js"></script>
+<script>
+/* responsive nav toggle (added 2026-09-11) */
+(function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(open){t.classList.toggle('nav-open',open);b.setAttribute('aria-expanded',open?'true':'false');b.textContent=open?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});t.querySelectorAll('.navlinks a').forEach(function(a){a.addEventListener('click',function(){set(false);});});document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});})();
+</script>
+
 </body>
 </html>
