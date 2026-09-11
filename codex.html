@@ -29,6 +29,11 @@ a{color:var(--red-deep)}
 .brand:hover{color:var(--red-deep)}
 .brand-mark{display:inline-grid;place-items:center;width:34px;height:34px;background:var(--red);color:var(--paper);font-family:var(--serif);font-size:1.25rem;border-radius:4px;box-shadow:0 1px 0 var(--red-deep)}
 .doc-tag{font-size:.72rem;letter-spacing:2.5px;color:var(--ink3);text-transform:uppercase}
+.navlinks{display:flex;gap:22px;flex-wrap:wrap}
+.navlinks a{text-decoration:none;color:var(--ink2);font-size:.8rem;letter-spacing:1.8px;text-transform:uppercase;font-weight:600}
+.navlinks a:hover{color:var(--red-deep)}
+.navlinks a.is-current{color:var(--red-deep);border-bottom:2px solid var(--red);padding-bottom:2px}
+.topbar .nav{gap:16px}
 /* ── document head ───────────────────────── */
 .doc-head{padding:56px 0 8px}
 .eyebrow{font-size:.75rem;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:14px}
@@ -151,7 +156,8 @@ h1 .amp{color:var(--red)}
 </head>
 <body>
 <header class="topbar"><div class="shell nav">
-  <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>← Ritual Archive</span></a>
+  <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
+  <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html">Character Builder</a><a href="codex.html" class="is-current">Technique Codex</a><a href="lore.html">Story So Far</a></nav>
   <span class="doc-tag">Field Manual · Technique Codex</span>
 </div></header>
 

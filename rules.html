@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Ritual Archive field manual: the player-facing rulebook for the JJK 5e homebrew — cursed energy, techniques, vows, domains, RCT, Black Flash, clashes, attunement.">
+<title>Field Guide · Rules — Ritual Archive</title>
+<style>
+:root{
+  --paper:#f4efe2; --paper2:#ece4cf; --card:#fbf8ee; --card2:#f6f1e1;
+  --ink:#221d14; --ink2:#57503f; --ink3:#7d7563;
+  --line:#d9cfae; --line2:#c9bfa1;
+  --red:#b33a2b; --red-deep:#8c2a1f;
+  --olive:#5f6238; --stone:#8a8474;
+  --serif:Georgia,'Times New Roman',Charter,'Bitstream Charter','Iowan Old Style',serif;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:16px;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(34,29,20,.028) 31px,rgba(34,29,20,.028) 32px);}
+::selection{background:var(--red);color:var(--paper)}
+.shell{max-width:1080px;margin:0 auto;padding:0 24px}
+a{color:var(--red-deep)}
+/* ── top bar ─────────────────────────────── */
+.topbar{background:var(--card);border-bottom:3px double var(--ink);position:sticky;top:0;z-index:50}
+.topbar .nav{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px 24px}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:var(--serif);font-size:1.15rem;font-weight:bold;letter-spacing:.5px}
+.brand:hover{color:var(--red-deep)}
+.brand-mark{display:inline-grid;place-items:center;width:34px;height:34px;background:var(--red);color:var(--paper);font-family:var(--serif);font-size:1.25rem;border-radius:4px;box-shadow:0 1px 0 var(--red-deep)}
+.navlinks{display:flex;align-items:center;gap:26px}
+.navlinks a{text-decoration:none;color:var(--ink2);font-size:.78rem;letter-spacing:2px;text-transform:uppercase}
+.navlinks a:hover{color:var(--red-deep)}
+.navlinks a.is-current{color:var(--ink);border-bottom:2px solid var(--red);padding-bottom:2px}
+.doc-tag{font-size:.72rem;letter-spacing:2.5px;color:var(--ink3);text-transform:uppercase;white-space:nowrap}
+/* ── document head ───────────────────────── */
+.doc-head{padding:56px 0 8px}
+.eyebrow{font-size:.75rem;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:14px}
+.eyebrow .orn{color:var(--ink3);letter-spacing:0}
+h1{font-family:var(--serif);font-size:3.2rem;line-height:1.05;margin:0 0 12px;letter-spacing:.5px}
+h1 .amp{color:var(--red)}
+.lede{font-size:1.1rem;color:var(--ink2);max-width:62ch;margin:0 0 24px}
+.statstrip{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line2);background:var(--card);margin:0 0 40px}
+.stat{flex:1 1 140px;padding:14px 18px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:none}
+.stat b{display:block;font-family:var(--serif);font-size:1.7rem;color:var(--ink)}
+.stat span{font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3)}
+/* ── layout + TOC ────────────────────────── */
+.layout{display:grid;grid-template-columns:250px 1fr;gap:40px;align-items:start;padding-bottom:64px}
+.toc{position:sticky;top:78px;background:var(--card);border:1px solid var(--line2);border-top:4px solid var(--ink);padding:18px 20px;box-shadow:0 2px 0 rgba(34,29,20,.08)}
+.toc .toc-title{font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--red);margin:0 0 10px;font-weight:bold}
+.toc ol{margin:0;padding:0;list-style:none}
+.toc li{margin:0}
+.toc a{display:block;text-decoration:none;color:var(--ink2);font-size:.85rem;padding:6px 0;border-bottom:1px dotted var(--line)}
+.toc a:hover{color:var(--red-deep)}
+.toc a .n{font-family:var(--serif);color:var(--red-deep);margin-right:8px}
+/* ── sections ────────────────────────────── */
+.rule-sec{background:var(--card);border:1px solid var(--line2);margin:0 0 26px;box-shadow:0 2px 0 rgba(34,29,20,.08);scroll-margin-top:80px}
+.sec-head{padding:26px 30px 0}
+.sec-kicker{font-size:.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--red);display:block;margin-bottom:6px}
+.sec-head h2{font-family:var(--serif);font-size:2rem;margin:0 0 10px;line-height:1.15}
+.sec-head .deck{color:var(--ink2);font-style:italic;max-width:64ch;margin:0 0 6px}
+.sec-body{padding:8px 30px 28px}
+.sec-body h3{font-family:var(--serif);font-size:1.25rem;margin:26px 0 8px;color:var(--ink)}
+.sec-body h3:first-child{margin-top:8px}
+.sec-body p{margin:.7em 0}
+.sec-body ul{margin:.6em 0;padding-left:1.4em}
+.sec-body li{margin:.35em 0}
+.sec-body dl{margin:.7em 0}
+.sec-body dt{font-family:var(--serif);font-weight:bold;margin-top:.5em}
+.sec-body dd{margin:0 0 .5em;color:var(--ink2)}
+b.k{font-family:var(--serif)}
+/* ── tables ──────────────────────────────── */
+.rtable{width:100%;border-collapse:collapse;margin:16px 0;font-size:.92rem}
+.rtable th{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:9px 12px;text-align:left}
+.rtable td{border-bottom:1px solid var(--line);padding:9px 12px;vertical-align:top}
+.rtable tr:nth-child(even) td{background:var(--card2)}
+.rtable td.num,.rtable th.num{text-align:right;font-variant-numeric:tabular-nums}
+.table-wrap{overflow-x:auto}
+/* ── callouts ────────────────────────────── */
+.canon-note{border:2px solid var(--olive);background:rgba(95,98,56,.06);margin:20px 0}
+.canon-note .cn-head{padding:10px 18px;border-bottom:1px solid rgba(95,98,56,.35);font-size:.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--olive);font-weight:bold}
+.canon-note .cn-body{padding:10px 18px 14px;font-size:.94rem;color:var(--ink2)}
+.canon-note .cn-body p{margin:.5em 0}
+.callout{border:2px solid var(--ink);margin:22px 0;background:var(--card)}
+.callout-head{padding:14px 20px 10px;border-bottom:1px solid var(--line2)}
+.callout-kicker{font-size:.68rem;letter-spacing:3px;text-transform:uppercase;display:block;margin-bottom:4px;color:var(--red)}
+.callout h4{font-family:var(--serif);font-size:1.3rem;margin:0}
+.callout .body{padding:6px 20px 16px}
+.callout .body p{margin:.6em 0}
+.callout-red{border-color:var(--red)}
+.callout-red .callout-head{background:rgba(179,58,43,.06)}
+/* ── formula box ─────────────────────────── */
+.formula{background:var(--ink);color:var(--paper);padding:20px 24px;margin:18px 0;font-family:var(--serif);font-size:1.08rem;line-height:1.7}
+.formula .f-label{display:block;font-family:var(--sans);font-size:.66rem;letter-spacing:3px;text-transform:uppercase;color:var(--line);margin-bottom:8px}
+.formula em{color:var(--paper)}
+/* ── cheat sheet ─────────────────────────── */
+.cheat{background:var(--card);border:3px double var(--ink);padding:30px 32px;scroll-margin-top:80px;box-shadow:0 2px 0 rgba(34,29,20,.08)}
+.cheat h2{font-family:var(--serif);font-size:1.8rem;margin:0 0 4px}
+.cheat .sub{color:var(--ink3);font-size:.82rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px}
+.cheat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.cheat-card{background:var(--paper);border:1px solid var(--line2);padding:16px 18px}
+.cheat-card h4{font-family:var(--serif);margin:0 0 8px;font-size:1.05rem;color:var(--red-deep)}
+.cheat-card ul{margin:0;padding-left:1.2em;font-size:.88rem}
+.cheat-card li{margin:.3em 0}
+/* ── footer ──────────────────────────────── */
+.footer{border-top:3px double var(--ink);padding:28px 0 48px;font-size:.8rem;color:var(--ink3)}
+.footer .shell{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.footer .brand{font-size:1rem}
+@media (max-width:980px){
+  .layout{grid-template-columns:1fr}
+  .toc{position:static}
+  h1{font-size:2.4rem}
+  .navlinks{display:none}
+}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="shell nav">
+<a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
+<nav class="navlinks"><a href="rules.html" class="is-current">Field Guide</a><a href="builder.html">Character Builder</a><a href="codex.html">Technique Codex</a><a href="lore.html">Story So Far</a></nav>
+<span class="doc-tag">Field Manual · Rules</span>
+</div></header>
+
+<main>
+<section class="doc-head"><div class="shell">
+  <div class="eyebrow"><span class="orn">❖</span> Field Manual · FM-RA-02 · Player Reference <span class="orn">❖</span></div>
+  <h1>Field Guide <span class="amp">·</span> Rules</h1>
+  <p class="lede">You already know Dungeons &amp; Dragons 5th Edition. This manual teaches only the adaptation layer — the sorcery. Cursed energy, innate techniques, binding vows, domains, reverse cursed technique, Black Flash, clashes, and attunement: everything a sorcerer needs at the table, and nothing else.</p>
+  <div class="statstrip">
+    <div class="stat"><b>7</b><span>reserve dice</span></div>
+    <div class="stat"><b>6</b><span>core advanced systems</span></div>
+    <div class="stat"><b>20 CE</b><span>to open a domain</span></div>
+    <div class="stat"><b>1d20</b><span>decides the sparks</span></div>
+  </div>
+</div></section>
+
+<div class="shell layout">
+<nav class="toc" aria-label="Table of contents">
+  <p class="toc-title">❖ Contents</p>
+  <ol>
+    <li><a href="#ce"><span class="n">I</span>Cursed Energy &amp; the Reserve</a></li>
+    <li><a href="#techniques"><span class="n">II</span>Innate Techniques</a></li>
+    <li><a href="#vows"><span class="n">III</span>Binding Vows</a></li>
+    <li><a href="#domains"><span class="n">IV</span>Domains</a></li>
+    <li><a href="#rct"><span class="n">V</span>Reverse Cursed Technique</a></li>
+    <li><a href="#blackflash"><span class="n">VI</span>Black Flash &amp; Output</a></li>
+    <li><a href="#clashes"><span class="n">VII</span>Clashes</a></li>
+    <li><a href="#attunement"><span class="n">VIII</span>Attunement</a></li>
+    <li><a href="#special"><span class="n">IX</span>Ten Shadows &amp; Special Systems</a></li>
+    <li><a href="#tools"><span class="n">X</span>Cursed Tools</a></li>
+    <li><a href="#cheat"><span class="n">❖</span>Quick Reference</a></li>
+  </ol>
+</nav>
+
+<div class="content">
+
+<!-- ═══════════ I. CE ═══════════ -->
+<section class="rule-sec" id="ce">
+<div class="sec-head">
+  <span class="sec-kicker">Section I</span>
+  <h2>Cursed Energy &amp; the CE Reserve</h2>
+  <p class="deck">Cursed energy is the negative emotion you weaponize. It lives in a reserve that behaves like hit points: it grows with every level, it empties as you spend it, and it is the whole character's — not any one class's.</p>
+</div>
+<div class="sec-body">
+<h3>The reserve formula</h3>
+<div class="formula">
+<span class="f-label">Maximum CE</span>
+<em>Starting die maximum</em> + <em>every later level's Reserve gain</em> + <em>CE ability modifier (once)</em> + <em>permanent bonuses</em>
+</div>
+<p>When you first gain cursed energy, choose <b>Wisdom or Charisma</b> as your CE ability, unless your class names another score. The choice applies to every class, technique, feat, and item you use. At character level 1, take the <b>maximum</b> of your starting class's Reserve Die and add your CE ability modifier. At every later level, roll that class's Reserve Die or take its fixed gain. The CE ability modifier is added <b>only once</b> to the whole reserve — never per level. If the modifier changes, adjust maximum and current CE by the same amount. Your maximum CE is always at least 1 if you possess cursed energy.</p>
+<h3>Reserve dice by class</h3>
+<div class="table-wrap"><table class="rtable">
+<tr><th>Class</th><th>Reserve die</th><th class="num">Fixed gain / level</th><th>Reserve identity</th></tr>
+<tr><td><b class="k">Juggernaut</b></td><td>d4</td><td class="num">+3 CE</td><td>Lowest reserve; relies on durability and efficient technique use.</td></tr>
+<tr><td><b class="k">Scout</b></td><td>d6</td><td class="num">+4 CE</td><td>Balanced reserve for movement, reactions, frequent low-cost techniques.</td></tr>
+<tr><td><b class="k">Warrior</b></td><td>d6</td><td class="num">+4 CE</td><td>Balanced reserve for weapon pressure mixed with technique bursts.</td></tr>
+<tr><td><b class="k">Shikigami User</b></td><td>d6</td><td class="num">+4 CE</td><td>Balanced reserve; higher summoning costs offset by persistent manifestations.</td></tr>
+<tr><td><b class="k">Support Specialist</b></td><td>d8</td><td class="num">+5 CE</td><td>Large reserve for barriers, healing, protection, sustained support.</td></tr>
+<tr><td><b class="k">Strategist</b></td><td>d10</td><td class="num">+6 CE</td><td>Largest natural reserve; technique modification and repeated deployment.</td></tr>
+<tr><td><b class="k">Heavenly Restriction</b></td><td>—</td><td class="num">0 CE</td><td>Possesses no cursed energy and never gains Reserve Dice.</td></tr>
+</table></div>
+<p>Fixed-gain milestones (assuming a +5 CE modifier and no permanent bonuses): a d4 class holds 9 CE at level 1, 39 at level 11, 66 at level 20; d6 holds 11 / 51 / 87; d8 holds 13 / 63 / 108; d10 holds 15 / 75 / 129.</p>
+<h3>One pool, one ability, one modifier</h3>
+<p>Multiclassing never creates several independent CE pools. Use the <b>maximum Reserve Die of your starting class</b> at character level 1; every later character level adds the Reserve roll or fixed gain of the class taken at that level. Add the CE ability modifier once to the combined reserve — a new class never adds it again, and never grants a second CE ability. Total character level sets your proficiency bonus; each class's features still advance on that class's levels.</p>
+<p><i>Example — Warrior 5 / Support Specialist 3, +4 CE modifier, fixed gains:</i> 6 (starting d6) + 16 (four later Warrior levels × 4) + 15 (three Support levels × 5) + 4 (modifier once) = <b>41 maximum CE</b>.</p>
+<h3>Attack, save DC, and spending</h3>
+<ul>
+<li><b>CE attack modifier</b> = proficiency bonus + CE ability modifier.</li>
+<li><b>CE save DC</b> = 8 + proficiency bonus + CE ability modifier.</li>
+<li><b>Recovery:</b> you regain all spent CE when you finish a long rest — not during combat or on a short rest, unless a feature expressly says so.</li>
+<li><b>Pay the listed cost.</b> If a feature costs 6 CE, pay 6 CE. Availability is not gated by level: once a class, technique, feat, ritual, or breakthrough grants an ability, you may use it whenever you can pay its cost and meet its trigger — even if that creates exceptional output earlier than expected.</li>
+<li><b>Variable input (X).</b> If the feature gives no ceiling, X may be any positive amount you can currently pay. A printed limit (CE modifier, PB, 10 CE) still applies.</li>
+<li><b>No universal Output Rank.</b> A large reserve is allowed to create a large moment. There is no level-based fixed-cost gate, proficiency-bonus overcharge cap, or universal accuracy ceiling — the feature's own cost and printed limits are the procedure. Named limits that stop a feature from triggering itself remain binding.</li>
+<li><b>Cost arithmetic:</b> base cost → add optional CE and extra targets → apply multiplier (e.g. Maximum Output) → apply cost reduction. Halved costs round up; CE is spent on activation and is not refunded by a miss, a saved-against effect, or a broken Focus. If you cannot pay the full calculated cost, the activation does not begin — you may choose a lower legal X first.</li>
+</ul>
+<h3>Temporary cursed energy</h3>
+<p>Borrowed output, not a permanent expansion. Temporary CE can raise current CE above maximum but never changes the maximum; it is spent <b>before</b> normal CE; it cannot be restored and vanishes when its source ends; repeated uses of the same source do not stack. Temporary CE may power techniques but <b>cannot</b> pay a permanent creation cost, a permanent Binding Vow cost, or any cost explicitly requiring your natural CE.</p>
+<div class="canon-note"><div class="cn-head">❖ Canon note</div><div class="cn-body"><p>This formula replaces every older fixed class-table CE total (and old formulas like <i>level + modifier</i> or <i>20 + modifier</i>). The old guide's fixed CE milestones above are recomputed from the same formula — reserve dice now scale like hit points across levels.</p></div></div>
+</div>
+</section>
+
+<!-- ═══════════ II. TECHNIQUES ═══════════ -->
+<section class="rule-sec" id="techniques">
+<div class="sec-head">
+  <span class="sec-kicker">Section II</span>
+  <h2>Innate Techniques</h2>
+  <p class="deck">Every sorcerer is born with one innate technique — the shape their cursed energy takes. It arrives at level 1 and deepens across your whole career.</p>
+</div>
+<div class="sec-body">
+<h3>Milestones</h3>
+<p>Every sorcerer class gains its Innate Technique at level 1, with major technique feature slots at class levels <b>3, 6, 11, and 18</b> — each slot uses the selected technique's own feature text. A completed technique framework may also print automatic internal unlocks at other levels; those belong to that technique's progression and do not consume a class feature slot. Above that lie the <b>level 20 capstone</b>, the <b>Maximum technique</b>, and the <b>Domain</b>.</p>
+<h3>Power tiers — descriptive, not a ban list</h3>
+<p>Every technique is catalogued on a five-tier scale plus one exception. The tier measures the technique's normal encounter influence, narrative reach, rules load, and late-game volatility — <b>not</b> your character's grade, and it never gates selection or weakens output.</p>
+<ul>
+<li><b>Tier I — Focused.</b> A narrow, dependable combat identity. Strong when used well, easy to prepare around.</li>
+<li><b>Tier II — Versatile.</b> Multiple tactical vectors, mobility, control, support, or a contained summon package.</li>
+<li><b>Tier III — Apex.</b> Consistent scene control, unusually high output, early Domain access, or party-wide swing potential.</li>
+<li><b>Tier IV — Special Grade.</b> Permanent acquisition, armies, copying, nullification, body or soul rewriting, bespoke rules engines.</li>
+<li><b>Tier V — Calamity.</b> A campaign-defining endpoint whose full release can invalidate normal encounter assumptions. Still a standard player choice — the label sets expectations.</li>
+<li><b>X Tier — Outside Classification.</b> Reserved for techniques that edit the resolution layer itself (dice faces, turns, dimensions, local physics). Not Tier VI, and not a promotion for an optimized Tier V.</li>
+</ul>
+<h3>Technique Focus</h3>
+<p>Technique Focus works like spell concentration: you maintain only one Focus effect at a time. Taking damage forces a Constitution save, DC 10 or half the damage taken, whichever is higher. Focus ends if you are incapacitated, die, end it voluntarily, or begin another Focus effect. When old technique text is silent about sustaining, apply this rule of thumb:</p>
+<ul>
+<li>Self-buff or transformation — <b>1 minute</b>; requires Focus if it grants major combat benefits.</li>
+<li>Hostile condition with no repeat save — until the end of the source's next turn.</li>
+<li>Hostile condition with repeat saves — up to 1 minute; repeat at the end of each affected turn.</li>
+<li>Persistent hazard, zone, or movable effect — 1 minute and Focus.</li>
+</ul>
+<h3>One technique per sorcerer</h3>
+<p>Multiclassing alone <b>never</b> grants a second cursed technique — technique milestones use the highest individual level in a class that grants that technique, not the sum of all class levels. The <b>Dual Technique variant</b> (a separate, GM-approved choice) advances both techniques by total character level, but both still share one CE Reserve, one CE ability, one action economy, one Focus slot, one reaction pool, and the normal Domain and Burnout limits. Gaining a second technique never creates duplicate CE, extra turns, a second Focus slot, or simultaneous Domains.</p>
+<p>Full technique records — every tier, the complete progression map, and binding mechanical rulings for each — live in the <a href="codex.html">Technique Codex</a>.</p>
+</div>
+</section>
+
+<!-- ═══════════ III. VOWS ═══════════ -->
+<section class="rule-sec" id="vows">
+<div class="sec-head">
+  <span class="sec-kicker">Section III</span>
+  <h2>Binding Vows</h2>
+  <p class="deck">A binding vow is a contract written on your own cursed energy. Heaven — the world itself — enforces it. That enforcement is what makes a vow powerful, and it is also what makes one dangerous to make.</p>
+</div>
+<div class="sec-body">
+<h3>The iron law: every vow has a price</h3>
+<p>No vow grants anything for nothing. A vow trades <b>restriction for power</b> (limit yourself, gain something), or <b>power for consequence</b> (declare something, pay if you break it). The price must be real: lost options, lost resources, a permanent cost, a genuine vulnerability. A vow whose "restriction" never actually restricts you grants nothing — Heaven can tell.</p>
+<h3>The structure every vow needs</h3>
+<ul>
+<li><b>The restriction or declaration, stated plainly.</b> What you cannot do, must do, or have declared — in words every creature at the table can understand.</li>
+<li><b>The gain.</b> What the vow returns: more output, a new option, a sharper edge. Sized to the price.</li>
+<li><b>The penalty for breaking.</b> What you lose if you violate it — paid automatically, without appeal. Breaking a vow always costs more than keeping it.</li>
+</ul>
+<h3>Compulsory effects need an out</h3>
+<p>A vow that <b>compels</b> another creature's behavior — forcing them to act, speak, or be bound — must give the target a fair procedure: a saving throw against the vow-maker's CE save DC, or a <b>willing-decline valve</b> (the target may refuse and suffer a stated, bounded consequence instead of being compelled outright). No vow removes another creature's agency without giving them a roll or a choice.</p>
+<h3>No precognition cheese</h3>
+<p>Vows cannot be used to extract information the vow-maker could not otherwise know — no vows that reveal the future, read hidden truths, or turn the contract into a divination engine. A vow binds conduct and cost; it is not a window.</p>
+<h3>Working with vows at the table</h3>
+<ul>
+<li>Permanent vow costs must be paid with your <b>natural CE or a real permanent sacrifice</b> — temporary CE can never fund one.</li>
+<li>A vow's restriction and its gain are both active at all times unless the vow names a window.</li>
+<li>Maximum Output cannot enhance Binding Vows, and vows do not bypass Technique Burnout.</li>
+<li>The GM adjudicates whether a proposed vow's price is genuine. Err on the side of a steeper price — the game will be better for it.</li>
+</ul>
+<div class="canon-note"><div class="cn-head">❖ Canon note</div><div class="cn-body"><p>The older guides carry no standing vow engine — scattered feats reference Binding Vows but define no procedure. The rules above are the campaign's table canon: real price, saves or a willing-decline valve for compulsion, and no precognition.</p></div></div>
+</div>
+</section>
+
+<!-- ═══════════ IV. DOMAINS ═══════════ -->
+<section class="rule-sec" id="domains">
+<div class="sec-head">
+  <span class="sec-kicker">Section IV</span>
+  <h2>Domains</h2>
+  <p class="deck">Domain Expansion is the pinnacle of jujutsu: your innate domain given form, your technique written onto the world itself. Expanding one is a fight-defining commitment — and ending one leaves a mark.</p>
+</div>
+<div class="sec-body">
+<h3>The complete Domain — baseline</h3>
+<div class="table-wrap"><table class="rtable">
+<tr><th>Statistic</th><th>Value</th></tr>
+<tr><td><b class="k">Activation</b></td><td>Full-turn action (your action, bonus action, object interaction, and all movement for the turn) plus the required hands or signs.</td></tr>
+<tr><td><b class="k">Cost</b></td><td>20 CE.</td></tr>
+<tr><td><b class="k">Area</b></td><td>60-foot-radius enclosed space centered on you.</td></tr>
+<tr><td><b class="k">Targets</b></td><td>Choose perceived creatures in the area when it opens. Every other creature is moved harmlessly to the nearest space outside.</td></tr>
+<tr><td><b class="k">Duration</b></td><td>1 minute base — see refinement, below.</td></tr>
+</table></div>
+<p>A technique-specific Domain may change its action, cost, shape, range, target rule, or duration — its explicit wording wins. Opening a Domain ends your current Technique Focus, and the Domain occupies that Focus slot.</p>
+<h3>Refinement — a milestone, not a currency</h3>
+<p>Refinement tiers are awarded by the GM after a meaningful breakthrough, a decisive clash, sustained narrative training, or technique evolution — never for defeating trivial creatures, dumping unused CE before bed, or staging friendly clashes. Each tier converts into <b>clash points</b>, and clash points set both duration and Burnout.</p>
+<div class="table-wrap"><table class="rtable">
+<tr><th>Tier</th><th>Eligibility</th><th class="num">Clash pts</th><th>Benefit</th><th>Duration</th><th class="num">Burnout</th></tr>
+<tr><td><b class="k">0 · Incomplete</b></td><td>Feature or breakthrough</td><td class="num">—</td><td>Action, 10 CE, 30-foot radius, 3 rounds, no barrier or sure-hit. Once each turn: advantage on your first imbued attack, or disadvantage on the first save against it.</td><td>3 rounds</td><td class="num">—</td></tr>
+<tr><td><b class="k">1 · Complete</b></td><td>Normally level 11+ with a Domain feature</td><td class="num">1</td><td>The complete baseline above.</td><td>1 min</td><td class="num">10 rounds</td></tr>
+<tr><td><b class="k">2 · Refined</b></td><td>Normally level 13+ with a breakthrough</td><td class="num">200</td><td>Expansion becomes an action instead of a full-turn action.</td><td>1 min</td><td class="num">10 rounds</td></tr>
+<tr><td><b class="k">3 · Mastered</b></td><td>Normally level 15+ with a breakthrough</td><td class="num">500</td><td>Cost becomes 20 − CE modifier (minimum 15). Choose a standard or inverted barrier; +5 CE for a balanced barrier.</td><td>2 min</td><td class="num">10 rounds</td></tr>
+<tr><td><b class="k">4 · Supreme</b></td><td>Normally level 17+ with a major breakthrough</td><td class="num">800</td><td>Unlocks 0.2-second expansion and one Burnout Recovery attempt per long rest.</td><td>2 min</td><td class="num">5 rounds</td></tr>
+<tr><td><b class="k">5 · Calamity</b></td><td>Level 20 or campaign-defining breakthrough</td><td class="num">1000</td><td>Expansion becomes a bonus action. May create an open-barrier Domain. Repeatable Burnout Recovery, with rising danger.</td><td>3 min</td><td class="num">3 rounds</td></tr>
+</table></div>
+<div class="canon-note"><div class="cn-head">❖ Canon note</div><div class="cn-body"><p>Domain duration now follows refinement points — <b>under 500: 1 minute; 500–999: 2 minutes; 1,000+: 3 minutes</b> — replacing the old table's flat 10-round durations for tiers 1–3. Open-barrier Domains default to 1 minute. Figure Domains in the codex are <b>Specific Domains</b>: their stated profile (full-turn + 20 CE baseline) wins over this table; Tier IV figures hold 2-minute Domains, Tier V figures 3-minute Domains, with three recorded exceptions — Tesla (action / 10 CE), Hotu Matu'a (action / 20 CE), Dzunuk'wa (action / 20 CE).</p></div></div>
+<h3>Sure-hits — two philosophies</h3>
+<div class="callout callout-red"><div class="callout-head"><span class="callout-kicker">Modern philosophy</span><h4>The sure-hit event — initiative count 20</h4></div>
+<div class="body">
+<p>Every complete lethal Domain names <b>one self-contained Sure-Hit Event</b>. At initiative count 20 each round — after any clash comparison — the event resolves once against every eligible chosen target still inside. It is a manifestation of the Domain itself, not an activation of your ordinary attack or technique.</p>
+<ul>
+<li>An <b>unprotected</b> chosen target receives the event's complete printed result with <b>no attack roll and no initial saving throw</b>.</li>
+<li>A creature protected by an anti-domain defense uses the fallback attack or save printed in the Domain. If none is printed, use the most relevant save — success halves damage and prevents movement, conditions, and secondary riders.</li>
+<li>The event resolves once per round and <b>loses ties</b> to other initiative-20 effects. A creature entering after that count waits until the next round. The event is not a critical hit and cannot trigger Black Flash unless its own entry creates a rolled critical.</li>
+<li>Everything else still rolls: ordinary attacks, summon attacks, and saving-throw features used inside the Domain resolve normally.</li>
+</ul>
+</div></div>
+<div class="callout"><div class="callout-head"><span class="callout-kicker">Heian philosophy</span><h4>The Domain as law — continuous, not an event</h4></div>
+<div class="body">
+<p>Some Domains do not fire a discrete pulse. The Domain itself is a <b>place</b> — a truth, a terrain, a law — and the sure-hit is continuous: there is no count because there is no event. Under this philosophy the Domain's rules apply constantly to everyone inside (a court that always judges, a terrain that always punishes, a muster that always answers). These Domains name their continuous rules instead of an initiative-20 event; the rules are understood by every trapped creature when the Domain opens.</p>
+</div></div>
+<h3>Anti-domain defenses</h3>
+<p><b>Simple Domain</b>, <b>Hollow Wicker Basket</b>, and similar defenses <b>suppress sure-hit</b> against protected creatures. They do not end the Domain, erase its terrain, prevent ordinary attacks, or automatically negate its separate environmental rules. A refined Simple Domain — the New Shadow Style discipline — is achievable around level 6: a 20-foot radius you can raise as a bonus action or as a reaction to a Domain or sure-hit effect, without CE a number of times per long rest equal to your proficiency bonus.</p>
+<h3>Non-lethal Domains</h3>
+<p>A non-lethal Domain replaces sure-hit with a <b>specific rule, trigger, consequence, and completion condition</b>, disclosed to every trapped creature when the Domain opens. A creature that knowingly violates it makes the listed save; success avoids the consequence until the start of its next turn. The procedure must offer meaningful choices — without explicit text it cannot cause instant death, permanent resource loss, or unavoidable violence. It clashes and burns out normally.</p>
+<h3>Barriers, stability, and collapse</h3>
+<ul>
+<li><b>Barrier:</b> AC 12 + PB; HP = 10 × max(1, actual CE modifier) + clash points (doubled clash-point contribution at 800+ points). Immune to psychic and poison damage. By default resists damage from inside and is vulnerable from outside; automatically fails saves; immune to conditions. From inside, a creature must use an action and succeed on Wisdom (Perception) against your CE save DC to expose a weak point until the end of its next turn.</li>
+<li><b>Tier 3 barrier choice:</b> standard (resistance inside, vulnerability outside), inverted (vulnerability inside, resistance outside), or balanced (+5 CE: neither).</li>
+<li><b>Domain Stability:</b> if one damage source deals at least 20% of your hit point maximum, make a Constitution save (DC 10 or half the damage taken, whichever is higher). On a failure, the Domain collapses. It also collapses if you are incapacitated, die, dismiss it (no action on your turn), its barrier or anchor reaches 0 HP, or another rule breaks it.</li>
+<li><b>A closed barrier</b> blocks physical passage and teleportation across it unless an effect expressly crosses planar barriers. Destroying it collapses the Domain.</li>
+</ul>
+<h3>Open-barrier Domains — tier 5</h3>
+<p>A divine technique with an escape route. Omit the outer barrier and choose a visible point on the ground as the anchor: <b>120-foot radius, 1 minute</b>. Creatures can enter or leave normally, but eligible creatures inside remain subject to its effect. The anchor has AC equal to your CE save DC, HP equal to 5 × your character level, immunity to psychic and poison damage, and no vulnerability. Destroying it collapses the Domain.</p>
+<h3>0.2-second expansion — tier 4</h3>
+<p>As an action, spend 10 CE to expand until the end of the current turn and immediately resolve your Domain's Sure-Hit Event once against every eligible creature in its area, <b>including allies</b>. Reactions cannot be used after the expansion begins, though they may still be used against its announced activation if their trigger permits. When it ends, suffer your normal Tier 4 Burnout. It cannot be extended or made open-barrier.</p>
+<h3>Technique Burnout</h3>
+<p>A Domain ending <b>for any reason</b> causes Technique Burnout. During Burnout you cannot activate an Innate Technique feature, Cursed Technique Reversal, Maximum Output, Maximum Technique, or Domain Expansion. You can still move, attack with weapons, use class features independent of your Innate Technique, reinforce yourself with generic CE, use anti-domain techniques, and use generic RCT. Existing manifestations remain and take ordinary commands. Burnout is not exhaustion, cannot be removed by ordinary condition cleansing, and <b>Black Flash does not end it</b>.</p>
+<p><b>Burnout Recovery</b> (tier 4 with RCT): as an action, spend 8 CE and make a DC 15 Constitution save. Success ends Burnout; failure deals 6d6 irreducible psychic damage, leaves Burnout intact, and prevents actions and reactions until the start of your next turn. Tier 4 permits one attempt per long rest; tier 5 may retry until a failure, with each prior success since your long rest raising the DC by 5.</p>
+</div>
+</section>
+
+<!-- ═══════════ V. RCT ═══════════ -->
+<section class="rule-sec" id="rct">
+<div class="sec-head">
+  <span class="sec-kicker">Section V</span>
+  <h2>Reverse Cursed Technique</h2>
+  <p class="deck">Cursed energy is negative; multiply it by itself and it turns positive. Reverse cursed technique converts CE into flesh — powerful emergency healing, with a visible limit.</p>
+</div>
+<div class="sec-body">
+<h3>Unlocking RCT</h3>
+<p>You gain RCT from a class or technique feature, a feat, or a GM-awarded breakthrough after a near-death experience or exceptional CE insight. Surviving danger can create the opportunity, but never guarantees the ability.</p>
+<h3>The Healing Reserve</h3>
+<p>Your <b>Healing Reserve maximum = 10 × total character level</b>. It is a separate pool from HP and CE, and it returns to maximum only on a <b>long rest</b> — not a short rest. There is no automatic healing pulse. Reserve spent on healing or repairs does not return until the long rest, even if CE is restored sooner. CE governs <b>burst speed</b>; the Reserve governs <b>rebuildable tissue</b>.</p>
+<h3>Self-healing</h3>
+<p>Once per round while conscious, use a <b>bonus action</b> — or a <b>reaction immediately after taking damage</b> — to spend from 1 CE up to your CE ability modifier. Heal up to <b>10 HP per CE spent</b>, limited by your missing HP and your remaining Healing Reserve. Deduct only the HP actually restored from the reserve. If the triggering damage reduced you to 0 HP, you cannot use the reaction unless a feature expressly permits RCT while unconscious or at 0 HP. Unspent healing from an activation is lost; CE is not refunded.</p>
+<h3>Healing others — Positive Energy Output</h3>
+<p>Base RCT targets only you. A feature granting RCT Output lets you touch another creature as an action, spending up to your CE ability modifier at a rate of <b>2 CE per 10 HP restored</b>, deducting the healing from your reserve. A class feature may improve this rate or action.</p>
+<h3>Repairs</h3>
+<div class="table-wrap"><table class="rtable">
+<tr><th>Repair</th><th class="num">Reserve</th><th class="num">CE</th><th>Time</th><th>Result</th></tr>
+<tr><td>Physical poison, disease, blindness, deafness</td><td class="num">20</td><td class="num">2</td><td>Action</td><td>Ends one condition from ordinary physical damage or disease.</td></tr>
+<tr><td>One exhaustion level</td><td class="num">30</td><td class="num">3</td><td>1 minute</td><td>Once per long rest per creature. Cannot remove Burnout.</td></tr>
+<tr><td>Broken limb</td><td class="num">20</td><td class="num">2</td><td>Action</td><td>Ends the broken-limb penalty.</td></tr>
+<tr><td>Reattach severed limb</td><td class="num">40</td><td class="num">4</td><td>1 minute</td><td>The intact limb must be present and held in place.</td></tr>
+<tr><td>Eye, organ, head or torso wound</td><td class="num">60</td><td class="num">6</td><td>10 minutes</td><td>Ends one Major Wound or restores one destroyed nonfatal organ.</td></tr>
+<tr><td>Regrow severed limb</td><td class="num">80</td><td class="num">8</td><td>10 minutes</td><td>Restores one limb without needing the original.</td></tr>
+</table></div>
+<p>Repair costs do not also heal HP — deduct their Reserve and CE separately. One RCT activation restores HP <b>or</b> performs one listed repair, unless a feature explicitly combines them.</p>
+<h3>What RCT cannot do</h3>
+<p>RCT cannot restore CE, revive a dead creature, recreate a destroyed brain or torso, remove Technique Burnout, repair soul damage, or end a curse or supernatural condition — unless a feature expressly says it can. You do not automatically weaponize positive energy; if an RCT Output feature lets you harm cursed spirits or undead, use that feature's damage.</p>
+</div>
+</section>
+
+<!-- ═══════════ VI. BLACK FLASH & OUTPUT ═══════════ -->
+<section class="rule-sec" id="blackflash">
+<div class="sec-head">
+  <span class="sec-kicker">Section VI</span>
+  <h2>Black Flash &amp; Output</h2>
+  <p class="deck">Within 2.5 microseconds of a physical hit, cursed energy distorts space and strikes black. It cannot be aimed for — only earned — and when it lands, it changes the math of the fight.</p>
+</div>
+<div class="sec-body">
+<h3>Black Flash — the procedure</h3>
+<p>Whenever a creature capable of using cursed energy lands a <b>critical hit with an attack</b>, roll a second <b>unmodified d20</b> before damage. On a <b>natural 20</b>, the attack becomes a Black Flash.</p>
+<ul>
+<li>There is <b>no universal once-per-turn or once-per-round limit</b> on attempts or successes. Every qualifying critical may attempt the confirmation roll.</li>
+<li>A saving throw, automatic hit, passive effect, initiative-20 Domain event, or manifestation attack does not qualify unless a specific feature explicitly creates a qualifying critical hit. Forced or expanded critical ranges qualify if the triggering feature permits Black Flash; an explicit restriction (such as Great Luck's non-qualifying critical) still wins.</li>
+<li>Choose and pay any damage rider that must be declared before damage is rolled, then resolve the complete critical hit. Effects that trigger only after damage is dealt remain separate and are not multiplied.</li>
+<li><b>Damage:</b> roll the qualifying critical normally — critical dice, flat modifiers, eligible declared riders — then <b>triple the completed critical-hit damage</b>. This is multiplication of the final number, not one extra set of dice.</li>
+<li><b>Defense:</b> the complete Black Flash hit ignores resistance to its damage types. Immunity still applies unless another feature separately ignores immunity.</li>
+</ul>
+<h3>The Zone</h3>
+<div class="table-wrap"><table class="rtable">
+<tr><th>Zone state</th><th>Confirmation range</th><th>Benefits</th></tr>
+<tr><td><b class="k">Outside the Zone</b></td><td>Natural 20</td><td>A natural Black Flash grants Stage 1 for 1 minute. Once per round, a natural Black Flash also restores CE equal to PB.</td></tr>
+<tr><td><b class="k">Stage 1 · Focused</b></td><td>19–20</td><td>Once per turn, add 1d4 to one CE attack roll, CE ability check, Technique Focus save, or Domain Stability save. Another natural Black Flash resets the duration and advances to Stage 2.</td></tr>
+<tr><td><b class="k">Stage 2 · Awakened</b></td><td>18–20</td><td>Retains the Stage 1 d4 — no further numerical stacking. Another natural Black Flash resets the 1-minute duration. Stage 2 is the ceiling.</td></tr>
+</table></div>
+<p>Only genuine timing deepens the Zone: an automatic or forced Black Flash grants Stage 1 if you are outside the Zone and resets the current stage's duration if you are in it, but it never advances the Zone or restores CE. The feat <b>Blessed by Black Sparks</b> confirms on 18–20 after any qualifying critical; the Zone cannot improve it beyond 18–20.</p>
+<p><b>What the Zone never does:</b> it never restores Healing Reserve, never ends Technique Burnout, never removes exhaustion or injuries by itself, and never creates a second Technique Focus slot. A separate explicit feature may still create its own exception.</p>
+<h3>Maximum Output — overcharge one dimension</h3>
+<p>Maximum Output is the universal act of forcing an ordinary technique above its safe operating level. It is <b>not</b> a named Maximum Technique, and it no longer turns an attack bonus into an accuracy-breaking number.</p>
+<ul>
+<li><b>Prerequisite:</b> CE ability score of 20, and a feature or breakthrough unlocking Maximum Output; normally level 11+.</li>
+<li><b>Activation:</b> as a bonus action, declare one eligible technique you will activate before the end of the current turn and pay its Output surcharge, then pay and activate the technique normally afterward. If you do not activate it before the turn ends, the surcharge is lost.</li>
+<li><b>Surcharge:</b> double the technique's printed fixed base CE cost (minimum 2 CE). A variable-cost technique uses the chosen X as its surcharge. Optional overcharge, extra targets, or other add-on CE is paid once and is <b>not</b> doubled. A normally free technique has a 2 CE surcharge. Cost reduction applies to the base activation only, not the surcharge.</li>
+</ul>
+<div class="table-wrap"><table class="rtable">
+<tr><th>Mode</th><th>Benefit</th><th>Limit</th></tr>
+<tr><td><b class="k">Power</b></td><td>Add damage dice equal to half the technique's original damage dice, rounded up, same die size.</td><td>Counts as the attack's one damage amplifier; does not copy flat damage or riders.</td></tr>
+<tr><td><b class="k">Reach</b></td><td>Increase range, radius, cone length, or line length by 50%, rounded up to the nearest 5 feet. Choose one measurement.</td><td>Does not change touch range or increase every dimension independently.</td></tr>
+<tr><td><b class="k">Duration</b></td><td>Increase a non-instant duration by 50%.</td><td>Focus remains required; does not extend a condition beyond hard-control limits.</td></tr>
+<tr><td><b class="k">Pressure</b></td><td>+2 to its attack roll <b>or</b> +1 to its save DC. Choose one.</td><td>Obeys the accuracy ceiling; never imposes disadvantage as well.</td></tr>
+</table></div>
+<p><i>Example:</i> a technique with a 4 CE base and 3 optional CE for extra dice. Maximum Output's surcharge is 4 CE — full overcharge costs 4 base + 4 surcharge + 3 optional = <b>11 CE</b>. Power adds half of the original printed dice; the optional dice are not copied.</p>
+<p><b>Exclusions:</b> Maximum Output cannot enhance Domain Expansion, RCT, anti-domain techniques, Binding Vows, a named Maximum Technique, Black Flash, or a manifestation's stat block unless a specific feature says otherwise. It cannot combine with Chanting or another Maximum Output on the same activation.</p>
+</div>
+</section>
+
+<!-- ═══════════ VII. CLASHES ═══════════ -->
+<section class="rule-sec" id="clashes">
+<div class="sec-head">
+  <span class="sec-kicker">Section VII</span>
+  <h2>Clashes</h2>
+  <p class="deck">When two Domains meet, there is no contest of dice and no negotiation. The stronger domain stands; the weaker one breaks. This is the table rule.</p>
+</div>
+<div class="sec-body">
+<div class="callout callout-red"><div class="callout-head"><span class="callout-kicker">Table rule · deterministic clashes</span><h4>Points decide. Dice do not.</h4></div>
+<div class="body"><p>Every Domain converts its refinement tier into <b>clash points</b>: Tier 1 = <b>1</b>, Tier 2 = <b>200</b>, Tier 3 = <b>500</b>, Tier 4 = <b>800</b>, Tier 5 = <b>1,000</b>. Compare the points. A gap of <b>100 or more</b> collapses the weaker Domain <b>immediately</b> — before its sure-hit resolves. Equal points, or a gap under 100, means <b>neither collapses automatically</b>: there is no countdown and no clash roll. That is the entire decision procedure.</p></div></div>
+<h3>The clash procedure</h3>
+<ul>
+<li><b>Answer the expansion.</b> When a perceived Domain opens within 120 feet, an eligible creature may use its reaction and pay its own Domain cost to expand.</li>
+<li><b>Compare points.</b> Each Domain's clash points come from its refinement tier.</li>
+<li><b>Break on a 100-point gap.</b> Compare each pair of clashing Domains. If one leads by 100 or more, the weaker collapses immediately — before its periodic sure-hit. Guarantees stay suppressed in the contested space while the clash continues, and a clash does not extend either Domain's expiry.</li>
+<li><b>Equal refinement — no automatic winner.</b> Resolve the clash through barrier damage, Domain Stability failures, or expiry.</li>
+<li><b>Collapse deals no damage.</b> The collapse itself deals nothing. The defeated creator suffers Burnout: <b>10 rounds</b> below 700 points, <b>5 rounds</b> at 700–999, <b>3 rounds</b> at 1,000.</li>
+<li><b>Breaking or withdrawing.</b> A defeated or voluntarily dismissed Domain collapses immediately and its creator burns out. The winner's sure-hit resumes at the <b>next</b> initiative count 20, not the round the rival broke.</li>
+<li><b>Keep fighting.</b> Creators act normally during the clash. Damage can trigger Domain Stability, barriers and open anchors can be attacked, and anti-domain techniques still suppress sure-hit locally.</li>
+<li><b>Three or more Domains.</b> Compare every pair. A Domain can outmatch one rival while losing to another. When a Domain collapses, remove it from the comparison; the rest keep clashing.</li>
+<li><b>Non-lethal and open Domains</b> use the same point comparison. An open Domain also makes its barrier attack at initiative 20 during the clash — 4d10 + CE modifier force damage to the closed barrier, before outside vulnerability is applied; two open Domains do not make this attack. An open Domain trailing by 100+ points collapses even if its anchor survives.</li>
+</ul>
+</div>
+</section>
+
+<!-- ═══════════ VIII. ATTUNEMENT ═══════════ -->
+<section class="rule-sec" id="attunement">
+<div class="sec-head">
+  <span class="sec-kicker">Section VIII</span>
+  <h2>Attunement</h2>
+  <p class="deck">Cursed tools are not ordinary magic items, and they do not share ordinary attunement. A sorcerer can only truly master as many tools as their experience allows.</p>
+</div>
+<div class="sec-body">
+<h3>Cursed-tool attunement slots</h3>
+<p>You have <b>cursed-tool attunement slots equal to your proficiency bonus</b> — 2 at 1st level, up to 6 at 20th. This is a <b>separate pool</b> from ordinary magic-item attunement; the two systems never share slots.</p>
+<div class="table-wrap"><table class="rtable">
+<tr><th>Grade</th><th>Rarity</th><th>Attunement</th></tr>
+<tr><td><b class="k">Grade 4</b></td><td>Common</td><td>Normally none. Counts as cursed; utility only, no numerical bonus.</td></tr>
+<tr><td><b class="k">Grade 3</b></td><td>Uncommon</td><td>Technique items only.</td></tr>
+<tr><td><b class="k">Grade 2</b></td><td>Rare</td><td>Optional, at the GM's discretion: usable unattuned (mundane weapon stats only) or attuned for one slot to gain full properties.</td></tr>
+<tr><td><b class="k">Grade 1</b></td><td>Very Rare</td><td><b>Yes</b> — one slot, through a one-hour ritual.</td></tr>
+<tr><td><b class="k">Special Grade</b></td><td>Legendary+</td><td><b>Yes</b> — one slot, through a one-hour ritual.</td></tr>
+</table></div>
+<h3>Suppression and repair</h3>
+<p>A suppressed cursed tool remains a mundane weapon of its type until repaired during appropriate downtime. A destroyed named Special Grade tool returns only through a campaign event — ordinary crafting cannot reproduce it.</p>
+<p>Technique-bearing tools (including items created by techniques such as Construction) still require their normal attunement before their technique properties function — a tool's text controls.</p>
+</div>
+</section>
+
+<!-- ═══════════ IX. SPECIAL SYSTEMS ═══════════ -->
+<section class="rule-sec" id="special">
+<div class="sec-head">
+  <span class="sec-kicker">Section IX</span>
+  <h2>Ten Shadows &amp; Special Systems</h2>
+  <p class="deck">Some techniques are entire subsystems unto themselves. The rules below are the load-bearing pillars; the full dossiers live in the library.</p>
+</div>
+<div class="sec-body">
+<h3>Ten Shadows Technique</h3>
+<ul>
+<li><b>Subjugation from level 1.</b> Every subjugation ritual may be attempted from level 1 — including the taming of the strongest shadows — provided you can pay the listed CE cost. There is no artificial roster gate.</li>
+<li><b>Mahoraga stays unreasonable.</b> It uses the complete CR 25 profile before and after taming, with legendary actions and no reduced player version. Its taming ritual is the balancing event: outside help may keep you alive but <b>invalidates the taming result</b>.</li>
+<li><b>Manifestation capacity:</b> one at level 1, two at level 3, three at level 11. The Divine Dogs together count as one; all active Gama count as one; a fusion counts as one; Mahoraga consumes the entire normal capacity.</li>
+<li>Manifest as an action at the listed cost. A manifestation acts immediately after you; one bonus action commands one manifestation, and uncommanded ones Dodge. A shadow reduced to 0 disperses until the next long rest.</li>
+<li>Fusions use the fifteen prebuilt <b>Wells Unknown Abyss</b> recipes (or Chimera rules: one intact base plus up to three donors). <b>Shadow Wearing</b> (level 8) and the <b>Wheel Wearing</b> capstone (level 17, once per long rest) follow their own entries.</li>
+</ul>
+<p>Full dossiers: <a href="library/ten_shadows_technique_guide.html">Technique Guide</a> · <a href="library/ten_shadows_shikigami_guide.html">Shikigami Roster</a> · <a href="library/wells_unknown_abyss_fusion_guide.html">Fusion Catalog</a> · <a href="library/ten_shadows_shadow_wearing_guide.html">Shadow Wearing</a>.</p>
+<div class="canon-note"><div class="cn-head">❖ Canon note</div><div class="cn-body"><p>The old guide's Ten Shadows entry lists the ritual under its level-3 feature ("challenge any untamed shadow"). The campaign canon is that <b>every</b> subjugation ritual is attemptable from level 1 — Mahoraga included — with the ritual's own danger, not a level gate, as the price of ambition.</p></div></div>
+<h3>Other special systems</h3>
+<ul>
+<li><b>Nine Tails transformation</b> exists as a standalone subsystem — a once-ever transformation with an existential cost. See its technique record in the <a href="codex.html">Technique Codex</a>.</li>
+<li><b>Dual Technique variant</b> — a separate, GM-approved choice — advances two Innate Techniques by total character level while sharing one CE Reserve, one CE ability, one action economy, one Focus slot, and the normal Domain/Burnout limits (Section II).</li>
+<li><b>Cursed Spirits as player characters</b> follow their own ancestry rules; cursed-spirit techniques are catalogued with every other technique in the <a href="codex.html">Technique Codex</a>.</li>
+</ul>
+</div>
+</section>
+
+<!-- ═══════════ X. TOOLS ═══════════ -->
+<section class="rule-sec" id="tools">
+<div class="sec-head">
+  <span class="sec-kicker">Section X</span>
+  <h2>Cursed Tools</h2>
+  <p class="deck">A cursed tool is a weapon with an exact handle: a grade, a bonus, and rules text that does precisely what it says. Their grades communicate rarity and narrative importance — never a character-level requirement.</p>
+</div>
+<div class="sec-body">
+<div class="table-wrap"><table class="rtable">
+<tr><th>Grade</th><th>Rarity</th><th>Improved item</th><th>Technique item</th></tr>
+<tr><td><b class="k">Grade 4</b></td><td>Common</td><td>Counts as cursed; no numerical bonus.</td><td>Utility only.</td></tr>
+<tr><td><b class="k">Grade 3</b></td><td>Uncommon</td><td>+1 to weapon attack and damage, armor AC, or the one listed related value.</td><td>Minor technique; no generic +1 unless stated.</td></tr>
+<tr><td><b class="k">Grade 2</b></td><td>Rare</td><td>+2 to the same defined values.</td><td>Par technique; no generic +2 unless stated.</td></tr>
+<tr><td><b class="k">Grade 1</b></td><td>Very Rare</td><td>+3 to the same defined values.</td><td>Major technique; no generic +3 unless stated.</td></tr>
+<tr><td><b class="k">Special Grade</b></td><td>Legendary+</td><td>Generic improved items may reach +4 as an explicit campaign exception.</td><td>Top technique; its text controls.</td></tr>
+</table></div>
+<p>Named tools are intentionally stronger than generic equipment: the Inverted Spear of Heaven suppresses spells and CE features on a hit, the Soul Split Katana wounds the soul itself, Dragon Bone banks a third of the damage it deals into the next strike, and the Sword of Extermination exorcises cursed spirits and undead outright — no save, HP irrelevant. Every named tool has exact rules text; use it as written.</p>
+<p>Heavenly Restriction users may wield cursed tools and benefit from passive weapon properties, but cannot fuel a tool with CE or activate a property whose cost or prerequisite requires CE unless the tool supplies its own independent charge.</p>
+<p>The full arsenal — every named tool with complete rules — is catalogued in <a href="library/cursed-tool-arsenal.html">library/cursed-tool-arsenal.html</a>.</p>
+</div>
+</section>
+
+<!-- ═══════════ CHEAT SHEET ═══════════ -->
+<section class="cheat" id="cheat">
+<h2>❖ Quick Reference</h2>
+<p class="sub">Cut this out. Tape it to your character sheet.</p>
+<div class="cheat-grid">
+<div class="cheat-card"><h4>Cursed Energy</h4><ul>
+<li>Max CE = die max (L1) + later gains + CE mod <b>once</b> + permanent bonuses</li>
+<li>CE attack = PB + CE mod · DC = 8 + PB + CE mod</li>
+<li>All CE returns on a long rest</li>
+<li>Temp CE: spent first, can't fund permanent costs, vanishes when its source ends</li>
+</ul></div>
+<div class="cheat-card"><h4>Spending</h4><ul>
+<li>Pay the listed cost — cost is not a level gate</li>
+<li>Order: base → additions → multiplier → reduction; halves round up</li>
+<li>CE is committed on activation; misses and saves don't refund</li>
+<li>No universal Output Rank; the feature's own caps are the law</li>
+</ul></div>
+<div class="cheat-card"><h4>Techniques</h4><ul>
+<li>Milestones: 1 / 3 / 6 / 11 / 18, then L20, Maximum, Domain</li>
+<li>One Focus at a time; damage forces a CON save (DC 10 or half)</li>
+<li>Multiclassing never grants a second technique</li>
+</ul></div>
+<div class="cheat-card"><h4>Binding Vows</h4><ul>
+<li>Every vow has a real price — restriction for power, or power with a penalty</li>
+<li>Compulsion needs a save or a willing-decline valve</li>
+<li>No precognition; temp CE can't pay permanent vow costs</li>
+</ul></div>
+<div class="cheat-card"><h4>Domains</h4><ul>
+<li>Full-turn action · 20 CE · 60-ft enclosed · 1 min (2 min at 500+ refinement pts, 3 min at 1000+)</li>
+<li>Sure-hit: one event at <b>initiative 20</b> (or continuous law, per the Domain)</li>
+<li>Simple Domain / Hollow Wicker Basket suppress sure-hit locally</li>
+<li>Any end → Technique Burnout (technique dark; weapons, CE reinforcement, RCT still work)</li>
+</ul></div>
+<div class="cheat-card"><h4>Clashes</h4><ul>
+<li>Points: 1 / 200 / 500 / 800 / 1000 by refinement tier</li>
+<li>Gap of 100+ → weaker collapses immediately; equal/under → no auto-winner, no clash roll</li>
+<li>Burnout: 10 / 5 / 3 rounds by points (&lt;700 / 700–999 / 1000)</li>
+<li>Winner's sure-hit resumes at the <b>next</b> initiative 20</li>
+</ul></div>
+<div class="cheat-card"><h4>RCT</h4><ul>
+<li>Healing Reserve = 10 × level; long rest only</li>
+<li>Once/round while conscious: bonus action or reaction, 1–CE-mod CE → 10 HP per CE</li>
+<li>Repairs: 20/30/40/60/80 reserve — poison, exhaustion, limbs, organs</li>
+<li>Can't: restore CE, revive, regrow a brain, end Burnout, heal soul damage</li>
+</ul></div>
+<div class="cheat-card"><h4>Black Flash</h4><ul>
+<li>Critical → second unmodified d20 → nat 20 = <b>triple the completed critical</b></li>
+<li>Ignores resistance, not immunity; no per-round cap</li>
+<li>Zone: nat 20 → Stage 1 (19–20); → Stage 2 (18–20) · once/turn +1d4 to a CE roll</li>
+<li>Black Flash never restores Healing Reserve or ends Burnout</li>
+</ul></div>
+<div class="cheat-card"><h4>Maximum Output</h4><ul>
+<li>CE ability 20 + feature/breakthrough, L11+; bonus-action declare</li>
+<li>Surcharge = base cost (min 2); pick one: Power · Reach · Duration · Pressure</li>
+<li>Can't touch Domains, RCT, vows, named Maximums, or Black Flash</li>
+</ul></div>
+<div class="cheat-card"><h4>Attunement</h4><ul>
+<li>Cursed-tool slots = PB (2 → 6); separate from ordinary attunement</li>
+<li>Grade 1 &amp; Special Grade: 1 slot each, 1-hour ritual</li>
+<li>Grade 2: GM's call — unattuned (mundane only) or attuned</li>
+<li>Destroyed Special Grade tools return only by campaign event</li>
+</ul></div>
+</div>
+</section>
+
+</div><!-- /content -->
+</div><!-- /layout -->
+</main>
+
+<footer class="footer"><div class="shell">
+  <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
+  <span>FM-RA-02 · Field Guide · Rules · fan-made JJK 5e homebrew reference. Clashes resolve deterministically by refinement points — dice do not.</span>
+</div></footer>
+</body>
+</html>

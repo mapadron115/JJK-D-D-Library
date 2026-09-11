@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Ritual Archive field manual: the Story So Far — the acceptance letter, the school, and the memorandum, everything the players know.">
+<title>Story So Far — Ritual Archive Field Manual</title>
+<style>
+:root{
+  --paper:#f4efe2; --paper2:#ece4cf; --card:#fbf8ee; --card2:#f6f1e1;
+  --ink:#221d14; --ink2:#57503f; --ink3:#7d7563;
+  --line:#d9cfae; --line2:#c9bfa1;
+  --red:#b33a2b; --red-deep:#8c2a1f;
+  --olive:#5f6238; --stone:#8a8474;
+  --serif:Georgia,'Times New Roman',Charter,'Bitstream Charter','Iowan Old Style',serif;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;font-size:16px;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(34,29,20,.028) 31px,rgba(34,29,20,.028) 32px);}
+::selection{background:var(--red);color:var(--paper)}
+.shell{max-width:1080px;margin:0 auto;padding:0 24px}
+a{color:var(--red-deep)}
+/* ── top bar ─────────────────────────────── */
+.topbar{background:var(--card);border-bottom:3px double var(--ink);position:sticky;top:0;z-index:50}
+.topbar .nav{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;gap:16px}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:var(--serif);font-size:1.15rem;font-weight:bold;letter-spacing:.5px}
+.brand:hover{color:var(--red-deep)}
+.brand-mark{display:inline-grid;place-items:center;width:34px;height:34px;background:var(--red);color:var(--paper);font-family:var(--serif);font-size:1.25rem;border-radius:4px;box-shadow:0 1px 0 var(--red-deep)}
+.navlinks{display:flex;gap:26px;align-items:center}
+.navlinks a{font-size:.78rem;letter-spacing:2.2px;text-transform:uppercase;text-decoration:none;color:var(--ink2);padding-bottom:3px;border-bottom:2px solid transparent}
+.navlinks a:hover{color:var(--ink)}
+.navlinks a.is-current{color:var(--ink);border-bottom:2px solid var(--red)}
+.doc-tag{font-size:.72rem;letter-spacing:2.5px;color:var(--ink3);text-transform:uppercase}
+/* ── document head ───────────────────────── */
+.doc-head{padding:56px 0 8px}
+.eyebrow{font-size:.75rem;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:14px}
+.eyebrow .orn{color:var(--ink3);letter-spacing:0}
+h1{font-family:var(--serif);font-size:3.2rem;line-height:1.05;margin:0 0 12px;letter-spacing:.5px}
+h1 .amp{color:var(--red)}
+.lede{font-size:1.1rem;color:var(--ink2);max-width:62ch;margin:0 0 24px}
+/* ── sections ────────────────────────────── */
+.section-subhead{font-family:var(--serif);font-size:1.45rem;margin:36px 0 14px;display:flex;align-items:baseline;gap:12px;font-weight:bold}
+.section-subhead .sub-n{font-size:.85rem;color:var(--ink3);font-family:var(--sans);font-weight:normal;letter-spacing:1px}
+.rule-note{font-size:.95rem;color:var(--ink2);max-width:70ch}
+/* ── the letter artifact ─────────────────── */
+.letter-wrap{position:relative;margin:28px 0 8px}
+.letter{background:var(--card);border:1px solid var(--line2);outline:4px double var(--ink);outline-offset:6px;
+  box-shadow:0 10px 30px rgba(34,29,20,.22);padding:56px 64px;max-width:900px;margin:0 auto;
+  font-family:var(--serif);color:var(--ink);position:relative}
+.letterhead{display:flex;align-items:center;gap:20px;border-bottom:2px solid var(--ink);padding-bottom:22px;margin-bottom:10px}
+.crest{width:74px;height:74px;border:2px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-size:2.4rem;font-family:var(--serif);flex-shrink:0;background:var(--card2)}
+.crest-inner{display:grid;place-items:center;width:56px;height:56px;border:1px solid var(--ink2);border-radius:50%}
+.school-name{font-family:var(--serif);font-weight:bold;font-size:1.5rem;letter-spacing:1.5px;line-height:1.2}
+.school-name .jp{display:block;font-weight:normal;font-size:1.05rem;letter-spacing:4px;color:var(--ink2)}
+.school-sub{font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);margin-top:6px;font-family:var(--sans)}
+.letter-body{padding:26px 6px 0}
+.salutation{font-size:1.15rem;margin:0 0 1em;font-style:italic}
+.letter p{margin:1.05em 0;line-height:1.75;font-size:1.02rem}
+.letter ol{margin:1.2em 0;padding-left:2.2em;line-height:1.7;font-size:1.02rem}
+.letter ol li{margin:1em 0}
+.signoff{margin-top:2.2em}
+.signature{font-size:1.3rem;font-weight:bold;margin:6px 0 2px}
+.sig-title{font-size:.82rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink2);font-family:var(--sans)}
+.wax-seal{position:absolute;right:54px;top:120px;width:104px;height:104px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #d2503e, var(--red) 45%, var(--red-deep) 80%);
+  box-shadow:0 4px 10px rgba(0,0,0,.35), inset 0 2px 6px rgba(255,255,255,.25), inset 0 -3px 8px rgba(0,0,0,.3);
+  display:grid;place-items:center;transform:rotate(-12deg)}
+.wax-seal span{display:grid;place-items:center;width:74px;height:74px;border:2px solid rgba(244,239,226,.75);border-radius:50%;
+  color:rgba(244,239,226,.92);font-family:var(--serif);font-size:2rem}
+.memo{margin-top:48px;border-top:3px double var(--ink);padding-top:28px}
+.memo-title{font-family:var(--serif);font-weight:bold;font-size:1.45rem;text-align:center;margin:0 0 6px}
+.memo-preamble{text-align:center;font-size:.95rem;color:var(--ink2);margin:0 0 26px}
+.memo h3{font-family:var(--serif);font-size:1.1rem;margin:26px 0 8px;letter-spacing:.5px}
+.memo h3 .art-no{color:var(--red)}
+.memo .clause{padding-left:2em;text-indent:-1.2em}
+.memo ul{margin:1em 0;padding-left:2.2em}
+.memo ul li{margin:.4em 0;list-style-type:lower-alpha}
+.seal-row{display:flex;justify-content:flex-end;margin-top:34px;padding-top:16px;border-top:1px solid var(--line)}
+.seal-stamp{font-family:var(--serif);font-weight:bold;letter-spacing:3px;font-size:1rem;color:var(--red);
+  border:2px solid var(--red);border-radius:4px;padding:6px 18px 6px 22px;transform:rotate(-4deg);
+  box-shadow:inset 0 0 0 2px var(--card),inset 0 0 0 3px rgba(179,58,43,.55)}
+/* ── know cards ──────────────────────────── */
+.know-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:18px 0 8px}
+.know{background:var(--card);border:1px solid var(--line2);border-top:4px solid var(--ink);padding:24px 26px;box-shadow:0 2px 0 rgba(34,29,20,.08)}
+.know h3{font-family:var(--serif);font-size:1.2rem;margin:0 0 10px}
+.know h3 .k{color:var(--red);font-size:.85em;letter-spacing:2px}
+.know p{margin:.7em 0;color:var(--ink);font-size:.96rem}
+.know .quote{font-style:italic;color:var(--ink2);border-left:3px solid var(--red);padding-left:14px;margin:12px 0}
+/* ── memorandum sidebar ──────────────────── */
+.plain-box{background:var(--card);border:2px solid var(--olive);margin:18px 0;padding:6px 30px 24px}
+.plain-box h3{font-family:var(--serif);font-size:1.25rem;color:var(--olive);margin:20px 0 6px}
+.plain-box p{margin:.7em 0;font-size:.97rem}
+.plain-box .flag{font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);margin-top:22px;display:block}
+.plain-box ol{margin:1em 0;padding-left:1.6em}
+.plain-box ol li{margin:.8em 0}
+.plain-box ol li b{font-family:var(--serif)}
+/* ── story so far ────────────────────────── */
+.story{background:var(--card);border:1px solid var(--line2);margin:18px 0 64px;padding:40px 44px;box-shadow:0 2px 0 rgba(34,29,20,.08);text-align:center}
+.story .ch{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:12px}
+.story p{font-family:var(--serif);font-size:1.15rem;font-style:italic;color:var(--ink2);max-width:52ch;margin:.6em auto}
+.story .orn{color:var(--red);font-style:normal;letter-spacing:6px}
+/* ── footer ──────────────────────────────── */
+.footer{border-top:3px double var(--ink);padding:28px 0 48px;font-size:.8rem;color:var(--ink3)}
+.footer .shell{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.footer .brand{font-size:1rem}
+/* ── responsive ──────────────────────────── */
+@media (max-width:980px){h1{font-size:2.4rem}.navlinks{display:none}}
+@media (max-width:720px){
+  .letter{padding:36px 26px}
+  .wax-seal{right:20px;top:96px;width:80px;height:80px}
+  .wax-seal span{width:58px;height:58px;font-size:1.5rem}
+  .school-name{font-size:1.15rem}
+  .story{padding:30px 22px}
+}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="shell nav">
+<a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
+<nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html">Character Builder</a><a href="codex.html">Technique Codex</a><a href="lore.html" class="is-current">Story So Far</a></nav>
+<span class="doc-tag">Field Manual · Story</span>
+</div></header>
+
+<main>
+<section class="doc-head"><div class="shell">
+  <div class="eyebrow"><span class="orn">❖</span> Field Manual · FM-RA-04 · Player Record <span class="orn">❖</span></div>
+  <h1>Story So <span class="amp">Far</span></h1>
+  <p class="lede">Everything the players know — the letter that summoned you, the school that took you in, the rules you live under, and the record of what has happened since. Nothing here is forbidden to player eyes; if it isn't on this page, your character doesn't know it yet.</p>
+</div></section>
+
+<section id="letter"><div class="shell">
+  <h2 class="section-subhead">The Acceptance Letter <span class="sub-n">— a document your character received</span></h2>
+  <div class="letter-wrap">
+    <div class="wax-seal" aria-hidden="true"><span>呪</span></div>
+    <article class="letter">
+      <div class="letterhead">
+        <div class="crest" aria-hidden="true"><span class="crest-inner">呪</span></div>
+        <div>
+          <div class="school-name">TOKYO METROPOLITAN CURSE TECHNICAL COLLEGE<span class="jp">東京都立呪術高等専門学校</span></div>
+          <div class="school-sub">Office of the Principal · Tokyo Prefecture</div>
+        </div>
+      </div>
+      <div class="letter-body">
+        <p class="salutation">To whom it may concern,</p>
+        <p>You may be confused as to how this letter may have found you with no address, name, or other method of identification. You may also be confused as to why you now possess supernatural, unexplained, or otherwise unwanted abilities. The answers to both those questions are a lot more complicated and will require more than this letter. It is precisely for this reason that you are being recruited and enrolled into the Tokyo Metropolitan Curse Technical College. You did not make a mistake. That word really says curse. In this world curses are very real and are manifestations of human negative energy given form. The abilities you may have noticed you now possess come from that Cursed Energy and are manifestations of innate abilities you possess. Here at the Tokyo Jujutsu High, we will teach you to control this Cursed Energy and master it. You will work alongside brilliant staff and an array of new students until your abilities are safe for yourself and those around you. During your time here you would normally also be expected to learn how to exorcise curses, but due to a sudden increase in awakening events for sorcerers, we now offer a curriculum based purely around control and not combat. With that we would like to request the following:</p>
+        <ol>
+          <li>Expect a driver showing the same emblem on this letter to pick you up in exactly ten days. Take this time to say goodbye to your loved ones and seek closure on any pending arrangements. We would like to make it known that while you can choose to not join our school, you will become an active danger to those around you unless you manage to master your newfound abilities. We have already sent notice to your parents and informed them of our prestigious facility, should you need to reject our invitation, please let them know so that they can contact our principal directly.</li>
+          <li>Pack heavy, you will be studying at Jujutsu High year round, you will be given a calendar with holidays during your first week, but for now assume the campus will be your new home.</li>
+          <li>Please be sure to read up on the Memorandum on the duty of jujutsu sorcerers attached below, do not worry if you cannot understand it yet, just commit it to memory.</li>
+        </ol>
+        <div class="signoff">
+          <p>We wish you the best,</p>
+          <p class="signature">— Masamichi Yaga</p>
+          <p class="sig-title">Principal of Tokyo Metropolitan Curse Technical College</p>
+        </div>
+        <div class="memo">
+          <h2 class="memo-title">Memorandum on the duty of jujutsu sorcerers</h2>
+          <p class="memo-preamble">The Zenin family, the Gojo family and the Kamo family agreed with the Japanese Kokufu as follows on behalf of all the sorcerers, and established this memorandum.</p>
+
+          <h3><span class="art-no">1</span> &nbsp;(Mission)</h3>
+          <p class="clause">1. The sorcerer's mission is to prevent calamity brought by jujutsu, curse spirits and cursed objects to mankind and to maintain the peace and security of society.</p>
+          <p class="clause">2. All sorcerers must follow this memorandum. The rules stipulated in this Memorandum shall be applied in addition to laws and regulations.</p>
+
+          <h3><span class="art-no">2</span> &nbsp;(Jujutsu Headquarters)</h3>
+          <p class="clause">1. As the highest institution that controls sorcerers, the head is the Director of Jujutsu.</p>
+          <p class="clause">2. The Director of Jujutsu is appointed by the Prime Minister based on the nomination of the Zenin family and the Gojo family and the Kamo family.</p>
+
+          <h3><span class="art-no">3</span> &nbsp;(Jujutsu Technical College)</h3>
+          <p class="clause">1. As institutions for the education, guidance and supervision of jujutsu sorcerers, Jujutsu Technical Colleges will be established in the Tokyo and Kyoto Prefectures.</p>
+          <p class="clause">2. As the head of the Jujutsu Technical College, the principal is in charge of the affairs related to the training of sorcerers, responding to threats, and oversees all sorcerers in command and supervision.</p>
+          <p class="clause">3. The principal is appointed by the Director of Jujutsu based on the recommendation of the Zenin family, the Gojo family and the Kamo family.</p>
+          <p class="clause">4. The Director of Jujutsu can command and supervise the principal.</p>
+
+          <h3><span class="art-no">4</span> &nbsp;(Grade of Jujutsu Sorcerers)</h3>
+          <p class="clause">1. Sorcerers are assigned grades of first grade, semi-first grade, second grade, semi-second grade, third grade and fourth grade. On a mission, a higher level sorcerer leads a lower level sorcerer.</p>
+          <p class="clause">2. The Director of Jujutsu recognises or changes the grade of each sorcerer according to appropriate criteria.</p>
+          <p class="clause">3. The sorcerer can receive salary and allowance conforming to their grade in accordance with the rules stipulated by the Director of Jujutsu.</p>
+
+          <h3><span class="art-no">5</span> &nbsp;(Punishment)</h3>
+          <p>The Director of Jujutsu may impose one or more of the following punishments on any sorcerer who does not obey a command or violates the obligations of this memorandum.</p>
+          <ul>
+            <li>Public execution</li>
+            <li>Secret execution</li>
+            <li>Recognition as a curse user</li>
+            <li>Sealing</li>
+            <li>Imprisonment</li>
+            <li>Disciplinary confinement</li>
+            <li>Confiscation of property</li>
+          </ul>
+
+          <h3><span class="art-no">6</span> &nbsp;(Retirement)</h3>
+          <p class="clause">1. A sorcerer can retire with the approval of the Director of Jujutsu. A retired sorcerer is gradeless.</p>
+          <p class="clause">2. A retired sorcerer may not use any jujutsu. However, this does not apply to cases where it is necessary to fulfill the obligations of the next article.</p>
+
+          <h3><span class="art-no">7</span> &nbsp;(Responding to threats)</h3>
+          <p class="clause">1. Cursed spirits, cursed objects and curse users are all threats.</p>
+          <p class="clause">2. If a sorcerer discovers a threat, they must immediately report it to the principal. The principal will assess the threat grade based on the report, notify the Director of Jujutsu, and organize and dispatch the necessary personnel and equipment to suppress it.</p>
+          <p class="clause">3. Regardless of the preceding paragraph, if the threat is imminent the sorcerer can take considerable measures to suppress it.</p>
+
+          <h3><span class="art-no">8</span> &nbsp;(Secret)</h3>
+          <p>A sorcerer must not reveal the existence of jujutsu, cursed spirits or cursed objects to a non-sorcerer. However, this does not apply when it is necessary to fulfill the obligations of the preceding article.</p>
+
+          <h3><span class="art-no">9</span> &nbsp;(On the safety of non-sorcerers)</h3>
+          <p>Sorcerers are not to harm non-sorcerers via Jujutsu, cursed spirits, or cursed objects. They are also not to overlook any potential threat to the non-sorcerer. However, this does not apply in the case of one's life or others in danger.</p>
+
+          <div class="seal-row"><span class="seal-stamp" aria-hidden="true">呪 · OFFICIAL</span></div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="school"><div class="shell">
+  <h2 class="section-subhead">What You Know — The School <span class="sub-n">— what every new student is told</span></h2>
+  <div class="know-grid">
+    <div class="know">
+      <h3><span class="k">❖</span> Tokyo Jujutsu High</h3>
+      <p>Formally the <b>Tokyo Metropolitan Curse Technical College</b> — the Tokyo Prefecture jujutsu technical college, where you now study. One of only two such schools in Japan, the other standing in Kyoto.</p>
+      <p>The campus is your new home: you study here year round, and your first week's calendar will lay out the holidays.</p>
+    </div>
+    <div class="know">
+      <h3><span class="k">❖</span> Principal Masamichi Yaga</h3>
+      <p>The man who signed your letter. The principal is in charge of the training of sorcerers, of responding to threats, and of the command and supervision of every sorcerer at the college.</p>
+    </div>
+    <div class="know">
+      <h3><span class="k">❖</span> A Control Curriculum</h3>
+      <p>You were not admitted to learn how to fight curses — at least, not yet.</p>
+      <p class="quote">"due to a sudden increase in awakening events for sorcerers, we now offer a curriculum based purely around control and not combat."</p>
+      <p>Normally new sorcerers also learn to exorcise curses. For your intake, the work is control: mastering your Cursed Energy until your abilities are safe for yourself and those around you.</p>
+    </div>
+    <div class="know">
+      <h3><span class="k">❖</span> What Cursed Energy Is</h3>
+      <p>As the letter puts it: in this world curses are very real, and they are <b>manifestations of human negative energy given form</b>. The abilities you noticed awakening in you come from that Cursed Energy — they are manifestations of innate abilities you possess.</p>
+    </div>
+    <div class="know">
+      <h3><span class="k">❖</span> Fellow New Students</h3>
+      <p>You are not the only one who received a letter. You will train alongside an array of new students — other newly awakened sorcerers, all learning to control what they cannot yet master.</p>
+    </div>
+    <div class="know">
+      <h3><span class="k">❖</span> The Driver &amp; The Trunk</h3>
+      <p>A driver bearing the same 呪 emblem on your letter came for you <b>ten days</b> after it arrived. Before that, you were asked to say goodbye to your loved ones, settle your pending arrangements, and pack heavy — the campus is your home now.</p>
+    </div>
+  </div>
+</section>
+
+<section id="memorandum"><div class="shell">
+  <h2 class="section-subhead">The Memorandum, Plainly <span class="sub-n">— rules every new student must live by</span></h2>
+  <p class="rule-note">The memorandum attached to your letter is dense. This is what it asks of you, in plain words — drawn only from the text you received.</p>
+  <div class="plain-box">
+    <span class="flag">❖ Plain-language summary ❖</span>
+    <ol>
+      <li><b>Your mission:</b> prevent the calamity that jujutsu, cursed spirits, and cursed objects bring to mankind, and maintain the peace and security of society. The memorandum's rules apply <i>in addition to</i> ordinary laws.</li>
+      <li><b>Your grades:</b> sorcerers are graded from <b>fourth grade</b> up through <b>third, semi-second, second, semi-first, and first grade</b>. On a mission, the higher-grade sorcerer leads. Grades are granted or changed by the Director of Jujutsu, and salary follows grade.</li>
+      <li><b>Your chain of command:</b> the highest authority over sorcerers is the <b>Director of Jujutsu</b> — appointed by the Prime Minister on the nomination of the Zenin, Gojo, and Kamo families. The Director can command and supervise even your principal.</li>
+      <li><b>If you see a threat:</b> cursed spirits, cursed objects, and curse users are all threats. If you discover one, <b>report it to the principal immediately</b> — the threat is graded, the Director is notified, and personnel are dispatched to suppress it. If the threat is imminent, you may take considerable measures yourself.</li>
+      <li><b>Keep the secret:</b> never reveal the existence of jujutsu, cursed spirits, or cursed objects to a non-sorcerer — unless secrecy would stand in the way of responding to a threat.</li>
+      <li><b>Never harm the innocent:</b> sorcerers are <b>not to harm non-sorcerers</b> by jujutsu, cursed spirits, or cursed objects — and they are not to overlook any potential threat to a non-sorcerer. The only exception is when your life, or the lives of others, are in danger.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="story"><div class="shell">
+  <h2 class="section-subhead">Story So Far <span class="sub-n">— the campaign record</span></h2>
+  <div class="story">
+    <div class="ch">Chapter 1 · In Play</div>
+    <p>The gates of Tokyo Jujutsu High are open. Your training begins.</p>
+    <p>This record fills as sessions happen — nothing more, and nothing before its time.</p>
+    <div class="orn">❖ 呪 ❖</div>
+  </div>
+</div></section>
+</main>
+
+<footer class="footer"><div class="shell">
+  <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
+  <span>FM-RA-04 · Story So Far · player-safe record only. Fan-made JJK 5e homebrew reference.</span>
+</div></footer>
+</body>
+</html>
