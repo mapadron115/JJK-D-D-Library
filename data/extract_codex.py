@@ -148,6 +148,19 @@ def parse_domain_fields(cost_line, text):
     if not m:
         m = re.search(r"\bclash\s+(\d[\d,]*)\b(?!\s*points)", blob, re.I)
     d["clash_points"] = int(m.group(1).replace(",", "")) if m else None
+    # Domain duration: explicit statement wins; otherwise the approved D008
+    # tier mapping for figure Domains (800 -> 2 min, 1000 -> 3 min).
+    m = re.search(r"duration:?\s*\**(\d+)\s*minutes?", blob, re.I)
+    if not m:
+        m = re.search(r"(\d+)-minute duration", blob, re.I)
+    if m:
+        d["duration_min"] = int(m.group(1))
+    elif d["clash_points"] == 800:
+        d["duration_min"] = 2
+    elif d["clash_points"] == 1000:
+        d["duration_min"] = 3
+    else:
+        d["duration_min"] = None
     m = re.search(r"burnout:?\s*\**(\d+)\s*rounds?", blob, re.I)
     if not m:
         m = re.search(r"\**(\d+)-round\s+burnout", blob, re.I)

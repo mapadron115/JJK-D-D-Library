@@ -76,6 +76,7 @@ Feature record plus:
 |---|---|---|
 | `clash_points` | number\|null | 800 (Tier IV) / 1000 (Tier V) per canon |
 | `burnout_rounds` | number\|null | 5 (Tier IV) / 3 (Tier V) per canon |
+| `duration_min` | number\|null | D008 tier mapping: 2 min at 800 pts, 3 min at 1000 pts (approved 2026-09-11); explicit module statement wins |
 | `radius` | string\|null | e.g. `60-ft radius` |
 | `activation` | string\|null | verbatim-ish, e.g. `action`, `full-turn`; audited 2026-09-11 (Specific Domains canon) |
 | `ce_cost` | number\|null | audited 2026-09-11 |

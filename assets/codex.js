@@ -172,6 +172,7 @@ function renderDomain(d) {
   var data = '<dl class="domain-data">' +
     cell('Clash points', d.clash_points) +
     cell('Burnout', d.burnout_rounds == null ? null : d.burnout_rounds + ' rounds') +
+    cell('Duration', d.duration_min == null ? null : d.duration_min + (d.duration_min === 1 ? ' minute' : ' minutes')) +
     cell('Radius', d.radius) +
     cell('Activation ✦', d.activation) +
     cell('CE cost ✦', d.ce_cost) +
