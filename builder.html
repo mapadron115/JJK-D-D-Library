@@ -441,8 +441,9 @@ img{max-width:100%;height:auto}
 
 <!-- cache-bust: bump ?v= on the script tags below whenever data/*.js or assets/*.js changes -->
 <script src="data/codex.js?v=20260911d"></script>
-<script src="data/library.js?v=20260911d"></script>
-<script src="data/technique_feats.js?v=20260911e"></script>
+<script src="data/library.js?v=20260911f"></script>
+<script src="data/technique_feats.js?v=20260911f"></script>
+<script src="data/codex_feats.js?v=20260911f"></script>
 <script>
 /* ════════════════════════════════════════════════════════════════
    Ritual Archive — Character Builder (IL-RA-02)
@@ -632,8 +633,9 @@ var PRESET_FEATS = ['Beginner Cursed Energy'];
 /* ── technique feats ──
    window.TECHNIQUE_FEATS (data/technique_feats.js) maps library entry id
    (e.g. 'e001') to that technique's Innate Technique Feats, extracted from the
-   dossiers: [{name, prereq, text}]. Historical-figure techniques carry no feat
-   lists, so their pickers fall back to the general feats. */
+   dossiers: [{name, prereq, text}]. window.CODEX_FEATS (data/codex_feats.js)
+   maps historical-figure codex id (e.g. 'miyamoto-musashi') to that figure's
+   hand-authored Innate Technique Feats, same shape. */
 function chosenTechEntry(){
   if(!char.technique) return null;
   var pool = char.technique.catalog==='originals' ? (typeof ORIGINALS!=='undefined'?ORIGINALS:[]) : (typeof FIGURES!=='undefined'?FIGURES:[]);
@@ -641,8 +643,11 @@ function chosenTechEntry(){
   return null;
 }
 function techFeatsFor(entry){
-  if(!entry || !window.TECHNIQUE_FEATS) return [];
-  return window.TECHNIQUE_FEATS[entry.id] || [];
+  if(!entry) return [];
+  var out = [];
+  if(window.TECHNIQUE_FEATS && window.TECHNIQUE_FEATS[entry.id]) out = out.concat(window.TECHNIQUE_FEATS[entry.id]);
+  if(window.CODEX_FEATS && window.CODEX_FEATS[entry.id]) out = out.concat(window.CODEX_FEATS[entry.id]);
+  return out;
 }
 function featInfo(name){
   var tf = techFeatsFor(chosenTechEntry());
