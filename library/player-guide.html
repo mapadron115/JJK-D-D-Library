@@ -1,4 +1,12 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08090c"><title>Comprehensive Player Guide · Ritual Archive</title><link rel="stylesheet" href="../assets/dossier-static.css"></head><body style="--accent:#d9565f"><header class="bar"><a class="brand" href="../index.html#library"><span>呪</span>Ritual Archive</a><a class="back" href="../index.html#library">← Back to catalogue</a></header><main class="shell"><article><header class="hero"><div class="eyebrow">Complete source guide</div><h1>Comprehensive Player Guide</h1><p class="summary">Full player-facing source material retained for the 2026 canon library.</p><div class="chips"><span>Rules / Collection Guide</span></div><div class="actions"><button type="button" onclick="window.print()">Print / Save PDF</button></div></header><div class="source-note">jjk5e_comprehensive_player_guide_canon.html</div><section class="dossier-content">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08090c"><title>Comprehensive Player Guide · Ritual Archive</title><link rel="stylesheet" href="../assets/dossier-static.css"><style>
+/* page interactivity (2026-09-11): filter buttons + empty states */
+#emptyState{display:none}
+#emptyState.show{display:block;margin:14px 0;padding:18px;border:1px dashed #3a3e48;border-radius:13px;color:#d8d3c7;text-align:center}
+button.gfilter{font:inherit;cursor:pointer;background:transparent}
+button.gfilter:hover{border-color:#efcd78;color:#fff}
+button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-color:var(--accent,#d9565f);color:#0b0c10;font-weight:700}
+</style>
+</head><body style="--accent:#d9565f"><header class="bar"><a class="brand" href="../index.html#library"><span>呪</span>Ritual Archive</a><a class="back" href="../index.html#library">← Back to catalogue</a></header><main class="shell"><article><header class="hero"><div class="eyebrow">Complete source guide</div><h1>Comprehensive Player Guide</h1><p class="summary">Full player-facing source material retained for the 2026 canon library.</p><div class="chips"><span>Rules / Collection Guide</span></div><div class="actions"><button type="button" onclick="window.print()">Print / Save PDF</button></div></header><div class="source-note">jjk5e_comprehensive_player_guide_canon.html</div><section class="dossier-content">
 <div class="book-part-block" id="part-foundations-block">
 <section class="part-intro" id="part-foundations">
 <span>Part I</span>
@@ -7316,50 +7324,122 @@
               The source contains 174 unique feats: Tavern Brawler appears once
               under Physical and again under Skill. Both printed entries remain
               visible here so the audit count is exact.
+            </p><p>
+              The complete feat entries are printed in the source books rather than reproduced here. Find the feat in your copy, then enter its exact name in the character builder&rsquo;s feat step.
             </p>
-</div>
-<div class="catalog-tools">
-<input aria-label="Search feat audit" class="search" id="featSearch" placeholder="Search feat, technique, prerequisite, or ruling…" type="search"/>
-<div class="filters">
-<select aria-label="Filter by group" id="groupFilter">
-<option value="all">All groups</option></select><select aria-label="Filter by audit status" id="statusFilter">
-<option value="all">All verdicts</option>
-<option value="adopted">Adopted</option>
-<option value="clarified">Clarified</option>
-<option value="rebuilt">Rebuilt</option>
-<option value="superseded">Superseded</option></select><select aria-label="Filter by impact" id="impactFilter">
-<option value="all">All impact</option>
-<option value="standard">Standard</option>
-<option value="high">High impact</option>
-<option value="pinnacle">Pinnacle</option>
-</select>
-</div>
-</div>
-<p aria-live="polite" class="catalog-status" id="featStatus">
-            Loading feat audit…
-          </p>
-<div class="table-wrap">
-<table id="featTable">
-<thead>
-<tr>
-<th>Feat</th>
-<th>Group / prerequisite</th>
-<th>Verdict</th>
-<th>Binding audit ruling</th>
-</tr>
-</thead>
-<tbody id="featRows"></tbody>
-</table>
-<div class="empty" id="featEmptyState">
-              No feat matches those filters.
-            </div>
 </div>
 <noscript><div class="callout" style="margin-top: 14px">
 <p>
-                This searchable catalog requires JavaScript. The mindsets and
-                cursed-tool rules above remain available without it.
+                The full feat entries live in the printed source books; the builder&rsquo;s feat step takes exact feat names.
               </p>
 </div></noscript>
 </section>
 </div>
-</section><div class="endcap"><a href="../index.html#library">← Return to complete library</a></div></article></main></body></html>
+</section><div class="endcap"><a href="../index.html#library">← Return to complete library</a></div></article></main><script>
+/* Glossary + technique catalog interactivity (2026-09-11) — vanilla JS, no dependencies */
+(function(){
+  "use strict";
+  function toButtons(container, onPick){
+    var spans = container.querySelectorAll('span.static-button-label');
+    spans.forEach(function(sp){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = sp.className + ' gfilter';
+      b.textContent = sp.textContent;
+      b.setAttribute('aria-pressed', 'false');
+      sp.parentNode.replaceChild(b, sp);
+    });
+    container.addEventListener('click', function(e){
+      var b = e.target.closest('button.gfilter');
+      if(!b || !container.contains(b)) return;
+      onPick(b);
+    });
+  }
+  function markActive(container, active){
+    container.querySelectorAll('button.gfilter').forEach(function(b){
+      b.setAttribute('aria-pressed', b===active ? 'true' : 'false');
+    });
+  }
+
+  /* ---- glossary: Part III Core Table Language ---- */
+  var gBlock = document.getElementById('part-glossary-block');
+  if(gBlock){
+    var gSearch = document.getElementById('glossarySearch');
+    var gFilters = gBlock.querySelector('.filters');
+    var gEmpty = document.getElementById('emptyState');
+    var CATMAP = {
+      actions:['actions','timing'], durations:['durations','duration'],
+      saves:['saves'], summons:['summons'], stacking:['stacking'], multiclass:['multiclass']
+    };
+    var gCat = 'all';
+    var gEntries = Array.prototype.slice.call(
+      gBlock.querySelectorAll('section.sheet [data-category]'));
+    function gApply(){
+      var q = (gSearch.value||'').trim().toLowerCase();
+      var want = CATMAP[gCat] || null;
+      var shown = 0;
+      gEntries.forEach(function(el){
+        var cats = (el.getAttribute('data-category')||'').toLowerCase().split(/\s+/);
+        var sheet = el.closest('section.sheet');
+        var sheetId = sheet ? (sheet.getAttribute('data-sheet')||'') : '';
+        var catOk = !want || want.some(function(t){ return cats.indexOf(t)>=0 || sheetId===t; });
+        var qOk = !q || (el.textContent||'').toLowerCase().indexOf(q)>=0;
+        var vis = catOk && qOk;
+        el.style.display = vis ? '' : 'none';
+        if(vis) shown++;
+      });
+      if(gEmpty) gEmpty.classList.toggle('show', shown===0);
+    }
+    if(gFilters){
+      toButtons(gFilters, function(b){
+        gCat = b.textContent.trim().toLowerCase();
+        markActive(gFilters, b);
+        gApply();
+      });
+      var first = gFilters.querySelector('button.gfilter');
+      if(first) first.setAttribute('aria-pressed','true');
+    }
+    if(gSearch) gSearch.addEventListener('input', gApply);
+  }
+
+  /* ---- technique catalog ---- */
+  var tSearch = document.getElementById('search');
+  var tList = document.getElementById('technique-list');
+  if(tSearch && tList){
+    var tStatus = document.getElementById('catalog-status');
+    var tTools = tSearch.closest('.catalog-tools');
+    var tFilters = tTools ? tTools.querySelector('.filters') : null;
+    var ROMAN = {i:'1', ii:'2', iii:'3', iv:'4', v:'5'};
+    var tTier = '';
+    var tCards = Array.prototype.slice.call(tList.querySelectorAll('article.technique'));
+    function tApply(){
+      var q = (tSearch.value||'').trim().toLowerCase();
+      var shown = 0;
+      tCards.forEach(function(card){
+        var tierOk = !tTier || (card.getAttribute('data-tier')||'')===tTier;
+        var qOk = !q || (card.textContent||'').toLowerCase().indexOf(q)>=0;
+        var vis = tierOk && qOk;
+        card.style.display = vis ? '' : 'none';
+        if(vis) shown++;
+      });
+      if(tStatus) tStatus.textContent = 'Showing '+shown+' of '+tCards.length+' techniques.';
+    }
+    if(tFilters){
+      toButtons(tFilters, function(b){
+        var label = b.textContent.trim().toLowerCase();
+        if(label==='expand all'){
+          tList.querySelectorAll('details').forEach(function(d){ d.open = true; });
+          return;
+        }
+        tTier = ROMAN[label] || '';
+        markActive(tFilters, b);
+        tApply();
+      });
+      var tFirst = tFilters.querySelector('button.gfilter');
+      if(tFirst) tFirst.setAttribute('aria-pressed','true');
+    }
+    tSearch.addEventListener('input', tApply);
+  }
+})();
+</script>
+</body></html>

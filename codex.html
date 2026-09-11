@@ -48,16 +48,14 @@ h1 .amp{color:var(--red)}
 .stat span{font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3)}
 /* ── controls ────────────────────────────── */
 .controls{background:var(--card);border:1px solid var(--line2);border-top:4px solid var(--ink);margin-bottom:8px}
-.ctrl-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr 1fr auto;gap:14px;padding:20px 24px 8px}
+.ctrl-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr auto;gap:14px;padding:20px 24px 8px}
 .field label{display:block;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
 .field input,.field select{width:100%;font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line2);border-radius:3px;padding:9px 10px}
 .field input:focus,.field select:focus{outline:2px solid var(--red);outline-offset:-1px;border-color:var(--red)}
 .btn-field{display:flex;align-items:flex-end}
 #clearAll{font:inherit;font-size:.8rem;letter-spacing:1.5px;text-transform:uppercase;background:transparent;color:var(--red-deep);border:1px solid var(--red);border-radius:3px;padding:9px 16px;cursor:pointer;white-space:nowrap}
 #clearAll:hover{background:var(--red);color:var(--paper)}
-/* ── source toggle ─────────────────────────── */
-.source-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:20px 24px 0}
-.source-label{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3)}
+/* ── origin filter row ───────────────────────── */
 .seg{display:inline-flex;border:1px solid var(--line2);border-radius:4px;overflow:hidden;background:var(--paper)}
 .seg-btn{font:inherit;font-size:.8rem;letter-spacing:1px;padding:9px 18px;background:transparent;border:none;border-right:1px solid var(--line2);cursor:pointer;color:var(--ink2)}
 .seg-btn:last-child{border-right:none}
@@ -239,7 +237,6 @@ h1 .amp{color:var(--red)}
   .doc-head{padding:56px 0 36px;margin-bottom:24px}
   .doc-head h1{font-size:2.1rem}
   .stat{padding:12px 14px}
-  .source-row{padding:16px 16px 0}
   .ctrl-grid{padding:16px 16px 4px;gap:12px}
   .resultline{padding:10px 16px 14px}
   #entries{padding:16px 0 48px}
@@ -271,7 +268,7 @@ h1 .amp{color:var(--red)}
 <div class="hero-art" aria-hidden="true"><img src="assets/img/hero-curse-hallway.jpg" alt="" loading="eager"></div><div class="shell">
   <div class="eyebrow"><span class="orn">❖</span> Illustrated · IL-RA-01 · Player Reference <span class="orn">❖</span></div>
   <h1>Technique <span class="amp">Codex</span></h1>
-  <p class="lede">Two catalogues, one codex: the historical figures' techniques with full level-by-level mechanics, and the original techniques from the library — each with its full dossier. Search across both, then open a figure entry for the progression or follow a card to its dossier.</p>
+  <p class="lede">One codex, every campaign technique: the historical figures' techniques with full level-by-level mechanics, and the original techniques from the library — each with its full dossier. Classify by origin, search across both, then open a figure entry for the progression or follow a card to its dossier.</p>
   <div class="statstrip" id="statstrip">
     <div class="stat"><b id="statTotal">—</b><span>catalogued entries</span></div>
     <div class="stat"><b id="statFigures">—</b><span>historical techniques</span></div>
@@ -281,17 +278,14 @@ h1 .amp{color:var(--red)}
 </div></section>
 
 <section class="controls"><div class="shell">
-  <div class="source-row">
-    <span class="source-label">Catalogue source</span>
-    <div class="seg" role="tablist" aria-label="Catalogue source">
-      <button type="button" class="seg-btn is-active" data-source="all" role="tab" aria-selected="true">All</button>
-      <button type="button" class="seg-btn" data-source="figures" role="tab" aria-selected="false">Historical Figures</button>
-      <button type="button" class="seg-btn" data-source="originals" role="tab" aria-selected="false">Original Techniques</button>
-    </div>
-  </div>
   <div class="ctrl-grid">
     <div class="field"><label for="q">Search the codex</label>
       <input id="q" type="search" placeholder="Figure, technique, dossier, rule text…" autocomplete="off"></div>
+    <div class="field"><label for="fOrigin">Origin</label><select id="fOrigin">
+      <option value="all">All origins</option>
+      <option value="figures">Historical figures</option>
+      <option value="originals">Original techniques</option>
+    </select></div>
     <div class="field" data-for="figures"><label for="fTier">Tier</label><select id="fTier"></select></div>
     <div class="field" data-for="figures"><label for="fRole">Combat role</label><select id="fRole"></select></div>
     <div class="field" data-for="figures"><label for="fRegion">Region</label><select id="fRegion"></select></div>
@@ -320,7 +314,7 @@ h1 .amp{color:var(--red)}
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
   <span class="tiny">IL-RA-01 · Technique Codex · fan-made JJK 5e homebrew reference. Domain profiles per the canon rules — figure Domains are Specific Domains.</span>
   <span class="editions">Illustrated edition</span>
-  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA and respective rights holders — manga &amp; anime art from the author's JJK 5e PDFs plus sourced franchise/comic/game imagery, used for personal, non-commercial fan purposes only. <a href="assets/img/CREDITS.md">Full image credits</a>.</span>
+  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA and respective rights holders — manga &amp; anime art from the author's JJK 5e PDFs plus sourced franchise/comic/game imagery, used for personal, non-commercial fan purposes only. <a href="image-credits.html">Full image credits</a>.</span>
 </div></footer>
 
 <script src="data/library.js"></script>

@@ -62,7 +62,7 @@ for a transformative, non-commercial fan project.
 
 | File | Techniques | Credit | Source page |
 |---|---|---|---|
-| a-ben10-omnitrix.jpg | e243 | © Cartoon Network — via https://www.kneetl.com/ben-10-original-watch — personal non-commercial fan use | https://www.kneetl.com/ben-10-original-watch |
+| a-ben10-omnitrix-logo.png | e243 | © Cartoon Network — via https://arabic-blogging.web.app/albedo-ben-10-alien-force-watch.html — personal non-commercial fan use | https://arabic-blogging.web.app/albedo-ben-10-alien-force-watch.html |
 | a-dc-amazon.jpg | e125 | © DC Comics — via https://funvibehub.pages.dev/posts/10-dc-characters-who-are-stronger-than-homelander/ — personal non-commercial fan use | https://funvibehub.pages.dev/posts/10-dc-characters-who-are-stronger-than-homelander/ |
 | a-dc-emerald.jpg | e126 | © DC Comics — via https://outsidethebeltway.com/2018/10/page/3/ — personal non-commercial fan use | https://outsidethebeltway.com/2018/10/page/3/ |
 | a-dc-kryptonian.jpg | e124 | © DC Comics — via https://lskpodcast.libsyn.com/2018/09 — personal non-commercial fan use | https://lskpodcast.libsyn.com/2018/09 |

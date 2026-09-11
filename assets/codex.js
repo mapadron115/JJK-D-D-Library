@@ -107,9 +107,9 @@ function haystack(t) {
 }
 
 function matches(t, st) {
-  if (st.source === 'originals') return false;
+  if (st.origin === 'originals') return false;
   if (st.tier && (t.tier || '') !== st.tier) return false;
-  if (st.role && (t.role || '') !== st.role) return false;
+  if (st.role && (t.role || '').toLowerCase() !== st.role.toLowerCase()) return false;
   if (st.region && (t.region || '') !== st.region) return false;
   if (st.culture && (t.culture || '') !== st.culture) return false;
   if (st.detail && (t.detail || '') !== st.detail) return false;
@@ -128,7 +128,7 @@ function libHaystack(e) {
 }
 
 function matchesLib(e, st) {
-  if (st.source === 'figures') return false;
+  if (st.origin === 'figures') return false;
   if (st.collection && (e.collection || '') !== st.collection) return false;
   if (st.q) {
     var q = st.q.toLowerCase();
@@ -281,7 +281,7 @@ function renderEntry(t) {
 /* ── state + filter dropdowns ─────────────────── */
 var openIds = new Set();
 var state = { q: '', tier: '', role: '', region: '', culture: '', detail: '',
-  source: 'all', collection: '' };
+  origin: 'all', collection: '' };
 
 function uniqSorted(vals, cmp) {
   var seen = {}, out = [];
@@ -334,32 +334,20 @@ if (typeof document !== 'undefined') {
       uniqSorted(TECHS.map(function (t) { return t.culture; })), 'All cultures');
     fillSelect(document.getElementById('fCollection'), collections, 'All collections');
 
-    // source toggle
-    var segBtns = Array.prototype.slice.call(document.querySelectorAll('.seg-btn'));
-    segBtns.forEach(function (btn) {
-      var label = btn.textContent.trim();
-      if (btn.getAttribute('data-source') === 'all') btn.textContent = label + ' · ' + (TECHS.length + LIBS.length);
-      if (btn.getAttribute('data-source') === 'figures') btn.textContent = label + ' · ' + TECHS.length;
-      if (btn.getAttribute('data-source') === 'originals') btn.textContent = label + ' · ' + LIBS.length;
-    });
+    // origin filter: historical figures vs. original techniques (one unified list)
+    var originSel = document.getElementById('fOrigin');
     function syncFilterVisibility() {
       document.querySelectorAll('[data-for]').forEach(function (el) {
         var f = el.getAttribute('data-for');
-        el.style.display = (state.source === 'all' || state.source === f) ? '' : 'none';
+        el.style.display = (state.origin === 'all' || state.origin === f) ? '' : 'none';
       });
     }
-    document.querySelector('.seg').addEventListener('click', function (ev) {
-      var btn = ev.target.closest('.seg-btn');
-      if (!btn) return;
-      state.source = btn.getAttribute('data-source');
-      segBtns.forEach(function (b) {
-        var on = b === btn;
-        b.classList.toggle('is-active', on);
-        b.setAttribute('aria-selected', String(on));
-      });
+    originSel.addEventListener('change', function (ev) {
+      state.origin = ev.target.value;
       syncFilterVisibility();
       render();
     });
+    syncFilterVisibility();
 
     // deep link: #entry-<id>
     var m = (location.hash || '').match(/^#entry-([\w-]+)$/);
@@ -368,25 +356,14 @@ if (typeof document !== 'undefined') {
       if (TECHS.some(function (t) { return 'entry-' + t.id === want; })) openIds.add(want);
     }
 
-    function subhead(label, n) {
-      return '<h2 class="section-subhead">' + esc(label) +
-        ' <span class="sub-n">' + n + ' entr' + (n === 1 ? 'y' : 'ies') + '</span></h2>';
-    }
-
     function render() {
       var figs = TECHS.filter(function (t) { return matches(t, state); });
       var libs = LIBS.filter(function (e) { return matchesLib(e, state); });
-      var html = '';
-      if (state.source === 'all') {
-        if (figs.length) html += subhead('Historical Figures', figs.length) + figs.map(renderEntry).join('');
-        if (libs.length) html += subhead('Original Techniques', libs.length) + libs.map(renderLibCard).join('');
-      } else {
-        html = figs.map(renderEntry).join('') + libs.map(renderLibCard).join('');
-      }
-      grid.innerHTML = html;
+      /* one unified list: figures first, then originals — each card labels its own origin */
+      grid.innerHTML = figs.map(renderEntry).join('') + libs.map(renderLibCard).join('');
       emptyState.classList.toggle('show', !figs.length && !libs.length);
-      var total = state.source === 'all' ? TECHS.length + LIBS.length
-        : state.source === 'figures' ? TECHS.length : LIBS.length;
+      var total = state.origin === 'all' ? TECHS.length + LIBS.length
+        : state.origin === 'figures' ? TECHS.length : LIBS.length;
       resultCount.textContent = 'Showing ' + (figs.length + libs.length) + ' of ' + total + ' entries';
     }
 
@@ -418,7 +395,7 @@ if (typeof document !== 'undefined') {
     });
     document.getElementById('clearAll').addEventListener('click', function () {
       state = { q: '', tier: '', role: '', region: '', culture: '', detail: '',
-        source: state.source, collection: '' };
+        origin: state.origin, collection: '' };
       q.value = '';
       ['fTier', 'fRole', 'fRegion', 'fCulture', 'fDetail', 'fCollection'].forEach(function (fid) {
         document.getElementById(fid).value = '';

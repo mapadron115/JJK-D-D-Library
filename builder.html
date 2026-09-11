@@ -436,7 +436,7 @@ img{max-width:100%;height:auto}
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
   <span class="tiny">IL-RA-02 · Character Builder · fan-made JJK 5e homebrew reference. CE Reserve per the campaign canon — Reserve Dice, one CE ability modifier, permanent bonuses added after.</span>
   <span class="editions">Illustrated edition</span>
-  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA and respective rights holders — manga &amp; anime art from the author's JJK 5e PDFs plus sourced franchise/comic/game imagery, used for personal, non-commercial fan purposes only. <a href="assets/img/CREDITS.md">Full image credits</a>.</span>
+  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA and respective rights holders — manga &amp; anime art from the author's JJK 5e PDFs plus sourced franchise/comic/game imagery, used for personal, non-commercial fan purposes only. <a href="image-credits.html">Full image credits</a>.</span>
 </div></footer>
 
 <script src="data/codex.js"></script>
@@ -469,6 +469,8 @@ var HAS_LIB   = !!(window.LIBRARY_ENTRIES && window.LIBRARY_ENTRIES.length);
 var FIGURES   = HAS_CODEX ? window.CODEX.techniques : [];
 var ORIGINALS = HAS_LIB ? window.LIBRARY_ENTRIES : [];
 var TOTAL_TECH = FIGURES.length + ORIGINALS.length;
+/* NPC-locked entries (e.g. Vlad III) are viewable but not selectable — count honestly */
+var PICKABLE_TECH = TOTAL_TECH - FIGURES.filter(function(e){ return e.visibility==='npc'; }).length;
 
 /* ── campaign tables (from the audited player guide + CE Reserve primer) ── */
 var ABILITIES = ['STR','DEX','CON','INT','WIS','CHA'];
@@ -1334,7 +1336,7 @@ function animateSingleDie(btn,spanAttr,sides,done){
 STEP_VALID[5]=function(){ return {ok:true}; };
 
 /* ═══════════ STEP 6 — TECHNIQUE ═══════════ */
-var techQ='', techGrade='', techGroup='', techRole='', techFranchise='', techCat='all';
+var techQ='', techGrade='', techGroup='', techRole='', techFranchise='', techOrigin='all';
 var GRADE_ORDER=['Reality Warping','Calamity','Special Grade','Grade 1','Grade 2','Grade 3','Grade 4','Unrated'];
 var GROUP_ORDER=['Anime & Manga','Video Games','Magic: The Gathering','Marvel','DC','Ben 10','Jujutsu Kaisen','Original Codex','SCP Anomalies','Bestiary \u2014 Cryptids','Bestiary \u2014 Mythology','Cursed Tool Arsenal','Applied Systems'];
 function stepTechnique(body){
@@ -1350,9 +1352,9 @@ function stepTechnique(body){
     return;
   }
   html+='<div class="banner"><span class="bk">❖ Campaign rule — open selection</span>'+
-    '<p>You may choose <b>ANY technique from the full codex at character creation</b> — all <b>'+TOTAL_TECH+'</b> entries are pickable, even at level 1. '+
+    '<p>You may choose <b>ANY technique from the full codex at character creation</b> — <b>'+PICKABLE_TECH+'</b> of the <b>'+TOTAL_TECH+'</b> entries are pickable, even at level 1. '+
     'The gate is on <b>features, not choice</b>: only features of level ≤ '+char.level+' are active now; everything else unlocks as you level and appears on your sheet as a roadmap.</p>'+
-    '<p class="small">One technique per character. <i>Dual Technique</i> is a known variant — ask your GM; this builder does not implement it.</p></div>';
+    '<p class="small">Vlad III\u2019s Impaler is GM-only (viewable, not selectable). One technique per character. <i>Dual Technique</i> is a known variant — ask your GM; this builder does not implement it.</p></div>';
   /* filters */
   var roles={};
   FIGURES.forEach(function(e){ if(e.role) roles[e.role]=1; });
@@ -1361,44 +1363,52 @@ function stepTechnique(body){
   var franch={};
   ORIGINALS.forEach(function(e){ if(e.franchise) franch[e.franchise]=1; });
   var franchOpts=Object.keys(franch).sort();
-  var grpDisabled=(techCat==='figures')?' disabled':'';
-  html+='<div class="seg" id="catSeg">'+
-    '<button type="button" class="seg-btn'+(techCat==='all'?' is-active':'')+'" data-cat="all">All ('+TOTAL_TECH+')</button>'+
-    '<button type="button" class="seg-btn'+(techCat==='figures'?' is-active':'')+'" data-cat="figures">Historical Figures ('+FIGURES.length+')</button>'+
-    '<button type="button" class="seg-btn'+(techCat==='originals'?' is-active':'')+'" data-cat="originals">Original Library ('+ORIGINALS.length+')</button></div>';
+  /* filters: one unified catalogue — historical figures and original library entries
+     in a single list, with an Origin filter for classification. */
   html+='<div class="controls"><div class="ctrl-grid">'+
     '<div class="field"><label for="tq">Search techniques</label><input id="tq" type="search" placeholder="Name, figure, concept, feature text…" value="'+esc(techQ)+'"></div>'+
-    '<div class="field"><label for="tg">Grouping</label><select id="tg"'+grpDisabled+'><option value="">All groupings</option>'+
+    '<div class="field"><label for="to">Origin</label><select id="to">'+
+      '<option value="all"'+(techOrigin==='all'?' selected':'')+'>All origins ('+TOTAL_TECH+')</option>'+
+      '<option value="figures"'+(techOrigin==='figures'?' selected':'')+'>Historical figures ('+FIGURES.length+')</option>'+
+      '<option value="originals"'+(techOrigin==='originals'?' selected':'')+'>Original library ('+ORIGINALS.length+')</option>'+
+    '</select></div>'+
+    '<div class="field"><label for="tg">Grouping</label><select id="tg"><option value="">All groupings</option>'+
       GROUP_ORDER.map(function(g){ return '<option value="'+esc(g)+'"'+(techGroup===g?' selected':'')+'>'+esc(g)+'</option>'; }).join('')+'</select></div>'+
     '<div class="field"><label for="tt">Grade</label><select id="tt"><option value="">All grades</option>'+
       GRADE_ORDER.map(function(t){ return '<option value="'+esc(t)+'"'+(techGrade===t?' selected':'')+'>'+esc(t)+'</option>'; }).join('')+'</select></div>'+
     '<div class="field"><label for="tr">Combat role</label><select id="tr"><option value="">All roles</option>'+
       roleOpts.map(function(r){ return '<option value="'+esc(r)+'"'+(techRole===r?' selected':'')+'>'+esc(r.length>38?r.slice(0,38)+'…':r)+'</option>'; }).join('')+'</select></div>'+
-    '<div class="field"><label for="tf">Franchise</label><select id="tf"'+grpDisabled+'><option value="">All franchises</option>'+
+    '<div class="field"><label for="tf">Franchise</label><select id="tf"><option value="">All franchises</option>'+
       franchOpts.map(function(f){ return '<option value="'+esc(f)+'"'+(techFranchise===f?' selected':'')+'>'+esc(f)+'</option>'; }).join('')+'</select></div>'+
     '<div class="field"><label>&nbsp;</label><button class="btn btn-small btn-ghost" id="tClear" type="button">Clear</button></div>'+
     '</div><div class="resultline"><span id="techResultCount"></span><span class="hint">Inspect any entry to see what is active at level 1 vs. what unlocks later.</span></div></div>';
   html+='<div id="techResults"></div>';
   body.innerHTML=html;
-  body.querySelectorAll('#catSeg .seg-btn').forEach(function(b){ b.addEventListener('click',function(){ techCat=b.getAttribute('data-cat'); stepTechnique(body); }); });
   var tq=$('tq');
   tq.addEventListener('input',function(){ techQ=tq.value; renderTechResults(); });
   $('tg').addEventListener('change',function(e){ techGroup=e.target.value; renderTechResults(); });
+  $('to').addEventListener('change',function(e){ techOrigin=e.target.value; renderTechResults(); });
   $('tt').addEventListener('change',function(e){ techGrade=e.target.value; renderTechResults(); });
   $('tr').addEventListener('change',function(e){ techRole=e.target.value; renderTechResults(); });
   $('tf').addEventListener('change',function(e){ techFranchise=e.target.value; renderTechResults(); });
-  $('tClear').addEventListener('click',function(){ techQ='';techGrade='';techGroup='';techRole='';techFranchise=''; stepTechnique(body); });
+  $('tClear').addEventListener('click',function(){ techQ='';techGrade='';techGroup='';techRole='';techFranchise='';techOrigin='all'; stepTechnique(body); });
   renderTechResults();
 }
-function techMatches(e,catalog){
-  if(techCat!=='all' && techCat!==catalog) return false;
+function techMatches(e){
+  var fig=tIsFigure(e);
+  /* Origin classification: historical figures vs. the original library. */
+  if(techOrigin==='figures' && !fig) return false;
+  if(techOrigin==='originals' && fig) return false;
   if(techGrade && tGrade(e)!==techGrade) return false;
-  if(techGroup && catalog==='originals' && (e.collection||'')!==techGroup) return false;
-  if(techFranchise && catalog==='originals' && (e.franchise||'')!==techFranchise) return false;
+  /* Franchise and Grouping describe only the Original Library — figures carry
+     neither, so they fall out of the list while either filter is set. */
+  if(techGroup && (e.collection||'')!==techGroup) return false;
+  if(techFranchise && (e.franchise||'')!==techFranchise) return false;
   if(techRole){
-    var r=tRole(e);
-    if(catalog==='figures'){ if(r!==techRole) return false; }
-    else { if(r!==techRole && (e.kind||'')!==techRole) return false; }
+    /* case-insensitive: data mixes "Controller", "controller / builder", "Appraisal controller" */
+    var r=(tRole(e)||'').toLowerCase(), want=techRole.toLowerCase();
+    if(fig){ if(r!==want) return false; }
+    else { if(r!==want && (e.kind||'').toLowerCase()!==want) return false; }
   }
   if(techQ){
     var q=techQ.toLowerCase();
@@ -1489,13 +1499,17 @@ function featuresHTML(features){
 }
 function renderTechResults(){
   var res=$('techResults'); if(!res) return;
-  var figs=FIGURES.filter(function(e){ return techMatches(e,'figures'); });
-  var origs=ORIGINALS.filter(function(e){ return techMatches(e,'originals'); });
-  var shown=figs.length+origs.length;
-  $('techResultCount').textContent='Showing '+shown+' of '+TOTAL_TECH+' techniques'+(char.technique?' · 1 selected':'');
+  /* One unified catalogue: figures first, then originals; every card labels its own origin. */
+  var list=FIGURES.filter(techMatches).concat(ORIGINALS.filter(techMatches));
+  var countText='Showing '+list.length+' of '+TOTAL_TECH+' techniques';
+  if(char.technique) countText+=' · 1 selected';
+  $('techResultCount').textContent=countText;
   var html='';
-  if(techCat!=='originals') html+='<div class="tech-sec">Historical Figures <span class="sub-n">'+figs.length+' shown</span></div>'+(figs.map(function(e){return techCard(e,'figures');}).join('')||'<p class="small">No figure techniques match.</p>');
-  if(techCat!=='figures') html+='<div class="tech-sec">Original Library <span class="sub-n">'+origs.length+' shown</span></div>'+(origs.map(function(e){return techCard(e,'originals');}).join('')||'<p class="small">No library entries match.</p>');
+  if(techOrigin==='all'&&(techFranchise!==''||techGroup!=='')){
+    html+='<p class="small">Franchise and grouping describe the Original Library — historical figures carry neither, so they fall out while either filter is set.</p>';
+  }
+  html+=list.map(function(e){ return techCard(e, tIsFigure(e)?'figures':'originals'); }).join('')||
+    '<p class="small">No techniques match the current filters.</p>';
   res.innerHTML=html;
   res.querySelectorAll('[data-inspect]').forEach(function(b){
     b.addEventListener('click',function(){
@@ -1524,7 +1538,7 @@ function renderTechResults(){
 STEP_VALID[6]=function(){
   if(isHR()) return {ok:true};
   if(!HAS_CODEX&&!HAS_LIB) return {ok:false,msg:'Technique data failed to load — check the data/ folder.'};
-  if(!char.technique) return {ok:false,msg:'Choose a technique — any of the '+TOTAL_TECH+' entries is available at creation.'};
+  if(!char.technique) return {ok:false,msg:'Choose a technique — '+PICKABLE_TECH+' of the '+TOTAL_TECH+' entries are pickable at creation (Vlad III is GM-only).'};
   return {ok:true};
 };
 
@@ -1533,7 +1547,7 @@ function stepDetails(body){
   var html='<h2>Step 7 — Details</h2><p class="sub">Feats, cursed tools, and the odds and ends that make the character yours. A permanent CE bonus here feeds straight into your Max CE (primer: bonuses are added <b>after</b> the reserve).</p>';
   html+='<div class="field" style="max-width:280px"><label for="ceBonus">Permanent CE bonus (feats, vows, items)</label>'+
     '<input id="ceBonus" type="number" min="0" max="999" value="'+(parseInt(char.ceBonus,10)||0)+'"></div>';
-  html+='<h3>Feats</h3><p class="small">The player guide carries the full <a href="library/player-guide.html#feats">feat catalog (175 printed entries)</a> — find the feat there, then add its exact name below.</p><div class="preset-chips" id="featChips">'+PRESET_FEATS.map(function(f){
+  html+='<h3>Feats</h3><p class="small">The full feat entries are printed in the source books — find the feat in your copy, then add its exact name below.</p><div class="preset-chips" id="featChips">'+PRESET_FEATS.map(function(f){
     var has=char.feats.indexOf(f)>=0;
     return '<button class="btn btn-small" type="button" data-feat="'+esc(f)+'" style="'+(has?'border-color:var(--red);color:var(--red-deep)':'')+'">'+(has?'✓ ':'+ ')+esc(f)+'</button>';
   }).join('')+'</div>'+
