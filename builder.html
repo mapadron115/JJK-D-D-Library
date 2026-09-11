@@ -1012,7 +1012,6 @@ function stepClass(body){
       var wasHR=isHR();
       char.cls=card.getAttribute('data-c');
       if(isHR()){ char.ceAbility=''; char.technique=null; }
-      else if(!char.ceAbility) char.ceAbility='WIS';
       if(wasHR!==isHR()){ char.levelData={}; } /* CE structure changed */
       renderStep();
     };
