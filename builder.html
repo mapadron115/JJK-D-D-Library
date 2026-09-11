@@ -751,6 +751,7 @@ function tHref(e){ var h=e?(e.href||''):''; return (h.indexOf('dossiers/')===0)?
 
 /* ── character state ── */
 var LS_KEY = 'ritual-archive-characters';
+var SCHEMA_VERSION = 2; /* bump when the save shape changes; migrateChar upgrades older saves */
 var char = null;
 var currentStep = 1;
 var dicePool = [];      // rolled/standard-array pool for ability assignment
@@ -770,7 +771,8 @@ function blankChar(){
     levelData:{}, // {level:{hpMode,hpDie,ceMode,ceDie}}
     classLevels:{}, // {charLevel:className} — multiclassing; level 1 is the starting class
     techniques:[], // [{catalog:'figures'|'originals', id}] — up to 2 innate techniques
-    feats:[], tools:[], notes:'', ceBonus:0
+    feats:[], tools:[], notes:'', ceBonus:0,
+    v: SCHEMA_VERSION
   };
 }
 
@@ -874,6 +876,10 @@ function classBreakdown(){
 }
 /* migrate pre-multiclass / pre-dual-technique saves */
 function migrateChar(c){
+  if(c.v!==SCHEMA_VERSION){
+    /* future schema changes branch here: if(c.v<3){ ... } */
+    c.v=SCHEMA_VERSION;
+  }
   if(!c.classLevels||!Object.keys(c.classLevels).length){
     c.classLevels={}; for(var l=1;l<=(c.level||1);l++) c.classLevels[l]=c.cls;
   }
@@ -1483,8 +1489,14 @@ function renderLvlRows(){
   /* wire */
   tb.querySelectorAll('[data-lvlclass]').forEach(function(sel){ sel.addEventListener('change',function(){
     var l=+sel.getAttribute('data-lvlclass');
-    char.classLevels[l]=sel.value;
-    delete char.levelData[l]; /* new Hit Die / Reserve Die — re-roll this level */
+    var oldCls=clsAt(l), newCls=sel.value;
+    char.classLevels[l]=newCls;
+    /* preserve this level's rolls when they're still valid on the new dice */
+    var ld=char.levelData[l]||{};
+    var newC=CLASSES[newCls]||CLASSES['Warrior'];
+    if(ld.hpMode==='roll' && (!ld.hpDie || ld.hpDie>newC.hd)){ ld.hpMode='fixed'; ld.hpDie=null; }
+    if(ld.ceMode==='roll' && (!ld.ceDie || ld.ceDie>newC.reserve)){ ld.ceMode='fixed'; ld.ceDie=null; }
+    if(oldCls!==newCls && !ld.hpMode && !ld.ceMode) delete char.levelData[l];
     renderLvlRows(); renderLvlTotals();
   }); });
   tb.querySelectorAll('[data-hpfixed]').forEach(function(b){ b.addEventListener('click',function(){ var l=+b.getAttribute('data-hpfixed'); char.levelData[l]=char.levelData[l]||{}; char.levelData[l].hpMode='fixed'; char.levelData[l].hpDie=null; renderLvlRows(); renderLvlTotals(); }); });
@@ -1892,7 +1904,10 @@ function sheetHTML(){
   html+='<p class="small" style="margin:0 0 4px;letter-spacing:2px;text-transform:uppercase">Feats</p>'+
     (function(){
       var featNote=function(name){ var fi=featInfo(name); return fi&&fi.prereq?' <span class="small">'+esc(fi.prereq)+'</span>':''; };
-      var items=char.feats.map(function(f){return '<li>'+esc(f)+featNote(f)+'</li>';})
+      /* Jujutsu Sorcerers automatically have the Cursed Energy feat (unusable under Pure Body) */
+      var autoFeats=(char.heritage==='sorcerer'&&!isHR())?['Beginner Cursed Energy']:[];
+      var items=autoFeats.map(function(f){return '<li>'+esc(f)+' <span class="small">(heritage)</span>'+featNote(f)+'</li>';})
+        .concat(char.feats.map(function(f){return '<li>'+esc(f)+featNote(f)+'</li>';}))
         .concat(asiFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat)</span>'+featNote(e.name)+'</li>';}));
       return items.length?'<ul class="tag-list">'+items.join('')+'</ul>':'<p class="small">—</p>';
     })();
