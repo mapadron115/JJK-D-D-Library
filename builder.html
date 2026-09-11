@@ -1441,6 +1441,26 @@ STEP_VALID[6]=function(){ return {ok:true}; };
 /* ═══════════ STEP 5 — TECHNIQUE ═══════════ */
 var techQ='', techGrade='', techGroup='', techRole='', techFranchise='', techOrigin='all';
 var GRADE_ORDER=['Reality Warping','Calamity','Special Grade','Grade 1','Grade 2','Grade 3','Grade 4','Unrated'];
+/* Canonical combat-role buckets for the filter. The figures' authored role
+   strings are freeform, so each string maps to buckets by keyword — a figure
+   can belong to several. Cards keep showing the full authored string. */
+var ROLE_ORDER=['Striker','Tank','Controller','Blaster','Support','Utility'];
+var ROLE_PATTERNS=[
+  ['Striker',/striker|duelist/i],
+  ['Tank',/tank|brute|grappl|defen[cs]e|defender/i],
+  ['Controller',/controll|debuff|denial|snare|edict|fear|geometry|encirclement/i],
+  ['Blaster',/\bblaster\b|\bcaster\b/i],
+  ['Support',/support|buffer|liberator|morale/i],
+  ['Utility',/utility|exploration|mobility|infiltrat|escape|divination/i]
+];
+var ROLE_OVERRIDES={'redistribution / inversion':['Controller']};
+function roleBuckets(role){
+  if(!role) return [];
+  if(ROLE_OVERRIDES[role]) return ROLE_OVERRIDES[role];
+  var out=[];
+  ROLE_PATTERNS.forEach(function(p){ if(p[1].test(role)) out.push(p[0]); });
+  return out;
+}
 var GROUP_ORDER=['Anime & Manga','Video Games','Magic: The Gathering','Marvel','DC','Ben 10','Jujutsu Kaisen','Original Codex','SCP Anomalies','Bestiary \u2014 Cryptids','Bestiary \u2014 Mythology','Cursed Tool Arsenal','Applied Systems'];
 function stepTechnique(body){
   var html='<h2>Step 5 — Technique</h2>';
@@ -1460,11 +1480,9 @@ function stepTechnique(body){
     '<p class="small">Cursed tools — the arsenal, sacred treasures, and Djinn metal vessels — are <b>gear, not techniques</b>: they have their own tab in the codex and are awarded through campaign progression.</p>'+
     '<p class="small">Vlad III\u2019s Impaler is GM-only (viewable, not selectable). One technique per character. <i>Dual Technique</i> is a known variant — ask your GM; this builder does not implement it.</p></div>';
   /* filters */
-  var roles={};
-  /* Combat role is figure data only — original-library entries carry no role,
-     so record-type values (kind) must not leak into this filter. */
-  FIGURES.forEach(function(e){ if(e.role) roles[e.role]=1; });
-  var roleOpts=Object.keys(roles).sort();
+  /* Combat role buckets are canonical (Striker/Tank/Controller/Blaster/Support/
+     Utility); the figures' freeform role strings map to them by keyword. */
+  var roleOpts=ROLE_ORDER.slice();
   var franch={};
   TECHNIQUES.forEach(function(e){ if(e.franchise) franch[e.franchise]=1; });
   var franchOpts=Object.keys(franch).sort();
@@ -1487,7 +1505,7 @@ function stepTechnique(body){
     '<div class="field"><label for="tt">Grade</label><select id="tt"><option value="">All grades</option>'+
       GRADE_ORDER.map(function(t){ return '<option value="'+esc(t)+'"'+(techGrade===t?' selected':'')+'>'+esc(t)+'</option>'; }).join('')+'</select></div>'+
     '<div class="field"><label for="tr">Combat role</label><select id="tr"><option value="">All roles</option>'+
-      roleOpts.map(function(r){ return '<option value="'+esc(r)+'"'+(techRole===r?' selected':'')+'>'+esc(r.length>38?r.slice(0,38)+'…':r)+'</option>'; }).join('')+'</select></div>'+
+      roleOpts.map(function(r){ return '<option value="'+esc(r)+'"'+(techRole===r?' selected':'')+'>'+esc(r)+'</option>'; }).join('')+'</select></div>'+
     '<div class="field"><label for="tf">Franchise</label><select id="tf"><option value="">All franchises</option>'+
       franchOpts.map(function(f){ return '<option value="'+esc(f)+'"'+(techFranchise===f?' selected':'')+'>'+esc(f)+'</option>'; }).join('')+'</select></div>'+
     '<div class="field"><label>&nbsp;</label><button class="btn btn-small btn-ghost" id="tClear" type="button">Clear</button></div>'+
@@ -1515,11 +1533,10 @@ function techMatches(e){
   if(techGroup && (e.collection||'')!==techGroup) return false;
   if(techFranchise && (e.franchise||'')!==techFranchise) return false;
   /* Combat role describes only the historical figures — original-library entries
-     carry no role data, so they pass through while the filter is set. */
-  if(techRole && fig){
-    /* case-insensitive: data mixes "Controller", "controller / builder", "Appraisal controller" */
-    var r=(tRole(e)||'').toLowerCase(), want=techRole.toLowerCase();
-    if(r!==want) return false;
+     carry no role data, so they fall out while the filter is set. */
+  if(techRole){
+    if(!fig) return false;
+    if(roleBuckets(tRole(e)).indexOf(techRole)<0) return false;
   }
   if(techQ){
     var q=techQ.toLowerCase();
@@ -1618,6 +1635,9 @@ function renderTechResults(){
   var html='';
   if(techOrigin==='all'&&(techFranchise!==''||techGroup!=='')){
     html+='<p class="small">Franchise and grouping describe the Original Library — historical figures carry neither, so they fall out while either filter is set.</p>';
+  }
+  if(techOrigin==='all'&&techRole!==''){
+    html+='<p class="small">Combat role describes the historical figures — original-library entries carry no role data, so they fall out while the filter is set.</p>';
   }
   html+=list.map(function(e){ return techCard(e, tIsFigure(e)?'figures':'originals'); }).join('')||
     '<p class="small">No techniques match the current filters.</p>';
