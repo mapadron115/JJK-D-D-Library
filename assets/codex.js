@@ -265,8 +265,8 @@ function renderEntry(t) {
     '<button class="entry-head" type="button" data-toggle="' + esc(id) + '" aria-expanded="' + openIds.has(id) + '">' +
     '<span class="head-main">' +
     '<span class="entry-no">Entry ' + esc(module) + '</span>' +
-    '<span class="figure">' + esc(t.figure || 'Unknown figure') + '</span>' +
-    (t.technique ? '<span class="techname">' + esc(t.technique) + '</span>' : '') +
+    '<span class="figure">' + esc(t.technique || t.figure || 'Unknown technique') + '</span>' + // headline = technique name
+    (t.technique ? '<span class="techname">' + esc(t.figure || 'Unknown figure') + '</span>' : '') + // byline = figure name
     (regionEra ? '<span class="meta-line">' + esc(regionEra) + '</span>' : '') +
     (t.concept ? '<span class="concept">“' + esc(t.concept) + '”</span>' : '') +
     '</span>' +
