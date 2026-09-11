@@ -34,6 +34,9 @@ details.level summary .lv-title b{color:#f1e5c7}
 .callout .callout-kicker{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:800}
 .callout h3.ctitle{margin:.3rem 0 .6rem;color:#f2e6c7}
 .callout-domain{border-color:#b276e8}
+.callout-maximum{border-color:#e06c4f}
+.callout-note{border-color:#6d9dc5}
+pre.legacy-source-text{white-space:pre-wrap;word-break:break-word;font-size:.82rem;line-height:1.55;color:#9aa0ab;background:#0d0f14;border:1px solid #23262e;border-radius:10px;padding:14px 16px;max-height:420px;overflow:auto;margin:14px 0}
 .source-list{list-style:none;padding:0;margin:12px 0}
 .source-list li{margin:8px 0;color:#d1cdc3}
 .table-scroll{overflow-x:auto;margin:14px 0}
