@@ -41,10 +41,10 @@ for a transformative, non-commercial fan project.
 | portrait-sage.jpg | JJK 5e V.6 | Long-haired sage in meditation | portrait / card |
 | portrait-sorceress.jpg | JJK 5e V.6 | Sorceress mid-technique | portrait / card |
 | portrait-todo-seated.jpg | JJK 5e V.6 | Seated sorcerer in patterned kimono | portrait / card |
-| portrait-toji.jpg | JJK 5e V.6 | Sorcerer in kimono (Toji) | portrait / card |
-| portrait-maki-bandaged.jpg | JJK 5e V.6 | Bandaged Maki, arms crossed | portrait / card |
+| portrait-toji.jpg | Jujutsu Kaisen Wiki (fandom.com/wiki/Toji_Fushiguro) | Toji Fushiguro, anime character art | portrait / card |
+| portrait-maki-bandaged.jpg | REMOVED 2026-09-11 | mislabeled (not Maki); file deleted | — |
 | portrait-blonde-sorcerer.jpg | JJK 5e V.6 | Full-body blonde sorcerer with a playful cursed tool | portrait / card |
-| portrait-maki-color.jpg | Creeps and Curses V.3.1 | Maki wreathed in magenta CE (color) | portrait / card |
+| portrait-maki-color.jpg | REMOVED 2026-09-11 | unverifiable provenance; file deleted | — |
 | portrait-mahito.jpg | JJK 5e V.6 | Mahito close-up, stitched face | portrait / card |
 | portrait-kenjaku.jpg | JJK 5e V.6 | Kenjaku's stitched brow | portrait / card |
 | portrait-todo-flex.jpg | JJK 5e V.6 | Todo Aoi flexing mid-fight | portrait / card |
