@@ -8,9 +8,19 @@
 
 var CODEX = (typeof window !== 'undefined' && window.CODEX) || { techniques: [] };
 var TECHS = Array.isArray(CODEX.techniques) ? CODEX.techniques : [];
-/* Original techniques: the 243 library dossiers (window.LIBRARY_ENTRIES). */
+/* Original techniques: the library dossiers (window.LIBRARY_ENTRIES). */
 var LIBS = (typeof window !== 'undefined' && Array.isArray(window.LIBRARY_ENTRIES))
   ? window.LIBRARY_ENTRIES : [];
+
+/* Cursed tools are gear, not techniques — the arsenal, sacred treasures, Djinn metal
+   vessels, and the Djinn system primer live on their own tab. */
+function isToolEntry(e) {
+  var k = (e && e.kind) || '';
+  return k === 'Cursed Tool' || k === 'Djinn / Metal Vessel' || k === 'Sacred Treasure'
+    || (e && e.id === 'e062');
+}
+var N_TECH_LIBS = LIBS.filter(function (e) { return !isToolEntry(e); }).length;
+var N_TOOLS = LIBS.length - N_TECH_LIBS;
 
 var TIER_ORDER = { 'I': 0, 'II': 1, 'III': 2, 'IV': 3, 'V': 4 };
 var DETAIL_LABEL = { full: 'FULL PROGRESSION', summary: 'DOSSIER SUMMARY', bespoke: 'BESPOKE RECORD' };
@@ -107,6 +117,7 @@ function haystack(t) {
 }
 
 function matches(t, st) {
+  if (st.tab === 'tools') return false;
   if (st.origin === 'originals') return false;
   /* Figures carry no collection — any active collection filter excludes them. */
   if (st.collection) return false;
@@ -130,6 +141,8 @@ function libHaystack(e) {
 }
 
 function matchesLib(e, st) {
+  /* Techniques tab hides tools; Cursed Tools tab shows only tools. */
+  if (st.tab === 'tools' ? !isToolEntry(e) : isToolEntry(e)) return false;
   if (st.origin === 'figures') return false;
   if (st.collection && (e.collection || '') !== st.collection) return false;
   if (st.q) {
@@ -283,7 +296,7 @@ function renderEntry(t) {
 /* ── state + filter dropdowns ─────────────────── */
 var openIds = new Set();
 var state = { q: '', tier: '', role: '', region: '', culture: '', detail: '',
-  origin: 'all', collection: '' };
+  origin: 'all', collection: '', tab: 'tech' };
 
 function uniqSorted(vals, cmp) {
   var seen = {}, out = [];
@@ -343,6 +356,10 @@ if (typeof document !== 'undefined') {
         var f = el.getAttribute('data-for');
         el.style.display = (state.origin === 'all' || state.origin === f) ? '' : 'none';
       });
+      /* Techniques-only filters (Origin, figure fields) hide on the Cursed Tools tab. */
+      document.querySelectorAll('[data-tabonly]').forEach(function (el) {
+        el.style.display = (state.tab === el.getAttribute('data-tabonly')) ? '' : 'none';
+      });
     }
     originSel.addEventListener('change', function (ev) {
       state.origin = ev.target.value;
@@ -351,11 +368,31 @@ if (typeof document !== 'undefined') {
     });
     syncFilterVisibility();
 
+    /* Techniques / Cursed Tools tabs */
+    var tabBtns = Array.prototype.slice.call(document.querySelectorAll('[data-tab]'));
+    function setTab(t) {
+      state.tab = t;
+      tabBtns.forEach(function (b) {
+        var on = b.getAttribute('data-tab') === t;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', String(on));
+      });
+      syncFilterVisibility();
+      render();
+    }
+    tabBtns.forEach(function (b) {
+      b.addEventListener('click', function () { setTab(b.getAttribute('data-tab')); });
+    });
+
     // deep link: #entry-<id>
     var m = (location.hash || '').match(/^#entry-([\w-]+)$/);
     if (m) {
       var want = 'entry-' + m[1];
       if (TECHS.some(function (t) { return 'entry-' + t.id === want; })) openIds.add(want);
+      else {
+        var le = LIBS.filter(function (e) { return 'entry-' + e.id === want; })[0];
+        if (le) { if (isToolEntry(le)) setTab('tools'); openIds.add(want); }
+      }
     }
 
     function render() {
@@ -364,9 +401,11 @@ if (typeof document !== 'undefined') {
       /* one unified list: figures first, then originals — each card labels its own origin */
       grid.innerHTML = figs.map(renderEntry).join('') + libs.map(renderLibCard).join('');
       emptyState.classList.toggle('show', !figs.length && !libs.length);
-      var total = state.origin === 'all' ? TECHS.length + LIBS.length
-        : state.origin === 'figures' ? TECHS.length : LIBS.length;
-      resultCount.textContent = 'Showing ' + (figs.length + libs.length) + ' of ' + total + ' entries';
+      var total = state.tab === 'tools' ? N_TOOLS
+        : state.origin === 'all' ? TECHS.length + N_TECH_LIBS
+        : state.origin === 'figures' ? TECHS.length : N_TECH_LIBS;
+      resultCount.textContent = 'Showing ' + (figs.length + libs.length) + ' of ' + total +
+        (state.tab === 'tools' ? ' cursed tools' : ' entries');
     }
 
     grid.addEventListener('click', function (ev) {
@@ -397,7 +436,7 @@ if (typeof document !== 'undefined') {
     });
     document.getElementById('clearAll').addEventListener('click', function () {
       state = { q: '', tier: '', role: '', region: '', culture: '', detail: '',
-        origin: state.origin, collection: '' };
+        origin: state.origin, collection: '', tab: state.tab };
       q.value = '';
       ['fTier', 'fRole', 'fRegion', 'fCulture', 'fDetail', 'fCollection'].forEach(function (fid) {
         document.getElementById(fid).value = '';

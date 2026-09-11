@@ -268,7 +268,7 @@ h1 .amp{color:var(--red)}
 <div class="hero-art" aria-hidden="true"><img src="assets/img/hero-curse-hallway.jpg" alt="" loading="eager"></div><div class="shell">
   <div class="eyebrow"><span class="orn">❖</span> Illustrated · IL-RA-01 · Player Reference <span class="orn">❖</span></div>
   <h1>Technique <span class="amp">Codex</span></h1>
-  <p class="lede">One codex, every campaign technique: the historical figures' techniques with full level-by-level mechanics, and the original techniques from the library — each with its full dossier. Classify by origin, search across both, then open a figure entry for the progression or follow a card to its dossier.</p>
+  <p class="lede">One codex, every campaign technique: the historical figures' techniques with full level-by-level mechanics, and the original techniques from the library — each with its full dossier. Classify by origin, search across both, then open a figure entry for the progression or follow a card to its dossier. Cursed tools — the arsenal, sacred treasures, and Djinn metal vessels — are gear, not techniques, and live on their own tab.</p>
   <div class="statstrip" id="statstrip">
     <div class="stat"><b id="statTotal">—</b><span>catalogued entries</span></div>
     <div class="stat"><b id="statFigures">—</b><span>historical techniques</span></div>
@@ -278,19 +278,26 @@ h1 .amp{color:var(--red)}
 </div></section>
 
 <section class="controls"><div class="shell">
+  <div class="source-row">
+    <span class="source-label">Catalogue</span>
+    <div class="seg" role="tablist" aria-label="Catalogue">
+      <button type="button" class="seg-btn is-active" data-tab="tech" role="tab" aria-selected="true">Techniques</button>
+      <button type="button" class="seg-btn" data-tab="tools" role="tab" aria-selected="false">Cursed Tools</button>
+    </div>
+  </div>
   <div class="ctrl-grid">
     <div class="field"><label for="q">Search the codex</label>
       <input id="q" type="search" placeholder="Figure, technique, dossier, rule text…" autocomplete="off"></div>
-    <div class="field"><label for="fOrigin">Origin</label><select id="fOrigin">
+    <div class="field" data-tabonly="tech"><label for="fOrigin">Origin</label><select id="fOrigin">
       <option value="all">All origins</option>
       <option value="figures">Historical figures</option>
       <option value="originals">Original techniques</option>
     </select></div>
-    <div class="field" data-for="figures"><label for="fTier">Tier</label><select id="fTier"></select></div>
-    <div class="field" data-for="figures"><label for="fRole">Combat role</label><select id="fRole"></select></div>
-    <div class="field" data-for="figures"><label for="fRegion">Region</label><select id="fRegion"></select></div>
-    <div class="field" data-for="figures"><label for="fCulture">Culture</label><select id="fCulture"></select></div>
-    <div class="field" data-for="figures"><label for="fDetail">Record type</label>
+    <div class="field" data-for="figures" data-tabonly="tech"><label for="fTier">Tier</label><select id="fTier"></select></div>
+    <div class="field" data-for="figures" data-tabonly="tech"><label for="fRole">Combat role</label><select id="fRole"></select></div>
+    <div class="field" data-for="figures" data-tabonly="tech"><label for="fRegion">Region</label><select id="fRegion"></select></div>
+    <div class="field" data-for="figures" data-tabonly="tech"><label for="fCulture">Culture</label><select id="fCulture"></select></div>
+    <div class="field" data-for="figures" data-tabonly="tech"><label for="fDetail">Record type</label>
       <select id="fDetail">
         <option value="">All record types</option>
         <option value="full">Full progression</option>

@@ -469,7 +469,13 @@ var HAS_CODEX = !!(window.CODEX && window.CODEX.techniques && window.CODEX.techn
 var HAS_LIB   = !!(window.LIBRARY_ENTRIES && window.LIBRARY_ENTRIES.length);
 var FIGURES   = HAS_CODEX ? window.CODEX.techniques : [];
 var ORIGINALS = HAS_LIB ? window.LIBRARY_ENTRIES : [];
-var TOTAL_TECH = FIGURES.length + ORIGINALS.length;
+/* Cursed tools are gear, not techniques — chosen in Step 7 (Details), never as the innate technique. */
+function isToolEntry(e){
+  var k=(e&&e.kind)||'';
+  return k==='Cursed Tool'||k==='Djinn / Metal Vessel'||k==='Sacred Treasure'||(e&&e.id==='e062');
+}
+var TECHNIQUES = ORIGINALS.filter(function(e){ return !isToolEntry(e); });
+var TOTAL_TECH = FIGURES.length + TECHNIQUES.length;
 /* NPC-locked entries (e.g. Vlad III) are viewable but not selectable — count honestly */
 var PICKABLE_TECH = TOTAL_TECH - FIGURES.filter(function(e){ return e.visibility==='npc'; }).length;
 
@@ -1354,16 +1360,22 @@ function stepTechnique(body){
   }
   html+='<div class="banner"><span class="bk">❖ Campaign rule — open selection</span>'+
     '<p>You may choose <b>ANY technique from the full codex at character creation</b> — <b>'+PICKABLE_TECH+'</b> of the <b>'+TOTAL_TECH+'</b> entries are pickable, even at level 1. '+
-    'The gate is on <b>features, not choice</b>: only features of level ≤ '+char.level+' are active now; everything else unlocks as you level and appears on your sheet as a roadmap.</p>'+
+    'The gate is on <b>features, not choice</b>: only features of level ≤ '+char.level+' are active now; everything else unlocks as you level and appears on your sheet as a roadmap.</p>'+\
+    '<p class="small">Cursed tools — the arsenal, sacred treasures, and Djinn metal vessels — are <b>gear, not techniques</b>: they have their own tab in the codex and are chosen in Step 7.</p>'+
     '<p class="small">Vlad III\u2019s Impaler is GM-only (viewable, not selectable). One technique per character. <i>Dual Technique</i> is a known variant — ask your GM; this builder does not implement it.</p></div>';
   /* filters */
   var roles={};
   FIGURES.forEach(function(e){ if(e.role) roles[e.role]=1; });
-  ORIGINALS.forEach(function(e){ if(e.kind) roles[e.kind]=1; });
+  TECHNIQUES.forEach(function(e){ if(e.kind) roles[e.kind]=1; });
   var roleOpts=Object.keys(roles).sort().slice(0,40);
   var franch={};
-  ORIGINALS.forEach(function(e){ if(e.franchise) franch[e.franchise]=1; });
+  TECHNIQUES.forEach(function(e){ if(e.franchise) franch[e.franchise]=1; });
   var franchOpts=Object.keys(franch).sort();
+  /* groupings that actually contain techniques (tool arsenals live on their own tab) */
+  var techGroups=[];
+  GROUP_ORDER.forEach(function(g){
+    if(TECHNIQUES.some(function(e){ return (e.collection||'')===g; })) techGroups.push(g);
+  });
   /* filters: one unified catalogue — historical figures and original library entries
      in a single list, with an Origin filter for classification. */
   html+='<div class="controls"><div class="ctrl-grid">'+
@@ -1371,10 +1383,10 @@ function stepTechnique(body){
     '<div class="field"><label for="to">Origin</label><select id="to">'+
       '<option value="all"'+(techOrigin==='all'?' selected':'')+'>All origins ('+TOTAL_TECH+')</option>'+
       '<option value="figures"'+(techOrigin==='figures'?' selected':'')+'>Historical figures ('+FIGURES.length+')</option>'+
-      '<option value="originals"'+(techOrigin==='originals'?' selected':'')+'>Original library ('+ORIGINALS.length+')</option>'+
+      '<option value="originals"'+(techOrigin==='originals'?' selected':'')+'>Original techniques ('+TECHNIQUES.length+')</option>'+
     '</select></div>'+
     '<div class="field"><label for="tg">Grouping</label><select id="tg"><option value="">All groupings</option>'+
-      GROUP_ORDER.map(function(g){ return '<option value="'+esc(g)+'"'+(techGroup===g?' selected':'')+'>'+esc(g)+'</option>'; }).join('')+'</select></div>'+
+      techGroups.map(function(g){ return '<option value="'+esc(g)+'"'+(techGroup===g?' selected':'')+'>'+esc(g)+'</option>'; }).join('')+'</select></div>'+
     '<div class="field"><label for="tt">Grade</label><select id="tt"><option value="">All grades</option>'+
       GRADE_ORDER.map(function(t){ return '<option value="'+esc(t)+'"'+(techGrade===t?' selected':'')+'>'+esc(t)+'</option>'; }).join('')+'</select></div>'+
     '<div class="field"><label for="tr">Combat role</label><select id="tr"><option value="">All roles</option>'+
@@ -1501,7 +1513,7 @@ function featuresHTML(features){
 function renderTechResults(){
   var res=$('techResults'); if(!res) return;
   /* One unified catalogue: figures first, then originals; every card labels its own origin. */
-  var list=FIGURES.filter(techMatches).concat(ORIGINALS.filter(techMatches));
+  var list=FIGURES.filter(techMatches).concat(TECHNIQUES.filter(techMatches));
   var countText='Showing '+list.length+' of '+TOTAL_TECH+' techniques';
   if(char.technique) countText+=' · 1 selected';
   $('techResultCount').textContent=countText;
