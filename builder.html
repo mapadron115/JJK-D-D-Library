@@ -1909,6 +1909,12 @@ function sheetHTML(){
       var items=autoFeats.map(function(f){return '<li>'+esc(f)+' <span class="small">(heritage)</span>'+featNote(f)+'</li>';})
         .concat(char.feats.map(function(f){return '<li>'+esc(f)+featNote(f)+'</li>';}))
         .concat(asiFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat)</span>'+featNote(e.name)+'</li>';}));
+      /* dedupe: identical feat names collapse, heritage entry (listed first) wins */
+      var seenDup={};
+      items=items.filter(function(li){
+        var m=li.match(/<li>([^<]+)/); var nm=m?m[1].trim():li;
+        if(seenDup[nm]) return false; seenDup[nm]=1; return true;
+      });
       return items.length?'<ul class="tag-list">'+items.join('')+'</ul>':'<p class="small">—</p>';
     })();
   html+='<p class="small" style="margin:12px 0 4px;letter-spacing:2px;text-transform:uppercase">Cursed tools</p>'+
