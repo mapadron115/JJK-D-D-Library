@@ -108,6 +108,8 @@ function haystack(t) {
 
 function matches(t, st) {
   if (st.origin === 'originals') return false;
+  /* Figures carry no collection — any active collection filter excludes them. */
+  if (st.collection) return false;
   if (st.tier && (t.tier || '') !== st.tier) return false;
   if (st.role && (t.role || '').toLowerCase() !== st.role.toLowerCase()) return false;
   if (st.region && (t.region || '') !== st.region) return false;
