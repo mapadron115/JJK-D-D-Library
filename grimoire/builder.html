@@ -539,6 +539,7 @@ function tIsFigure(e){ return !!(e && (e.figure || e.technique || e.features)); 
 function tName(e){ return e ? (e.technique || e.title || e.name || 'Untitled') : 'Untitled'; }
 function tSource(e){ return e ? (e.figure || e.collection || e.source || '') : ''; }
 function tTier(e){ return e ? (e.tier || '') : ''; }
+function tGrade(e){ return e ? (e.grade || '') : ''; }
 function tRole(e){ return e ? (e.role || e.kind || '') : ''; }
 function tCe(e){ return e ? (e.ce_ability || '') : ''; }
 function tConcept(e){ return e ? (e.concept || e.summary || '') : ''; }
@@ -1203,7 +1204,9 @@ function animateSingleDie(btn,spanAttr,sides,done){
 STEP_VALID[5]=function(){ return {ok:true}; };
 
 /* ═══════════ STEP 6 — TECHNIQUE ═══════════ */
-var techQ='', techTier='', techRole='', techCat='all';
+var techQ='', techGrade='', techGroup='', techRole='', techCat='all';
+var GRADE_ORDER=['Reality Warping','Calamity','Special Grade','Grade 1','Grade 2','Grade 3','Grade 4','Unrated'];
+var GROUP_ORDER=['Anime & Manga','Video Games','Magic: The Gathering','Marvel','DC','Ben 10','Jujutsu Kaisen','Original Codex','SCP Anomalies','Bestiary \u2014 Cryptids','Bestiary \u2014 Mythology','Cursed Tool Arsenal','Applied Systems'];
 function stepTechnique(body){
   var html='<h2>Step 6 — Technique</h2>';
   if(isHR()){
@@ -1221,18 +1224,21 @@ function stepTechnique(body){
     'The gate is on <b>features, not choice</b>: only features of level ≤ '+char.level+' are active now; everything else unlocks as you level and appears on your sheet as a roadmap.</p>'+
     '<p class="small">One technique per character. <i>Dual Technique</i> is a known variant — ask your GM; this builder does not implement it.</p></div>';
   /* filters */
-  var tiers={}, roles={};
-  FIGURES.forEach(function(e){ if(e.tier) tiers[e.tier]=1; if(e.role) roles[e.role]=1; });
-  ORIGINALS.forEach(function(e){ if(e.tier) tiers[e.tier]=1; if(e.kind) roles[e.kind]=1; });
-  var tierOpts=Object.keys(tiers).sort(), roleOpts=Object.keys(roles).sort().slice(0,40);
+  var roles={};
+  FIGURES.forEach(function(e){ if(e.role) roles[e.role]=1; });
+  ORIGINALS.forEach(function(e){ if(e.kind) roles[e.kind]=1; });
+  var roleOpts=Object.keys(roles).sort().slice(0,40);
+  var grpDisabled=(techCat==='figures')?' disabled':'';
   html+='<div class="seg" id="catSeg">'+
     '<button type="button" class="seg-btn'+(techCat==='all'?' is-active':'')+'" data-cat="all">All ('+TOTAL_TECH+')</button>'+
     '<button type="button" class="seg-btn'+(techCat==='figures'?' is-active':'')+'" data-cat="figures">Historical Figures ('+FIGURES.length+')</button>'+
     '<button type="button" class="seg-btn'+(techCat==='originals'?' is-active':'')+'" data-cat="originals">Original Library ('+ORIGINALS.length+')</button></div>';
   html+='<div class="controls"><div class="ctrl-grid">'+
     '<div class="field"><label for="tq">Search techniques</label><input id="tq" type="search" placeholder="Name, figure, concept, feature text…" value="'+esc(techQ)+'"></div>'+
-    '<div class="field"><label for="tt">Tier</label><select id="tt"><option value="">All tiers</option>'+
-      tierOpts.map(function(t){ return '<option value="'+esc(t)+'"'+(techTier===t?' selected':'')+'>'+esc(t)+'</option>'; }).join('')+'</select></div>'+
+    '<div class="field"><label for="tg">Grouping</label><select id="tg"'+grpDisabled+'><option value="">All groupings</option>'+
+      GROUP_ORDER.map(function(g){ return '<option value="'+esc(g)+'"'+(techGroup===g?' selected':'')+'>'+esc(g)+'</option>'; }).join('')+'</select></div>'+
+    '<div class="field"><label for="tt">Grade</label><select id="tt"><option value="">All grades</option>'+
+      GRADE_ORDER.map(function(t){ return '<option value="'+esc(t)+'"'+(techGrade===t?' selected':'')+'>'+esc(t)+'</option>'; }).join('')+'</select></div>'+
     '<div class="field"><label for="tr">Combat role</label><select id="tr"><option value="">All roles</option>'+
       roleOpts.map(function(r){ return '<option value="'+esc(r)+'"'+(techRole===r?' selected':'')+'>'+esc(r.length>38?r.slice(0,38)+'…':r)+'</option>'; }).join('')+'</select></div>'+
     '<div class="field"><label>&nbsp;</label><button class="btn btn-small btn-ghost" id="tClear" type="button">Clear</button></div>'+
@@ -1242,14 +1248,16 @@ function stepTechnique(body){
   body.querySelectorAll('#catSeg .seg-btn').forEach(function(b){ b.addEventListener('click',function(){ techCat=b.getAttribute('data-cat'); stepTechnique(body); }); });
   var tq=$('tq');
   tq.addEventListener('input',function(){ techQ=tq.value; renderTechResults(); });
-  $('tt').addEventListener('change',function(e){ techTier=e.target.value; renderTechResults(); });
+  $('tg').addEventListener('change',function(e){ techGroup=e.target.value; renderTechResults(); });
+  $('tt').addEventListener('change',function(e){ techGrade=e.target.value; renderTechResults(); });
   $('tr').addEventListener('change',function(e){ techRole=e.target.value; renderTechResults(); });
-  $('tClear').addEventListener('click',function(){ techQ='';techTier='';techRole=''; stepTechnique(body); });
+  $('tClear').addEventListener('click',function(){ techQ='';techGrade='';techGroup='';techRole=''; stepTechnique(body); });
   renderTechResults();
 }
 function techMatches(e,catalog){
   if(techCat!=='all' && techCat!==catalog) return false;
-  if(techTier && tTier(e)!==techTier) return false;
+  if(techGrade && tGrade(e)!==techGrade) return false;
+  if(techGroup && catalog==='originals' && (e.collection||'')!==techGroup) return false;
   if(techRole){
     var r=tRole(e);
     if(catalog==='figures'){ if(r!==techRole) return false; }
@@ -1257,7 +1265,7 @@ function techMatches(e,catalog){
   }
   if(techQ){
     var q=techQ.toLowerCase();
-    var hay=[tName(e),tSource(e),tConcept(e),tTier(e),tRole(e),e.aliases||'',e.id||''];
+    var hay=[tName(e),tSource(e),tConcept(e),tTier(e),tGrade(e),tRole(e),e.aliases||'',e.id||''];
     if(tIsFigure(e)&&(e.features||[]).forEach){ e.features.forEach(function(f){ hay.push(f.name||''); }); }
     if(!hay.join(' ').toLowerCase().includes(q)) return false;
   }
@@ -1267,7 +1275,8 @@ function techCard(e,catalog){
   var fig=tIsFigure(e);
   var sel=char.technique&&char.technique.catalog===catalog&&char.technique.id===e.id;
   var chips='';
-  if(tTier(e)) chips+='<span class="chip solid">'+esc(fig?('Tier '+tTier(e)):tTier(e))+'</span>';
+  var gchip=fig?(tTier(e)?('Tier '+tTier(e)):''):tGrade(e);
+  if(gchip) chips+='<span class="chip solid">'+esc(gchip)+'</span>';
   if(tRole(e)) chips+='<span class="chip">'+esc(tRole(e))+'</span>';
   if(fig&&tCe(e)) chips+='<span class="chip plain">CE: '+esc(tCe(e))+'</span>';
   if(e.detail) chips+='<span class="chip plain">'+esc(e.detail)+' record</span>';
@@ -1468,7 +1477,7 @@ function sheetHTML(){
     html+=roadmapHTML(entry, char.level);
   }else{
     html+='<p style="font-family:var(--serif);font-size:1.5rem;font-weight:bold;margin:0">'+esc(tName(entry))+'</p>'+
-      '<p class="small" style="margin-top:2px">'+esc(tSource(entry))+(tTier(entry)?' · '+esc(tTier(entry)):'')+'</p>'+
+      '<p class="small" style="margin-top:2px">'+esc(tSource(entry))+(tGrade(entry)?' · '+esc(tGrade(entry)):'')+'</p>'+
       (tConcept(entry)?'<p style="font-style:italic;color:var(--ink2)">“'+esc(tConcept(entry))+'”</p>':'')+
       (tHref(entry)?'<p><a href="'+esc(tHref(entry))+'">Open the full dossier →</a></p>':'')+
       '<p class="small">Level progression lives in the Technique Codex dossier — unlocks tracked with your GM.</p>';

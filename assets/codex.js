@@ -123,7 +123,7 @@ function matches(t, st) {
 
 /* ── original techniques (library dossiers) ─── */
 function libHaystack(e) {
-  var bits = [e.id, e.title, e.collection, e.summary, e.kind, e.tier, e.source, e.aliases];
+  var bits = [e.id, e.title, e.collection, e.summary, e.kind, e.tier, e.grade, e.source, e.aliases];
   return bits.filter(Boolean).join(' ').toLowerCase();
 }
 
@@ -150,7 +150,7 @@ function renderLibCard(e) {
     '<span class="lib-title">' + esc(e.title || 'Untitled technique') + '</span>' +
     '<span class="lib-chips">' +
     (e.kind ? '<span class="kind-chip">' + esc(e.kind) + '</span>' : '') +
-    (e.tier ? '<span class="tier-chip">' + esc(e.tier) + '</span>' : '') +
+    (e.grade || e.tier ? '<span class="tier-chip">' + esc(e.grade || e.tier) + '</span>' : '') +
     '</span>' +
     (e.summary ? '<span class="concept">' + esc(e.summary) + '</span>' : '') +
     '<span class="dossier-cta">Open full dossier →</span>' +
