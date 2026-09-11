@@ -848,7 +848,11 @@ function ceMax(){
 }
 function isHR(){ return clsAt(1)==='Heavenly Restriction'; }
 /* multiclassing: which class was taken at character level l */
-function clsAt(l){ return (char.classLevels||{})[l] || char.cls || null; }
+function clsAt(l){
+  var c=(char.classLevels||{})[l] || char.cls || null;
+  /* stale/renamed class names (old saves, hand edits) fall back to Warrior instead of throwing mid-render */
+  return (c && CLASSES[c]) ? c : 'Warrior';
+}
 function ensureClassLevels(){
   char.classLevels=char.classLevels||{};
   for(var l=1;l<=char.level;l++){
@@ -873,7 +877,9 @@ function migrateChar(c){
   if(!c.classLevels||!Object.keys(c.classLevels).length){
     c.classLevels={}; for(var l=1;l<=(c.level||1);l++) c.classLevels[l]=c.cls;
   }
-  if(!c.techniques){ c.techniques=c.technique?[c.technique]:[]; delete c.technique; }
+  if(!c.techniques){ c.techniques=c.technique?[c.technique]:[]; }
+  else if(c.technique && !c.techniques.some(function(t){ return t.id===c.technique.id; }) && c.techniques.length<2){ c.techniques.push(c.technique); }
+  delete c.technique;
   return c;
 }
 function techEntryFor(t){
@@ -882,7 +888,13 @@ function techEntryFor(t){
   for(var i=0;i<arr.length;i++) if(arr[i].id===t.id) return arr[i];
   return null;
 }
-function getTechniques(){ return (char.techniques||[]).map(techEntryFor).filter(function(e){return !!e;}); }
+function getTechniques(){
+  var seen={}, out=[];
+  (char.techniques||[]).map(techEntryFor).forEach(function(e){
+    if(e && !seen[e.id]){ seen[e.id]=1; out.push(e); }
+  });
+  return out;
+}
 function chosenTechEntries(){ return getTechniques(); }
 function featLists(entry, level){
   /* split features into active (level<=charLevel or un-leveled) and locked roadmap */
@@ -917,10 +929,15 @@ function renderManager(){
     html = '<div class="empty-mgr">❖ No sorcerers yet. The page is blank, the ink is fresh — begin. ❖</div>';
   }else{
     html = '<div class="mgr-grid">' + arr.map(function(c){
-      var t = null;
-      if(c.technique){
-        var src = c.technique.catalog==='originals' ? ORIGINALS : FIGURES;
-        for(var i=0;i<src.length;i++) if(src[i].id===c.technique.id){ t=src[i]; break; }
+      var t = null, t2 = null;
+      var techArr = (c.techniques && c.techniques.length ? c.techniques : (c.technique?[c.technique]:[]));
+      if(techArr.length){
+        var src = techArr[0].catalog==='originals' ? ORIGINALS : FIGURES;
+        for(var i=0;i<src.length;i++) if(src[i].id===techArr[0].id){ t=src[i]; break; }
+        if(techArr.length>1){
+          var src2 = techArr[1].catalog==='originals' ? ORIGINALS : FIGURES;
+          for(var j=0;j<src2.length;j++) if(src2[j].id===techArr[1].id){ t2=src2[j]; break; }
+        }
       }
       var anc = c.ancestry ? (ANCESTRIES[c.ancestry]?ANCESTRIES[c.ancestry].name:c.ancestry) : '—';
       var her = '';
@@ -928,7 +945,7 @@ function renderManager(){
         her = ' · '+ANCESTRIES[c.ancestry].heritages[c.heritage].name;
       return '<div class="mgr-card"><h3>'+esc(c.name||'Unnamed')+'</h3>'+
         '<p class="m-sub">'+esc(anc+her)+' · '+esc(c.cls||'—')+' · Level '+(c.level||1)+'</p>'+
-        '<p class="m-tech">'+(t?esc(tName(t))+(tIsFigure(t)&&t.figure?' — '+esc(t.figure):''):'No technique chosen')+'</p>'+
+        '<p class="m-tech">'+(t?esc(tName(t))+(tIsFigure(t)&&t.figure?' — '+esc(t.figure):'')+(t2?' + '+esc(tName(t2)):''):'No technique chosen')+'</p>'+
         '<div class="mgr-actions">'+
         '<button class="btn btn-small" data-act="load" data-id="'+esc(c.id)+'">Load</button>'+
         '<button class="btn btn-small" data-act="edit" data-id="'+esc(c.id)+'">Edit</button>'+
@@ -1135,7 +1152,15 @@ function stepClass(body){
       var wasHR=(clsAt(1)==='Heavenly Restriction');
       char.cls=card.getAttribute('data-c');
       char.classLevels[1]=char.cls; ensureClassLevels();
-      if(isHR()){ char.ceAbility=''; char.techniques=[]; }
+      if(isHR()){ char.ceAbility=''; char.techniques=[];
+        /* Pure Body has no technique: drop ASI feats that belong to a technique, keep general feats */
+        if(char.asiFeat && window.TECHNIQUE_FEATS){
+          var allTFeats={};
+          Object.keys(window.TECHNIQUE_FEATS).forEach(function(k){ (window.TECHNIQUE_FEATS[k]||[]).forEach(function(f){ allTFeats[f.name]=1; }); });
+          Object.keys(char.asiFeat).forEach(function(L){
+            if(allTFeats[char.asiFeat[L]]){ delete char.asiFeat[L]; if((char.asiMode||{})[L]==='feat') delete char.asiMode[L]; }
+          });
+        } }
       if(wasHR!==isHR()){ char.levelData={}; } /* CE structure changed */
       renderStep();
     };
@@ -1736,13 +1761,13 @@ STEP_VALID[5]=function(){
 /* ═══════════ STEP 7 — DETAILS ═══════════ */
 function stepDetails(body){
   var html='<h2>Step 7 — Details</h2><p class="sub">The odds and ends that make the character yours. A permanent CE bonus here feeds straight into your Max CE (primer: bonuses are added <b>after</b> the reserve).</p>';
-  html+='<div class="field" style="max-width:280px"><label for="ceBonus">Permanent CE bonus (feats, vows, items)</label>'+
+  if(!isHR()) html+='<div class="field" style="max-width:280px"><label for="ceBonus">Permanent CE bonus (feats, vows, items)</label>'+
     '<input id="ceBonus" type="number" min="0" max="999" value="'+(parseInt(char.ceBonus,10)||0)+'"></div>';
   html+='<h3>Cursed tools</h3><p class="small">Cursed tools are awarded through campaign progression — your GM grants them in play, so they aren\u2019t chosen here. The full arsenal lives in the codex\u2019s Cursed Tools tab.</p>';
   html+='<h3>Notes</h3><div class="field"><label for="notes">Freeform — backstory, binding vows, GM notes</label>'+
     '<textarea id="notes" placeholder="Anything the sheet should remember…">'+esc(char.notes)+'</textarea></div>';
   body.innerHTML=html;
-  $('ceBonus').addEventListener('change',function(e){ char.ceBonus=Math.max(0,parseInt(e.target.value,10)||0); });
+  var ceB=$('ceBonus'); if(ceB) ceB.addEventListener('change',function(e){ char.ceBonus=Math.max(0,parseInt(e.target.value,10)||0); });
   $('notes').addEventListener('input',function(e){ char.notes=e.target.value; });
 }
 STEP_VALID[7]=function(){ return {ok:true}; };
@@ -1844,7 +1869,7 @@ function sheetHTML(){
     '<div><b>'+hp+'</b><span>Max HP ('+classesTaken().map(function(c){ return 'd'+CLASSES[c].hd; }).join(' / ')+')</span></div>'+
     (isHR()?'<div><b>—</b><span>Max CE (Pure Body)</span></div>'
       :'<div><b>'+ce+'</b><span>Max CE Reserve</span></div>'+
-       '<div><b>'+char.ceAbility+'</b><span>CE ability ('+(ceMod>=0?'+':'')+ceMod+')</span></div>'+
+       '<div><b>'+(char.ceAbility||'&mdash;')+'</b><span>CE ability ('+((ceMod==null)?'&mdash;':(ceMod>=0?'+':'')+ceMod)+')</span></div>'+
        '<div><b>'+((P+ceMod>=0?'+':'')+(P+ceMod))+'</b><span>CE attack</span></div>'+
        '<div><b>'+(8+P+ceMod)+'</b><span>CE save DC</span></div>')+
     '<div><b>+'+P+'</b><span>Proficiency</span></div>'+

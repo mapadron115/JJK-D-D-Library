@@ -397,6 +397,15 @@ if (typeof document !== 'undefined') {
     var tabBtns = Array.prototype.slice.call(document.querySelectorAll('[data-tab]'));
     function setTab(t) {
       state.tab = t;
+      /* Figure-only filters are meaningless on the tools tab and their
+         controls are hidden there — a stale filter would dead-end the tab
+         with no visible cause. Clear them (and origin) on every tab switch. */
+      state.tier = ''; state.role = ''; state.region = ''; state.culture = ''; state.detail = '';
+      state.origin = 'all';
+      ['fTier', 'fRole', 'fRegion', 'fCulture', 'fDetail'].forEach(function (fid) {
+        var el = document.getElementById(fid); if (el) el.value = '';
+      });
+      var oel = document.getElementById('fOrigin'); if (oel) oel.value = 'all';
       tabBtns.forEach(function (b) {
         var on = b.getAttribute('data-tab') === t;
         b.classList.toggle('is-active', on);
@@ -416,7 +425,7 @@ if (typeof document !== 'undefined') {
       if (TECHS.some(function (t) { return 'entry-' + t.id === want; })) openIds.add(want);
       else {
         var le = LIBS.filter(function (e) { return 'entry-' + e.id === want; })[0];
-        if (le) { if (isToolEntry(le)) setTab('tools'); openIds.add(want); }
+        if (le) { setTab(isToolEntry(le) ? 'tools' : 'tech'); openIds.add(want); }
       }
     }
 
@@ -461,11 +470,13 @@ if (typeof document !== 'undefined') {
     });
     document.getElementById('clearAll').addEventListener('click', function () {
       state = { q: '', tier: '', role: '', region: '', culture: '', detail: '',
-        origin: state.origin, collection: '', tab: state.tab };
+        origin: 'all', collection: '', tab: state.tab };
       q.value = '';
       ['fTier', 'fRole', 'fRegion', 'fCulture', 'fDetail', 'fCollection'].forEach(function (fid) {
         document.getElementById(fid).value = '';
       });
+      document.getElementById('fOrigin').value = 'all';
+      syncFilterVisibility();
       render();
     });
 
