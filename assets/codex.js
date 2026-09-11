@@ -144,6 +144,11 @@ function matchesLib(e, st) {
   /* Techniques tab hides tools; Cursed Tools tab shows only tools. */
   if (st.tab === 'tools' ? !isToolEntry(e) : isToolEntry(e)) return false;
   if (st.origin === 'figures') return false;
+  /* Figure-only filters (tier, role, region, culture, record type): original
+     techniques carry none of that data, so any active figure-only filter
+     excludes them — the filter actually filters instead of dumping every
+     original below the matching figures. */
+  if (st.tier || st.role || st.region || st.culture || st.detail) return false;
   if (st.collection && (e.collection || '') !== st.collection) return false;
   if (st.q) {
     var q = st.q.toLowerCase();
