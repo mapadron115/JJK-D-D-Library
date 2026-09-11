@@ -7,8 +7,6 @@ non-commercial fan homebrew website** for illustrative purposes only — no
 ownership is claimed and no commercial use is made. This constitutes fair use
 for a transformative, non-commercial fan project.
 
-**No AI-generated art is used anywhere in this project.**
-
 ## Sources
 
 - **JJK 5e V.6.pdf** — author's "Jujutsu Kaisen 5e" homebrew rulebook, v6.0
@@ -60,7 +58,7 @@ for a transformative, non-commercial fan project.
 
 ## Imagery audit additions (2026-09-11)
 
-178 per-technique images sourced for the Technique Codex audit. Every image is real published art, a screencap, a photo, or a logo — **no AI-generated art**. Each was visually inspected; 6 AI-looking candidates were rejected and re-sourced during the audit. All images resized to max 800px (JPEG q82), web-sized. Used on a **personal, non-commercial fan homebrew website** for illustrative purposes only — fair use, no ownership claimed, no commercial use.
+178 per-technique images sourced for the Technique Codex audit. Every image is real published art, a screencap, a photo, or a logo. Each was visually inspected during the audit; 6 candidates that did not meet the real-art standard were rejected and re-sourced. All images resized to max 800px (JPEG q82), web-sized. Used on a **personal, non-commercial fan homebrew website** for illustrative purposes only — fair use, no ownership claimed, no commercial use.
 
 | File | Techniques | Credit | Source page |
 |---|---|---|---|

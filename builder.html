@@ -436,7 +436,7 @@ img{max-width:100%;height:auto}
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
   <span class="tiny">IL-RA-02 · Character Builder · fan-made JJK 5e homebrew reference. CE Reserve per the campaign canon — Reserve Dice, one CE ability modifier, permanent bonuses added after.</span>
   <span class="editions">Editions: <a href="field-manual/index.html">Field Manual</a> · <a href="grimoire/index.html">Grimoire</a> · <span class="ed-current">Illustrated · current</span></span>
-  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA and respective rights holders — manga &amp; anime art from the author's JJK 5e PDFs plus sourced franchise/comic/game imagery, used for personal, non-commercial fan purposes only. No AI art. <a href="assets/img/CREDITS.md">Full image credits</a>.</span>
+  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA and respective rights holders — manga &amp; anime art from the author's JJK 5e PDFs plus sourced franchise/comic/game imagery, used for personal, non-commercial fan purposes only. <a href="assets/img/CREDITS.md">Full image credits</a>.</span>
 </div></footer>
 
 <script src="data/codex.js"></script>
@@ -919,7 +919,7 @@ function stepConcept(body){
     '<h2>Step 1 — Concept</h2><p class="sub">Who walks into the story? A name, the player behind them, and the level the campaign starts them at.</p>'+
     '<div class="grid2">'+
     '<div class="field"><label for="cName">Character name</label><input id="cName" maxlength="60" value="'+esc(char.name)+'" placeholder="e.g. Kaito Mori"></div>'+
-    '<div class="field"><label for="cPlayer">Player name</label><input id="cPlayer" maxlength="60" value="'+esc(char.player)+'" placeholder="e.g. zack"></div></div>'+
+    '<div class="field"><label for="cPlayer">Player name</label><input id="cPlayer" maxlength="60" value="'+esc(char.player)+'" placeholder="e.g. Alex"></div></div>'+
     '<div class="field" style="max-width:260px"><label for="cLevel">Starting level</label>'+
     '<select id="cLevel">'+levelOptions()+'</select></div>'+
     '<div class="banner"><span class="bk">❖ Campaign note</span><p>This campaign opens at level 1 with 4–8 sorcerers — but the builder supports starting as high as level 20, with per-level HP and CE Reserve rolls handled in Step 5.</p></div>';
@@ -1566,7 +1566,7 @@ function stepSheet(body){
   '<button class="btn btn-primary" id="btnSave" type="button">💾 Save character</button>'+
   '<button class="btn" id="btnPrint" type="button">🖨 Print sheet</button>'+
   '<button class="btn btn-ghost" id="btnNew2" type="button">＋ New character</button></div>'+
-  '<p class="store-note no-print">Stored on this device only (localStorage key <code>'+LS_KEY+'</code>).</p>';
+  '<p class="store-note no-print">Stored on this device only.</p>';
   $('btnSave').addEventListener('click',function(){
     var c=deep(char);
     if(upsertChar(c)){ alert('Saved "'+(c.name||'Unnamed')+'" to this device.'); renderManager(); }
