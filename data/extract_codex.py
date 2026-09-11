@@ -18,6 +18,11 @@ domain.ce_cost fields afterwards; the extractor records them verbatim.
 import json, re, os, datetime
 
 DRAFTS = os.path.expanduser("~/workspace/goals/ritual-archive-campaign-lore-bible/hidden_files/drafts")
+
+# Modules whose codex entries were hand-built as full playable techniques
+# (2026-09-11 RoR rebuild: Jack/37, Qin/38, Tesla/39, Raiden/41, Okita/42).
+# A regen must preserve the existing full entry, never downgrade it to a summary.
+FULL_OVERRIDE_MODULES = {"37", "38", "39", "41", "42"}
 OUTDIR = os.path.dirname(os.path.abspath(__file__))  # repo/data
 SKIP_FILES = {
     "43-master-timeline.md", "44-chapter-houses.md", "45-commentators.md",
@@ -279,10 +284,27 @@ def parse_header_meta(header_line):
 
 def main():
     atlas = json.load(open(os.path.join(OUTDIR, "figure_atlas.json"), encoding="utf-8"))
+    # Existing entries, so FULL_OVERRIDE_MODULES can be carried over intact.
+    existing_by_mod = {}
+    try:
+        with open(os.path.join(OUTDIR, "codex.json"), encoding="utf-8") as f:
+            payload = json.load(f)
+        items = payload if isinstance(payload, list) else payload.get("techniques", [])
+        for e in items:
+            m = str(e.get("module", "")).lstrip("0") or "0"
+            if e.get("detail") == "full":
+                existing_by_mod[m] = e
+    except (OSError, ValueError):
+        pass
     techniques = []
     files = sorted(f for f in os.listdir(DRAFTS) if f.endswith(".md") and f not in SKIP_FILES)
     for fn in files:
         mod = fn.split("-")[0]
+        mod_key = mod.lstrip("0") or "0"
+        if mod_key in FULL_OVERRIDE_MODULES and mod_key in existing_by_mod:
+            techniques.append(existing_by_mod[mod_key])
+            print(f"{mod} {existing_by_mod[mod_key].get('figure')}: preserved hand-built full entry (regen carve-out)")
+            continue
         path = os.path.join(DRAFTS, fn)
         md = open(path, encoding="utf-8").read()
         title_m = re.search(r"^#\s+(.+)$", md, re.M)
