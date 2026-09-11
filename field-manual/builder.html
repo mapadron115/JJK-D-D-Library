@@ -147,6 +147,7 @@ h1 .amp{color:var(--red)}
 .chip.plain{border-color:var(--line2);color:var(--ink3)}
 .tech-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
 .tech-body{border-top:3px double var(--ink);padding:20px 22px;background:var(--card2);display:none}
+.npc-note{display:inline-block;font-size:.78rem;font-style:italic;color:var(--ink2);border:1px dashed var(--line2);border-radius:4px;padding:5px 12px;background:var(--card2);margin:2px 0}
 .dossier-frame{width:100%;min-height:480px;border:1px solid var(--line);background:var(--card);display:block;margin:12px 0 4px}
 .tech-card.open .tech-body{display:block}
 .gate-label{font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;margin:18px 0 10px;display:block}
@@ -1255,6 +1256,7 @@ function techMatches(e,catalog){
 function techCard(e,catalog){
   var fig=tIsFigure(e);
   var sel=char.technique&&char.technique.catalog===catalog&&char.technique.id===e.id;
+  var isNPC=e&&e.visibility==='npc'; /* U14: NPC-locked entries are viewable but not selectable */
   var chips='';
   var gchip=fig?(tTier(e)?('Tier '+tTier(e)):''):tGrade(e);
   if(gchip) chips+='<span class="chip solid">'+esc(gchip)+'</span>';
@@ -1268,7 +1270,7 @@ function techCard(e,catalog){
     (tConcept(e)?'<span class="t-concept">“'+esc(tConcept(e).length>220?tConcept(e).slice(0,220)+'…':tConcept(e))+'”</span>':'')+
     '<div class="chips">'+chips+'</div>'+
     '<div class="tech-actions"><button class="btn btn-small btn-ghost" type="button" data-inspect>Inspect features</button>'+
-    '<button class="btn btn-small'+(sel?'':' btn-primary')+'" type="button" data-choose>'+(sel?'✓ Selected — click to remove':'Choose this technique')+'</button></div>'+
+    (isNPC?'<span class="npc-note">NPC technique — not player-selectable</span>':'<button class="btn btn-small'+(sel?'':' btn-primary')+'" type="button" data-choose>'+(sel?'✓ Selected — click to remove':'Choose this technique')+'</button>')+'</div>'+
     '</div><div class="tech-side">' + techImg(e) + '</div></div>'+
     '<div class="tech-body">'+techInspectHTML(e,catalog)+'</div></div>';
 }
@@ -1276,6 +1278,7 @@ function techInspectHTML(e,catalog){
   var fig=tIsFigure(e);
   var html='';
   if(fig){
+    if(e.visibility==='npc') html+='<div class="banner"><span class="bk">❖ NPC</span><p>This is an NPC technique — viewable here but not player-selectable.</p></div>';
     var ceSug=tCe(e);
     if(ceSug&&char.ceAbility&&ceSug!==char.ceAbility)
       html+='<div class="banner"><span class="bk">❖ Note</span><p>This technique suggests <b>'+esc(ceSug)+'</b> as its CE ability; yours is <b>'+esc(char.ceAbility)+'</b>. CE attack and save DC always use <b>your</b> CE ability.</p></div>';
@@ -1354,6 +1357,9 @@ function renderTechResults(){
     b.addEventListener('click',function(){
       var card=b.closest('.tech-card'), parts=card.getAttribute('data-card').split('|');
       var catalog=parts[0], id=parts.slice(1).join('|');
+      var pool=catalog==='originals'?ORIGINALS:FIGURES, entry=null;
+      for(var gi=0;gi<pool.length;gi++){ if(pool[gi].id===id){ entry=pool[gi]; break; } }
+      if(entry&&entry.visibility==='npc') return; /* NPC techniques are not player-selectable */
       if(char.technique&&char.technique.catalog===catalog&&char.technique.id===id) char.technique=null;
       else char.technique={catalog:catalog,id:id};
       renderTechResults(); renderStepBar(); renderNav();
