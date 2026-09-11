@@ -23,7 +23,7 @@ DRAFTS = os.path.expanduser("~/workspace/goals/ritual-archive-campaign-lore-bibl
 # (2026-09-11 RoR rebuild: Shaka/36, Jack/37, Qin/38, Tesla/39, Simo/40,
 # Raiden/41, Okita/42).
 # A regen must preserve the existing full entry, never downgrade it to a summary.
-FULL_OVERRIDE_MODULES = {"36", "37", "38", "39", "40", "41", "42"}
+FULL_OVERRIDE_MODULES = {"21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42"}
 OUTDIR = os.path.dirname(os.path.abspath(__file__))  # repo/data
 SKIP_FILES = {
     "43-master-timeline.md", "44-chapter-houses.md", "45-commentators.md",

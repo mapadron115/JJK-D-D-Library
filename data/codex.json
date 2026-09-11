@@ -1703,364 +1703,1151 @@
    "source_file": "20-gilles.md"
   },
   {
-   "id": "genghis-khan",
-   "module": "21",
+   "ce_ability": "CHA or WIS",
+   "concept": "He conquered half the world without ever needing to be the strongest man on the field — because the field itself was his weapon, and the army was his body.",
+   "culture": "Mongol",
+   "detail": "full",
+   "domain": {
+    "activation": "full-turn action",
+    "burnout_rounds": 3,
+    "ce_cost": 20,
+    "clash_points": 1000,
+    "cost_line": "Full-turn action · 20 CE · 1,000 clash points · burnout 3 rounds · duration 3 minutes · 120-ft open radius.",
+    "duration_min": 3,
+    "kind": "domain",
+    "level": null,
+    "name": "Under the Eternal Blue Sky: One World, One Tumen",
+    "radius": "120-ft open radius",
+    "text": "An open *support* Domain held under a Binding Vow: it never imposes an offensive sure-hit on an unwilling creature. At **initiative 20**, each willing Arban member that has not yet acted enters the **Tumen Phase** immediately after — each member still takes exactly one ordinary turn, fully interleaved with the others; no member gains extra movement, actions, or attacks. The **Yam ignores ordinary walls**: reported information reaches all Arban members instantly, regardless of barriers or distance within the Domain. **Nerge lines extend to 60 ft** while the Domain persists. **Clash victory:** your refinement grows by 10% per person currently under the technique's influence (non-compounding). The open sky feeds on the formation it shelters — the longer a fight runs under it, the stronger the Arban grows. End fights fast, or thin the Arban first."
+   },
+   "era": "1162–1227 · 12th–13th c.",
+   "features": [
+    {
+     "cost_line": "Bonus action · 1 CE · 60 ft · willing creatures.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Khan's Knot",
+     "text": "Bind willing creatures into the **Arban**, up to your proficiency bonus in members (you always count as a member). The Knot holds until you dismiss it as a free action — it is never forced; willing men cannot be perfectly predicted, and that is the hole in every plan ever made against you. Knotted members gain the Muster, the Yam Relay, and the War Phase."
+    },
+    {
+     "cost_line": "Passive · the Muster acts on your initiative; the Yam reaches 60 ft (120 ft at 6th level).",
+     "kind": "feature",
+     "level": 1,
+     "name": "Muster and the Yam Relay",
+     "text": "**Muster:** at the start of combat, any Knotted member may abandon its rolled initiative and act on your initiative count instead. **Yam Relay:** you may pass a tactical thought instantly to any Knotted member within 60 ft (120 ft from 6th level), and they may reply in kind — perfect information, relayed at the speed of horses. Reporting is silent, instantaneous, and cannot be overheard by ordinary means."
+    },
+    {
+     "cost_line": "Passive · requires 2+ Mustered members.",
+     "kind": "feature",
+     "level": 3,
+     "name": "War Phase",
+     "text": "When 2 or more Mustered members' consecutive turns form a phase, each member may **pause** its turn once, **yield** to another member, and **resume** later within the same phase — turns interleave like cavalry across a valley. Start- and end-of-turn effects stay pinned to the individual creature. The economy is ordinary: **no member ever gains extra movement, actions, or attacks** from the interleave."
+    },
+    {
+     "cost_line": "Bonus action · designate the Noyan and split the Arban.",
+     "kind": "feature",
+     "level": 6,
+     "name": "Noyan and Detachments",
+     "text": "Designate one Knotted member as your **Noyan** (second-in-command). You may split the Arban into **two Detachments**, each with its own independent War Phase. The Yam Relay now reaches 120 ft. The sülde are the formation's infrastructure: the White holds the command post; the Black can be repositioned as the formation moves."
+    },
+    {
+     "cost_line": "Passive · each sülde is a destructible standard (AC 12, HP 3 × your level).",
+     "kind": "feature",
+     "level": 6,
+     "name": "White and Black Sülde",
+     "text": "The **White Sülde** — memory, law, identity — is a static command post planted where you stand; it does not move once planted. The **Black Sülde** — ambition, terror, forward motion — is a formation anchor you may reposition up to 30 ft as a bonus action. Neither sülde attacks, and neither takes damage meant for others. They are load-bearing: if **both** are destroyed, the Knot breaks and the Arban dissolves. You may plant a replacement sülde within 5 ft of you as an action (1 CE)."
+    },
+    {
+     "cost_line": "Passive · the doctrine at full strength.",
+     "kind": "feature",
+     "level": 11,
+     "name": "Full Tumen Doctrine",
+     "text": "The Arban grows to **10 members**, with **two Noyans** and **three Detachments**, each Detachment with its own War Phase. Pause/resume inside a phase is unlimited, still within the ordinary one-turn economy — no extra movement, actions, or attacks, ever. **The Horde Has No Center:** if you are incapacitated, command passes to a Noyan for 1 minute — the formation fights on without you. There is no head to cut off."
+    },
+    {
+     "cost_line": "Passive · the succession never breaks.",
+     "kind": "feature",
+     "level": 18,
+     "name": "Khagan of the Living Army",
+     "text": "You gain a **third Noyan**. You may transfer members between Detachments before the first Arban member acts in a round. Succession continues until **all Noyans fall or the Arban dissolves** — incapacitate one commander and the next inherits, and the next, and the next."
+    }
+   ],
    "figure": "Genghis Khan",
-   "title": "GENGHIS KHAN",
-   "detail": "summary",
-   "technique": "One Sky, One Army — Tumen Doctrine",
-   "tier": "V",
-   "grade": "Calamity",
-   "role": "Special Grade",
-   "ce_ability": "CHA",
+   "id": "genghis-khan",
+   "l20": {
+    "cost_line": "Once per long rest · action · 5 CE.",
+    "kind": "l20",
+    "level": 20,
+    "name": "The Last Tumen",
+    "text": "Your answer to the question that has haunted you since the steppe: can the doctrine work on the *unwilling* world? Offer the Knot to up to 10 creatures within 60 ft — willing or not. Each unwilling target makes a Wisdom save against your technique DC; on a failure it is **Knotted for 1 minute**, counting as willing for your technique's effects. Fight as one, or die as ten."
+   },
+   "maximum": {
+    "cost_line": "Action · 10 CE · Focus.",
+    "kind": "maximum",
+    "level": 11,
+    "name": "Nerge: The Great Hunt",
+    "text": "Designate one creature you can see as the **Quarry** for 1 minute. **Hunt Lines** form between pairs of Arban members within 30 ft of each other, drawn across the field. When the Quarry voluntarily crosses a Hunt Line, the member who formed that line may use a reaction to move up to 10 ft and make one opportunity attack against it. When three or more members form a **closed polygon** around the Quarry, it is **Caught in the Nerge**: it cannot Hide from the Arban, Disengage covers only one line-crossing per turn, and teleporting from inside to outside requires a CE check against your technique DC or it lands back inside. The Hunt breaks if the forming members move, are disabled, or are separated beyond line range."
+   },
+   "module": "21",
    "primary_verb": "Interleave",
    "region": "Mongolia",
-   "era": "c. 1162–1227 · 12th–13th c.",
-   "culture": "Mongol",
-   "concept": "He conquered half the world without ever needing to be the strongest man on the field — because the field itself was his weapon, and the army was his body.",
+   "role": "Commander / Formation Controller",
    "serves": null,
-   "features": [],
-   "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "*Tier V · Special Grade · Suggested CE ability CHA or WIS · Primary verb: Interleave. Faithful summary of U14-02; not a rewrite.*\n\n- **Core loop:** Khan's Knot binds willing creatures (PB capacity) into the Arban; Muster lets members abandon rolled initiative for his; Yam relays tactical messages (60 ft, 120 ft at L6); War Phase lets members pause/yield/resume turns within ordinary one-turn economy — *no extra movement, actions, or attacks, ever*.\n- **L3 — War Phase:** 2+ Mustered members' consecutive turns form a phase; each may pause once, yield to another, resume. Start/end-turn effects stay pinned to the individual.\n- **L6 — Noyan & Detachments:** designate a Noyan; split into two Detachments with independent War Phases.\n- **L11 — Full Tumen Doctrine:** capacity 10, two Noyans, three Detachments, unlimited pause/resume inside normal economy; **The Horde Has No Center** — incapacitated Khan passes command to a Noyan for 1 minute.\n- **L18 — Khagan of the Living Army:** third Noyan; Detachment transfers before the first Arban member acts; succession continues until all Noyans fall or the Arban dissolves.\n- **Maximum — Nerge: The Great Hunt** (Action, 10 CE, Focus): designate a Quarry for 1 minute; Hunt Lines between member pairs (≤30 ft); voluntary crossing lets the line-former reaction-move 10 ft and opportunity-attack; closed 3+ polygon = Caught in the Nerge (can't Hide from the Arban, Disengage covers one crossing/turn, inside→outside teleport needs a CE check or lands back inside). Broken by moving, disabling, or separating members.\n- **Domain — Under the Eternal Blue Sky: One World, One Tumen** (1,000 clash points, 120-ft open radius, full-turn 20 CE activation, 3-round burnout · 3-minute duration): open *support* Domain under a Binding Vow — never imposes an offensive sure-hit on an unwilling creature. At initiative 20, willing Arban members that haven't acted enter the Tumen Phase immediately after — each still exactly one ordinary turn, fully interleaved. Yam ignores ordinary walls; reported information reaches all members instantly. Nerge lines extend to 60 ft. Clash-win: refinement grows 10% per person under the technique's influence (non-compounding).\n- **Genghis Only — White & Black Sülde:** White (Name/memory/law) is a static command post; Black (Will/ambition/terror) is a bonus-action 30-ft repositionable formation anchor. Neither attacks nor takes damage for others.\n- **Campaign Status: RIVAL PACT** — binding vow with Sun Tzu; neither commands the other without consent.",
-   "source_file": "21-genghis-khan.md"
+   "source_file": "21-genghis-khan.md",
+   "summary_text": null,
+   "technique": "Tumen Doctrine",
+   "tier": "V",
+   "title": "GENGHIS KHAN",
+   "grade": "Calamity"
   },
   {
-   "id": "joan-of-arc",
-   "module": "22",
+   "ce_ability": "CHA or WIS",
+   "concept": "They burned her at Rouen, and she refused to become what burning makes — so the fire kept the body and lost the argument.",
+   "culture": "French",
+   "detail": "full",
+   "domain": null,
+   "era": "c. 1412–1431 · 15th c.",
+   "features": [
+    {
+     "cost_line": "Bonus action · 1 CE · 1 minute · the banner manifests in your grasp.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Raise the Standard",
+     "text": "Manifest the banner — the promise made visible. Willing creatures within 30 ft may swear a **Vow of Conviction** as a bonus action: a concrete duty (hold this ground, spare the surrendered, speak truth) plus a meaningful voluntary restriction, freely chosen. **Resolve:** once per round, a sworn creature making a d20 roll directly to keep its Vow adds your proficiency bonus to the roll after rolling. A **voluntary violation** ends the Vow, deals 2 × your PB psychic damage to the violator, and the creature cannot re-swear until it finishes a short rest. **Forced movement and compulsion are not voluntary betrayal** — Heaven knows the difference between the forced and the willing."
+    },
+    {
+     "cost_line": "Reaction · 1 CE · once per round.",
+     "kind": "feature",
+     "level": 3,
+     "name": "Martyr's Share",
+     "text": "When a sworn ally would fail a d20 roll tied to its Vow, take unavoidable damage equal to 2 × your proficiency bonus — and the ally **rerolls** the failed roll. The wound is yours so the vow survives; that is the oldest logic you know. You cannot use this on yourself."
+    },
+    {
+     "cost_line": "1 CE · one creature per round.",
+     "kind": "feature",
+     "level": 6,
+     "name": "Voices at the Edge",
+     "text": "When a sworn ally within 60 ft starts its turn **Charmed**, **Frightened**, or under a comparable non-incapacitating compulsion that conflicts with its Vow, spend 1 CE — the ally immediately repeats the save, hearing a girl's voice say *hold*. One creature per round."
+    },
+    {
+     "cost_line": "Passive · once per round.",
+     "kind": "feature",
+     "level": 11,
+     "name": "Banner at Orléans",
+     "text": "Once per round, when a sworn ally succeeds on a meaningful Vow-tied roll, a **different** sworn ally within 60 ft may move up to 10 ft toward its own duty. This movement costs no movement and provokes no opportunity attack from one creature the moving ally can see. Victory is contagious under the banner."
+    },
+    {
+     "cost_line": "Reaction · once per long rest per ally.",
+     "kind": "feature",
+     "level": 18,
+     "name": "No One Burns Alone",
+     "text": "When a sworn ally within 60 ft would drop to 0 HP from damage taken while directly upholding its Vow, you take **half the post-mitigation damage** — and the ally stays standing at 1 HP. Rouen, inverted. You cannot redirect damage that would kill you outright first."
+    }
+   ],
    "figure": "Joan of Arc",
-   "title": "JOAN OF ARC",
-   "detail": "summary",
-   "technique": "Banner of the Unburned Saint",
-   "tier": "IV",
-   "grade": "Special Grade",
-   "role": "Suggested CE ability CHA or WIS",
-   "ce_ability": "CHA",
+   "id": "joan-of-arc",
+   "l20": {
+    "cost_line": "Once per long rest · reaction.",
+    "kind": "l20",
+    "level": 20,
+    "name": "Orléans",
+    "text": "The precise shape of what happened at Orléans: sometimes, rarely, and never at your choosing, the impossible simply *succeeds* — because someone swore it would. When a sworn creature would fail a d20 roll directly necessary to keep its Vow, convert the failure into a success. This is a **Miracle** granted without the Maximum, but the Maximum's law holds: no critical, and it cannot do the impossible."
+   },
+   "maximum": {
+    "cost_line": "Action · 8 CE · Focus · 1 minute.",
+    "kind": "maximum",
+    "level": 11,
+    "name": "Raise the Banner Through Fire",
+    "text": "Plant the standard and refuse to let it fall. The banner's radius extends to 60 ft, and it becomes **unsuppressible by ordinary fear or morale effects**. Each Vowed creature gains one **Miracle** for the duration: convert one failed d20 roll directly necessary to keep its Vow into a success (no critical; it cannot override the impossible). The Maximum ends early if you knowingly order a sworn creature to violate its Vow."
+   },
+   "module": "22",
    "primary_verb": "Swear",
    "region": "France",
-   "era": "c. 1412–1431 · 15th c.",
-   "culture": "French",
-   "concept": "They burned her at Rouen, and she refused to become what burning makes — so the fire kept the body and lost the argument.",
+   "role": "Support / Vow Amplifier / Morale Anchor",
    "serves": null,
-   "features": [],
-   "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "*Tier IV · Suggested CE ability CHA or WIS · Primary verb: Swear. Faithful summary of U14-03; not a rewrite.*\n\n- **Core loop:** Raise the Standard (bonus action, 1 CE, 1 minute) manifests the banner; willing creatures within 30 ft may swear a Vow of Conviction (bonus action): concrete duty + meaningful voluntary restriction. Resolve: once/round, a sworn creature making a d20 roll directly to keep its Vow adds Joan's PB after rolling. Voluntary violation ends the Vow, deals 2×PB psychic, no re-swearing until a short rest. Forced movement/compulsion is not voluntary betrayal.\n- **L3 — Martyr's Share:** Reaction, 1 CE, once/round — when a sworn ally would fail a Vow-tied d20 roll, Joan takes unavoidable 2×PB damage and the ally rerolls. Not usable on herself.\n- **L6 — Voices at the Edge:** When a sworn ally within 60 ft starts its turn Charmed/Frightened (or comparable non-incapacitating compulsion conflicting with its Vow), Joan spends 1 CE to let it immediately repeat the save. One creature per round.\n- **L11 — Banner at Orléans:** Once/round, when a sworn ally succeeds on a meaningful Vow roll, a *different* sworn ally within 60 ft may move 10 ft toward its own duty (no movement cost, no OA from one creature it can see).\n- **L18 — No One Burns Alone:** Reaction — when a sworn ally within 60 ft would drop to 0 HP from damage taken while directly upholding its Vow, Joan takes half the post-mitigation damage; the ally stays at 1 HP. Once/long rest per ally. Cannot redirect damage that would kill Joan outright first.\n- **Maximum — Raise the Banner Through Fire** (Action, 8 CE, Focus, 1 minute): banner to 60 ft, unsuppressible by ordinary fear/morale; each Vowed creature gains one Miracle — convert one failed d20 roll directly necessary to keep the Vow into a success (no crit, cannot override the impossible). Ends early if Joan knowingly orders a sworn creature to violate its Vow.\n- **No Domain — deliberate.** Tier IV carried by breadth + the Miracle.\n- **Campaign Status: OPPOSITION** — final vow rejects any peace requiring surrender of conscience; directly opposes the End of War. Refused Commentator recruitment.",
-   "source_file": "22-joan-of-arc.md"
-  },
-  {
-   "id": "blackbeard",
-   "module": "23",
-   "figure": "Blackbeard",
-   "title": "BLACKBEARD",
-   "detail": "summary",
-   "technique": "Reputation Made Real — The Devil They Asked For",
+   "source_file": "22-joan-of-arc.md",
+   "summary_text": null,
+   "technique": "Banner of the Unburned Saint",
    "tier": "IV",
-   "grade": "Special Grade",
-   "role": "Suggested CE ability CHA",
-   "ce_ability": "CHA",
-   "primary_verb": "Bluff",
-   "region": "Caribbean / Atlantic",
-   "era": "c. 1680–1718 · 18th c.",
-   "culture": "English pirate",
-   "concept": "Edward Teach died at Ocracoke in 1718 — but the world had spent years telling itself what Blackbeard was, and the telling was stronger than the man.",
-   "serves": null,
-   "features": [],
-   "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "*Tier IV · Suggested CE ability CHA · Primary verb: Bluff. Faithful summary of U14-04; not a rewrite.*\n\n- **Core loop:** Fly the Colors (bonus action, 1 CE, 120 ft broadcast) — perform one known Rumor for perceiving creatures; witnesses that haven't personally disproved the claim become Believers. Maintain 1 active Rumor (2 at L6, 3 at L11).\n- **L1 Rumors (each with verbatim Exposure):** *Bullets Don't Take Him* — first ranged attack/round by a Believer at disadvantage; if it still hits for ≥2×PB after mitigation, Exposed to all witnesses. *No One Escapes the Flag* — Believers treating him as a threat spend 2 ft per 1 ft moved directly away after the first 20 ft; escaping ≥60 ft farther in one turn Exposes it. *Smoke Is His Sight* — Believers gain no defensive benefit from smoke/darkness he sees through; successfully Hiding in it Exposes the Rumor to observers.\n- **L3 — Call the Bluff:** a Believer may spend an Action studying a Rumor (Insight/Investigation vs Technique DC) → personal immunity + may loudly expose it to perceiving creatures.\n- **L6 — Tell It Again:** Believers repeating a claim outside his presence spread Belief for 24 hours.\n- **L11 — The Monster Outgrows the Man:** Believers who flee/surrender/drop to 0 HP while visibly Rumor-affected convert nearby witnesses without another activation.\n- **L18 — Established Legend:** one chosen Rumor per initiative needs two different successful public Tests in the same round to fully Expose; individual testers still personally immune after their own proof.\n- **Maximum — A General History of the Pyrates** (Action, 10 CE, 1 minute): every known unexposed Rumor circulates among perceiving creatures within 120 ft (Believers for the duration); spectacular Exposure of any Rumor lets all witnesses immediately test to reject *all* Rumors.\n- **No Domain — deliberate.** **Campaign Status: AUTONOMOUS CURSE** — may not contain Teach at all.",
-   "source_file": "23-blackbeard.md"
+   "title": "JOAN OF ARC",
+   "grade": "Special Grade"
   },
   {
-   "id": "timur",
-   "module": "24",
-   "figure": "Timur",
-   "title": "TIMUR",
-   "detail": "summary",
-   "technique": "Roads to Samarkand",
-   "tier": "V",
-   "grade": "Calamity",
-   "role": "Special Grade",
+   "ce_ability": "CHA",
+   "concept": "Edward Teach died at Ocracoke in 1718 — but the world had spent years telling itself what Blackbeard was, and the telling was stronger than the man.",
+   "culture": "English",
+   "detail": "full",
+   "domain": null,
+   "era": "c. 1680–1718 · 18th c.",
+   "features": [
+    {
+     "cost_line": "Bonus action · 1 CE · 120-ft broadcast.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Fly the Colors",
+     "text": "Perform one known **Rumor** for every creature that can perceive you within 120 ft. A witness who has not personally disproved the claim **Believes** — not charmed, not frightened, but *convinced*, and conviction has teeth. You may maintain **1 active Rumor** at a time (2 at 6th level, 3 at 11th). A witness who sees through a tale is immune to it for 24 hours — conviction, once broken, takes time to re-seat."
+    },
+    {
+     "cost_line": "Passive · each Rumor names its own undoing.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Rumors of the Devil",
+     "text": "Your known Rumors, each with its **verbatim Exposure**: **Bullets Don't Take Him** — the first ranged attack each round made against you by a Believer is at disadvantage; if it still hits for 2 × your PB or more after mitigation, the Rumor is **Exposed** to all witnesses. **No One Escapes the Flag** — a Believer that treats you as a threat spends 2 ft of movement per 1 ft moved directly away from you after the first 20 ft; if it escapes 60 ft or farther from you in one turn, the Rumor is **Exposed**. **Smoke Is His Sight** — Believers gain no defensive benefit from smoke or darkness you can see through; a creature that successfully Hides in it **Exposes** the Rumor to all observers. Every tale you tell names its own public disproof — a rumor that cannot be disproved is not a rumor; it's a god, and you are honest about the difference."
+    },
+    {
+     "cost_line": "Action · Insight or Investigation vs. your technique DC.",
+     "kind": "feature",
+     "level": 3,
+     "name": "Call the Bluff",
+     "text": "A Believer may spend an action studying one of your Rumors — an Insight or Investigation check against your technique DC. On a success, that creature gains **personal immunity** to the Rumor and may **loudly expose it** to every creature that can perceive the call. Fear that can be publicly disproved is the honest version of this fantasy — study the claim, see through it, shout the truth, and the fear breaks."
+    },
+    {
+     "cost_line": "Passive · the retelling is a ritual.",
+     "kind": "feature",
+     "level": 6,
+     "name": "Tell It Again",
+     "text": "Believers who repeat your claim outside your presence spread Belief for 24 hours — every tavern retelling is a little ritual, and you need not be there to feed on it. A creature that believes a secondhand retelling counts as a Believer of that Rumor until the 24 hours end or it personally disproves the claim."
+    },
+    {
+     "cost_line": "Passive · confirmation converts.",
+     "kind": "feature",
+     "level": 11,
+     "name": "The Monster Outgrows the Man",
+     "text": "When a Believer **flees, surrenders, or drops to 0 HP** while visibly affected by one of your Rumors, nearby witnesses convert without another performance — they Believe, no Fly the Colors required. You feed on your own confirmation; every rout your enemies witness becomes a mass conversion, live, in front of them."
+    },
+    {
+     "cost_line": "Passive · established legends die harder.",
+     "kind": "feature",
+     "level": 18,
+     "name": "Established Legend",
+     "text": "Choose one Rumor per initiative count. That Rumor now requires **two different successful public Tests in the same round** to be fully Exposed. A creature that performs its own successful Test still gains personal immunity to the Rumor regardless — the proof works for the prover, but the legend survives the crowd."
+    }
+   ],
+   "figure": "Blackbeard",
+   "id": "blackbeard",
+   "l20": {
+    "cost_line": "Once per long rest · free action (trigger: you drop to 0 HP).",
+    "kind": "l20",
+    "level": 20,
+    "name": "Three Laps Around the Ship",
+    "text": "The legend says the body swam three laps around the ship before sinking — the story refused the ending. When you are reduced to 0 HP, drop to 1 HP instead and immediately perform **Fly the Colors** as a free action. The telling outlives the man."
+   },
+   "maximum": {
+    "cost_line": "Action · 10 CE · 1 minute.",
+    "kind": "maximum",
+    "level": 11,
+    "name": "A General History of the Pyrates",
+    "text": "Your grandest trick, deployed over a battlefield or a port: every known **unexposed** Rumor circulates simultaneously among all perceiving creatures within 120 ft — they Believe for the duration. But the theater has its price: a spectacular Exposure of **any** Rumor lets every witness immediately test to reject **all** circulating Rumors. Whoever faces the full history must answer just as spectacularly — or become part of the story."
+   },
+   "module": "23",
+   "primary_verb": "Bluff",
+   "region": "Caribbean",
+   "role": "Intimidation Controller / Bluff Engine",
+   "serves": null,
+   "source_file": "23-blackbeard.md",
+   "summary_text": null,
+   "technique": "Reputation Made Real",
+   "tier": "IV",
+   "title": "BLACKBEARD",
+   "grade": "Special Grade"
+  },
+  {
    "ce_ability": null,
+   "concept": "Every conqueror in history took ground — Timur built the roads that ground traveled on, and the roads never forgot him.",
+   "culture": "Turco-Mongol",
+   "detail": "full",
+   "domain": null,
+   "era": "1336–1405 · 14th–15th c.",
+   "features": [
+    {
+     "cost_line": "Action · 1 CE · designate a 5-ft Capital · lasts 1 hour.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Set Samarkand",
+     "text": "Declare a 5-ft space you stand in to be **Samarkand** — the center of the world, for as long as you hold the thought. The Capital persists for 1 hour. All Roads must stay connected to the Capital via continuous segments; a segment cut off from the Capital is just ground again."
+    },
+    {
+     "cost_line": "1 CE · once per turn while moving · up to 20 ft of personally-traversed path.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Lay Campaign Road",
+     "text": "While you move, convert up to 20 ft of the path you personally traverse into 5-ft-wide **Campaign Road**. No road without the walking — you do not conjure roads; you *earn* them. You may maintain up to your proficiency bonus in segments (10 minutes each; oldest replaced first). Willing allies that start their movement on a connected Road treat the **first 15 ft traveled along it as 5 ft**. Road segments are **visible cursed infrastructure**, destructible by damage or terrain-clearing — a severed road is the cheapest victory in the campaign."
+    },
+    {
+     "cost_line": "Passive · once per turn per ally.",
+     "kind": "feature",
+     "level": 3,
+     "name": "Junction Discipline",
+     "text": "Where two Road segments meet, a **Junction** forms. Once per turn, a willing ally that reaches a Junction may change direction and **ignore opportunity attacks from one visible creature** until it leaves the 5-ft Junction space. The crossroads is a weapon, if you have walked both arms of it."
+    },
+    {
+     "cost_line": "Reaction · 2 CE.",
+     "kind": "feature",
+     "level": 6,
+     "name": "Burn the Road Behind",
+     "text": "When a hostile creature enters one of your Road segments, destroy the segment. The hostile makes a Dexterity save against your technique DC: on a failure it takes 2 × your PB bludgeoning/fire damage and its speed is reduced by 10 ft for the turn; on a success, half damage and no slow. The destroyed segment becomes ordinary difficult terrain. Let them chase you down your own highway and find it a trap."
+    },
+    {
+     "cost_line": "Bonus action · 3 CE · Capital or any Junction within 120 ft.",
+     "kind": "feature",
+     "level": 11,
+     "name": "All Roads Lead to Samarkand",
+     "text": "Relocate along your connected network to the Capital or any Junction within 120 ft. The relocation traces the Road continuously — **severed networks block it**. You arrive where the road goes; position is the attack."
+    },
+    {
+     "cost_line": "Passive · the network at full muster.",
+     "kind": "feature",
+     "level": 18,
+     "name": "Empire of Roads",
+     "text": "You may maintain **2 × your proficiency bonus** in Road segments, and Road duration extends from 10 minutes to **24 hours**. After physically traveling a route outside combat, you may stabilize one **1-mile Long Road** along that route until your next long rest. Your 11th-level relocation may carry **one willing adjacent creature** and may use a Long Road."
+    }
+   ],
+   "figure": "Timur",
+   "id": "timur",
+   "l20": {
+    "cost_line": "Once per long rest · bonus action.",
+    "kind": "l20",
+    "level": 20,
+    "name": "Then I Became One",
+    "text": "He built an empire of roads. Then he *became* one. Relocate along your network to **any point on a connected Road segment** within 1 mile of traced network — not only the Capital or a Junction — bringing up to your proficiency bonus in willing adjacent creatures with you. Long Roads extend the traced range to their full length. The roads go where you walked; the war goes where you arrive."
+   },
+   "maximum": {
+    "cost_line": "Action · 8 CE.",
+    "kind": "maximum",
+    "level": 11,
+    "name": "The Campaign Returns Home",
+    "text": "The great working: **redeployment, not damage**. Up to your proficiency bonus in willing creatures on the network may use their reactions to relocate to any reachable Capital or Junction (up to 300 ft of traced network). The relocation grants no attack. You may destroy the segments they traveled; hostiles standing on a destroyed segment make your Burn the Road Behind save."
+   },
+   "module": "24",
    "primary_verb": "Build",
    "region": "Central Asia",
-   "era": "c. 1336–1405 · 14th–15th c.",
-   "culture": "Turco-Mongol",
-   "concept": "Every conqueror in history took ground — Timur built the roads that ground traveled on, and the roads never forgot him.",
+   "role": "Infrastructure / Logistics Controller",
    "serves": null,
-   "features": [],
-   "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "*Tier V · Special Grade · Primary verb: Build. Faithful summary of U14 D1; not a rewrite.*\n\n- **Core loop:** Set Samarkand (action, 1 CE) designates a 5-ft Capital (1 hour); Lay Campaign Road (1 CE, once/turn while moving) converts up to 20 ft of personally-traversed path into 5-ft-wide Road (10 min, PB segments, oldest-first replacement). Willing allies starting movement on a connected Road treat the first 15 ft traveled along it as 5 ft. All Roads must stay connected to the Capital via continuous segments.\n- **L3 — Junction Discipline:** where two segments meet, a Junction forms; once/turn, a willing ally reaching a Junction may change direction and ignore opportunity attacks from one visible creature until leaving the 5-ft space.\n- **L6 — Burn the Road Behind:** Reaction, 2 CE, when a hostile enters a Road segment — destroy the segment; Dex save vs 2×PB bludgeoning/fire + speed −10 ft for the turn (half damage, no slow on success). Former segment becomes ordinary difficult terrain.\n- **L11 — All Roads Lead to Samarkand:** Bonus action, 3 CE — relocate along the connected network to the Capital or any Junction within 120 ft. Teleport traces the Road continuously; severed networks block it (zack's ruling).\n- **L18 — Empire of Roads:** maintain 2×PB segments; Road duration extends from 10 minutes to **24 hours**. After physically traveling a route outside combat, stabilize one 1-mile Long Road until next long rest. L11 relocation may carry one willing adjacent creature and use the Long Road.\n- **Maximum — The Campaign Returns Home** (Action, 8 CE): up to PB willing creatures on the network may use reactions to relocate to any reachable Capital/Junction (≤300 ft traced network); no attack granted. Timur may destroy used segments; hostiles on destroyed segments make the Burn save.\n- **No Domain — deliberate.** Road segments are visible cursed infrastructure, destructible by damage/terrain-clearing (zack's ruling).\n- **Persistence: The Sealed Campaign** — Sun Tzu pact; waking conditional on civilization-scale mobilization.",
-   "source_file": "24-timur.md"
+   "source_file": "24-timur.md",
+   "summary_text": null,
+   "technique": "Roads to Samarkand",
+   "tier": "V",
+   "title": "TIMUR",
+   "grade": "Calamity"
   },
   {
-   "id": "rasputin",
-   "module": "25",
-   "figure": "Rasputin",
-   "title": "RASPUTIN",
-   "detail": "summary",
-   "technique": "Not Yet — Intercession of the Unfinished Man",
-   "tier": "IV",
-   "grade": "Special Grade",
-   "role": "Primary verb: Postpone. Faithful summary of U14 D2; not a rewrite.",
    "ce_ability": null,
+   "concept": "He owes Heaven his death, and he has been postponing payment for over a century — the interest compounds, and he keeps paying it in other people's tomorrows.",
+   "culture": "Russian",
+   "detail": "full",
+   "domain": null,
+   "era": "1869–1916 · 19th–20th c.",
+   "features": [
+    {
+     "cost_line": "Reaction · 2 CE · once per round.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Postpone",
+     "text": "When you or a willing creature within 5 ft would take damage, say the two syllables: *not yet*. After all normal mitigation, defer up to **5 × your proficiency bonus** of the final damage — record the exact amount and source as a **Debt**; the creature takes the remainder. The Debt comes due at the **end of the holder's next turn**: settlement is **unavoidable damage of the recorded type** — it cannot be reduced by resistance, further effects, or temporary HP; no new save; it triggers no on-damage reactions. **One creature holds one damage Debt at a time.** Debts outstanding when combat ends come due immediately — no bookkeeping limbo."
+    },
+    {
+     "cost_line": "Reaction · 1 CE.",
+     "kind": "feature",
+     "level": 3,
+     "name": "Intercession",
+     "text": "When a willing creature within 30 ft has a Debt due before the end of its current turn, take ownership of the Debt onto your own shoulders — its due time becomes the end of **your** next turn. A Debt transfers once unless a feature says otherwise. You take the wound, you hold it, and you return it when you decide."
+    },
+    {
+     "cost_line": "Action · 2 CE · touch a willing creature.",
+     "kind": "feature",
+     "level": 6,
+     "name": "Deferred Affliction",
+     "text": "Suspend a non-incapacitating condition with a duration of 1 minute or less — eligible conditions are **blinded, charmed, deafened, frightened, poisoned** — and carry it in your own ruined frame as an **Affliction Debt**. At the end of your next turn it affects you for its remaining duration (minimum 1 round). **Stunned, Paralyzed, Unconscious, death, and Domain sure-hits cannot be moved** — some things even he cannot reschedule."
+    },
+    {
+     "cost_line": "Reaction · priced in your own maximum HP.",
+     "kind": "feature",
+     "level": 11,
+     "name": "Refusal to Die",
+     "text": "When a Debt comes due and would reduce you to 0 HP, **split it after seeing the result**: half now, half as a new Debt due at the end of your next turn. Each use reduces your **maximum HP by 2 × your proficiency bonus** until you finish a long rest, and you cannot use this if your maximum HP would hit 0. This is the **sole exception** to the no-second-postponement rule — it divides what is due rather than postponing it, and the division is priced in your own ending."
+    },
+    {
+     "cost_line": "Passive · the arithmetic runs on.",
+     "kind": "feature",
+     "level": 18,
+     "name": "The Impossible Man",
+     "text": "The first Postpone each round costs **0 CE**. Intercession once per round requires **no reaction**. You may hold up to **your proficiency bonus in simultaneous Debts**, each with its own source and due time. He does not die. He *reschedules* — thinner, paler, more unfinished each time."
+    }
+   ],
+   "figure": "Rasputin",
+   "id": "rasputin",
+   "l20": {
+    "cost_line": "Once per long rest · action.",
+    "kind": "l20",
+    "level": 20,
+    "name": "The Nursery at Scale",
+    "text": "The nursery, at scale — the starets' compulsion, grown to metaphysics. Every willing creature within 120 ft may immediately **Postpone** its next damaging effect: no reaction required, no CE spent, each Debt held by you with a due time of the end of your next turn. You may hold any number of these Debts simultaneously. Come to him wounded. Come to him dying. He will say the two syllables — and tomorrow, ah, tomorrow you will talk about tomorrow."
+   },
+   "maximum": {
+    "cost_line": "Action · 8 CE.",
+    "kind": "maximum",
+    "level": 11,
+    "name": "Tomorrow, Then",
+    "text": "Until the start of your next turn, the **first** damaging effect or eligible affliction on each willing creature within 30 ft is fully deferred to you — no reaction required. At the start of your next turn, you may **redistribute each resulting Debt once** among willing creatures within 30 ft; whatever is left stays yours. Redistributed Debts come due at the end of each new holder's next turn. The bill always arrives. He is always on time."
+   },
+   "module": "25",
    "primary_verb": "Postpone",
    "region": "Russia",
-   "era": "1869–1916 · early 20th c.",
-   "culture": "Russian",
-   "concept": "He owes Heaven his death, and he has been postponing payment for over a century — the interest compounds, and he keeps paying it in other people's tomorrows.",
+   "role": "Consequence Deferral / Debt Controller",
    "serves": null,
-   "features": [],
-   "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "*Tier IV · Primary verb: Postpone. Faithful summary of U14 D2; not a rewrite.*\n\n- **Core loop:** Postpone (Reaction, 2 CE, once/round, when Rasputin or a willing creature within 5 ft would take damage) — after all normal mitigation, defer up to 5×PB of final damage; record exact amount/source as a Debt; creature takes the remainder. Debt comes due at end of the holder's next turn; settlement is unavoidable damage of the recorded type — cannot be reduced by resistance, further effects, or temp HP; no new save; triggers no on-damage reactions (zack's ruling). One creature holds one damage Debt at a time. Outstanding Debts come due immediately when combat ends.\n- **L3 — Intercession** (Reaction, 1 CE): when a willing creature within 30 ft has a Debt due before end of its current turn, Rasputin takes ownership; due time becomes end of his next turn. Transfers once unless a feature says otherwise.\n- **L6 — Deferred Affliction** (Action, 2 CE, touch willing): suspend a listed non-incapacitating condition (duration ≤1 min) — eligible: **blinded, charmed, deafened, frightened, poisoned** — place it on Rasputin as Affliction Debt; at end of his next turn it affects him for remaining duration (min 1 round). Stunned/Paralyzed/Unconscious/death/Domain sure-hits cannot be moved.\n- **L11 — Refusal to Die:** when a Debt comes due and would reduce Rasputin to 0 HP, split after seeing the result — half now, half as a new Debt due end of his next turn. Each use reduces max HP by 2×PB until a long rest; cannot be used if max HP would hit 0. This is the **sole exception** to the no-second-postponement rule — it divides what is due rather than postponing it, and the division is priced in his own maximum HP.\n- **L18 — The Impossible Man:** first Postpone each round costs 0 CE; Intercession once/round needs no Reaction; may hold up to PB simultaneous Debts, each with own source/due time.\n- **Maximum — Tomorrow, Then** (Action, 8 CE): until start of his next turn, the first damaging effect or eligible affliction on each willing creature within 30 ft is fully deferred to Rasputin (no reaction); at start of his next turn he may redistribute each resulting Debt once among willing creatures within 30 ft; leftovers stay his; redistributed Debts come due end of each new holder's next turn.\n- **No Domain — deliberate.** **Persistence: The Final Debt** — death as unpaid metaphysical Debt; permanent defeat requires a ritual forcing settlement with no transfer.",
-   "source_file": "25-rasputin.md"
+   "source_file": "25-rasputin.md",
+   "summary_text": null,
+   "technique": "Intercession of the Unfinished Man",
+   "tier": "IV",
+   "title": "RASPUTIN",
+   "grade": "Special Grade"
   },
   {
    "id": "alexander",
    "module": "26",
    "figure": "Alexander",
    "title": "ALEXANDER",
-   "detail": "summary",
+   "detail": "full",
    "technique": "There Is Always Another Horizon",
    "tier": "V",
-   "grade": "Calamity",
    "role": "exploration / mobility",
-   "ce_ability": null,
+   "ce_ability": "STR or DEX (player's choice, locked at creation)",
    "primary_verb": "cross",
    "region": "Macedon / Persia",
    "era": "356–323 BCE · 4th c. BCE",
    "culture": "Macedonian",
    "concept": "Every frontier he crossed became a road — and the roads are still there.",
    "serves": null,
-   "features": [],
-   "maximum": null,
+   "features": [
+    {
+     "name": "Name the Frontier / Make Passage",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Bonus action · 1 CE.",
+     "text": "At character creation, choose **STR or DEX** as your CE ability for this technique; locked thereafter. Name one meaningful visible boundary within 60 feet as a **Frontier** — a doorway, a wall's edge, a riverbank, a sealed threshold, a hostile frontline. Arbitrary lines in open ground are not Frontiers. When you cross the Frontier first, the crossing becomes a **Passage** (1 minute; you may maintain a number of Passages equal to your PB). Willing allies crossing a Passage gain +10 feet of movement for the crossing and ignore nonmagical difficult terrain."
+    },
+    {
+     "name": "First Across",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Part of the crossing movement.",
+     "text": "When you convert a Frontier by crossing it first, you may draw a weapon, interact with an object, or make one weapon attack as part of that movement — the crossing *is* the attack's delivery."
+    },
+    {
+     "name": "No Barrier Is the World",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "CE ability check vs the creator's Technique/Barrier DC.",
+     "text": "Cursed barriers, curtains, Domain walls, and sealed doorways can be named as Frontiers. Make a CE ability check against the creator's Technique or Barrier DC: success opens a 5-foot Passage through the barrier for willing allies. Per zack's ruling: passing through a Domain wall this way grants immunity to that Domain's sure-hit, but mutual non-interference applies — you cannot harm anyone inside while immune, and cannot be harmed. The check is a breach attempt resolved before any clash; it is not a clash substitute."
+    },
+    {
+     "name": "Uncharted Route",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Passive movement.",
+     "text": "While moving toward a named Frontier or along a Passage, you can run across liquids and vertical surfaces. Gaps no wider than your remaining movement are traversable — the road continues where the map ends."
+    },
+    {
+     "name": "Beyond the Map",
+     "level": 18,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "Your Passages last 24 hours. You may stabilize one Long Passage through a supernatural threshold; it persists until your next long rest."
+    }
+   ],
+   "maximum": {
+    "name": "To the End of the Known World",
+    "kind": "maximum",
+    "level": 11,
+    "cost_line": "Action · 10 CE.",
+    "text": "Trace a 300-foot **Expedition Route**, 10 feet wide. It climbs walls, crosses water and gaps, and punches through one plausible mundane obstacle. Willing allies may use their reactions to move along the Route. Each supernatural barrier on the Route requires the L6 breach check."
+   },
    "domain": null,
-   "l20": null,
-   "summary_text": "**\"There Is Always Another Horizon\"** — Tier V · exploration / mobility · verb: *cross.* (Suggested CE ability per dossier pattern: STR or DEX; the dossier's breach check is a CE ability check.)\n\n**Core loop:** Name a meaningful visible boundary within 60 ft as a Frontier (bonus action, 1 CE) → Alexander crosses first → the crossing becomes a Passage (1 min, maintain PB) → willing allies crossing gain bonus movement and ignore nonmagical difficult terrain.\n\n**Signature features:**\n- **L1 — Name the Frontier / Make Passage:** the foundation. Arbitrary lines in open ground are invalid — the boundary must be meaningful (doorway, wall edge, riverbank, sealed threshold, hostile frontline).\n- **L3 — First Across:** converting a Frontier lets him draw a weapon, interact, or make one weapon attack as part of the movement — the crossing *is* the attack's delivery.\n- **L6 — No Barrier Is the World:** cursed barriers, curtains, Domain walls, sealed doorways can be named as Frontiers; CE ability check vs the creator's Technique/Barrier DC opens a 5-ft Passage for willing allies. Per zack's ruling: passage through a Domain wall grants immunity to the Domain's sure-hit **but** mutual non-interference — he cannot hurt others inside while immune. The check is a breach attempt resolved before any clash, not a clash substitute.\n- **L11 — Uncharted Route:** run across liquids and vertical surfaces while moving toward a Frontier or along a Passage; gaps ≤ remaining movement are traversable.\n- **L18 — Beyond the Map:** Passages last 24 hours; one Long Passage through a supernatural threshold can be stabilized until the next long rest.\n- **Maximum — To the End of the Known World** (action, 10 CE): 300-ft Expedition Route, 10 ft wide — climbs walls, crosses water and gaps, punches one plausible mundane obstacle; willing allies use reactions to move along it. Supernatural barriers on the route each require the L6 check.\n- **Domain: none.** No clash points. (Per dossier: it *breaches* Domains without being one.)\n\n**D&D combat role:** mobility support / exploration-striker. The party's way through.",
-   "source_file": "26-alexander.md"
+   "l20": {
+    "name": "The Road Wears the Man",
+    "kind": "l20",
+    "level": 20,
+    "cost_line": "Once per long rest · bonus action.",
+    "text": "For 1 minute, every boundary you cross becomes a Passage for willing allies — no naming, no CE cost, no breach check (zack's mutual-non-interference rule still applies inside hostile Domains). Allies crossing your Passages gain double the usual bonus movement, and Passages opened during this minute last 1 hour. The horizon walks, and the world keeps up."
+   },
+   "summary_text": null,
+   "source_file": "26-alexander.md",
+   "grade": "Calamity"
   },
   {
    "id": "taira-no-masakado",
    "module": "27",
    "figure": "Taira no Masakado",
    "title": "TAIRA NO MASAKADO",
-   "detail": "summary",
+   "detail": "full",
    "technique": "Counter-Capital — The Rebel Seat",
    "tier": "V",
-   "grade": "Calamity",
    "role": "territorial denial",
-   "ce_ability": null,
+   "ce_ability": "WIS or CHA (player's choice, locked at creation)",
    "primary_verb": "contest",
    "region": "Japan",
    "era": "c. 900s–940 · 10th c.",
    "culture": "Japanese",
    "concept": "The capital moved. He did not.",
    "serves": null,
-   "features": [],
-   "maximum": null,
+   "features": [
+    {
+     "name": "Raise a Rebel Seat",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Action · 2 CE.",
+     "text": "At character creation, choose **WIS or CHA** as your CE ability for this technique; locked thereafter. Plant a **Rebel Seat**: a 10-foot-radius zone (1 minute; you may maintain 1). The first time each round a willing creature inside the Seat faces a hostile non-damage territorial rule — forced movement, movement tax, silence, fear or charm compulsion, line-of-sight distortion, a zone rider — it may use its reaction to make a Strength, Wisdom, or CE-ability check against the source DC; success ignores that rider until the end of its turn. Damage applies normally: the Seat contests *authority*, not violence."
+    },
+    {
+     "name": "Eastern Road",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Bonus action · 2 CE.",
+     "text": "You may maintain 2 Seats. A willing creature in one Seat may spend 10 feet of movement to teleport to your other Seat, provided it is within 60 feet."
+    },
+    {
+     "name": "Local Sovereignty",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "When a hostile Domain expands over a Seat, the Seat becomes a **Counter-Capital** (HP = 5 × your level, AC = your Technique DC). The first initiative-20 sure-hit event affecting a creature inside the Seat is intercepted — resolved against the Seat's HP, once per event. Per zack's ruling: ordinary attacks and riders inside are unaffected; Seats are visible, targetable objects."
+    },
+    {
+     "name": "The Head Still Flies East",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Passive (trigger: you drop to 0 HP).",
+     "text": "While at 0 HP with at least 1 Seat maintained, you remain conscious: you may speak through a Seat, perceive everything within its radius, and use Eastern Road for willing allies. No movement, attacks, or other techniques."
+    },
+    {
+     "name": "Three Seats of the East",
+     "level": 18,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "You may maintain 3 Seats. Once per round, when a rider is resisted inside a Seat, you may relocate that Seat up to 15 feet as a reaction. Seats persist 1 hour outside hostile Domains."
+    }
+   ],
+   "maximum": {
+    "name": "New Imperial Capital",
+    "kind": "maximum",
+    "level": 11,
+    "cost_line": "Action · 8 CE · Focus, 1 minute.",
+    "text": "One Seat becomes a 30-foot-radius **New Imperial Capital**. Once per round, a hostile technique imposing a non-damage rule inside must win a CE-ability contest against you, or the rule does not apply that round. Eastern Road in and out of the Capital costs no CE while the Maximum lasts."
+   },
    "domain": null,
-   "l20": null,
-   "summary_text": "**\"Counter-Capital — The Rebel Seat\"** — Tier V · territorial denial · verb: *contest.* (Suggested CE ability per dossier pattern: WIS or CHA.)\n\n**Core loop:** Plant a Rebel Seat (action, 2 CE, 10-ft radius, 1 min, maintain 1) → hostile non-damage territorial rules inside are contested → willing creatures use reactions to check vs the source DC and ignore the rider for the turn. Damage applies normally — the Seat contests *authority*, not violence.\n\n**Signature features:**\n- **L1 — Raise a Rebel Seat:** the foundation. First time each round a willing creature inside faces a hostile non-damage territorial rule (forced movement, movement tax, silence, fear/charm compulsion, LOS distortion, zone rider), it may use its reaction for a Str/Wis/CE check vs the source DC; success ignores that rider until end of turn.\n- **L3 — Eastern Road:** maintain 2 Seats; bonus action, 2 CE — a willing creature in one Seat spends 10 ft of movement to teleport to the other Seat within 60 ft.\n- **L6 — Local Sovereignty:** when a hostile Domain expands over a Seat, it becomes a Counter-Capital (HP = 5× level, AC = Technique DC). The first initiative-20 sure-hit event affecting a creature inside is intercepted — resolved against the Seat's HP, once per event. Per zack's ruling: ordinary attacks/riders inside are unaffected; Seats are visible, targetable objects.\n- **L11 — The Head Still Flies East:** at 0 HP with ≥1 Seat, Masakado remains conscious to speak through a Seat, perceive its radius, and use Eastern Road for willing allies. No movement, attacks, or other techniques.\n- **L18 — Three Seats of the East:** maintain 3 Seats; once/round relocate a Seat 15 ft as a reaction when a rider is resisted inside it. Seats persist 1 hour outside hostile Domains.\n- **Maximum — New Imperial Capital** (action, 8 CE, Focus, 1 min): one Seat becomes 30-ft radius; once/round, a hostile technique imposing a non-damage rule inside must win a CE ability contest vs Masakado or the rule doesn't apply that round. Eastern Road in/out costs no CE during the Maximum.\n- **Domain: none.** No clash points. (Per dossier: it *contests* Domains without being one — the only anti-Domain territory specialist in the set.)\n\n**D&D combat role:** zone defender / anti-Domain anchor. The party's bunker.",
-   "source_file": "27-masakado.md"
+   "l20": {
+    "name": "The True Capital",
+    "kind": "l20",
+    "level": 20,
+    "cost_line": "Once per long rest · action.",
+    "text": "For 1 minute, every Seat you maintain becomes a Counter-Capital — with its printed HP, AC, and sure-hit interception — even outside any hostile Domain. Willing creatures inside your Seats automatically ignore hostile non-damage territorial rules (no reaction or check required), and a Seat destroyed during this minute is restored at 1 HP at the start of your next turn. The capital moved. It has moved back."
+   },
+   "summary_text": null,
+   "source_file": "27-masakado.md",
+   "grade": "Calamity"
   },
   {
    "id": "emperor-sutoku",
    "module": "28",
    "figure": "Emperor Sutoku",
    "title": "EMPEROR SUTOKU",
-   "detail": "summary",
+   "detail": "full",
    "technique": "Crown & Exile — Heaven Below, Earth Above",
    "tier": "V",
-   "grade": "Calamity",
    "role": "redistribution / inversion",
-   "ce_ability": null,
+   "ce_ability": "INT or CHA (player's choice, locked at creation)",
    "primary_verb": "transpose",
    "region": "Japan",
    "era": "1119–1164 · 12th c.",
    "culture": "Japanese",
    "concept": "He sat the highest seat in Japan, and they made him the lowest man in it — so he rewrote the seating chart of the world.",
    "serves": null,
-   "features": [],
-   "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "**\"Crown & Exile — Heaven Below, Earth Above\"** — Tier V · redistribution / inversion · verb: *transpose.* Deliberate onryō. (Suggested CE ability per dossier pattern: INT or CHA.)\n\n**Core loop:** Link two creatures within 60 ft as Crown and Exile (action, 2 CE, Focus 1 min). Unwilling targets make a **WIS save vs Sutoku's technique DC** when named — a creature that succeeds cannot be made Crown or Exile for 1 minute; willing targets (including Sutoku himself) need no save. → once/round, transpose external non-damage benefits from Crown to Exile (reaction) → once/round, transpose external non-damage penalties from Exile to Crown (reaction). Crown loses what Exile gains.\n\n**Signature features:**\n- **L1 — Name Crown & Exile / Burden Upward:** the foundation. Benefits transpose down; penalties transpose up. Damage, Stunned/Paralyzed/Unconscious, death, Domain sure-hits excluded.\n- **L3 — Exchange Offices** (bonus action, 1 CE): swap which linked creature is Crown/Exile; once/round, Exile may use Crown's proficiency on a d20 roll when Crown's is higher.\n- **L6 — The Low Seat Speaks:** Exile may refuse a beneficial effect that could target Crown; if Crown accepts, it redirects upward and Exchange Offices triggers free.\n- **L11 — Two Courts:** maintain two independent pairs; one reaction per pair per round.\n- **L18 — The Throne Has No Owner:** first valid transposition per pair per round is free; Exchange Offices once/round without bonus action.\n- **Maximum — Sovereign Becomes Commoner** (action, 10 CE): pick one Axis (AC, walking speed, current CE, current HP percentage, initiative count) among creatures within 60 ft; the single highest and single lowest exchange those values until end of Sutoku's next turn. Caps at recipients' maxima. No max HP, ability scores, class features, or techniques exchanged.\n- **Domain Expansion — Court of the Demon Sovereign: The World Turned Upside Down** (disclosed rule-Domain): at initiative 20, Sutoku announces one Axis, ranks every creature publicly, and swaps highest/lowest until the next initiative 20. The sure-hit *is* the ranking and transposition; ordinary attacks stay ordinary. Counterplay is printed: creatures may deliberately lower their Axis position before the count. **1,000 clash points** (Tier V floor), 60-ft enclosed default, full-turn 20 CE activation, burnout 3 rounds · duration 3 minutes.\n\n**D&D combat role:** debuffer / hierarchy-inverter. The fight's tax collector.",
-   "source_file": "28-sutoku.md"
+   "features": [
+    {
+     "name": "Name Crown & Exile / Burden Upward",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Action · 2 CE · Focus, 1 minute.",
+     "text": "At character creation, choose **INT or CHA** as your CE ability for this technique; locked thereafter. Link two creatures within 60 feet as **Crown** and **Exile**. Unwilling targets make a **Wisdom save vs your technique DC** when named (zack-ruled) — a creature that succeeds cannot be made Crown or Exile for 1 minute; willing targets (including yourself) need no save. Once per round as a reaction, transpose one external non-damage **benefit** from the Crown to the Exile; once per round as a reaction, transpose one external non-damage **penalty** from the Exile to the Crown. The Crown loses what the Exile gains. Benefits transpose down; penalties transpose up. Damage, Stunned/Paralyzed/Unconscious, death, and Domain sure-hits are excluded."
+    },
+    {
+     "name": "Exchange Offices",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Bonus action · 1 CE.",
+     "text": "Swap which linked creature is Crown and which is Exile. Once per round, the Exile may use the Crown's proficiency bonus on a d20 roll when the Crown's is higher."
+    },
+    {
+     "name": "The Low Seat Speaks",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Reaction.",
+     "text": "When a beneficial effect would affect the Exile — one that could equally target the Crown — the Exile may refuse it. If the Crown accepts the effect, it redirects upward to the Crown, and Exchange Offices triggers immediately without costing your bonus action."
+    },
+    {
+     "name": "Two Courts",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "You may maintain two independent Crown–Exile pairs. You have one transposition reaction per pair per round."
+    },
+    {
+     "name": "The Throne Has No Owner",
+     "level": 18,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "The first valid transposition per pair per round costs no reaction. Exchange Offices may be used once per round without spending a bonus action."
+    }
+   ],
+   "maximum": {
+    "name": "Sovereign Becomes Commoner",
+    "kind": "maximum",
+    "level": 11,
+    "cost_line": "Action · 10 CE.",
+    "text": "Choose one **Axis** — AC, walking speed, current CE, current HP percentage, or initiative count — among creatures within 60 feet. The single highest and single lowest exchange those values until the end of your next turn. Values are capped at each recipient's maxima. Max HP, ability scores, class features, and techniques are never exchanged."
+   },
+   "domain": {
+    "name": "Court of the Demon Sovereign: The World Turned Upside Down",
+    "kind": "domain",
+    "level": null,
+    "cost_line": "Full-turn action · 20 CE · 1,000 clash points · burnout 3 rounds · duration 3 minutes · 60-ft enclosed.",
+    "text": "At initiative 20, you announce one Axis (as the Maximum), rank every creature in the Domain publicly, and the highest and lowest swap values until the next initiative 20. The sure-hit *is* the ranking and transposition; ordinary attacks stay ordinary. Counterplay is printed: creatures may deliberately lower their Axis position before the count.",
+    "clash_points": 1000,
+    "burnout_rounds": 3,
+    "duration_min": 3,
+    "radius": "60-ft radius",
+    "activation": "full-turn action",
+    "ce_cost": 20
+   },
+   "l20": {
+    "name": "The Seating Chart, Rewritten",
+    "kind": "l20",
+    "level": 20,
+    "cost_line": "Once per long rest · action · 5 CE.",
+    "text": "Choose one Axis (as the Maximum). For 1 minute, all creatures within 60 feet are continuously ranked on that Axis — re-ranked at each initiative 20 — and once per round as a reaction you may swap any two creatures' current values on that Axis. Values are capped at maxima; max HP, ability scores, class features, and techniques are never exchanged."
+   },
+   "summary_text": null,
+   "source_file": "28-sutoku.md",
+   "grade": "Calamity"
   },
   {
    "id": "john-dee",
    "module": "29",
    "figure": "John Dee",
    "title": "JOHN DEE",
-   "detail": "summary",
+   "detail": "full",
    "technique": "Angelic Correspondence",
    "tier": "V",
-   "grade": "Calamity",
    "role": "divination / support",
-   "ce_ability": null,
+   "ce_ability": "INT",
    "primary_verb": "Ask",
    "region": "England",
    "era": "1527–1609 · 16th c.",
    "culture": "English",
    "concept": "He asked the angels questions for thirty years — and never once asked what they were.",
    "serves": null,
-   "features": [],
-   "maximum": null,
+   "features": [
+    {
+     "name": "Operator & Skryer / Consult the Shew-Stone / Correspondence",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Action · 1 CE.",
+     "text": "Your CE ability for this technique is **Intelligence**. During a rest, designate one willing creature as your **Skryer** and prepare a reflective focus. **Consult the Shew-Stone:** ask one objective yes/no question about the present state of something perceived by you or the Skryer. The GM answers **Yes, No, or Obscured** — truthfully, and **to the Skryer, never to you** (the witness law). Until the end of your next turn, the first d20 roll by you or the Skryer that directly and plausibly exploits a clear answer gains **+PB** (GM-gated: the table must explain the connection). Questions about futures, secret intentions, morality, or unknowable metaphysics return Obscured. If no willing second creature is available, you may serve as your own emergency Skryer for +1 CE."
+    },
+    {
+     "name": "Cross-Examination",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Bonus action · 2 CE.",
+     "text": "Ask a follow-up question narrowing the same subject. If both answers are clear and are genuinely used together, the Correspondence roll also ignores one source of disadvantage."
+    },
+    {
+     "name": "Distant Conference",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Passive (requires matched mirrors).",
+     "text": "With matched mirrors, you and your Skryer may operate up to 1 mile apart. Only the Q&A channel crosses the distance — no remote attacks, no sight-sharing."
+    },
+    {
+     "name": "Four Castles",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Action · 4 CE · Focus, 1 minute.",
+     "text": "Set four Seal points forming a ritual area. After a clear Query about a subject inside the area, you and your Skryer treat that subject as perceptible for further Queries — even through smoke, invisibility, or mundane walls. Total cover still blocks attacks."
+    },
+    {
+     "name": "Angelic Grammar",
+     "level": 18,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "Consult the Shew-Stone becomes a bonus action. You may maintain two Skryers. Once per round, an Obscured answer must instead provide one truthful **symbolic clue** — short, non-numeric, never a disguised future prediction — delivered **to a Skryer**, preserving the witness law."
+    }
+   ],
+   "maximum": {
+    "name": "Monas Hieroglyphica",
+    "kind": "maximum",
+    "level": 11,
+    "cost_line": "Action · 8 CE.",
+    "text": "Requires four clear Query answers about the same target in the current encounter. Write one **Axiom** drawn from established facts only. For 1 minute, once per round a willing creature directly testing the Axiom may reroll one failed d20. If a premise is definitively disproven, the Maximum ends and you take 4 × PB psychic damage."
+   },
    "domain": null,
-   "l20": null,
-   "summary_text": "**\"Angelic Correspondence\"** — Tier V · divination / support · verb: *Ask.* Suggested CE ability: **INT.** Campaign status: FORMER COMMENTATOR. **No Domain.**\n\n**Core loop:** During rest, designate a willing Skryer and prepare a reflective focus → Consult the Shew-Stone (action, 1 CE): ask one objective yes/no question about the present state of something perceived by Dee or the Skryer → the GM answers **Yes, No, or Obscured** truthfully **to the Skryer** (never the Operator) → until end of Dee's next turn, the first d20 roll by Dee or the Skryer that directly and plausibly exploits a clear answer gains **+PB** (GM-gated; the table must explain the connection).\n\n**Signature features:**\n- **L1 — Operator & Skryer / Consult the Shew-Stone / Correspondence:** the foundation. Questions about futures, secret intentions, morality, or unknowable metaphysics return Obscured. Dee may serve as his own emergency Skryer only if no willing second creature is available (+1 CE).\n- **L3 — Cross-Examination** (bonus action, 2 CE): follow-up narrowing the same subject; if both answers are clear and genuinely used together, the Correspondence roll also ignores one source of disadvantage.\n- **L6 — Distant Conference:** matched mirrors let Dee and Skryer operate up to 1 mile apart. Only the Q&A channel crosses — no remote attacks or sight-sharing.\n- **L11 — Four Castles** (action, 4 CE, Focus 1 min): four Seal points forming a ritual area; after a clear Query about a subject inside, Dee and Skryer treat it as perceptible for further Queries even through smoke/invisibility/mundane walls. Total cover still blocks attacks.\n- **L18 — Angelic Grammar:** Consult becomes a bonus action; maintain two Skryers; once per round, an Obscured answer must instead provide one truthful **symbolic clue** (short, non-numeric, not a disguised future prediction) — delivered **to a Skryer**, preserving the witness law.\n- **Maximum — Monas Hieroglyphica** (action, 8 CE): requires four clear Query answers about the same target in the current encounter. Dee writes one Axiom from established facts only. For 1 minute, once per round a willing creature directly testing the Axiom may reroll one failed d20. If a premise is definitively disproven, the Maximum ends and Dee takes 4×PB psychic damage.\n\n**D&D combat role:** divination support. The encounter's oracle.",
-   "source_file": "29-john-dee.md"
+   "l20": {
+    "name": "What He Never Asked",
+    "kind": "l20",
+    "level": 20,
+    "cost_line": "Once per long rest · action · 1 CE.",
+    "text": "Ask one objective yes/no question about the present state of something **neither you nor your Skryer perceives** — anything the campaign has established. The witness law holds: the answer is given truthfully (Yes or No, never Obscured) **to the Skryer**. Thirty years of questions, and the angels were listening all along."
+   },
+   "summary_text": null,
+   "source_file": "29-john-dee.md",
+   "grade": "Calamity"
   },
   {
    "id": "vlad-iii",
    "module": "30",
    "figure": "Vlad III",
    "title": "VLAD III",
-   "detail": "summary",
+   "detail": "full",
    "technique": "The Dread I Cast Off",
    "tier": "IV",
-   "grade": "Special Grade",
    "role": "fear externalization / identity defense",
-   "ce_ability": null,
+   "ce_ability": "CHA",
    "primary_verb": "Externalize",
    "region": "Wallachia",
    "era": "1431–1476/77 · 15th c.",
    "culture": "Wallachian",
    "concept": "He spent his life manufacturing terror in others so he'd never have to feel his own — and the terror he cast off had other plans.",
    "serves": null,
-   "features": [],
-   "maximum": null,
+   "features": [
+    {
+     "name": "Cast Off Dread",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Bonus action · 1 CE · Focus, 1 minute.",
+     "text": "Your CE ability for this technique is **Charisma**. Externalize your terror as a **Dread Shadow**: a 10-foot-radius zone placed within 30 feet of you. Hostiles entering it or starting their turns inside make a Wisdom save. Failures become **Dreaded** until the end of their next turn: they cannot willingly move closer to the Shadow's center, and they have disadvantage on attacks against you while you are inside the Shadow. Dreaded is bespoke — immunity to Frightened grants advantage on the save, not immunity."
+    },
+    {
+     "name": "Move the Terror",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Bonus action · no additional CE.",
+     "text": "Move the Dread Shadow up to 20 feet. A hostile whose space the Shadow would cover may use its reaction to step 5 feet out before making the save — yield ground or face the fear."
+    },
+    {
+     "name": "Impaler's Lesson",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Once per turn · 2 CE.",
+     "text": "When you hit a Dreaded creature with a piercing weapon or a grapple adjacent to a solid surface, the target makes a Strength save or is **pinned** (speed 0 until the end of its next turn, or until it uses an action to beat your Athletics against your technique DC). Restraint, not dismemberment."
+    },
+    {
+     "name": "Separate the Name",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Reaction · 2 CE.",
+     "text": "When you are targeted by a non-Domain mark, curse, scrying, tracking, or identity-dependent technique, redirect it to the Dread Shadow — if the effect can legally target a shadow construct. If it cannot, the CE is not spent."
+    },
+    {
+     "name": "The Ruler Is Not the Legend",
+     "level": 18,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "Cast Off Dread no longer requires Focus, and the Shadow's radius becomes 15 feet. Once per round, move the Shadow up to 10 feet as a reaction (no additional CE). Effects redirected to the Shadow stay on it even if you leave."
+    }
+   ],
+   "maximum": {
+    "name": "Dracula Unbound",
+    "kind": "maximum",
+    "level": 11,
+    "cost_line": "Action · 10 CE · 1 minute.",
+    "text": "The Shadow becomes the autonomous curse: 40-foot fly speed, passage through mist, and +2 × PB necrotic damage after each of your piercing hits (healing you the same amount). **Cost of control:** each turn, if no hostile is Dreaded and Dracula has taken damage since your last turn, make a Charisma save vs your own technique DC — on a failure, Dracula chooses its own movement and target, prioritizing blood and fear over tactics."
+   },
    "domain": null,
-   "l20": null,
-   "summary_text": "**\"The Dread I Cast Off\"** — Tier IV · fear externalization / identity defense · verb: *Externalize.* Suggested CE ability: **CHA.** Campaign status: CURSE-BOUND. **No Domain.** NPC-locked per zack's ruling (viewable in the library, not selectable in the builder).\n\n**Core loop:** Cast Off Dread (bonus action, 1 CE, Focus 1 min) → place a 10-ft-radius Dread Shadow within 30 ft → hostiles entering or starting turns inside make a Wis save → failures become **Dreaded** (can't willingly move closer to the Shadow's center; disadvantage on attacks vs Vlad while he's inside) until end of their next turn. Dreaded is bespoke — Frightened immunity grants advantage on the save, not immunity.\n\n**Signature features:**\n- **L1 — Cast Off Dread:** the foundation. The Shadow is Vlad's externalized terror, placed and used as terrain.\n- **L3 — Move the Terror** (bonus action, no additional CE): move the Shadow 20 ft; a hostile whose space is covered may use its reaction to step 5 ft out before the save — yield ground or face the fear.\n- **L6 — Impaler's Lesson:** once/turn, hitting a Dreaded creature with a piercing weapon or grapple adjacent to a solid surface — spend 2 CE, Str save or **pinned** (speed 0 until end of its next turn or until it uses an action to beat Athletics vs Technique DC). Restraint, not dismemberment.\n- **L11 — Separate the Name** (reaction, 2 CE): when targeted by a non-Domain mark, curse, scry, tracking, or identity-dependent technique — redirect it to the Dread Shadow if legal. Failure (can't target a shadow construct): CE not spent.\n- **L18 — The Ruler Is Not the Legend:** no Focus required; 15-ft radius; once/round move it 10 ft as a reaction (no additional CE). Redirected effects stay on the Shadow even if Vlad leaves.\n- **Maximum Release — Dracula Unbound** (action, 10 CE, 1 min; **Vlad only**): the Shadow becomes the autonomous curse — 40-ft fly, mist passage, +2×PB necrotic after Vlad's piercing damage (healing the same). **Cost of control:** each turn, if no hostile is Dreaded and Dracula took damage since Vlad's last turn — Cha save vs own Technique DC or Dracula chooses its movement and target, prioritizing blood and fear over tactics.\n- **Persistence — The Legend Needs Its Prisoner** (GM-discretion plot hook per zack's ruling): Vlad can die; Dracula attempts to reconstruct or reclaim him, because the fiction needs its anchor. **Personal Legacy:** the Dracula relationship does not transfer to inheritors.\n\n**D&D combat role:** fear-zone controller / identity defense. The battlefield's bad geometry.",
-   "source_file": "30-vlad.md"
+   "l20": {
+    "name": "I Am the Dread",
+    "kind": "l20",
+    "level": 20,
+    "cost_line": "Once per long rest · action.",
+    "text": "Recall the Dread Shadow into yourself. For 1 minute: hostiles within 30 feet that can see you make the Dreaded save at the start of their turns, as if standing inside the Shadow; Separate the Name costs no CE; Impaler's Lesson needs no solid surface. He spent his life casting it off. At the end, he wears it."
+   },
+   "summary_text": null,
+   "source_file": "30-vlad.md",
+   "grade": "Special Grade",
+   "visibility": "npc"
   },
   {
-   "id": "the-count-of-saint-germain",
-   "module": "31",
+   "ce_ability": "CHA or INT (player's choice, locked at creation)",
+   "concept": "He has been dying for three hundred years, and he has not finished yet — every identity he wears is real, and none of them is him.",
+   "culture": "European",
+   "detail": "full",
+   "domain": null,
+   "era": "d. 1784 · 18th c.",
+   "features": [
+    {
+     "cost_line": "Bonus Action · 1 CE to switch.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Establish Persona",
+     "text": "Maintain **2 Personae** (alias + records + one Credential proficiency — expertise if you are already proficient in it). Switching the active Persona costs a Bonus Action and 1 CE. Identification magic reads the active Persona as truthful."
+    },
+    {
+     "cost_line": "Passive.",
+     "kind": "feature",
+     "level": 3,
+     "name": "Separate Accounts",
+     "text": "Marks, bounties, curses, and tracking attach to the **active Persona only**. When you switch, you suspend (not end) one such effect per Persona — it waits on the face that earned it."
+    },
+    {
+     "cost_line": "Downtime.",
+     "kind": "feature",
+     "level": 6,
+     "name": "Prepared Life",
+     "text": "Each Persona holds one downtime-built **Asset**: a safehouse, cached gear (cap $100 × your level), a vehicle, forged access, or a mundane contact. The life comes with the face."
+    },
+    {
+     "cost_line": "Once per long rest · reaction at 0 HP.",
+     "kind": "feature",
+     "level": 11,
+     "name": "Death of an Alias",
+     "text": "When you drop to 0 HP without dying outright, you may destroy the active Persona instead: stay at 1 HP, instantly assume another maintained Persona, and end one effect that targets your identity. A burned Persona cannot return for 7 days, and must return under a new identity."
+    },
+    {
+     "cost_line": "Passive.",
+     "kind": "feature",
+     "level": 18,
+     "name": "No Original",
+     "text": "Maintain **PB Personae**; switching costs no action and no CE, once per turn. Divination seeking your 'real' identity returns the active Persona as truth — **unless it targets soul continuity**."
+    }
+   ],
    "figure": "The Count of Saint-Germain",
-   "title": "THE COUNT OF SAINT-GERMAIN",
-   "detail": "summary",
-   "technique": "Continuity of Persona",
-   "tier": "IV",
-   "grade": "Special Grade",
-   "role": "infiltrator / escape artist",
-   "ce_ability": "CHA",
+   "id": "the-count-of-saint-germain",
+   "l20": {
+    "cost_line": "Once per long rest · reaction.",
+    "kind": "l20",
+    "level": 20,
+    "name": "The Seam Is the Self",
+    "text": "When an effect would identify, reveal, locate, or forcibly strip your active Persona — or destroy or negate all your maintained Personae at once — you may declare it resolved against a face you have already burned: the effect expends itself against nothing, and you immediately assume any maintained Persona, even one destroyed within the last 7 days (which returns early for this purpose only). The continuity steps sideways; the man was never there."
+   },
+   "maximum": {
+    "cost_line": "Action · 8 CE.",
+    "kind": "maximum",
+    "level": 11,
+    "name": "I Was Never Here",
+    "text": "Burn all Personae but one, ending every mark, bounty, curse, and tracking effect on the burned faces, and teleport to a prepared token within 1 mile. The surviving Persona is the only detectable identity you have; the rest are metaphysically dead."
+   },
+   "module": 31,
    "primary_verb": "Assume",
    "region": "Europe",
-   "era": "d. 1784 · 18th c.",
-   "culture": "European",
-   "concept": "He has been dying for three hundred years, and he has not finished yet — every identity he wears is real, and none of them is him.",
+   "role": "infiltrator / escape artist",
    "serves": null,
-   "features": [],
-   "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "*Tier IV · infiltrator / escape artist · verb: Assume · suggested CE ability CHA or INT · **No Domain**.*\n\n- **L1 — Establish Persona / Assume Persona:** maintain 2 Personae (alias + records + one Credential proficiency, expertise if already proficient). Bonus Action, 1 CE to switch; identification reads the active Persona as truthful.\n- **L3 — Separate Accounts:** marks, bounties, curses, and tracking attach to the *active Persona*; switching suspends (not ends) one effect per Persona.\n- **L6 — Prepared Life:** each Persona holds one downtime-built Asset — safehouse, cached gear (cap $100×level), vehicle, forged access, or a mundane contact.\n- **L11 — Death of an Alias:** once per long rest, at 0 HP without dying outright — destroy the active Persona, stay at 1 HP, instantly assume another, end one identity effect. Burned Persona gone 7 days.\n- **L18 — No Original:** maintain PB Personae; switch once per turn free. Divination for the \"real\" identity returns the active Persona — *unless it targets soul continuity.*\n- **Maximum — I Was Never Here (Action, 8 CE):** burn all Personae but one, end all their marks, and teleport to a prepared token within 1 mile. The survivor is the only detectable identity; the rest are metaphysically dead.\n\n## IX. Reveal & Escalation\n\n1. **The ally who wasn't.** A helpful NPC — a contact, a fixer, a fence — vanishes mid-arc. Their records don't quite hold up. They were never born.\n2. **The burned alias.** The party kills a network operative. The body's papers describe a life that ends three days ago. The dental records belong to a man who died in 1962.\n3. **The pattern.** Three \"different\" operatives across three arcs share a tell — a turn of phrase, a card trick, a way of pouring wine. Someone is wearing the network.\n4. **The contract.** The party finds the vow — not its terms (Heaven keeps those), but its *shape*: a blank space in the General's perfect records, exactly man-sized.\n5. **The choice.** Cornered, Saint-Germain offers the party a deal — and his deals, unlike the General's, are *small*. He doesn't want their loyalty. He wants them to owe him one favor, payable in illegibility.\n\n## X. D&D Combat Function\n\n**Infiltrator / escape artist.** Saint-Germain is not a combatant — he is the encounter that happens *before* combat, and the escape that happens *after* it. At the table, run him as a skill-monster with an unbreakable exit: he will not stand and fight, because standing and fighting would require being someone, and he declines. The party beats him by attacking the continuity, not the man — soul-targeting divination, the 7-day burn window, the prepared token they find *before* he needs it.",
-   "source_file": "31-saint-germain.md"
+   "source_file": "31-saint-germain.md",
+   "summary_text": null,
+   "technique": "Continuity of Persona",
+   "tier": "IV",
+   "title": "THE COUNT OF SAINT-GERMAIN",
+   "grade": "Special Grade"
   },
   {
-   "id": "khutulun",
-   "module": "32",
+   "ce_ability": "STR or CHA (player's choice, locked at creation)",
+   "concept": "She never lost a wrestling match — and the world is just a bigger ring.",
+   "culture": "Mongol",
+   "detail": "full",
+   "domain": null,
+   "era": "d. 1306 · 13th–14th c.",
+   "features": [
+    {
+     "cost_line": "Bonus Action · 1 CE.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Issue the Wager",
+     "text": "Challenge one creature within 30 ft that understands the offer — it may refuse, with no magical penalty. If accepted, both name one **Minor Stake** (10 ft speed, +1 AC, 5 max HP, a proficiency, +1 with a named weapon, advantage on a named skill) and a contest form — normally wrestling: first to 2 opposed-Athletics victories. The loser transfers the named stake to the winner, held until the winner's next long rest or lost in a later wager."
+    },
+    {
+     "cost_line": "Passive.",
+     "kind": "feature",
+     "level": 3,
+     "name": "No Empty Wager",
+     "text": "The technique rejects worthless, suppressed, or battlefield-meaningless stakes; the challenged party gets one renegotiation. A 'yes' taken by compulsion, deception about the stakes, or any pressure that removes the genuine power to refuse is not acceptance — the wager is rejected."
+    },
+    {
+     "cost_line": "Passive.",
+     "kind": "feature",
+     "level": 6,
+     "name": "Major Stakes",
+     "text": "Unlocks **Major Stakes**: damage resistance, a 30-ft movement mode, one extra Reaction per round, one limited-use non-Domain feature, Powerful Build. **Never valid:** technique ownership, Domains, Maximums, souls, lives, ability scores."
+    },
+    {
+     "cost_line": "Passive.",
+     "kind": "feature",
+     "level": 11,
+     "name": "Champion's Purse",
+     "text": "Keep up to **PB won Stakes** until your next long rest, and risk them in later wagers. If you lose, the winner takes your stake **plus** one of your retained Stakes. **Using won Stakes (per zack's ruling):** passive Stakes (speed, AC, resistance, movement modes, Powerful Build, the extra Reaction) apply automatically while held. A won limited-use feature may be used **once** before your next long rest, using your action and your own CE at your technique DC. Stakes won beyond the PB cap cannot be retained — they must be immediately re-wagered or forfeited."
+    },
+    {
+     "cost_line": "Once per challenge · free.",
+     "kind": "feature",
+     "level": 18,
+     "name": "Undefeated Until Proven Otherwise",
+     "text": "After losing a contest roll, you may offer to double the wager: if the opponent accepts, the loss is erased and the challenge continues at doubled stakes; if they refuse, the loss stands."
+    }
+   ],
    "figure": "Khutulun",
-   "title": "KHUTULUN",
-   "detail": "summary",
-   "technique": "Ten Thousand Horses",
-   "tier": "IV",
-   "grade": "Special Grade",
-   "role": "duelist / voluntary-stake engine",
-   "ce_ability": "STR",
+   "id": "khutulun",
+   "l20": {
+    "cost_line": "Passive.",
+    "kind": "l20",
+    "level": 20,
+    "name": "The Horses Are Never Taken",
+    "text": "Won Stakes no longer expire at a long rest — they persist until lost in a wager. Your Purse capacity becomes **2 × PB**. No one ever took her horses; no one ever takes yours, except across the ring."
+   },
+   "maximum": {
+    "cost_line": "Action · 10 CE.",
+    "kind": "maximum",
+    "level": 11,
+    "name": "The Ten-Thousand-Horse Wager",
+    "text": "One Grand Challenge to a **willing** opponent: Grand Stakes (table-approved), every retained Stake on the table, first to 3 victories. The winner holds everything for 24 hours. **Refusal is always legal.**"
+   },
+   "module": 32,
    "primary_verb": "Wager",
    "region": "Mongolia",
-   "era": "d. 1306 · 13th–14th c.",
-   "culture": "Mongol",
-   "concept": "She never lost a wrestling match — and the world is just a bigger ring.",
+   "role": "duelist / voluntary-stake engine",
    "serves": null,
-   "features": [],
-   "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "*Tier IV · duelist / voluntary-stake engine · verb: Wager · suggested CE ability STR or CHA · **No Domain**.*\n\n- **L1 — Issue the Wager:** Bonus Action, 1 CE — challenge one creature within 30 ft that understands the offer. **It may refuse with no magical penalty.** If accepted, both name one Minor Stake (10 ft speed, +1 AC, 5 max HP, a proficiency, +1 with a named weapon, advantage on a named skill) and a contest form — normally wrestling, first to 2 opposed-Athletics victories.\n- **L3 — No Empty Wager:** the technique rejects worthless, suppressed, or battlefield-meaningless stakes; the challenged party gets one renegotiation. Coerced \"yes\" is not acceptance (per zack's ruling).\n- **L6 — Major Stakes:** damage resistance, a 30-ft movement mode, one extra Reaction/round, one limited-use non-Domain feature, Powerful Build. **Never valid:** technique ownership, Domains, Maximums, souls, lives, ability scores.\n- **L11 — Champion's Purse:** keep up to PB won Stakes until the next long rest; risk them in later wagers. Lose, and the winner takes your stake *plus* one of your retained Stakes.\n  - **Using won Stakes:** passive Stakes (speed, AC, resistance, movement modes, Powerful Build, the extra Reaction) apply automatically while held. A won limited-use feature may be used **once** before the next long rest, using Khutulun's action and her own CE at her technique DC. Stakes won beyond the PB cap cannot be retained — they must be immediately re-wagered or forfeited.\n- **L18 — Undefeated Until Proven Otherwise:** once per challenge, after losing a contest roll, offer to double the wager — opponent's acceptance erases the loss; refusal lets it stand.\n- **Maximum — The Ten-Thousand-Horse Wager:** one Grand Challenge to a *willing* opponent, GM-approved Grand Stakes, every retained Stake on the table, first to 3 victories. Winner holds everything 24 hours. *\"Refusal is always legal.\"*\n\n## IX. Reveal & Escalation\n\n1. **The horses.** A village, a warlord, a minor sorcerer — someone the party knows — is suddenly *slower*, clumsier, diminished. They wagered something with a traveler. They won't say what.\n2. **The traveler.** A Mongol woman at a waystation, polite, curious, asking about the strongest fighter the party has ever seen. She is *auditioning*.\n3. **The bout.** She challenges a player — fairly, openly, stakes named. Win or lose, it's the most honorable fight of the campaign. She remembers the ones who accept.\n4. **The Purse.** The party realizes she's been collecting — Stakes from across the region, all held, all risked. She's building toward something.\n5. **The Grand Wager.** She calls due her bout with the General. The campaign stops. The ring is drawn. Heaven watches.\n\n## X. D&D Combat Function\n\n**Duelist / voluntary-stake engine.** Khutulun is a single-target striker whose real weapon is the *offer*. At the table, she plays like a fighting-game grappler crossed with a poker player: get close, offer the wager, win the opposed Athletics, take the trait. She is devastating against proud enemies and useless against those who simply refuse — which is the point. The party beats her by declining (and living with the shame), or by accepting and being better. There is no third option, and she likes it that way.",
-   "source_file": "32-khutulun.md"
+   "source_file": "32-khutulun.md",
+   "summary_text": null,
+   "technique": "Ten Thousand Horses",
+   "tier": "IV",
+   "title": "KHUTULUN",
+   "grade": "Special Grade"
   },
   {
-   "id": "hannibal-barca",
-   "module": "33",
+   "ce_ability": "INT or WIS (player's choice, locked at creation)",
+   "concept": "Rome called him the enemy at the gates for a generation — and he is still at the gates.",
+   "culture": "Carthaginian",
+   "detail": "full",
+   "domain": null,
+   "era": "d. c. 183 BCE · 3rd–2nd c. BCE",
+   "features": [
+    {
+     "cost_line": "Bonus Action · 1 CE.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Elastic Center",
+     "text": "Two ground points ≤30 ft apart define a **Center Line** (1 min). Once per round, when a hostile crosses toward your side, a willing ally within 5 ft of the line may use their Reaction to step 5 ft back (no opportunity attack); the line shifts with them."
+    },
+    {
+     "cost_line": "Passive (requires Center Line).",
+     "kind": "feature",
+     "level": 3,
+     "name": "Left & Right Wings",
+     "text": "10-ft **Wing zones** open at each endpoint. A hostile across the line while both Wings hold conscious allies is **Committed**. Once per round, when a Committed creature ends movement, one ally per Wing may shift 5 ft toward it, no action required. No separate action or CE — the rider runs off the established line."
+    },
+    {
+     "cost_line": "Passive (requires Center Line).",
+     "kind": "feature",
+     "level": 6,
+     "name": "Close the Pocket",
+     "text": "A Committed creature within the Center ally's reach and at least one creature from each Wing becomes **Enveloped**. Disengage protects from only one direction per turn. No separate action or CE — the rider runs off the established line."
+    },
+    {
+     "cost_line": "Bonus Action · 0 CE · once per Center Line.",
+     "kind": "feature",
+     "level": 11,
+     "name": "Cavalry Reserve",
+     "text": "Designate one willing ally outside the formation as the reserve. Once per round, when the geometry is breached, the reserve ally may use their Reaction to move half speed and repair it. No damage buff — discipline, not fury."
+    },
+    {
+     "cost_line": "Passive (requires Center Line).",
+     "kind": "feature",
+     "level": 18,
+     "name": "Cross the Impossible Ground",
+     "text": "The line extends to 60 ft, the Wings to 15 ft; the formation ignores nonmagical difficult terrain, and you may bend one endpoint 10 ft once per round. No separate action or CE — the rider runs off the established line."
+    }
+   ],
    "figure": "Hannibal Barca",
-   "title": "HANNIBAL BARCA",
-   "detail": "summary",
+   "id": "hannibal-barca",
+   "l20": {
+    "cost_line": "Once per long rest.",
+    "kind": "l20",
+    "level": 20,
+    "name": "Every Field Is Cannae",
+    "text": "When you establish your Center Line, you may declare it self-commanding: the formation persists for 1 minute after you are incapacitated or leave the field, anchored on the Center ally — roles, Committed, and Enveloped states continue in your name. The doctrine outlives the commander."
+   },
+   "maximum": {
+    "cost_line": "Action · 8 CE · Focus, 1 min.",
+    "kind": "maximum",
+    "level": 11,
+    "name": "Cannae: The Double Envelopment",
+    "text": "The line extends to 60 ft with both Wings established. Enveloped creatures treat retreat as difficult terrain and cannot Disengage against more than one role. The working breaks if a role is incapacitated or displaced — a cage made of people and positioning, not an invisible wall."
+   },
+   "module": 33,
+   "primary_verb": "Envelop",
+   "region": "Carthage",
+   "role": "battlefield geometry / elastic defense / encirclement",
+   "serves": null,
+   "source_file": "33-hannibal.md",
+   "summary_text": null,
    "technique": "Hollow Center — Cannae Doctrine",
    "tier": "IV",
-   "grade": "Special Grade",
-   "role": "battlefield geometry / elastic defense / encirclement",
-   "ce_ability": "INT",
-   "primary_verb": "Envelop",
-   "region": "Carthage / Rome",
-   "era": "247–183 BCE · 3rd c. BCE",
-   "culture": "Carthaginian",
-   "concept": "Rome called him the enemy at the gates for a generation — and he is still at the gates.",
-   "serves": null,
-   "features": [],
-   "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "*Tier IV · battlefield geometry / elastic defense / encirclement · verb: Envelop · suggested CE ability INT or WIS · **No Domain**.*\n\n- **L1 — Elastic Center:** Bonus Action, 1 CE — two ground points ≤30 ft apart define a Center Line (1 min). Once/round, when a hostile crosses toward Hannibal's side, a willing ally within 5 ft may Reaction-step 5 ft back (no OA); the line shifts with them.\n- **L3 — Left & Right Wings:** 10-ft Wing zones at each endpoint. A hostile across the line while both Wings hold conscious allies is **Committed**. Once/round, when a Committed creature ends movement, one ally per Wing may shift 5 ft toward it free. *(Passive rider — no separate action or CE once the Center Line is established.)*\n- **L6 — Close the Pocket:** a Committed creature within the Center ally's reach and at least one creature from each Wing becomes **Enveloped**. Disengage protects from only one direction per turn. *(Passive rider — no separate action or CE once the Center Line is established.)*\n- **L11 — Cavalry Reserve:** one designated willing ally outside the formation may once/round Reaction-move half speed to repair the geometry when it's breached. Designating the reserve ally costs a **bonus action, 0 CE**, once per Center Line establishment. No damage buff — discipline, not fury.\n- **L18 — Cross the Impossible Ground:** line extends to 60 ft, Wings to 15 ft; formation ignores nonmagical difficult terrain; Hannibal may bend an endpoint 10 ft once/round. *(Passive rider — no separate action or CE once the Center Line is established.)*\n- **Maximum — Cannae: The Double Envelopment (Action, 8 CE, Focus, 1 min):** line to 60 ft, both Wings established; Enveloped creatures treat retreat as difficult terrain and can't Disengage against more than one role. Breaks if a role is incapacitated or displaced — *\"a cage made of people and positioning, not an invisible wall.\"*\n\n## IX. Reveal & Escalation\n\n1. **The geometry.** A network operation the party investigates went wrong for the *other* side — a strike team walked into a valley and didn't walk out. Survivors describe being *folded*.\n2. **The annotation.** A captured Commentator text contains marginalia on Cannae in a modern hand — professional, admiring, *tactical*. Someone is studying.\n3. **The Alps.** A \"retreat\" by network forces leads the party's allies straight through \"impassable\" terrain — into a prepared pocket. The retreat was the maneuver.\n4. **The oath.** The party uncovers the Hamilcar oath — and realizes the General's most loyal commander swore his deepest vow *against* empires.\n5. **The choice.** Hannibal offers the party's commander a soldier's parley — and asks, quietly, what they think the End of War *is*. He is asking for himself.\n\n## X. D&D Combat Function\n\n**Battlefield-geometry controller / force multiplier.** Hannibal is not a duelist — he is a *formation*. At the table he plays like a puzzle boss crossed with a warlord: he defines lines, assigns willing allies to roles, and punishes every step the party takes inside his geometry. He deals no direct damage with the technique itself — the damage comes from the allies he positions. The party beats him by breaking the geometry (incapacitate a Wing, scatter the roles, refuse to cross the line), not by out-damaging him. And the cruelest counterplay is the oldest: *don't walk into the hollow center.*",
-   "source_file": "33-hannibal.md"
+   "title": "HANNIBAL BARCA",
+   "grade": "Special Grade"
   },
   {
-   "id": "zheng-yi-sao",
-   "module": "34",
+   "ce_ability": "CHA or INT (player's choice, locked at creation)",
+   "concept": "She commanded eighty thousand pirates and retired with a pardon — and nobody retires from this.",
+   "culture": "Chinese",
+   "detail": "full",
+   "domain": null,
+   "era": "d. c. 1844 · 19th c.",
+   "features": [
+    {
+     "cost_line": "During a rest.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Sign the Articles",
+     "text": "Up to **PB willing creatures** become Crew during a rest. They can always leave at the next rest; there is no punishment for refusing renewal. Consent is the hull — a Crew member who turns hostile or acts under compulsion loses Crew status immediately, and while fewer than two willing Crew remain, the Fund locks."
+    },
+    {
+     "cost_line": "Passive (Fund).",
+     "kind": "feature",
+     "level": 1,
+     "name": "General Fund",
+     "text": "Each Crew member may deposit up to **PB CE** (Fund cap 2 × your level + PB); deposited CE leaves the personal pool. Once per turn, a Crew member within 60 ft may draw 1 CE to pay part of one legal CE cost. **No CE is created** — the Articles gather, they do not conjure."
+    },
+    {
+     "cost_line": "Reaction · 2 Fund CE · once per round.",
+     "kind": "feature",
+     "level": 3,
+     "name": "Article of Mutual Defense",
+     "text": "When a Crew member within 60 ft fails a save or takes damage, another Crew member may spend **2 Fund CE** to add PB to the save or reduce the damage by 2 × PB. The assister decides."
+    },
+    {
+     "cost_line": "After a short rest.",
+     "kind": "feature",
+     "level": 6,
+     "name": "Articles May Be Amended",
+     "text": "After a short rest, the Crew may unanimously add one table-written Article (GM-approved). Any signer rejecting means no amendment."
+    },
+    {
+     "cost_line": "Action.",
+     "kind": "feature",
+     "level": 11,
+     "name": "Amnesty",
+     "text": "Offer explicit surrender terms to one hostile that understands them. If accepted and witnessed, both sides are bound for 24 hours; a knowing violator takes **5 × PB psychic damage** and loses PB CE. Terms cannot require suicide, slavery, soul-surrender, or unrelated future obedience."
+    },
+    {
+     "cost_line": "At objective's end.",
+     "kind": "feature",
+     "level": 18,
+     "name": "Pension & Exit",
+     "text": "At the end of an objective, any Crew member may leave permanently and withdraw up to their contribution. Amnesty-honorers cannot be hunted by the Crew for the term."
+    }
+   ],
    "figure": "Zheng Yi Sao",
-   "title": "ZHENG YI SAO",
-   "detail": "summary",
-   "technique": "Red Flag Articles",
-   "tier": "IV",
-   "grade": "Special Grade",
-   "role": "support economy / voluntary law / surrender",
-   "ce_ability": "CHA",
+   "id": "zheng-yi-sao",
+   "l20": {
+    "cost_line": "Once per long rest.",
+    "kind": "l20",
+    "level": 20,
+    "name": "The Fleet Stands Down",
+    "text": "Your Amnesty is no longer offered to one hostile — it may be offered to **every hostile that can hear and understand the terms** within 120 ft, all bound by the same witnessed 24-hour terms if they accept. She priced surrender until surrender was the winning move; eighty thousand pirates stood down, and so can this field."
+   },
+   "maximum": {
+    "cost_line": "Action · 10 CE · 1 min.",
+    "kind": "maximum",
+    "level": 11,
+    "name": "Red Flag Confederation",
+    "text": "The Fund's range becomes 120 ft; a Crew member may draw **any amount** for one activation, and other willing Crew may use their Reaction to contribute personal CE (up to PB each) toward one activation. May pay Domain Expansion costs (per zack's ruling)."
+   },
+   "module": 34,
    "primary_verb": "Contract",
    "region": "South China Sea",
-   "era": "1775–1844 · 18th–19th c.",
-   "culture": "Chinese",
-   "concept": "She commanded eighty thousand pirates and retired with a pardon — and nobody retires from this.",
+   "role": "support economy / voluntary law / surrender",
    "serves": null,
-   "features": [],
-   "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "*Tier IV · support economy / voluntary law / surrender · verb: Contract · suggested CE ability CHA or INT · **No Domain**.*\n\n- **L1 — Sign the Articles:** during a rest, up to PB *willing* creatures become Crew (they can always leave at the next rest; no punishment for refusing renewal).\n- **L1 — General Fund:** each Crew member may deposit up to PB CE (cap 2×Zheng's level + PB); deposited CE leaves the personal pool. Once per turn, a Crew member within 60 ft may draw 1 CE to pay part of one legal CE cost. *No CE is created.*\n- **L3 — Article of Mutual Defense:** once/round, when a Crew member within 60 ft fails a save or takes damage, another Crew member may Reaction-spend 2 Fund CE to add PB to the save or reduce damage by 2×PB. The *assister* decides.\n- **L6 — Articles May Be Amended:** after a short rest, the Crew may unanimously add one table-written Article (GM-approved). Any signer rejecting = no amendment.\n- **L11 — Amnesty:** offer explicit surrender terms to one hostile that understands them. If accepted and witnessed, both sides bound 24 hours; a knowing violator takes 5×PB psychic, loses PB CE. Terms can't require suicide, slavery, soul-surrender, or unrelated future obedience.\n- **L18 — Pension & Exit:** at objective's end, any Crew member may leave permanently and withdraw up to their contribution. Amnesty-honorers can't be hunted by the Crew for the term.\n- **Maximum — Red Flag Confederation (Action, 10 CE, 1 min):** Fund range 120 ft; a Crew member may draw *any amount* for one activation; other willing Crew may Reaction-contribute personal CE (up to PB each) toward one activation. Per zack's ruling: may pay Domain Expansion costs.\n\n## IX. Reveal & Escalation\n\n1. **The quartermaster.** Network operations the party disrupts keep getting *funded* — techniques fire that shouldn't be affordable. Someone is paying.\n2. **The Articles.** A captured operative carries a copy of Articles — fair, precise, witnessed. The party's lawyer-minded member reads them and goes pale: *these are good terms.*\n3. **The amnesty.** A fight the party is winning *stops* — a woman's voice offers terms, and the terms are fair, and Heaven is listening, and refusing would cost more than accepting.\n4. **The gambling house.** In Guangzhou, or its modern equivalent, an old woman runs a game. She has been running it for a very long time. She remembers every player.\n5. **The negotiation.** She asks for a meeting — not a fight, a *meeting*. She wants to discuss the End of War's terms. She has notes.\n\n## X. D&D Combat Function\n\n**Support / quartermaster / economy engine.** Zheng Yi Sao doesn't win fights — she *funds* them. At the table she's the reason the network's impossible plays are possible: the shared CE pool, the mutual-defense reactions, the group-funded Maximum. She is also the network's most approachable face: fair terms, clean exits, no conscription. The party beats her the way you beat any quartermaster — cut the supply lines. Turn the Crew. Break the cooperation, and the Fund locks, and the Pirate Queen is just a woman with a gambling house and the best exit clause in history.",
-   "source_file": "34-zheng-yi-sao.md"
+   "source_file": "34-zheng-yi-sao.md",
+   "summary_text": null,
+   "technique": "Red Flag Articles",
+   "tier": "IV",
+   "title": "ZHENG YI SAO",
+   "grade": "Special Grade"
   },
   {
-   "id": "yi-sun-sin",
-   "module": "35",
+   "ce_ability": "WIS or INT (player's choice, locked at creation)",
+   "concept": "With thirteen ships he faced a hundred and thirty-three — he is still outnumbered, and it still doesn't matter.",
+   "culture": "Korean",
+   "detail": "full",
+   "domain": null,
+   "era": "d. 1598 · 16th c.",
+   "features": [
+    {
+     "cost_line": "Action · 2 CE · Focus, up to 1 min.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Draw the Strait",
+     "text": "Two anchors within 60 ft of you (≤30 ft apart); the line between them is a **Current Line** with a chosen direction. Crossing carries creatures 10 ft parallel — willing creatures may accept; unwilling make a STR save to resist."
+    },
+    {
+     "cost_line": "At initiative 20 · automatic (1 CE to prevent one reversal).",
+     "kind": "feature",
+     "level": 1,
+     "name": "Reversing Tide",
+     "text": "The line reverses direction automatically at initiative 20 (you may spend 1 CE to prevent one reversal). The direction is always visible — a timing puzzle, not a trap."
+    },
+    {
+     "cost_line": "Passive.",
+     "kind": "feature",
+     "level": 3,
+     "name": "Anchor Ships",
+     "text": "Up to **PB willing creatures** ignore the lines' forced movement and may ride 10 ft along the current for 5 ft of movement, once per turn each."
+    },
+    {
+     "cost_line": "Bonus Action · 2 CE.",
+     "kind": "feature",
+     "level": 6,
+     "name": "Crane Wing",
+     "text": "Open a second Current Line sharing one anchor — a bent channel. An unwilling creature carried across the second line makes a DEX save: fail = carried again and knocked prone; success = stops, stays standing."
+    },
+    {
+     "cost_line": "Passive.",
+     "kind": "feature",
+     "level": 11,
+     "name": "Twelve Against Hundreds",
+     "text": "While conscious hostiles within 60 ft outnumber allies at least 2:1, hostile saves against the lines are at disadvantage and forced movement becomes 15 ft. Ends the instant the condition fails."
+    },
+    {
+     "cost_line": "Reaction · at 0 HP while a Current effect is active.",
+     "kind": "feature",
+     "level": 18,
+     "name": "Do Not Announce My Death",
+     "text": "When you drop to 0 HP while a Current effect is active, your Reaction makes the technique self-sustaining for 1 minute — no Focus required, reversals continue, anchors persist. You take no actions; the lines remain destructible."
+    }
+   ],
    "figure": "Yi Sun-sin",
-   "title": "YI SUN-SIN",
-   "detail": "summary",
-   "technique": "Roaring Current — Myeongnyang Doctrine",
-   "tier": "IV",
-   "grade": "Special Grade",
-   "role": "movement-channel controller / chokepoint / last-line defender",
-   "ce_ability": "WIS",
+   "id": "yi-sun-sin",
+   "l20": {
+    "cost_line": "Once per long rest.",
+    "kind": "l20",
+    "level": 20,
+    "name": "Noryang: The Battle Continued",
+    "text": "When Do Not Announce My Death triggers, the self-sustaining current lasts until the encounter ends (not 1 minute), and once while it runs you may take one full turn — action, bonus action, movement — issued through the current itself, before going still. The fleet never knew; the battle continued."
+   },
+   "maximum": {
+    "cost_line": "Action · 10 CE · Focus, 1 min.",
+    "kind": "maximum",
+    "level": 11,
+    "name": "Myeongnyang: The Roaring Strait",
+    "text": "Anchors to 60 ft apart, with a 30-ft-wide current zone; the zone reverses each initiative 20. Hostiles entering the zone or starting their turn inside make a STR save — fail = moved 20 ft with the current. Anchored allies ride free and never collide."
+   },
+   "module": 35,
    "primary_verb": "Channel",
    "region": "Korea",
-   "era": "1545–1598 · 16th c.",
-   "culture": "Korean",
-   "concept": "With thirteen ships he faced a hundred and thirty-three — he is still outnumbered, and it still doesn't matter.",
+   "role": "movement-channel controller / chokepoint / last-line defender",
    "serves": null,
-   "features": [],
-   "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "*Tier IV · movement-channel controller / chokepoint / last-line defender · verb: Channel · suggested CE ability WIS or INT · **No Domain**.*\n\n- **L1 — Draw the Strait:** Action, 2 CE, Focus up to 1 min — two anchors within 60 ft (≤30 ft apart); the line between is a Current Line with a chosen direction. Crossing carries creatures 10 ft parallel — willing may accept; unwilling make a Str save.\n- **L1 — Reversing Tide:** at initiative 20 the line reverses automatically (1 CE to prevent one reversal). Direction always visible — a timing puzzle, not a trap.\n- **L3 — Anchor Ships:** up to PB willing creatures ignore the forced movement and may ride 10 ft along the current for 5 ft of movement (once/turn).\n- **L6 — Crane Wing:** a second Current Line sharing one anchor (bent channel). An unwilling creature carried across the second line makes a Dex save: fail = carried again + prone; success = stops, stays standing.\n- **L11 — Twelve Against Hundreds:** while conscious hostiles within 60 ft outnumber allies ≥2:1, hostile saves vs. lines are at disadvantage and forced movement becomes 15 ft. Ends the instant the condition fails.\n- **L18 — Do Not Announce My Death:** at 0 HP while a Current effect is active, his Reaction makes the technique self-sustaining 1 minute — no Focus, reversals continue, anchors persist. No actions; lines remain destructible.\n- **Maximum — Myeongnyang: The Roaring Strait (Action, 10 CE, Focus, 1 min):** anchors to 60 ft apart, 30-ft-wide current zone; reverses each initiative 20; hostiles entering or starting turn inside make a Str save — fail = moved 20 ft with the current. Anchored allies ride free and never collide.\n\n## IX. Reveal & Escalation\n\n1. **The strait.** A network withdrawal the party pursues turns into a nightmare of *positioning* — every step slides sideways, the ground has a schedule, and someone studied this water.\n2. **The thirteen.** Intelligence mentions a network cell that should have been overrun — thirteen operatives against hundreds — holding for weeks. The numbers don't make sense. The numbers never make sense around him.\n3. **The turtle ships.** A modern equivalent surfaces: armored, deliberate, unhurried assets that don't retreat and don't break. Someone is building geobukseon for the current war.\n4. **The court records.** The party finds Joseon court documents — the demotion, the torture, the reinstatement. They understand, suddenly, exactly what kind of man serves a master who betrayed him: *carefully.*\n5. **The test.** Yi requests a parley — not with the party's leaders, but with its *soldiers*. He wants to know how they're treated. He is taking notes.\n\n## X. D&D Combat Function\n\n**Movement-channel controller / chokepoint defender / anti-horde.** Yi Sun-sin is the battlefield's *water*: he doesn't deal damage directly, he decides where everyone stands. At the table he plays like a living difficult-terrain puzzle with a reversal clock — the party must track the current's direction, time their crossings, and respect the anchors. He is at his weakest in open-field duels and at his strongest when the party brings numbers — which inverts every instinct players have about outnumbering a boss. Beat him by fighting *small* (deny the 2:1), *anchored* (his own allies' trick, turned around), or *patient* (the current reverses; the patient inherit the strait).",
-   "source_file": "35-yi-sun-sin.md"
+   "source_file": "35-yi-sun-sin.md",
+   "summary_text": null,
+   "technique": "Roaring Current — Myeongnyang Doctrine",
+   "tier": "IV",
+   "title": "YI SUN-SIN",
+   "grade": "Special Grade"
   },
   {
    "id": "shaka-zulu",
