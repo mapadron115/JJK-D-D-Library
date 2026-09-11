@@ -442,6 +442,7 @@ img{max-width:100%;height:auto}
 <!-- cache-bust: bump ?v= on the script tags below whenever data/*.js or assets/*.js changes -->
 <script src="data/codex.js?v=20260911d"></script>
 <script src="data/library.js?v=20260911d"></script>
+<script src="data/technique_feats.js?v=20260911e"></script>
 <script>
 /* ════════════════════════════════════════════════════════════════
    Ritual Archive — Character Builder (IL-RA-02)
@@ -625,10 +626,61 @@ var ANCESTRIES = {
 
 /* Preset lists below are canon-only: every name must appear verbatim in the
    library (player-guide.html or cursed-tool-arsenal.html). Do NOT add invented
-   feat or tool names — use the free-text fields for table customs. */
+   feat or tool names. */
 var PRESET_FEATS = ['Beginner Cursed Energy'];
 
-var STEP_NAMES = ['Concept','Ancestry','Class','Abilities','Level-Up Rolls','Technique','Details','Sheet'];
+/* ── technique feats ──
+   window.TECHNIQUE_FEATS (data/technique_feats.js) maps library entry id
+   (e.g. 'e001') to that technique's Innate Technique Feats, extracted from the
+   dossiers: [{name, prereq, text}]. Historical-figure techniques carry no feat
+   lists, so their pickers fall back to the general feats. */
+function chosenTechEntry(){
+  if(!char.technique) return null;
+  var pool = char.technique.catalog==='originals' ? (typeof ORIGINALS!=='undefined'?ORIGINALS:[]) : (typeof FIGURES!=='undefined'?FIGURES:[]);
+  for(var i=0;i<pool.length;i++){ if(pool[i].id===char.technique.id) return pool[i]; }
+  return null;
+}
+function techFeatsFor(entry){
+  if(!entry || !window.TECHNIQUE_FEATS) return [];
+  return window.TECHNIQUE_FEATS[entry.id] || [];
+}
+function featInfo(name){
+  var tf = techFeatsFor(chosenTechEntry());
+  for(var i=0;i<tf.length;i++){ if(tf[i].name===name) return tf[i]; }
+  return null;
+}
+function featInfoHTML(name){
+  var fi = name ? featInfo(name) : null;
+  if(!fi) return '';
+  return '<div class="asi-note" style="margin-top:4px"><b>'+esc(fi.prereq||'No prerequisite listed')+'.</b> '+esc(fi.text)+'</div>';
+}
+/* Builds the <option> list for every feat picker: the chosen technique's
+   feats first, then the general feats. A name already stored on the character
+   but absent from both lists is preserved so older sheets never lose data. */
+function featSelectOptions(selected){
+  var entry = chosenTechEntry();
+  var tfeats = techFeatsFor(entry);
+  var html = '<option value="">— choose a feat —</option>';
+  if(tfeats.length){
+    html += '<optgroup label="'+esc(tName(entry))+' — technique feats">' +
+      tfeats.map(function(f){
+        var label = f.name + (f.prereq ? ' ('+f.prereq+')' : '');
+        return '<option value="'+esc(f.name)+'"'+(selected===f.name?' selected':'')+
+          ' title="'+esc((f.prereq?f.prereq+'. ':'')+f.text)+'">'+esc(label)+'</option>';
+      }).join('') + '</optgroup>';
+  }
+  html += '<optgroup label="General feats">' +
+    PRESET_FEATS.map(function(f){
+      return '<option value="'+esc(f)+'"'+(selected===f?' selected':'')+'>'+esc(f)+'</option>';
+    }).join('') + '</optgroup>';
+  var known = tfeats.map(function(f){ return f.name; }).concat(PRESET_FEATS);
+  if(selected && known.indexOf(selected) < 0){
+    html += '<optgroup label="Previously chosen"><option value="'+esc(selected)+'" selected>'+esc(selected)+' (kept from earlier)</option></optgroup>';
+  }
+  return html;
+}
+
+var STEP_NAMES = ['Concept','Ancestry','Class','Abilities','Technique','Level-Up Rolls','Details','Sheet'];
 
 /* ── utils ── */
 function $(id){ return document.getElementById(id); }
@@ -883,7 +935,7 @@ function renderStep(){
   $('wizTitle').innerHTML = title;
   var body = $('stepBody'), nav = $('wizNav');
   body.innerHTML=''; nav.innerHTML='';
-  ({1:stepConcept,2:stepAncestry,3:stepClass,4:stepAbilities,5:stepLevelUps,6:stepTechnique,7:stepDetails,8:stepSheet})[currentStep](body);
+  ({1:stepConcept,2:stepAncestry,3:stepClass,4:stepAbilities,5:stepTechnique,6:stepLevelUps,7:stepDetails,8:stepSheet})[currentStep](body);
   renderNav();
 }
 function renderNav(){
@@ -940,7 +992,7 @@ function stepConcept(body){
     '<div class="field"><label for="cPlayer">Player name</label><input id="cPlayer" maxlength="60" value="'+esc(char.player)+'" placeholder="e.g. Alex"></div></div>'+
     '<div class="field" style="max-width:260px"><label for="cLevel">Starting level</label>'+
     '<select id="cLevel">'+levelOptions()+'</select></div>'+
-    '<div class="banner"><span class="bk">❖ Campaign note</span><p>This campaign opens at level 1 with 4–8 sorcerers — but the builder supports starting as high as level 20, with per-level HP and CE Reserve rolls handled in Step 5.</p></div>';
+    '<div class="banner"><span class="bk">❖ Campaign note</span><p>This campaign opens at level 1 with 4–8 sorcerers — but the builder supports starting as high as level 20, with per-level HP and CE Reserve rolls handled in Step 6.</p></div>';
   $('cName').addEventListener('input',function(e){ char.name=e.target.value; refreshNav(); });
   $('cPlayer').addEventListener('input',function(e){ char.player=e.target.value; });
   $('cLevel').addEventListener('change',function(e){
@@ -1233,7 +1285,7 @@ function renderFinal(){
     html+='<h3>Final scores</h3><table class="assign-table"><tr><th>Ability</th><th>Score</th><th>Modifier</th></tr>'+
       ABILITIES.map(function(a){ return '<tr><td>'+ABIL_NAMES[a]+' ('+a+')</td><td class="roll-res">'+char.abilities[a]+'</td><td>'+modStr(char.abilities[a])+'</td></tr>'; }).join('')+'</table>';
     if(char.ceAbility&&!isHR()){
-      html+='<p class="small">CE ability <b>'+char.ceAbility+'</b> modifier '+modStr(char.abilities[char.ceAbility])+' — added to your CE Reserve <b>once</b> (Step 5).</p>';
+      html+='<p class="small">CE ability <b>'+char.ceAbility+'</b> modifier '+modStr(char.abilities[char.ceAbility])+' — added to your CE Reserve <b>once</b> (Step 6).</p>';
     }
   }
   el.innerHTML=html;
@@ -1264,7 +1316,7 @@ STEP_VALID[4]=function(){
   return {ok:true};
 };
 
-/* ═══════════ STEP 5 — LEVEL-UP ROLLS ═══════════ */
+/* ═══════════ STEP 6 — LEVEL-UP ROLLS ═══════════ */
 function levelRows(){
   var C=CLASSES[char.cls], hd=C.hd;
   var ab=Object.assign({},char.abilities);
@@ -1281,7 +1333,7 @@ function levelRows(){
 }
 function stepLevelUps(body){
   var C=CLASSES[char.cls], hd=C.hd;
-  var html='<h2>Step 5 — Level-Up Rolls</h2>'+
+  var html='<h2>Step 6 — Level-Up Rolls</h2>'+
     '<p class="sub">Level 1 is fixed: <b>HP = '+hd+' + CON</b>'+(isHR()?'.':' and <b>CE = '+C.reserve+' (max Reserve Die)</b>')+'. '+
     'For each later level, roll the die (watch it land) or take the fixed value. Your CE ability modifier is added <b>once</b> to the whole reserve — never per level.</p>';
   if(isHR()) html+='<div class="banner warn"><span class="bk">❖ Pure Body</span><p>No CE Reserve to roll — Heavenly Restriction gains neither a Reserve Die nor a CE modifier. Roll HP only.</p></div>';
@@ -1322,11 +1374,9 @@ function renderLvlRows(){
         '<option value="feat"'+(mode==='feat'?' selected':'')+'>Feat instead</option></select>';
       if(mode==='feat'){
         var pf=((char.asiFeat||{})[r.l])||'';
-        var isPreset=PRESET_FEATS.indexOf(pf)>=0;
-        asiCell+='<div style="margin-top:4px"><select data-asifeatpreset="'+r.l+'"><option value="">— choose a feat —</option>'+
-          PRESET_FEATS.map(function(f){return '<option'+(isPreset&&pf===f?' selected':'')+'>'+f+'</option>';}).join('')+'</select> '+
-          '<input type="text" data-asifeatcustom="'+r.l+'" placeholder="or type a feat name" value="'+esc(isPreset?'':pf)+'" style="width:132px">'+
-          '<div class="asi-note">Replaces the ASI (D&D 5e rule). Full feat text lives in your source book.</div></div>';
+        asiCell+='<div style="margin-top:4px"><select data-asifeatpreset="'+r.l+'">'+featSelectOptions(pf)+'</select>'+
+          featInfoHTML(pf)+
+          '<div class="asi-note">Replaces the ASI (D&D 5e rule). Technique feats list their prerequisite — you must meet it before selecting.</div></div>';
       }else{
         var cur=char.asi[r.l]||['STR','STR'];
         asiCell+='<div style="margin-top:4px"><select data-asi="'+r.l+'|0">'+ABILITIES.map(function(a){return '<option'+(cur[0]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select> '+
@@ -1370,13 +1420,6 @@ function renderLvlRows(){
     if(s.value) char.asiFeat[l]=s.value; else delete char.asiFeat[l];
     renderLvlRows(); renderLvlTotals();
   }); });
-  tb.querySelectorAll('[data-asifeatcustom]').forEach(function(inp){ inp.addEventListener('change',function(){
-    var l=+inp.getAttribute('data-asifeatcustom');
-    char.asiFeat=char.asiFeat||{};
-    var v=inp.value.trim();
-    if(v) char.asiFeat[l]=v; else delete char.asiFeat[l];
-    renderLvlTotals();
-  }); });
 }
 function animateSingleDie(btn,spanAttr,sides,done){
   var span=btn.parentElement.querySelector('[data-'+spanAttr+'="'+btn.getAttribute(spanAttr==='hpdice'?'data-hproll':'data-ceroll')+'"]');
@@ -1388,14 +1431,14 @@ function animateSingleDie(btn,spanAttr,sides,done){
     if(ticks>7){ clearInterval(iv); btn.disabled=false; span.innerHTML=''; done(rollDie(sides)); }
   },80);
 }
-STEP_VALID[5]=function(){ return {ok:true}; };
+STEP_VALID[6]=function(){ return {ok:true}; };
 
-/* ═══════════ STEP 6 — TECHNIQUE ═══════════ */
+/* ═══════════ STEP 5 — TECHNIQUE ═══════════ */
 var techQ='', techGrade='', techGroup='', techRole='', techFranchise='', techOrigin='all';
 var GRADE_ORDER=['Reality Warping','Calamity','Special Grade','Grade 1','Grade 2','Grade 3','Grade 4','Unrated'];
 var GROUP_ORDER=['Anime & Manga','Video Games','Magic: The Gathering','Marvel','DC','Ben 10','Jujutsu Kaisen','Original Codex','SCP Anomalies','Bestiary \u2014 Cryptids','Bestiary \u2014 Mythology','Cursed Tool Arsenal','Applied Systems'];
 function stepTechnique(body){
-  var html='<h2>Step 6 — Technique</h2>';
+  var html='<h2>Step 5 — Technique</h2>';
   if(isHR()){
     body.innerHTML=html+'<div class="banner warn"><span class="bk">❖ Pure Body</span>'+
       '<p><b>Heavenly Restriction characters have no Innate Technique.</b> No technique selection, no Maximum, no Domain, no RCT. Your power is the body — the sheet will reflect that.</p></div>';
@@ -1598,7 +1641,7 @@ function renderTechResults(){
     });
   });
 }
-STEP_VALID[6]=function(){
+STEP_VALID[5]=function(){
   if(isHR()) return {ok:true};
   if(!HAS_CODEX&&!HAS_LIB) return {ok:false,msg:'Technique data failed to load — check the data/ folder.'};
   if(!char.technique) return {ok:false,msg:'Choose a technique — '+PICKABLE_TECH+' of the '+TOTAL_TECH+' entries are pickable at creation (Vlad III is GM-only).'};
@@ -1610,11 +1653,18 @@ function stepDetails(body){
   var html='<h2>Step 7 — Details</h2><p class="sub">Feats and the odds and ends that make the character yours. A permanent CE bonus here feeds straight into your Max CE (primer: bonuses are added <b>after</b> the reserve).</p>';
   html+='<div class="field" style="max-width:280px"><label for="ceBonus">Permanent CE bonus (feats, vows, items)</label>'+
     '<input id="ceBonus" type="number" min="0" max="999" value="'+(parseInt(char.ceBonus,10)||0)+'"></div>';
-  html+='<h3>Feats</h3><p class="small">The full feat entries are printed in the source books — find the feat in your copy, then add its exact name below.</p><div class="preset-chips" id="featChips">'+PRESET_FEATS.map(function(f){
+  var techEntry=chosenTechEntry(), techFeatList=techFeatsFor(techEntry);
+  var featChip=function(f,tip){
     var has=char.feats.indexOf(f)>=0;
-    return '<button class="btn btn-small" type="button" data-feat="'+esc(f)+'" style="'+(has?'border-color:var(--red);color:var(--red-deep)':'')+'">'+(has?'✓ ':'+ ')+esc(f)+'</button>';
-  }).join('')+'</div>'+
-  '<div class="field"><label for="featCustom">Add a custom feat</label><div style="display:flex;gap:8px"><input id="featCustom" placeholder="e.g. Eagle-Eyed Spotter" style="flex:1"><button class="btn btn-small" id="featAdd" type="button">Add</button></div></div>'+
+    return '<button class="btn btn-small" type="button" data-feat="'+esc(f)+'"'+(tip?' title="'+esc(tip)+'"':'')+' style="'+(has?'border-color:var(--red);color:var(--red-deep)':'')+'">'+(has?'✓ ':'+ ')+esc(f)+'</button>';
+  };
+  html+='<h3>Feats</h3><p class="small">Tap to add — your technique\'s feats, plus the general feats any sorcerer can take. No typing needed; the full rules text for each technique feat lives in your technique dossier.</p>';
+  if(techFeatList.length){
+    html+='<p class="small" style="margin:10px 0 4px"><b>'+esc(tName(techEntry))+' — technique feats</b> <span class="small">(hover a feat for its prerequisite)</span></p><div class="preset-chips">'+
+      techFeatList.map(function(ft){ return featChip(ft.name,(ft.prereq?ft.prereq+'. ':'')+ft.text); }).join('')+'</div>';
+  }
+  html+='<p class="small" style="margin:10px 0 4px"><b>General feats</b></p><div class="preset-chips" id="featChips">'+
+    PRESET_FEATS.map(function(f){ return featChip(f,''); }).join('')+'</div>'+
   '<ul class="tag-list" id="featList">'+char.feats.map(function(f){ return '<li>'+esc(f)+'<span class="rm" data-rmfeat="'+esc(f)+'">remove ✕</span></li>'; }).join('')+'</ul>';
   html+='<h3>Cursed tools</h3><p class="small">Cursed tools are awarded through campaign progression — your GM grants them in play, so they aren\u2019t chosen here. The full arsenal lives in the codex\u2019s Cursed Tools tab.</p>';
   html+='<h3>Notes</h3><div class="field"><label for="notes">Freeform — backstory, binding vows, GM notes</label>'+
@@ -1624,9 +1674,6 @@ function stepDetails(body){
   var refresh=function(){ stepDetails(body); };
   body.querySelectorAll('[data-feat]').forEach(function(b){ b.addEventListener('click',function(){ var f=b.getAttribute('data-feat'); var i=char.feats.indexOf(f); if(i>=0)char.feats.splice(i,1); else char.feats.push(f); refresh(); }); });
   body.querySelectorAll('[data-rmfeat]').forEach(function(s){ s.addEventListener('click',function(){ char.feats=char.feats.filter(function(f){return f!==s.getAttribute('data-rmfeat');}); refresh(); }); });
-  var addFeat=function(){ var v=$('featCustom').value.trim(); if(v&&char.feats.indexOf(v)<0)char.feats.push(v); refresh(); };
-  $('featAdd').addEventListener('click',addFeat);
-  $('featCustom').addEventListener('keydown',function(e){ if(e.key==='Enter'){e.preventDefault();addFeat();} });
   $('notes').addEventListener('input',function(e){ char.notes=e.target.value; });
 }
 STEP_VALID[7]=function(){ return {ok:true}; };
@@ -1707,8 +1754,9 @@ function sheetHTML(){
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Details</h3>';
   html+='<p class="small" style="margin:0 0 4px;letter-spacing:2px;text-transform:uppercase">Feats</p>'+
     (function(){
-      var items=char.feats.map(function(f){return '<li>'+esc(f)+'</li>';})
-        .concat(asiFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat)</span></li>';}));
+      var featNote=function(name){ var fi=featInfo(name); return fi&&fi.prereq?' <span class="small">'+esc(fi.prereq)+'</span>':''; };
+      var items=char.feats.map(function(f){return '<li>'+esc(f)+featNote(f)+'</li>';})
+        .concat(asiFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat)</span>'+featNote(e.name)+'</li>';}));
       return items.length?'<ul class="tag-list">'+items.join('')+'</ul>':'<p class="small">—</p>';
     })();
   html+='<p class="small" style="margin:12px 0 4px;letter-spacing:2px;text-transform:uppercase">Cursed tools</p>'+
