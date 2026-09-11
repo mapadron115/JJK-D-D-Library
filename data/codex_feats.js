@@ -1543,24 +1543,24 @@ window.CODEX_FEATS = {
  ],
  "michael-jackson": [
   {
-   "name": "The Stand-In",
-   "prereq": "",
-   "text": "The Crown remembers being worn. As an action, Michael may place THE BURNED CROWN on a willing creature within 5 ft; while it wears the Crown, that creature counts as Michael for directing Active Gallery Dancers - it may choose their movement and targets on its turn. Michael may reclaim the Crown as a bonus action while within 60 ft of the bearer. The show goes on, even with an understudy."
+   "name": "Off the Wall",
+   "prereq": "Prerequisite: Rock with You",
+   "text": "Rock with You can travel up vertical surfaces and across liquids regardless of current Performance. At level 6, it may also travel across ceilings. Rock with You's distance increases by 10 feet."
   },
   {
-   "name": "The Body Is Returned",
-   "prereq": "Prerequisite: MICHAEL-SPECIFIC RULE: CLAIM THE DEAD",
-   "text": "The Gallery does not only collect - it can exhibit. As an action, Michael may release one stored corpse from his Innate Domain into an unoccupied space within 30 ft; it appears as it was at death, no longer part of the collection. Bodies have been returned to doorsteps, to stages, and to negotiating tables. The message is always understood."
+   "name": "Jam",
+   "prereq": "Prerequisite: Smooth Criminal",
+   "text": "When Smooth Criminal causes an attack to miss, spend 1 Performance as part of the same reaction to make one weapon or unarmed attack against the attacker if it is within reach. You may take Smooth Criminal's granted movement before or after this attack."
   },
   {
-   "name": "The Set Is Dressed",
-   "prereq": "Prerequisite: MICHAEL-SPECIFIC RULE: GALLERY MANIFESTATION",
-   "text": "The background formation is not only for show. When Michael expands THRILLER, he may place up to 6 background (non-Active) corpses in unoccupied spaces inside the Domain as set pieces: each such corpse's space is difficult terrain, and the corpse grants half cover to creatures behind it. The stage is dressed; the audience will trip over it."
+   "name": "Bad",
+   "prereq": "Prerequisite: Beat It",
+   "text": "Once per turn when you spend at least 2 Performance on Beat It, add one additional POP Die of force damage. This die costs no additional Performance."
   },
   {
-   "name": "The Final Bow",
-   "prereq": "Prerequisite: DESTROYING A GALLERY CORPSE",
-   "text": "Every dancer gets a final bow. When an Active Gallery Dancer is reduced to 0 HP inside THRILLER, Michael may spend his reaction to let it take its last step: it immediately makes its one retained basic attack before collapsing. The dancer leaves the stage; the dancer is applauded out."
+   "name": "Don't Stop 'Til You Get Enough",
+   "prereq": "Prerequisite: Slave to the Rhythm",
+   "text": "Once per turn, when spending Performance would reduce you to 0, you may remain at 1 Performance instead. Once this preserves Performance, you cannot use it again until the beginning of your next turn."
   }
  ],
  "jiang-wei": [

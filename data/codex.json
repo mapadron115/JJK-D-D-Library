@@ -6003,12 +6003,12 @@
    "module": "78",
    "figure": "Michael Jackson",
    "title": "MICHAEL JACKSON",
-   "detail": "bespoke",
+   "detail": "full",
    "technique": "King of POP",
-   "tier": "IV",
+   "tier": "V",
    "grade": "Special Grade",
-   "role": null,
-   "ce_ability": null,
+   "role": "mobile striker / evasive duelist / rule-Domain controller",
+   "ce_ability": "CHA or WIS",
    "primary_verb": null,
    "region": "USA",
    "era": "1958–2009 · 20th–21st c.",
@@ -6017,17 +6017,88 @@
    "serves": "**Both.** **Phase 2 (EXPOSURE / FRICTION):** the Gallery is built from the establishment's own champions — every disappearance proves the old order cannot protect its own, and the missing return as walking evidence. **All-Out War (attrition):** every enemy casualty he personally causes is permanently claimed and re-fielded — he converts the enemy's losses into his formation, and the formation only grows.",
    "features": [
     {
-     "level": null,
-     "name": "THRILLER",
+     "level": 1,
+     "name": "Slave to the Rhythm",
      "cost_line": "",
-     "kind": "domain",
-     "text": "*Carried over faithfully from the King of POP prototype module (zack-approved; not redesigned). The player-facing King of POP technique — the named applications (Smooth Criminal, Rock with You, Beat It, This Time Around, Blue Gangsta), the Misstep engine, and the Domain's sure-hit choreography compulsion — lives in the rules library's technique codex. This module carries Michael's antagonist-specific layer: the Crown, the failed vessel, and the Gallery.*\n\nTier IV Domain bookkeeping: **800 clash points / 5-round burnout · 2-minute duration.** When Michael opens Thriller, the Gallery manifests per the rules below. The Domain's sure-hit — the choreography compulsion and the Misstep track — is defined in the codex technique; what follows is the permanent collection only Michael possesses.",
-     "clash_points": 800,
-     "duration_min": 2,
-     "burnout_rounds": 5,
-     "radius": null,
-     "activation": null,
-     "ce_cost": null
+     "kind": "feature",
+     "text": "**Performance** is both fuel and a state threshold — spend it aggressively for burst damage, or protect the meter long enough to unlock **Dangerous**, **Invincible**, and finally **HIStory**.\n\n- **POP Die:** d6 (d8 at 6th, d10 at 11th, d12 at 18th). **Performance cap:** 3 (4 at 6th, 5 at 11th, 6 at 18th).\n- **Gain (offense):** once on each of your turns, after you voluntarily move at least 10 feet and then hit a hostile creature with an attack or cause a hostile creature to fail a saving throw against King of POP, gain 1 Performance after the effect resolves. Limit 1/turn.\n- **Gain (defense):** beginning at level 3, gain 1 Performance once per round when a King of POP reaction causes an attack to miss you or lets you fully avoid a damaging effect. Limit 1/round.\n- **Breaking the routine:** if your turn ends while you have Performance and you neither voluntarily moved at least 10 feet nor attempted an attack or offensive King of POP effect, lose 1 Performance. Becoming incapacitated reduces Performance to 0. All Performance disappears 1 minute after meaningful combat ends.\n- Harmless objects, allies, willing training targets, and other non-hostile creatures cannot be used to farm Performance.\n\n**Fundamental law:** choreography is more authoritative than anatomy. King of POP makes your body obey the next position in a performance even when balance, leverage, inertia, or ordinary muscular mechanics would reject it. It does not manipulate frames, time, or another creature's cursed-energy rhythm. **Hard boundaries:** no teleportation unless a feature says so; no generic telekinesis or unrestricted momentum control; no Projection-style frame scripting or automatic extra attacks."
+    },
+    {
+     "level": 1,
+     "name": "Rock with You",
+     "cost_line": "Bonus Action · 1 CE",
+     "kind": "feature",
+     "text": "Perform a cursed moonwalk, slide, or glide and move up to half your walking speed.\n\n- This movement does not provoke opportunity attacks, ignores nonmagical difficult terrain, may change direction freely, does not consume your ordinary movement, and counts toward Slave to the Rhythm.\n- This is movement, not teleportation: you need a physical path, interact with hazards normally, cannot pass through solid objects, and cannot end inside another creature."
+    },
+    {
+     "level": 1,
+     "name": "Beat It",
+     "cost_line": "Once per turn · qualifying hit",
+     "kind": "feature",
+     "text": "When you hit with a weapon attack, unarmed strike, or direct damaging technique attack after voluntarily moving at least 10 feet this turn, spend up to 3 Performance. Add 1 POP Die of force damage per Performance spent.\n\n- For every Performance spent, choose yourself or the struck creature and move that creature 5 feet. A hostile creature cannot be moved this way if it is more than one size larger than you.\n- If Beat It is attached to a qualifying critical strike, its dice are part of that direct strike and can participate in Black Flash under the campaign's normal critical/Black Flash procedure.\n- A Beat It spend attached to the same hit that generated a new Performance point uses the Performance you had before the new point is gained."
+    },
+    {
+     "level": 3,
+     "name": "Smooth Criminal",
+     "cost_line": "Reaction · 2 CE",
+     "kind": "feature",
+     "text": "When an attack you can perceive would hit you, add your proficiency bonus to AC against that attack only.\n\n- If this turns the hit into a miss, immediately move up to 10 feet without provoking opportunity attacks. This counts as King of POP movement and can grant the once-per-round defensive Performance.\n- If the attack still hits after the AC increase, reduce its damage by 1 POP Die + your CE modifier instead."
+    },
+    {
+     "level": 3,
+     "name": "Remember the Time",
+     "cost_line": "",
+     "kind": "feature",
+     "text": "At the beginning of each of your turns, the space you occupy becomes your **Remembered Mark** until the beginning of your next turn. At level 3 this is primarily setup — at level 11, **This Time Around** turns the remembered position into an escape route."
+    },
+    {
+     "level": 6,
+     "name": "Dangerous",
+     "cost_line": "",
+     "kind": "feature",
+     "text": "Your POP Die becomes d8 and your Performance maximum becomes 4. While you have at least 3 Performance, you enter **Dangerous**:\n\n- Walking speed +10 feet.\n- Advantage on Dexterity saving throws against effects you can perceive.\n- Standing from prone costs only 5 feet of movement.\n- During your turn you may move across vertical surfaces and liquids without falling during that movement.\n- The first 5 feet of ordinary movement you take each turn does not provoke opportunity attacks.\n\nIf you fall below 3 Performance, these benefits end immediately."
+    },
+    {
+     "level": 6,
+     "name": "Another Part of Me",
+     "cost_line": "",
+     "kind": "feature",
+     "text": "Once during each use of Rock with You, make one abrupt change in direction — including a complete reversal — without losing movement. You may also move through the space of a hostile creature during Rock with You as difficult terrain if it is no more than one size larger than you. You cannot end there."
+    },
+    {
+     "level": 11,
+     "name": "Invincible",
+     "cost_line": "",
+     "kind": "feature",
+     "text": "Your POP Die becomes d10 and your Performance maximum becomes 5. While at 4 or more Performance, **Dangerous** improves into **Invincible**:\n\n- Dangerous's speed bonus becomes +20 feet.\n- When a Dexterity save would normally deal half damage on success, you take no damage on success and half on failure.\n- Rock with You ignores magical difficult terrain unless that terrain specifically prevents supernatural movement or suppresses cursed techniques."
+    },
+    {
+     "level": 11,
+     "name": "This Time Around",
+     "cost_line": "Reaction · 3 CE · 2 Performance",
+     "kind": "feature",
+     "text": "When you are hit by an attack or fail a Dexterity saving throw, retrace your own movement and return to your Remembered Mark **before the triggering effect resolves**.\n\n- This is movement rather than teleportation and does not provoke opportunity attacks.\n- If the attacker can no longer legally reach or target you, the attack misses. If you have left an area of effect, you are unaffected by it. If the effect can still legally reach the Remembered Mark, resolve it normally.\n- You cannot use This Time Around if the retraced route has become physically impossible to traverse."
+    },
+    {
+     "level": 14,
+     "name": "Don't Walk Away",
+     "cost_line": "Reaction · 4 CE · 20 RCT Healing Reserve · 2 Performance · 60 ft",
+     "kind": "feature",
+     "text": "**Off-milestone mastery — suggested level 14; requires Reverse Cursed Technique.** Level 14 is intentionally not a normal technique milestone. The forward technique declares where the user's choreography permits the body to move; positive energy reverses that law and declares where another motion must stop. This is King of POP's **Cursed Technique Reversal**.\n\n**Trigger:** a creature you can perceive begins movement. The target makes a Constitution saving throw against your CE save DC.\n\n- **Failure:** its current movement immediately ends and its speed becomes 0 until the end of the current turn.\n- **Success:** movement continues, but its remaining speed is reduced by 10 feet for that turn.\n\n**Limits:** movement has to exist to be stopped. Cannot undo teleportation after relocation has resolved. Cannot interrupt a fully resolved effect. Cannot target movement you cannot perceive. Does not stun, paralyze, or remove a creature's action."
+    },
+    {
+     "level": 18,
+     "name": "HIStory",
+     "cost_line": "",
+     "kind": "feature",
+     "text": "Your POP Die becomes d12 and your Performance maximum becomes 6. When you roll initiative and are not surprised, begin with 2 Performance.\n\nAt maximum Performance, enter **Perfect Performance**:\n\n- Dangerous and Invincible remain active.\n- Opportunity attacks against you have disadvantage.\n- During your own movement, unsupported space briefly behaves as a surface beneath your feet — you can step, slide, and moonwalk through open air. This is not a flying speed. If you end movement unsupported, gravity resumes normally."
+    },
+    {
+     "level": null,
+     "name": "THE BASE TECHNIQUE AND MICHAEL'S LAYER",
+     "cost_line": "",
+     "kind": "feature",
+     "text": "Carried over faithfully from the zack-approved King of POP technique guide (not redesigned). The **King of POP** progression above — Levels 1–18, **Maximum: Blue Gangsta**, and **Domain Expansion: Thriller — Night of the Living Dead** — is the reusable player-facing technique: the Performance engine, the named applications (Slave to the Rhythm, Rock with You, Beat It, Smooth Criminal, Remember the Time, Dangerous, Another Part of Me, Invincible, This Time Around, Don't Walk Away, HIStory), the Misstep engine, and the Domain's sure-hit choreography compulsion.\n\nWhat follows is Michael's antagonist-specific layer only: the Burned Crown, the failed vessel, and the Gallery. Per the guide, these overlays are intentionally kept outside the base technique."
     },
     {
      "level": null,
@@ -6114,19 +6185,25 @@
      "text": "Michael is an antagonist inspired by the public mythology, performances, songs, imagery, controversies, and cultural footprint associated with Michael Jackson. The fictional jujutsu premise must not present unresolved real-world criminal allegations as established supernatural fact. The campaign's emotional engine is unresolved public fixation and a sorcerer's refusal to pass quietly into obscurity. The horror comes from fame becoming cursed persistence, performance becoming bodily compulsion, and an audience becoming an undead collection. The reusable King of POP technique belongs in the player rules library. The Burned Crown, failed reincarnation, corpse-body horror, permanent Gallery, and this specific antagonist arc belong only to Michael's GM-facing module."
     }
    ],
-   "maximum": null,
+   "maximum": {
+    "level": 11,
+    "name": "Blue Gangsta",
+    "cost_line": "Action · 10 CE · requires 4+ Performance",
+    "kind": "maximum",
+    "text": "The entire stored performance collapses into one uninterrupted execution route. Consume all current Performance. Move up to **20 ft × Performance consumed** along one continuous choreographed path.\n\n- This movement does not provoke opportunity attacks. You may traverse walls, ceilings, liquids, hostile spaces, and unsupported gaps. You still cannot pass through solid matter and must end in an unoccupied space you can physically occupy.\n- Each chosen creature you pass within 5 feet of makes one Dexterity saving throw. On failure it takes **2 × Performance spent POP Dice + CE modifier** force damage and falls prone. On success it takes half damage and does not fall prone. A creature is affected only once per use.\n- **Gangsta's Exit:** after resolving Blue Gangsta, choose your facing and finish in a pose. Until the beginning of your next turn, creatures damaged by Blue Gangsta cannot gain advantage against you solely from flanking, facing, or positional orientation.\n- Blue Gangsta is save-based area damage and cannot critically hit or Black Flash."
+   },
    "domain": {
-    "level": null,
-    "name": "THRILLER",
-    "cost_line": "",
+    "level": 18,
+    "name": "Thriller — Night of the Living Dead",
+    "cost_line": "20 CE · full-turn activation · enclosed 60-foot radius · up to 1 minute",
     "kind": "domain",
-    "text": "*Carried over faithfully from the King of POP prototype module (zack-approved; not redesigned). The player-facing King of POP technique — the named applications (Smooth Criminal, Rock with You, Beat It, This Time Around, Blue Gangsta), the Misstep engine, and the Domain's sure-hit choreography compulsion — lives in the rules library's technique codex. This module carries Michael's antagonist-specific layer: the Crown, the failed vessel, and the Gallery.*\n\nTier IV Domain bookkeeping: **800 clash points / 5-round burnout · 2-minute duration.** When Michael opens Thriller, the Gallery manifests per the rules below. The Domain's sure-hit — the choreography compulsion and the Misstep track — is defined in the codex technique; what follows is the permanent collection only Michael possesses.",
+    "text": "A moonlit cemetery and abandoned city block swallow the battlefield. Fog hugs the floor. Graves split open. Rows of dead figures take formation. The beat starts.\n\n**Sure-Hit — Everybody Dance.** The sure-hit deals no damage. Every chosen creature receives the complete Domain procedure directly into its mind: the choreography, timing, what constitutes a Misstep, and what happens at three Missteps. No shared language is required. Ordinary attacks and technique rolls inside Thriller remain ordinary; the rules implant is the guaranteed event.\n\n**The Five-Step Routine.** When Thriller stabilizes, roll five choreography results (d8): **1** Moonwalk — spend at least 15 feet of movement on a backward glide. **2** Side Slide — spend at least 10 feet moving laterally before ending your turn. **3** Spin — spend 10 feet of movement executing a full stationary spin. **4** Toe Stand — spend your bonus action striking and maintaining the pose. **5** Kick & Snap — replace one attack with an unarmed strike (or use your bonus action to make one if you would not attack). **6** The Lean — spend your reaction maintaining the pose; forced movement against you is reduced by 10 feet until your next turn. **7** Freeze — after completing your action, spend 10 feet of remaining movement and voluntarily make no further movement that turn. **8** Full Combination — roll twice, rerolling further 8s; both steps must be completed.\n\nMichael and every implanted creature instantly know the full sequence. At the next initiative count 20, the first step becomes active. A creature has until the following initiative count 20 to comply — failure gives 1 Misstep, then the next step begins.\n\n**Improvisation.** A creature unwilling or unable to follow a step literally may improvise: at the end of its turn it makes Dexterity (Acrobatics) or Charisma (Performance) against Michael's CE save DC. Success counts as completing the step; failure is a Misstep.\n\n**Missteps.** **1 Misstep** — the dead are watching; no additional numerical penalty, the Domain makes the failure visible. **2 Missteps** — the formation opens; still no stacking stat penalty. **3 Missteps** — **Living Dead**: the creature is assimilated into the backup troupe until Thriller ends. A Living Dead Backup Dancer retains HP, AC, saves, walking speed, ability scores, and basic weapon/unarmed attacks; cannot take reactions; cannot activate Innate Techniques, Maximum Techniques, Domain Expansion, RCT, or active cursed-tool abilities; Michael determines its movement; it uses its action to make one basic attack against a legal non-Dancer target Michael chooses (or Dodges if none exists); it automatically succeeds on Thriller choreography and counts as both its original creature type and Undead until the Domain ends.\n\n**Finale or Encore.** After the fifth choreography step resolves, Michael chooses one. **Encore** — run it again: generate another five-step sequence; existing Missteps and Living Dead remain. **Finale** — every Living Dead dancer may immediately move up to half its speed without provoking opportunity attacks and make one basic attack against a legal non-Dancer target Michael chooses; Michael rises to maximum Performance, moves up to his walking speed without provoking opportunity attacks, makes one weapon or unarmed attack, and may add a 6-POP-Die Beat It to that attack without spending Performance. The Domain then ends and normal Technique Burnout applies.\n\n**Rule-Domain counterplay:** successful anti-domain protection suppresses Everybody Dance for the protected creature while the sure-hit remains suppressed. Ordinary attacks inside Thriller are never converted into automatic hits.",
     "clash_points": 800,
     "duration_min": 2,
     "burnout_rounds": 5,
-    "radius": null,
-    "activation": null,
-    "ce_cost": null
+    "radius": "60-foot enclosed",
+    "activation": "Full turn",
+    "ce_cost": "20 CE"
    },
    "l20": null,
    "summary_text": null,

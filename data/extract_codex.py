@@ -9,7 +9,7 @@ Writes: data/codex.json  (pure JSON, versioned — the data contract)
         data/codex.js     (window.CODEX = <same payload>; for the static page)
 
 Figure modules: 01-20 (full), 21-42 (dossier-faithful summaries), 49-56 (full),
-59-77 (full), 78 (Michael Jackson, bespoke). Skips infra docs.
+59-77 (full), 78 (Michael Jackson: hand-built full entry, preserved on regen). Skips infra docs.
 Module 00 (sun-tzu) has no technique and is skipped.
 
 Known pending: a Domain activation-cost audit may re-sync domain.activation /
@@ -21,9 +21,10 @@ DRAFTS = os.path.expanduser("~/workspace/goals/ritual-archive-campaign-lore-bibl
 
 # Modules whose codex entries were hand-built as full playable techniques
 # (2026-09-11 RoR rebuild: Shaka/36, Jack/37, Qin/38, Tesla/39, Simo/40,
-# Raiden/41, Okita/42).
+# Raiden/41, Okita/42; 2026-09-11 King of POP/78: hand-built full technique
+# from zack's technique guide + the antagonist layer).
 # A regen must preserve the existing full entry, never downgrade it to a summary.
-FULL_OVERRIDE_MODULES = {"21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42"}
+FULL_OVERRIDE_MODULES = {"21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "78"}
 OUTDIR = os.path.dirname(os.path.abspath(__file__))  # repo/data
 SKIP_FILES = {
     "43-master-timeline.md", "44-chapter-houses.md", "45-commentators.md",
