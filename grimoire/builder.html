@@ -462,7 +462,7 @@ var ANCESTRIES = {
       'reincarnated':{ name:'Reincarnated',
         asi:'+2 to one ability score and +1 to each of your other five ability scores.',
         bonus:{STR:1,DEX:1,CON:1,INT:1,WIS:1,CHA:1},
-        pick:{counts:[2]},
+        pick:{counts:[1]},
         traits:['This Body Is Mine. You have advantage on saving throws against effects that would unwillingly transform your body or replace your physical form. This does not grant general advantage against possession, charm, or soul damage unless the effect also transforms your body.',
                 'Incomplete and complete states are narrative states, not additional ancestry options \u2014 choose Reincarnated or Death Painting for statistics.',
                 'Ability Score Increase. Increase one ability score by 2 and each of your other five ability scores by 1.',
@@ -1478,6 +1478,11 @@ function sheetHTML(){
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Ability Scores</h3><div class="ab-grid">'+
     ABILITIES.map(function(a){ return '<div class="ab-box"><div class="ab-name">'+a+'</div><div class="ab-score">'+ab[a]+'</div><div class="ab-mod">'+modStr(ab[a])+'</div></div>'; }).join('')+'</div>'+
     '<p class="small">Final scores include ancestry increases'+(Object.keys(char.asi).length?' and level-up ASIs':'')+'.</p></div>';
+  /* ancestry */
+  html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Ancestry</h3>'+
+    '<p style="font-family:var(--serif);font-size:1.15rem;font-weight:bold;margin:0">'+esc(ancLine)+'</p>'+
+    (A&&A.blurb?'<p class="small">'+esc(A.blurb)+'</p>':'')+
+    (H&&H.traits&&H.traits.length?'<ul style="margin:6px 0 0;padding-left:1.3em">'+H.traits.map(function(t){ return '<li class="small">'+esc(t)+'</li>'; }).join('')+'</ul>':'<p class="small">No ancestry traits recorded.</p>')+'</div>';
   /* vitals */
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Vitals</h3><div class="vitals">'+
     '<div><b>'+hp+'</b><span>Max HP (d'+CLASSES[char.cls].hd+')</span></div>'+
