@@ -18,6 +18,9 @@ var DETAIL_LABEL = { full: 'FULL PROGRESSION', summary: 'DOSSIER SUMMARY', bespo
 /* Edition-aware dossier base: dossiers/ lives beside assets/ at the site root.
    Derived from this script's own URL so subdirectory editions (grimoire/,
    illustrated/) resolve dossier links correctly. Root behavior unchanged. */
+/* Edition-aware dossier base: dossiers/ lives beside assets/ at the site root.
+   Derived from this script's own URL so subdirectory editions (grimoire/,
+   illustrated/) resolve dossier links correctly. Root behavior unchanged. */
 var DOSSIER_BASE = (function () {
   try {
     var src = (document.currentScript && document.currentScript.src) || '';
@@ -26,6 +29,30 @@ var DOSSIER_BASE = (function () {
   } catch (e) {}
   return 'dossiers/';
 })();
+
+/* Edition-aware image base: assets/img/ lives beside assets/ at the site root.
+   Derived from this script's own URL so subdirectory editions resolve
+   per-technique card art correctly. Root behavior unchanged. */
+var IMG_BASE = (function () {
+  try {
+    var src = (document.currentScript && document.currentScript.src) || '';
+    var m = src.match(/^(.*)\/assets\/codex\.js(\?.*)?$/);
+    if (m) return m[1] + '/assets/img/';
+  } catch (e) {}
+  return 'assets/img/';
+})();
+
+/* Per-technique card art. Data entries may carry an "img" filename (imagery
+   wiring only — never text). The filename is whitelisted to plain image names
+   so data can never inject paths or markup. Cards without img fall back to the
+   edition's nth-child cycling art via CSS. */
+function cardImg(e) {
+  var f = e && e.img;
+  if (typeof f === 'string' && /^[A-Za-z0-9][\w\-.]*\.(jpg|jpeg|png|webp)$/i.test(f)) {
+    return { attr: ' data-img="1"', css: "--card-img:url('" + IMG_BASE + f + "')" };
+  }
+  return { attr: '', css: '' };
+}
 
 /* ── text helpers ─────────────────────────────── */
 function esc(s) {
@@ -116,7 +143,8 @@ function renderLibCard(e) {
   var accent = e.accent || '#b33a2b';
   var raw = e.href || ((e.id || '') + '.html');
   var href = (/^dossiers\//.test(raw) && typeof DOSSIER_BASE === 'string') ? DOSSIER_BASE + raw.slice(9) : raw;
-  return '<article class="entry lib-card" style="--accent:' + esc(accent) + '">' +
+  var ci = cardImg(e);
+  return '<article class="entry lib-card"' + ci.attr + ' style="--accent:' + esc(accent) + ';' + ci.css + '">' +
     '<a class="lib-link" href="' + esc(href) + '">' +
     '<span class="entry-no">Original · ' + esc(e.collection || 'Library') + '</span>' +
     '<span class="lib-title">' + esc(e.title || 'Untitled technique') + '</span>' +
@@ -232,7 +260,8 @@ function renderEntry(t) {
   var roleTag = t.role ? '<span class="role-tag">' + esc(t.role) + '</span>' : '';
   var regionEra = [t.region, t.era].filter(Boolean).join(' · ');
   var open = openIds.has(id) ? ' open' : '';
-  return '<article class="entry' + open + '" id="' + esc(id) + '">' +
+  var ci = cardImg(t);
+  return '<article class="entry' + open + '" id="' + esc(id) + '"' + ci.attr + ' style="' + ci.css + '">' +
     '<button class="entry-head" type="button" data-toggle="' + esc(id) + '" aria-expanded="' + openIds.has(id) + '">' +
     '<span class="head-main">' +
     '<span class="entry-no">Entry ' + esc(module) + '</span>' +

@@ -138,6 +138,8 @@ h1 .amp{color:var(--red)}
 .tech-head .t-name{font-family:var(--serif);font-size:1.35rem;font-weight:bold;display:block;line-height:1.2}
 .tech-head .t-concept{font-style:italic;color:var(--ink2);margin-top:8px;font-size:.92rem;max-width:62ch;display:block}
 .tech-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
+.tech-thumb{width:120px;height:120px;object-fit:cover;border-radius:10px;border:1px solid var(--line2);opacity:.94;flex-shrink:0}
+@media(max-width:700px){.tech-thumb{width:84px;height:84px}}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .chip{font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;border-radius:20px;padding:3px 12px;border:1px solid var(--olive);color:var(--olive);white-space:nowrap}
 .chip.solid{background:var(--olive);color:var(--paper)}
@@ -428,7 +430,7 @@ img{max-width:100%;height:auto}
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
   <span class="tiny">IL-RA-02 · Character Builder · fan-made JJK 5e homebrew reference. CE Reserve per the campaign canon — Reserve Dice, one CE ability modifier, permanent bonuses added after.</span>
   <span class="editions">Editions: <a href="field-manual/index.html">Field Manual</a> · <a href="grimoire/index.html">Grimoire</a> · <span class="ed-current">Illustrated · current</span></span>
-  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA — manga &amp; anime art from the author's JJK 5e PDFs, used for personal, non-commercial fan purposes only. No AI art.</span>
+  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA and respective rights holders — manga &amp; anime art from the author's JJK 5e PDFs plus sourced franchise/comic/game imagery, used for personal, non-commercial fan purposes only. No AI art. <a href="assets/img/CREDITS.md">Full image credits</a>.</span>
 </div></footer>
 
 <script src="data/codex.js"></script>
@@ -443,6 +445,18 @@ img{max-width:100%;height:auto}
    ════════════════════════════════════════════════════════════════ */
 (function(){
 'use strict';
+
+/* Per-technique card art (imagery audit 2026-09-11): entries may carry an
+   "img" filename; shown as a thumbnail in the technique picker. The filename
+   is whitelisted to plain image names so data can never inject paths. */
+var IMG_BASE = (/(^|\/)(field-manual|grimoire)\//.test(location.pathname || '')) ? '../assets/img/' : 'assets/img/';
+function techImg(e){
+  var f = e && e.img;
+  if (typeof f === 'string' && /^[A-Za-z0-9][\w\-.]*\.(jpg|jpeg|png|webp)$/i.test(f)) {
+    return '<img class="tech-thumb" src="' + IMG_BASE + f + '" alt="" loading="lazy">';
+  }
+  return '';
+}
 
 /* ── data guards (must also work from file://) ── */
 var HAS_CODEX = !!(window.CODEX && window.CODEX.techniques && window.CODEX.techniques.length);
@@ -690,6 +704,7 @@ function featLists(entry, level){
   var active=[], locked={};
   if(entry && entry.features){
     entry.features.forEach(function(f){
+      if(f.kind==='domain'||f.kind==='maximum') return; /* domains & maxima render in their own callouts */
       var lv = (f.level==null) ? null : Number(f.level);
       if(lv==null || lv<=lvl) active.push(f);
       else { (locked[lv]=locked[lv]||[]).push(f); }
@@ -1326,7 +1341,7 @@ function techCard(e,catalog){
     '<div class="chips">'+chips+'</div>'+
     '<div class="tech-actions"><button class="btn btn-small btn-ghost" type="button" data-inspect>Inspect features</button>'+
     '<button class="btn btn-small'+(sel?'':' btn-primary')+'" type="button" data-choose>'+(sel?'✓ Selected — click to remove':'Choose this technique')+'</button></div>'+
-    '</div><div class="tech-side"></div></div>'+
+    '</div><div class="tech-side">' + techImg(e) + '</div></div>'+
     '<div class="tech-body">'+techInspectHTML(e,catalog)+'</div></div>';
 }
 function techInspectHTML(e,catalog){
@@ -1340,7 +1355,7 @@ function techInspectHTML(e,catalog){
       html+='<span class="gate-label active">Active now — dossier record</span><div class="feat-text">'+md(e.summary_text)+'</div>';
     }else{
       var parts=featLists(e, char.level);
-      html+='<span class="gate-label active">✓ Active at level '+char.level+' ('+parts.active.length+' feature'+(parts.active.length===1?'':'s')+')</span>';
+      html+='<span class="gate-label active">✓ Active at your level ('+char.level+') — ('+parts.active.length+' feature'+(parts.active.length===1?'':'s')+')</span>';
       html+=parts.active.length?featuresHTML(parts.active):'<p class="small">No level-'+char.level+'-or-below features recorded — confirm with your GM.</p>';
     }
     html+=roadmapHTML(e, char.level);
@@ -1510,7 +1525,7 @@ function sheetHTML(){
     if(entry.detail==='summary'&&entry.summary_text){
       html+='<div class="feat-text">'+md(entry.summary_text)+'</div>';
     }else if(parts.active.length){
-      html+='<span class="gate-label active">✓ Active at level '+char.level+'</span>'+featuresHTML(parts.active);
+      html+='<span class="gate-label active">✓ Active at your level ('+char.level+')</span>'+featuresHTML(parts.active);
     }
     html+=roadmapHTML(entry, char.level);
   }else{

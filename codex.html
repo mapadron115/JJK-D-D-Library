@@ -206,18 +206,11 @@ h1 .amp{color:var(--red)}
 .entry{position:relative}
 .entry::before{content:"";position:absolute;top:0;right:0;bottom:0;width:260px;pointer-events:none;background-repeat:no-repeat;background-position:right center;background-size:auto 140%;opacity:.5;-webkit-mask-image:linear-gradient(90deg,transparent 25%,#000 78%);mask-image:linear-gradient(90deg,transparent 25%,#000 78%)}
 .entry-head,.lib-link,.entry-body{position:relative;z-index:1}
-.entry:nth-child(8n+1)::before{background-image:url('assets/img/panel-curse-maw.jpg')}
-.entry:nth-child(8n+2)::before{background-image:url('assets/img/panel-shikigami-clash.jpg')}
-.entry:nth-child(8n+3)::before{background-image:url('assets/img/panel-cursed-spirits.jpg')}
-.entry:nth-child(8n+4)::before{background-image:url('assets/img/panel-cursed-tools.jpg')}
-.entry:nth-child(8n+5)::before{background-image:url('assets/img/panel-divine-lightning.jpg')}
-.entry:nth-child(8n+6)::before{background-image:url('assets/img/panel-gojo-infinity.jpg')}
-.entry:nth-child(8n+7)::before{background-image:url('assets/img/panel-megumi-strike.jpg')}
-.entry:nth-child(8n+8)::before{background-image:url('assets/img/panel-yuji-cursed-energy.jpg')}
-.entry.lib-card:nth-child(4n+1)::before{background-image:url('assets/img/panel-umbrella-shore.jpg')}
-.entry.lib-card:nth-child(4n+2)::before{background-image:url('assets/img/panel-gojo-playful.jpg')}
-.entry.lib-card:nth-child(4n+3)::before{background-image:url('assets/img/panel-cursed-dagger.jpg')}
-.entry.lib-card:nth-child(4n+4)::before{background-image:url('assets/img/portrait-megumi-stance.jpg')}
+/* Per-technique card art (imagery audit 2026-09-11): the random nth-child
+   cycling was REMOVED. Only entries with an approved "img" field in their
+   data record render a watermark (data-img + --card-img). Entries without
+   img show no art — no more misleading mismatches. */
+.entry[data-img]::before{background-image:var(--card-img)}
 
 /* ── responsive nav: hamburger below 860px (added 2026-09-11) ── */
 .nav-toggle{display:none}
@@ -327,7 +320,7 @@ h1 .amp{color:var(--red)}
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
   <span class="tiny">IL-RA-01 · Technique Codex · fan-made JJK 5e homebrew reference. Domain profiles per the audited canon — figure Domains are Specific Domains.</span>
   <span class="editions">Editions: <a href="field-manual/index.html">Field Manual</a> · <a href="grimoire/index.html">Grimoire</a> · <span class="ed-current">Illustrated · current</span></span>
-  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA — manga &amp; anime art from the author's JJK 5e PDFs, used for personal, non-commercial fan purposes only. No AI art.</span>
+  <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA and respective rights holders — manga &amp; anime art from the author's JJK 5e PDFs plus sourced franchise/comic/game imagery, used for personal, non-commercial fan purposes only. No AI art. <a href="assets/img/CREDITS.md">Full image credits</a>.</span>
 </div></footer>
 
 <script src="data/library.js"></script>
