@@ -1,5 +1,21 @@
 # Codex Schema v1
 
+## Regen pipeline (one command)
+
+From the repo root (`~/workspace/jjk-site/JJK-D-D-Library`):
+
+```sh
+python3 data/extract_codex.py
+```
+
+Reads every `*.md` draft in `~/workspace/goals/ritual-archive-campaign-lore-bible/hidden_files/drafts/`
+(figure modules 01–78; infra docs and module 00 skipped by design), uses
+`data/figure_atlas.json` for region/era/culture, and rewrites both
+`data/codex.json` and `data/codex.js` (`window.CODEX`). No other build step —
+`codex.html` renders purely from `window.CODEX` (+ `window.LIBRARY_ENTRIES`
+from `data/library.js` for the original-techniques catalogue), so a re-run is
+the whole deploy: regenerate, verify counts, commit.
+
 **File:** `data/codex.json` (pure JSON — the data contract).
 **Twin:** `data/codex.js` (`window.CODEX = <same payload>;`) for the static page.
 **Generator:** `data/extract_codex.py` reads the lore-bible drafts;
