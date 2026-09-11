@@ -27,7 +27,7 @@
 <article class="card wide">
 <span class="term">Signature Sure-Hit Event</span>
 <h3 id="one-domain-specific-effect-resolves-at-initiative-20">One Domain-specific effect resolves at initiative 20</h3>
-<p>Every complete lethal Domain names one self-contained Sure-Hit Event. At initiative count 20 each round—after Domain clash checks—the event resolves once against every eligible chosen target still inside. It is a manifestation of the Domain itself, not an activation of the user’s ordinary attack or technique.</p>
+<p>Every complete lethal Domain names one self-contained Sure-Hit Event. At initiative count 20 each round—after the clash comparison resolves—the event resolves once against every eligible chosen target still inside. It is a manifestation of the Domain itself, not an activation of the user’s ordinary attack or technique.</p>
 <ul>
 <li>An unprotected chosen target receives the event’s complete printed result without an attack roll or initial saving throw.</li>
 <li>A creature protected by an anti-domain defense uses the fallback attack or saving throw printed in that Domain. If none is printed, use the most relevant save; success halves damage and prevents movement, conditions, and secondary riders.</li>
@@ -61,12 +61,13 @@
 <tr><td><strong>0 • Incomplete</strong></td><td>Technique feature or breakthrough</td><td>Action, 10 CE, 30-foot radius, 3 rounds, no barrier or sure-hit. Once each turn choose advantage on the first imbued attack or disadvantage on the first save against it.</td><td>Until the end of your next turn.</td></tr>
 <tr><td><strong>1 • Complete</strong></td><td>Normally level 11+ and a Domain feature</td><td>Uses the complete baseline above.</td><td>10 rounds.</td></tr>
 <tr><td><strong>2 • Refined</strong></td><td>Normally level 13+ and a breakthrough</td><td>Expansion becomes an action rather than a full-turn action.</td><td>10 rounds.</td></tr>
-<tr><td><strong>3 • Mastered</strong></td><td>Normally level 15+ and a breakthrough</td><td>Cost becomes <span class="formula">20 − CE modifier</span>, minimum 15. Choose a standard or inverted barrier; pay +5 CE for a balanced barrier.</td><td>5 rounds.</td></tr>
+<tr><td><strong>3 • Mastered</strong></td><td>Normally level 15+ and a breakthrough</td><td>Cost becomes <span class="formula">20 − CE modifier</span>, minimum 15. Choose a standard or inverted barrier; pay +5 CE for a balanced barrier.</td><td>10 rounds.</td></tr>
 <tr><td><strong>4 • Supreme</strong></td><td>Normally level 17+ and a major breakthrough</td><td>Unlock 0.2-second expansion and one Burnout Recovery attempt per long rest.</td><td>5 rounds.</td></tr>
 <tr><td><strong>5 • Calamity</strong></td><td>Level 20 or campaign-defining breakthrough</td><td>Normal expansion becomes a bonus action. May create an open-barrier Domain. Repeatable Burnout Recovery, with rising danger.</td><td>3 rounds.</td></tr>
 </tbody>
 </table>
 </div>
+<p class="micro">Burnout after a Domain clash is set by the loser's clash points, not by tier alone: 10 rounds below 700 points, 5 rounds at 700–999, 3 rounds at 1,000. Tiers 1–3 clash at 1, 200, and 500 points, so all three burn out for 10 rounds.</p>
 <article class="card half">
 <span class="term">0.2-second expansion • Tier 4</span>
 <h3 id="one-impossible-instant">One impossible instant</h3>
@@ -82,7 +83,7 @@
 <article class="card half">
 <span class="term">Enclosed barrier</span>
 <h3 id="statistics-and-weak-points">Statistics and weak points</h3>
-<p><strong>AC:</strong> <span class="formula">12 + proficiency bonus</span><br/><strong>HP:</strong> <span class="formula">5 × character level + 10 × refinement tier</span></p>
+<p><strong>AC:</strong> <span class="formula">12 + proficiency bonus</span><br/><strong>HP:</strong> <span class="formula">10 × max(1, actual CE modifier) + clash points</span> (double the clash-point contribution at 800+ clash points)</p>
 <p>The barrier is immune to psychic and poison damage. By default it resists damage from inside and is vulnerable to damage from outside. It automatically fails saving throws and is immune to conditions.</p>
 <p>From inside, a creature must first use an action and succeed on Wisdom (Perception) against the creator’s CE save DC. Success exposes a weak point to that creature until the end of its next turn.</p>
 </article>
@@ -121,25 +122,25 @@
 </section>
 <section class="chapter" data-tone="domain" id="clashes">
 <header class="chapter-head">
-<div><span class="kicker">Domain procedure</span><h2 id="clashes-resolve-through-momentum">Clashes resolve through momentum.</h2></div>
-<p>Refinement matters, but it does not automatically erase a close rival. Each round creates visible progress and gives both sorcerers time to change the battle.</p>
+<div><span class="kicker">Domain procedure</span><h2 id="clashes-resolve-through-momentum">Clashes resolve through points.</h2></div>
+<p>Each Domain converts its refinement tier into clash points. An overwhelming points advantage collapses the weaker Domain outright; a close clash must be broken by barrier damage, stability failures, or expiry.</p>
 </header>
 <div class="grid">
 <div aria-label="Domain clash sequence" class="sequence">
 <div><strong>Answer the expansion</strong>When a perceived Domain opens within 120 feet, an eligible creature may use its reaction and pay its own Domain cost to expand.</div>
-<div><strong>Build the check</strong>Each creator’s Clash modifier is <span class="formula">PB + CE modifier + refinement tier</span>. This is a special check, not an ability check.</div>
-<div><strong>Roll at initiative 20</strong>All clashing creators roll d20 + Clash modifier. Sure-hit is suppressed in the contested space while the clash continues.</div>
-<div><strong>Gain Dominance</strong>Beat a rival by 1–4 to gain 1 Dominance against it; beat it by 5+ to gain 2. At 3 Dominance, that rival’s Domain collapses.</div>
+<div><strong>Compare clash points</strong>Each Domain's clash points come from its refinement tier: <span class="formula">Tier I = 1, Tier II = 200, Tier III = 500, Tier IV = 800, Tier V = 1,000</span>.</div>
+<div><strong>Break on a 100-point gap</strong>Compare each pair of clashing Domains. If one Domain has 100 or more points than the other, the weaker Domain collapses immediately — before its periodic sure-hit. Guarantees stay suppressed in the contested space while the clash continues, and a clash does not extend either Domain's expiry.</div>
+<div><strong>Collapse deals no damage</strong>A collapsed Domain deals no damage from the collapse itself. The defeated creator suffers Burnout: <span class="formula">10 rounds</span> if its points were below 700, <span class="formula">5 rounds</span> at 700–999, <span class="formula">3 rounds</span> at 1,000.</div>
 </div>
 <article class="card">
-<span class="term">Unequal mastery</span>
-<h3 id="a-head-start-not-an-auto-win">A head start, not an auto-win</h3>
-<p>If one Domain’s refinement tier exceeds another by 3 or more, the stronger Domain begins with 1 Dominance against the weaker. A tie on a Clash check awards no Dominance.</p>
+<span class="term">Equal refinement</span>
+<h3 id="a-head-start-not-an-auto-win">No automatic winner</h3>
+<p>If two Domains hold equal clash points — or the gap is under 100 — neither collapses. There is no countdown and no clash roll; resolve the clash through barrier damage, Domain Stability, or expiry.</p>
 </article>
 <article class="card">
 <span class="term">Breaking or withdrawing</span>
 <h3 id="burnout-follows">Burnout follows</h3>
-<p>A defeated or voluntarily dismissed Domain collapses immediately and its creator suffers Burnout. The winner’s sure-hit resumes at the next initiative count 20, not during the roll that broke the rival.</p>
+<p>A defeated or voluntarily dismissed Domain collapses immediately and its creator suffers Burnout — 10 rounds below 700 clash points, 5 rounds at 700–999, 3 rounds at 1,000. The winner’s sure-hit resumes at the next initiative count 20, not on the round that broke the rival.</p>
 </article>
 <article class="card">
 <span class="term">Keep fighting</span>
@@ -149,12 +150,12 @@
 <article class="card half">
 <span class="term">Three or more Domains</span>
 <h3 id="compare-every-rival">Compare every rival</h3>
-<p>All creators roll once. Compare every pair and track Dominance separately. A creator can gain against one rival while losing to another. When any Domain collapses, erase only its tracks; the remaining Domains continue clashing.</p>
+<p>Compare every pair of clashing Domains. If one Domain has 100 or more points than a rival, that rival’s Domain collapses immediately. A Domain can outmatch one rival while losing to another. When a Domain collapses, remove it from the comparison; the remaining Domains keep clashing.</p>
 </article>
 <article class="card half">
 <span class="term">Non-lethal and open Domains</span>
 <h3 id="one-common-engine">One common engine</h3>
-<p>Non-lethal Domains use the same Clash check. Open Domains also use it and make their barrier attack at initiative 20 after Clash checks. An open Domain can lose by Dominance even if its anchor remains intact.</p>
+<p>Non-lethal Domains use the same point comparison. Open Domains also compare points and make their barrier attack at initiative 20 during the clash. An open Domain whose points trail by 100 or more collapses even if its anchor remains intact.</p>
 </article>
 </div>
 </section>
@@ -351,7 +352,7 @@
 <thead><tr><th>Zone state</th><th>Confirmation range</th><th>Benefits</th><th>How it changes</th></tr></thead>
 <tbody>
 <tr><td><strong>Outside the Zone</strong></td><td>Natural 20</td><td>None.</td><td>A natural Black Flash grants Stage 1 for 1 minute. Once per round, a natural Black Flash also restores CE equal to PB, subject to any campaign recovery cap.</td></tr>
-<tr><td><strong>Stage 1 • Focused</strong></td><td>19–20</td><td>Once per turn, add 1d4 to one CE attack roll, CE ability check, Clash check, Technique Focus save, or Domain Stability save.</td><td>Another natural Black Flash resets the duration and advances to Stage 2.</td></tr>
+<tr><td><strong>Stage 1 • Focused</strong></td><td>19–20</td><td>Once per turn, add 1d4 to one CE attack roll, CE ability check, Technique Focus save, or Domain Stability save.</td><td>Another natural Black Flash resets the duration and advances to Stage 2.</td></tr>
 <tr><td><strong>Stage 2 • Awakened</strong></td><td>18–20</td><td>Retains the Stage 1 d4. No further numerical stacking.</td><td>Another natural Black Flash resets the 1-minute duration. Stage 2 is the ceiling.</td></tr>
 </tbody>
 </table>
@@ -383,7 +384,7 @@
 <header class="lab-head">
 <div class="eyebrow">Interactive reference</div>
 <h2 id="lab-title">Advanced Sorcery Rules Lab</h2>
-<p>Check clash momentum, RCT expenditure, injury thresholds, Maximum Output costs, and Black Flash averages at the table.</p>
+<p>Check clash points, RCT expenditure, injury thresholds, Maximum Output costs, and Black Flash averages at the table.</p>
 </header>
 <div aria-label="Rules calculators" class="tabs" role="tablist">
 <span class="static-button-label">Domain clash</span>
@@ -393,17 +394,19 @@
 <span class="static-button-label">Black Flash</span>
 </div>
 <section aria-labelledby="tab-clash" class="lab-panel active" id="panel-clash" role="tabpanel">
-<div class="controls">
-<div class="control"><label for="aPb">Sorcerer A proficiency</label><input id="aPb" max="6" min="2" type="number" value="5"/></div>
-<div class="control"><label for="bPb">Sorcerer B proficiency</label><input id="bPb" max="6" min="2" type="number" value="5"/></div>
-<div class="control"><label for="aCe">A CE modifier</label><input id="aCe" max="10" min="1" type="number" value="5"/></div>
-<div class="control"><label for="bCe">B CE modifier</label><input id="bCe" max="10" min="1" type="number" value="5"/></div>
-<div class="control"><label for="aTier">A refinement tier</label><input id="aTier" max="5" min="0" type="number" value="3"/></div>
-<div class="control"><label for="bTier">B refinement tier</label><input id="bTier" max="5" min="0" type="number" value="2"/></div>
-<div class="control"><label for="aRoll">A d20 roll</label><input id="aRoll" max="20" min="1" type="number" value="12"/></div>
-<div class="control"><label for="bRoll">B d20 roll</label><input id="bRoll" max="20" min="1" type="number" value="9"/></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Refinement tier</th><th>Clash points</th></tr></thead>
+<tbody>
+<tr><td>Tier I</td><td>1</td></tr>
+<tr><td>Tier II</td><td>200</td></tr>
+<tr><td>Tier III</td><td>500</td></tr>
+<tr><td>Tier IV</td><td>800</td></tr>
+<tr><td>Tier V</td><td>1,000</td></tr>
+</tbody>
+</table>
 </div>
-<output aria-live="polite" class="result" id="clashResult"></output>
+<p class="micro">No rolls: compare the two Domains' clash points. A 100-point or greater advantage collapses the weaker Domain immediately. Equal points (or a gap under 100) means no automatic winner — break the clash with barrier damage, Domain Stability, or expiry.</p>
 </section>
 <section aria-labelledby="tab-rct" class="lab-panel" hidden="" id="panel-rct" role="tabpanel">
 <div class="controls">
