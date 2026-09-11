@@ -147,6 +147,7 @@ h1 .amp{color:var(--red)}
 .chip.plain{border-color:var(--line2);color:var(--ink3)}
 .tech-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
 .tech-body{border-top:3px double var(--ink);padding:20px 22px;background:var(--card2);display:none}
+.dossier-frame{width:100%;min-height:480px;border:1px solid var(--line);background:var(--card);display:block;margin:12px 0 4px}
 .tech-card.open .tech-body{display:block}
 .gate-label{font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;margin:18px 0 10px;display:block}
 .gate-label.active{color:var(--olive)}
@@ -652,7 +653,24 @@ function tGrade(e){ return e ? (e.grade || '') : ''; }
 function tRole(e){ return e ? (e.role || e.kind || '') : ''; }
 function tCe(e){ return e ? (e.ce_ability || '') : ''; }
 function tConcept(e){ return e ? (e.concept || e.summary || '') : ''; }
-function tHref(e){ var h = e ? (e.href || '') : ''; return (h.indexOf('dossiers/')===0) ? '../'+h : h; }
+/* Edition-aware dossier base: dossiers/ lives at the site root beside data/.
+   Derived from a script URL under data/ or assets/ (mirrors assets/codex.js
+   DOSSIER_BASE) so subdirectory editions resolve above themselves while the
+   root builder resolves at the root. Computed lazily on first use. */
+var DOSSIER_BASE=null;
+function dossierBase(){
+  if(DOSSIER_BASE!==null) return DOSSIER_BASE;
+  DOSSIER_BASE='dossiers/';
+  try{
+    var tags=document.getElementsByTagName('script');
+    for(var i=0;i<tags.length;i++){
+      var m=(tags[i].src||'').match(/^(.*)\/(?:assets|data)\//);
+      if(m){ DOSSIER_BASE=m[1]+'/dossiers/'; break; }
+    }
+  }catch(e){}
+  return DOSSIER_BASE;
+}
+function tHref(e){ var h=e?(e.href||''):''; return (h.indexOf('dossiers/')===0)?dossierBase()+h.slice(9):h; }
 
 /* ── character state ── */
 var LS_KEY = 'ritual-archive-characters';
@@ -1417,7 +1435,8 @@ function techInspectHTML(e,catalog){
     html+=roadmapHTML(e, char.level);
   }else{
     html+='<span class="gate-label active">Library entry</span><div class="feat-text"><p>'+esc(tConcept(e)||'No summary recorded.')+'</p></div>';
-    if(tHref(e)) html+='<p><a href="'+esc(tHref(e))+'" target="_blank" rel="noopener">Open the full dossier →</a> <span class="small">(full level progression lives there — track unlocks with your GM)</span></p>';
+    if(tHref(e)) html+='<iframe class="dossier-frame" data-dossier-src="'+esc(tHref(e))+'" title="'+esc(tName(e))+' — full dossier" loading="lazy"></iframe>'+
+      '<p class="small"><a href="'+esc(tHref(e))+'" target="_blank" rel="noopener">Open full dossier page →</a> <span class="small">(full level progression — track unlocks with your GM)</span></p>';
     else html+='<p class="small">Full level progression lives in the Technique Codex — track unlocks with your GM.</p>';
   }
   return html;
@@ -1470,6 +1489,11 @@ function renderTechResults(){
     b.addEventListener('click',function(){
       var card=b.closest('.tech-card'); card.classList.toggle('open');
       b.textContent=card.classList.contains('open')?'Hide features':'Inspect features';
+      if(card.classList.contains('open')){
+        /* lazy-load dossier iframes only when the panel opens — keeps the list fast */
+        var fr=card.querySelectorAll('iframe[data-dossier-src]');
+        for(var k=0;k<fr.length;k++){ if(!fr[k].getAttribute('src')) fr[k].src=fr[k].getAttribute('data-dossier-src'); }
+      }
     });
   });
   res.querySelectorAll('[data-choose]').forEach(function(b){
