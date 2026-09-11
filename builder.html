@@ -701,6 +701,8 @@ function blankChar(){
     abilityMethod:'', abilityBase:{}, ancestryPicks:{},
     abilities:{}, // final at level 1 (base + ancestry)
     asi:{},       // {level:[a,b]}
+    asiMode:{},   // {level:'asi'|'feat'} — feat replaces the ASI (D&D 5e rule)
+    asiFeat:{},   // {level:'feat name'}
     levelData:{}, // {level:{hpMode,hpDie,ceMode,ceDie}}
     technique:null, // {catalog:'figures'|'originals', id}
     feats:[], tools:[], notes:'', ceBonus:0
@@ -733,9 +735,18 @@ function abilitiesAt(level){
   var ab = Object.assign({}, char.abilities);
   if(!ab.STR) ABILITIES.forEach(function(a){ ab[a]=10; });
   asiLevels(char.cls).forEach(function(L){
-    if(L<=level && char.asi[L]) char.asi[L].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
+    if(L<=level && char.asi[L] && (char.asiMode||{})[L]!=='feat') char.asi[L].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
   });
   return ab;
+}
+/* Feats taken in place of an ASI at milestone levels */
+function asiFeatEntries(){
+  var out=[];
+  if(!char.cls) return out;
+  asiLevels(char.cls).forEach(function(L){
+    if((char.asiMode||{})[L]==='feat' && char.asiFeat && char.asiFeat[L]) out.push({level:L,name:char.asiFeat[L]});
+  });
+  return out;
 }
 function hpMax(){
   if(!char.cls) return 0;
@@ -743,7 +754,7 @@ function hpMax(){
   var ab = Object.assign({}, char.abilities);
   var total = hd + mod(ab.CON||10);
   for(var l=2;l<=char.level;l++){
-    if(char.asi[l]) char.asi[l].forEach(function(a){ ab[a]++; });
+    if(char.asi[l] && (char.asiMode||{})[l]!=='feat') char.asi[l].forEach(function(a){ ab[a]++; });
     var ld = char.levelData[l]||{};
     var die = (ld.hpMode==='roll') ? (ld.hpDie||0) : avgDie(hd);
     total += die + mod(ab.CON||10);
@@ -1253,7 +1264,7 @@ function levelRows(){
   var ab=Object.assign({},char.abilities);
   var rows=[];
   for(var l=2;l<=char.level;l++){
-    if(char.asi[l]) char.asi[l].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
+    if(char.asi[l] && (char.asiMode||{})[l]!=='feat') char.asi[l].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
     var cm=mod(ab.CON||10);
     var ld=char.levelData[l]||{};
     var hpDie=(ld.hpMode==='roll')?(ld.hpDie||0):avgDie(hd);
@@ -1299,10 +1310,23 @@ function renderLvlRows(){
     var ld=char.levelData[r.l]||{};
     var asiCell='—';
     if(r.asi){
-      var cur=char.asi[r.l]||['STR','STR'];
-      asiCell='<select data-asi="'+r.l+'|0">'+ABILITIES.map(function(a){return '<option'+(cur[0]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select> '+
-              '<select data-asi="'+r.l+'|1">'+ABILITIES.map(function(a){return '<option'+(cur[1]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select>'+
-              '<div class="asi-note">+1 / +1 (or the same twice for +2)</div>';
+      var mode=((char.asiMode||{})[r.l])||'asi';
+      asiCell='<select data-asimode="'+r.l+'">'+
+        '<option value="asi"'+(mode==='asi'?' selected':'')+'>ASI +1/+1</option>'+
+        '<option value="feat"'+(mode==='feat'?' selected':'')+'>Feat instead</option></select>';
+      if(mode==='feat'){
+        var pf=((char.asiFeat||{})[r.l])||'';
+        var isPreset=PRESET_FEATS.indexOf(pf)>=0;
+        asiCell+='<div style="margin-top:4px"><select data-asifeatpreset="'+r.l+'"><option value="">— choose a feat —</option>'+
+          PRESET_FEATS.map(function(f){return '<option'+(isPreset&&pf===f?' selected':'')+'>'+f+'</option>';}).join('')+'</select> '+
+          '<input type="text" data-asifeatcustom="'+r.l+'" placeholder="or type a feat name" value="'+esc(isPreset?'':pf)+'" style="width:132px">'+
+          '<div class="asi-note">Replaces the ASI (D&D 5e rule). Full feat text lives in your source book.</div></div>';
+      }else{
+        var cur=char.asi[r.l]||['STR','STR'];
+        asiCell+='<div style="margin-top:4px"><select data-asi="'+r.l+'|0">'+ABILITIES.map(function(a){return '<option'+(cur[0]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select> '+
+                '<select data-asi="'+r.l+'|1">'+ABILITIES.map(function(a){return '<option'+(cur[1]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select>'+
+                '<div class="asi-note">+1 / +1 (or the same twice for +2)</div></div>';
+      }
     }
     var hpRes = ld.hpMode==='roll'
       ? '<span class="roll-res">'+ld.hpDie+' <small>+ '+r.con+' CON = '+(ld.hpDie+r.con)+' HP</small></span>'
@@ -1328,6 +1352,24 @@ function renderLvlRows(){
     var parts=s.getAttribute('data-asi').split('|'), l=+parts[0], idx=+parts[1];
     char.asi[l]=char.asi[l]||['STR','STR']; char.asi[l][idx]=s.value;
     renderLvlRows(); renderLvlTotals();
+  }); });
+  tb.querySelectorAll('[data-asimode]').forEach(function(s){ s.addEventListener('change',function(){
+    var l=+s.getAttribute('data-asimode');
+    char.asiMode=char.asiMode||{}; char.asiMode[l]=s.value;
+    renderLvlRows(); renderLvlTotals();
+  }); });
+  tb.querySelectorAll('[data-asifeatpreset]').forEach(function(s){ s.addEventListener('change',function(){
+    var l=+s.getAttribute('data-asifeatpreset');
+    char.asiFeat=char.asiFeat||{};
+    if(s.value) char.asiFeat[l]=s.value; else delete char.asiFeat[l];
+    renderLvlRows(); renderLvlTotals();
+  }); });
+  tb.querySelectorAll('[data-asifeatcustom]').forEach(function(inp){ inp.addEventListener('change',function(){
+    var l=+inp.getAttribute('data-asifeatcustom');
+    char.asiFeat=char.asiFeat||{};
+    var v=inp.value.trim();
+    if(v) char.asiFeat[l]=v; else delete char.asiFeat[l];
+    renderLvlTotals();
   }); });
 }
 function animateSingleDie(btn,spanAttr,sides,done){
@@ -1360,7 +1402,7 @@ function stepTechnique(body){
   }
   html+='<div class="banner"><span class="bk">❖ Campaign rule — open selection</span>'+
     '<p>You may choose <b>ANY technique from the full codex at character creation</b> — <b>'+PICKABLE_TECH+'</b> of the <b>'+TOTAL_TECH+'</b> entries are pickable, even at level 1. '+
-    'The gate is on <b>features, not choice</b>: only features of level ≤ '+char.level+' are active now; everything else unlocks as you level and appears on your sheet as a roadmap.</p>'+\
+    'The gate is on <b>features, not choice</b>: only features of level ≤ '+char.level+' are active now; everything else unlocks as you level and appears on your sheet as a roadmap.</p>'+
     '<p class="small">Cursed tools — the arsenal, sacred treasures, and Djinn metal vessels — are <b>gear, not techniques</b>: they have their own tab in the codex and are chosen in Step 7.</p>'+
     '<p class="small">Vlad III\u2019s Impaler is GM-only (viewable, not selectable). One technique per character. <i>Dual Technique</i> is a known variant — ask your GM; this builder does not implement it.</p></div>';
   /* filters */
@@ -1622,7 +1664,7 @@ function sheetHTML(){
   /* abilities */
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Ability Scores</h3><div class="ab-grid">'+
     ABILITIES.map(function(a){ return '<div class="ab-box"><div class="ab-name">'+a+'</div><div class="ab-score">'+ab[a]+'</div><div class="ab-mod">'+modStr(ab[a])+'</div></div>'; }).join('')+'</div>'+
-    '<p class="small">Final scores include ancestry increases'+(Object.keys(char.asi).length?' and level-up ASIs':'')+'.</p></div>';
+    '<p class="small">Final scores include ancestry increases'+(Object.keys(char.asi).length?' and level-up ASIs':'')+(asiFeatEntries().length?' (feats taken instead of an ASI grant no score increase)':'')+'.</p></div>';
   /* ancestry */
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Ancestry</h3>'+
     '<p style="font-family:var(--serif);font-size:1.15rem;font-weight:bold;margin:0">'+esc(ancLine)+'</p>'+
@@ -1666,7 +1708,11 @@ function sheetHTML(){
   /* details */
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Details</h3>';
   html+='<p class="small" style="margin:0 0 4px;letter-spacing:2px;text-transform:uppercase">Feats</p>'+
-    (char.feats.length?'<ul class="tag-list">'+char.feats.map(function(f){return '<li>'+esc(f)+'</li>';}).join('')+'</ul>':'<p class="small">—</p>');
+    (function(){
+      var items=char.feats.map(function(f){return '<li>'+esc(f)+'</li>';})
+        .concat(asiFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat)</span></li>';}));
+      return items.length?'<ul class="tag-list">'+items.join('')+'</ul>':'<p class="small">—</p>';
+    })();
   html+='<p class="small" style="margin:12px 0 4px;letter-spacing:2px;text-transform:uppercase">Cursed tools</p>'+
     (char.tools.length?'<ul class="tag-list">'+char.tools.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ul>':'<p class="small">—</p>');
   if(char.notes) html+='<p class="small" style="margin:12px 0 4px;letter-spacing:2px;text-transform:uppercase">Notes</p><div class="feat-text">'+md(char.notes)+'</div>';
