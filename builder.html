@@ -1655,30 +1655,14 @@ STEP_VALID[5]=function(){
 
 /* ═══════════ STEP 7 — DETAILS ═══════════ */
 function stepDetails(body){
-  var html='<h2>Step 7 — Details</h2><p class="sub">Feats and the odds and ends that make the character yours. A permanent CE bonus here feeds straight into your Max CE (primer: bonuses are added <b>after</b> the reserve).</p>';
+  var html='<h2>Step 7 — Details</h2><p class="sub">The odds and ends that make the character yours. A permanent CE bonus here feeds straight into your Max CE (primer: bonuses are added <b>after</b> the reserve).</p>';
   html+='<div class="field" style="max-width:280px"><label for="ceBonus">Permanent CE bonus (feats, vows, items)</label>'+
     '<input id="ceBonus" type="number" min="0" max="999" value="'+(parseInt(char.ceBonus,10)||0)+'"></div>';
-  var techEntry=chosenTechEntry(), techFeatList=techFeatsFor(techEntry);
-  var featChip=function(f,tip){
-    var has=char.feats.indexOf(f)>=0;
-    return '<button class="btn btn-small" type="button" data-feat="'+esc(f)+'"'+(tip?' title="'+esc(tip)+'"':'')+' style="'+(has?'border-color:var(--red);color:var(--red-deep)':'')+'">'+(has?'✓ ':'+ ')+esc(f)+'</button>';
-  };
-  html+='<h3>Feats</h3><p class="small">Tap to add — your technique\'s feats, plus the general feats any sorcerer can take. No typing needed; the full rules text for each technique feat lives in your technique dossier.</p>';
-  if(techFeatList.length){
-    html+='<p class="small" style="margin:10px 0 4px"><b>'+esc(tName(techEntry))+' — technique feats</b> <span class="small">(hover a feat for its prerequisite)</span></p><div class="preset-chips">'+
-      techFeatList.map(function(ft){ return featChip(ft.name,(ft.prereq?ft.prereq+'. ':'')+ft.text); }).join('')+'</div>';
-  }
-  html+='<p class="small" style="margin:10px 0 4px"><b>General feats</b></p><div class="preset-chips" id="featChips">'+
-    PRESET_FEATS.map(function(f){ return featChip(f,''); }).join('')+'</div>'+
-  '<ul class="tag-list" id="featList">'+char.feats.map(function(f){ return '<li>'+esc(f)+'<span class="rm" data-rmfeat="'+esc(f)+'">remove ✕</span></li>'; }).join('')+'</ul>';
   html+='<h3>Cursed tools</h3><p class="small">Cursed tools are awarded through campaign progression — your GM grants them in play, so they aren\u2019t chosen here. The full arsenal lives in the codex\u2019s Cursed Tools tab.</p>';
   html+='<h3>Notes</h3><div class="field"><label for="notes">Freeform — backstory, binding vows, GM notes</label>'+
     '<textarea id="notes" placeholder="Anything the sheet should remember…">'+esc(char.notes)+'</textarea></div>';
   body.innerHTML=html;
   $('ceBonus').addEventListener('change',function(e){ char.ceBonus=Math.max(0,parseInt(e.target.value,10)||0); });
-  var refresh=function(){ stepDetails(body); };
-  body.querySelectorAll('[data-feat]').forEach(function(b){ b.addEventListener('click',function(){ var f=b.getAttribute('data-feat'); var i=char.feats.indexOf(f); if(i>=0)char.feats.splice(i,1); else char.feats.push(f); refresh(); }); });
-  body.querySelectorAll('[data-rmfeat]').forEach(function(s){ s.addEventListener('click',function(){ char.feats=char.feats.filter(function(f){return f!==s.getAttribute('data-rmfeat');}); refresh(); }); });
   $('notes').addEventListener('input',function(e){ char.notes=e.target.value; });
 }
 STEP_VALID[7]=function(){ return {ok:true}; };
