@@ -16,10 +16,10 @@ var TIER_ORDER = { 'I': 0, 'II': 1, 'III': 2, 'IV': 3, 'V': 4 };
 var DETAIL_LABEL = { full: 'FULL PROGRESSION', summary: 'DOSSIER SUMMARY', bespoke: 'BESPOKE RECORD' };
 
 /* Edition-aware dossier base: dossiers/ lives beside assets/ at the site root.
-   Derived from this script's own URL so subdirectory editions (grimoire/,
+   Derived from this script's own URL so pages served from a subdirectory,
    illustrated/) resolve dossier links correctly. Root behavior unchanged. */
 /* Edition-aware dossier base: dossiers/ lives beside assets/ at the site root.
-   Derived from this script's own URL so subdirectory editions (grimoire/,
+   Derived from this script's own URL so pages served from a subdirectory,
    illustrated/) resolve dossier links correctly. Root behavior unchanged. */
 var DOSSIER_BASE = (function () {
   try {
