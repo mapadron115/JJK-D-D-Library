@@ -42,3 +42,8 @@ pre.legacy-source-text{white-space:pre-wrap;word-break:break-word;font-size:.82r
 .table-scroll{overflow-x:auto;margin:14px 0}
 .caption{color:var(--muted);font-size:.9rem;margin:14px 0 -6px}
 @media(max-width:700px){.dsec>h2.stitle{font-size:1.38rem}.dsec-identity h2{font-size:1.7rem}}
+/* alien roster badges (e243 Omnitrix): single-letter icon was unstyled and ran into the name */
+details.alien summary{display:flex;align-items:center;gap:.65em;cursor:pointer}
+.alien-icon{display:inline-grid;place-items:center;width:2em;height:2em;flex:none;border-radius:50%;background:var(--accent,#8ccf58);color:#0b0c10;font-weight:800;font-size:.95em}
+.alien-title{font-weight:700}
+.alien-sub{display:block;font-size:.85em;color:var(--muted,#9aa0ab);font-weight:400}

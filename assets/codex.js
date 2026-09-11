@@ -329,11 +329,12 @@ if (typeof document !== 'undefined') {
     var resultCount = document.getElementById('resultCount');
     var q = document.getElementById('q');
 
-    // stat strip
+    // stat strip — tools are gear, not techniques (see the page lede), so the
+    // "original techniques" stat counts technique entries only, not tools.
     var collections = uniqSorted(LIBS.map(function (e) { return e.collection; }));
-    document.getElementById('statTotal').textContent = TECHS.length + LIBS.length;
+    document.getElementById('statTotal').textContent = TECHS.length + N_TECH_LIBS;
     document.getElementById('statFigures').textContent = TECHS.length;
-    document.getElementById('statOriginals').textContent = LIBS.length;
+    document.getElementById('statOriginals').textContent = N_TECH_LIBS;
     document.getElementById('statCollections').textContent = collections.length;
 
     // filter dropdowns built from live data
