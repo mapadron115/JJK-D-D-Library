@@ -1335,7 +1335,7 @@ function animateSingleDie(btn,spanAttr,sides,done){
 STEP_VALID[5]=function(){ return {ok:true}; };
 
 /* ═══════════ STEP 6 — TECHNIQUE ═══════════ */
-var techQ='', techGrade='', techGroup='', techRole='', techCat='all';
+var techQ='', techGrade='', techGroup='', techRole='', techFranchise='', techCat='all';
 var GRADE_ORDER=['Reality Warping','Calamity','Special Grade','Grade 1','Grade 2','Grade 3','Grade 4','Unrated'];
 var GROUP_ORDER=['Anime & Manga','Video Games','Magic: The Gathering','Marvel','DC','Ben 10','Jujutsu Kaisen','Original Codex','SCP Anomalies','Bestiary \u2014 Cryptids','Bestiary \u2014 Mythology','Cursed Tool Arsenal','Applied Systems'];
 function stepTechnique(body){
@@ -1359,6 +1359,9 @@ function stepTechnique(body){
   FIGURES.forEach(function(e){ if(e.role) roles[e.role]=1; });
   ORIGINALS.forEach(function(e){ if(e.kind) roles[e.kind]=1; });
   var roleOpts=Object.keys(roles).sort().slice(0,40);
+  var franch={};
+  ORIGINALS.forEach(function(e){ if(e.franchise) franch[e.franchise]=1; });
+  var franchOpts=Object.keys(franch).sort();
   var grpDisabled=(techCat==='figures')?' disabled':'';
   html+='<div class="seg" id="catSeg">'+
     '<button type="button" class="seg-btn'+(techCat==='all'?' is-active':'')+'" data-cat="all">All ('+TOTAL_TECH+')</button>'+
@@ -1372,6 +1375,8 @@ function stepTechnique(body){
       GRADE_ORDER.map(function(t){ return '<option value="'+esc(t)+'"'+(techGrade===t?' selected':'')+'>'+esc(t)+'</option>'; }).join('')+'</select></div>'+
     '<div class="field"><label for="tr">Combat role</label><select id="tr"><option value="">All roles</option>'+
       roleOpts.map(function(r){ return '<option value="'+esc(r)+'"'+(techRole===r?' selected':'')+'>'+esc(r.length>38?r.slice(0,38)+'…':r)+'</option>'; }).join('')+'</select></div>'+
+    '<div class="field"><label for="tf">Franchise</label><select id="tf"'+grpDisabled+'><option value="">All franchises</option>'+
+      franchOpts.map(function(f){ return '<option value="'+esc(f)+'"'+(techFranchise===f?' selected':'')+'>'+esc(f)+'</option>'; }).join('')+'</select></div>'+
     '<div class="field"><label>&nbsp;</label><button class="btn btn-small btn-ghost" id="tClear" type="button">Clear</button></div>'+
     '</div><div class="resultline"><span id="techResultCount"></span><span class="hint">Inspect any entry to see what is active at level 1 vs. what unlocks later.</span></div></div>';
   html+='<div id="techResults"></div>';
@@ -1382,13 +1387,15 @@ function stepTechnique(body){
   $('tg').addEventListener('change',function(e){ techGroup=e.target.value; renderTechResults(); });
   $('tt').addEventListener('change',function(e){ techGrade=e.target.value; renderTechResults(); });
   $('tr').addEventListener('change',function(e){ techRole=e.target.value; renderTechResults(); });
-  $('tClear').addEventListener('click',function(){ techQ='';techGrade='';techGroup='';techRole=''; stepTechnique(body); });
+  $('tf').addEventListener('change',function(e){ techFranchise=e.target.value; renderTechResults(); });
+  $('tClear').addEventListener('click',function(){ techQ='';techGrade='';techGroup='';techRole='';techFranchise=''; stepTechnique(body); });
   renderTechResults();
 }
 function techMatches(e,catalog){
   if(techCat!=='all' && techCat!==catalog) return false;
   if(techGrade && tGrade(e)!==techGrade) return false;
   if(techGroup && catalog==='originals' && (e.collection||'')!==techGroup) return false;
+  if(techFranchise && catalog==='originals' && (e.franchise||'')!==techFranchise) return false;
   if(techRole){
     var r=tRole(e);
     if(catalog==='figures'){ if(r!==techRole) return false; }
