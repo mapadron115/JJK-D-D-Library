@@ -700,22 +700,39 @@ function renderNav(){
     nav.appendChild(next);
   }
 }
+/* Re-evaluate the current step's gate and flip the Next button live.
+   Text/number/select inputs mutate char state without re-rendering the
+   step, so without this the Next button stays disabled forever once a
+   step renders with validation failing. */
+function refreshNav(){
+  var nav=$('wizNav'); if(!nav||currentStep>=8) return;
+  var next=nav.querySelector('.btn-primary'); if(!next) return;
+  var v=STEP_VALID[currentStep];
+  var res=v?v():{ok:true};
+  next.disabled=!res.ok;
+  next.title=res.ok?'':(res.msg||'Complete this step to continue');
+}
 
 /* ═══════════ STEP 1 — CONCEPT ═══════════ */
+function levelOptions(){
+  var o='';
+  for(var L=1;L<=20;L++) o+='<option value="'+L+'"'+(char.level===L?' selected':'')+'>Level '+L+'</option>';
+  return o;
+}
 function stepConcept(body){
   body.innerHTML =
     '<h2>Step 1 — Concept</h2><p class="sub">Who walks into the story? A name, the player behind them, and the level the campaign starts them at.</p>'+
     '<div class="grid2">'+
     '<div class="field"><label for="cName">Character name</label><input id="cName" maxlength="60" value="'+esc(char.name)+'" placeholder="e.g. Kaito Mori"></div>'+
     '<div class="field"><label for="cPlayer">Player name</label><input id="cPlayer" maxlength="60" value="'+esc(char.player)+'" placeholder="e.g. zack"></div></div>'+
-    '<div class="field" style="max-width:260px"><label for="cLevel">Starting level (1–20)</label>'+
-    '<input id="cLevel" type="number" min="1" max="20" value="'+char.level+'"></div>'+
+    '<div class="field" style="max-width:260px"><label for="cLevel">Starting level</label>'+
+    '<select id="cLevel">'+levelOptions()+'</select></div>'+
     '<div class="banner"><span class="bk">❖ Campaign note</span><p>This campaign opens at level 1 with 4–8 sorcerers — but the builder supports starting as high as level 20, with per-level HP and CE Reserve rolls handled in Step 5.</p></div>';
-  $('cName').addEventListener('input',function(e){ char.name=e.target.value; });
+  $('cName').addEventListener('input',function(e){ char.name=e.target.value; refreshNav(); });
   $('cPlayer').addEventListener('input',function(e){ char.player=e.target.value; });
   $('cLevel').addEventListener('change',function(e){
     var v=parseInt(e.target.value,10); if(isNaN(v)) v=1;
-    char.level=Math.max(1,Math.min(20,v)); e.target.value=char.level;
+    char.level=Math.max(1,Math.min(20,v));
   });
 }
 STEP_VALID[1]=function(){
@@ -920,7 +937,7 @@ function renderManualUI(){
     $('man_'+a).addEventListener('change',function(e){
       var v=parseInt(e.target.value,10);
       if(isNaN(v)) v=3; v=Math.max(3,Math.min(maxScore,v));
-      e.target.value=v; char.abilityBase[a]=v; applyAncestry(); renderFinal();
+      e.target.value=v; char.abilityBase[a]=v; applyAncestry(); renderFinal(); refreshNav();
     });
   });
   renderFinal();
@@ -947,13 +964,13 @@ function renderAssignUI(){
     $('asg_'+a).addEventListener('change',function(e){
       var v=e.target.value===''?null:parseInt(e.target.value,10);
       diceAssign[a]=v; char.abilityBase[a]=v||undefined;
-      applyAncestry(); renderAssignUI(); renderFinal();
+      applyAncestry(); renderAssignUI(); renderFinal(); refreshNav();
     });
   });
   $('autoAssign').addEventListener('click',function(){
     var sorted=dicePool.slice().sort(function(a,b){return b-a;});
     ABILITIES.forEach(function(a,i){ diceAssign[a]=sorted[i]; char.abilityBase[a]=sorted[i]; });
-    applyAncestry(); renderAssignUI(); renderFinal();
+    applyAncestry(); renderAssignUI(); renderFinal(); refreshNav();
   });
   ABILITIES.forEach(function(a){
     var cell=$('fin_'+a);
@@ -1007,6 +1024,7 @@ function renderFinal(){
         char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks['p'+i]=e.target.value;
         applyAncestry(); renderFinal();
         if(char.abilityMethod!=='manual') renderAssignUI();
+        refreshNav();
       });
     });
   }
