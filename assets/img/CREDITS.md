@@ -245,3 +245,7 @@ for a transformative, non-commercial fan project.
 | c-misc-netero.jpg | e042 | © respective rights holder — via https://figuretopia.com/product/1-6-scale-100-type-guanyin-bodhisattva-isaac-netero-hunter-x-hunter-resin-statue-pg-studio/ — personal non-commercial fan use | https://figuretopia.com/product/1-6-scale-100-type-guanyin-bodhisattva-isaac-netero-hunter-x-hunter-resin-statue-pg-studio/ |
 | c-misc-perfume.jpg | e152 | © respective rights holder — via https://gobozor.tut.uz/en/product/693490047342 — personal non-commercial fan use | https://gobozor.tut.uz/en/product/693490047342 |
 | c-misc-traffic.jpg | e151 | © respective rights holder — via https://www.pexels.com/photo/timelapse-photograph-681334/ — personal non-commercial fan use | https://www.pexels.com/photo/timelapse-photograph-681334/ |
+| portrait-reincarnated.jpg | Sportskeeda (sportskeeda.com/anime — JJK manga panel collage) | Sukuna's grin taking over Megumi's body, "SOMETHING INTERESTING" incarnation moment | portrait / card |
+| portrait-death-painting.jpg | AnimePrinted wiki (wiki.animeprinted.com/glossary/jujutsu-kaisen/choso) | Choso, full-body anime character art | portrait / card |
+| portrait-softbody.jpg | Jujutsu Kaisen Wiki mirror (jujutsu-kaisen-wiki.vercel.app) | Panda in his green skull scarf, anime still | portrait / card |
+| portrait-hard-shell.jpg | Anime Characters Database (animecharactersdatabase.com, id 134848) | Ultimate Mechamaru humanoid puppet frame, anime character render | portrait / card |
