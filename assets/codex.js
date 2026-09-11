@@ -254,7 +254,7 @@ function renderBody(t) {
   if (t.primary_verb) stats.push('Primary verb <b>' + esc(t.primary_verb) + '</b>');
   if (t.tier) stats.push('Tier <b>' + esc(t.tier) + '</b>');
   if (stats.length) out += '<div class="entry-statline"><span>' + stats.join('</span><span>') + '</span></div>';
-  if (t.serves) out += '<p class="plays-line">❖ Plays into: ' + esc(t.serves) + '</p>';
+
 
   if (t.detail === 'summary') {
     out += '<div class="summary-body">' + md(t.summary_text) + '</div>';
