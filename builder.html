@@ -445,6 +445,7 @@ img{max-width:100%;height:auto}
 <script src="data/library.js?v=20260911g"></script>
 <script src="data/technique_feats.js?v=20260911f"></script>
 <script src="data/codex_feats.js?v=20260911g"></script>
+<script src="data/class_features.js?v=20260911a"></script>
 <script>
 /* ════════════════════════════════════════════════════════════════
    Ritual Archive — Character Builder (IL-RA-02)
@@ -637,11 +638,13 @@ var PRESET_FEATS = ['Beginner Cursed Energy'];
    dossiers: [{name, prereq, text}]. window.CODEX_FEATS (data/codex_feats.js)
    maps historical-figure codex id (e.g. 'miyamoto-musashi') to that figure's
    hand-authored Innate Technique Feats, same shape. */
-function chosenTechEntry(){
-  if(!char.technique) return null;
-  var pool = char.technique.catalog==='originals' ? (typeof ORIGINALS!=='undefined'?ORIGINALS:[]) : (typeof FIGURES!=='undefined'?FIGURES:[]);
-  for(var i=0;i<pool.length;i++){ if(pool[i].id===char.technique.id) return pool[i]; }
-  return null;
+function chosenTechEntry(){ var all=chosenTechEntries(); return all.length?all[0]:null; }
+function techFeatsForAll(){
+  var out=[], seen={};
+  chosenTechEntries().forEach(function(entry){
+    techFeatsFor(entry).forEach(function(f){ if(!seen[f.name]){ seen[f.name]=1; out.push(f); } });
+  });
+  return out;
 }
 function techFeatsFor(entry){
   if(!entry) return [];
@@ -651,7 +654,7 @@ function techFeatsFor(entry){
   return out;
 }
 function featInfo(name){
-  var tf = techFeatsFor(chosenTechEntry());
+  var tf = techFeatsForAll();
   for(var i=0;i<tf.length;i++){ if(tf[i].name===name) return tf[i]; }
   return null;
 }
@@ -664,17 +667,20 @@ function featInfoHTML(name){
    feats first, then the general feats. A name already stored on the character
    but absent from both lists is preserved so older sheets never lose data. */
 function featSelectOptions(selected){
-  var entry = chosenTechEntry();
-  var tfeats = techFeatsFor(entry);
+  var entries = chosenTechEntries();
+  var tfeats = techFeatsForAll();
   var html = '<option value="">— choose a feat —</option>';
-  if(tfeats.length){
-    html += '<optgroup label="'+esc(tName(entry))+' — technique feats">' +
-      tfeats.map(function(f){
-        var label = f.name + (f.prereq ? ' ('+f.prereq+')' : '');
-        return '<option value="'+esc(f.name)+'"'+(selected===f.name?' selected':'')+
-          ' title="'+esc((f.prereq?f.prereq+'. ':'')+f.text)+'">'+esc(label)+'</option>';
-      }).join('') + '</optgroup>';
-  }
+  entries.forEach(function(entry){
+    var ef = techFeatsFor(entry);
+    if(ef.length){
+      html += '<optgroup label="'+esc(tName(entry))+' — technique feats">' +
+        ef.map(function(f){
+          var label = f.name + (f.prereq ? ' ('+f.prereq+')' : '');
+          return '<option value="'+esc(f.name)+'"'+(selected===f.name?' selected':'')+
+            ' title="'+esc((f.prereq?f.prereq+'. ':'')+f.text)+'">'+esc(label)+'</option>';
+        }).join('') + '</optgroup>';
+    }
+  });
   html += '<optgroup label="General feats">' +
     PRESET_FEATS.map(function(f){
       return '<option value="'+esc(f)+'"'+(selected===f?' selected':'')+'>'+esc(f)+'</option>';
@@ -761,7 +767,8 @@ function blankChar(){
     asiMode:{},   // {level:'asi'|'feat'} — feat replaces the ASI (D&D 5e rule)
     asiFeat:{},   // {level:'feat name'}
     levelData:{}, // {level:{hpMode,hpDie,ceMode,ceDie}}
-    technique:null, // {catalog:'figures'|'originals', id}
+    classLevels:{}, // {charLevel:className} — multiclassing; level 1 is the starting class
+    techniques:[], // [{catalog:'figures'|'originals', id}] — up to 2 innate techniques
     feats:[], tools:[], notes:'', ceBonus:0
   };
 }
@@ -791,61 +798,91 @@ function upsertChar(c){
 function abilitiesAt(level){
   var ab = Object.assign({}, char.abilities);
   if(!ab.STR) ABILITIES.forEach(function(a){ ab[a]=10; });
-  asiLevels(char.cls).forEach(function(L){
-    if(L<=level && char.asi[L] && (char.asiMode||{})[L]!=='feat') char.asi[L].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
-  });
+  for(var L=2;L<=level;L++){
+    if(hasASIAt(L) && char.asi[L] && (char.asiMode||{})[L]!=='feat') char.asi[L].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
+  }
   return ab;
 }
 /* Feats taken in place of an ASI at milestone levels */
 function asiFeatEntries(){
   var out=[];
-  if(!char.cls) return out;
-  asiLevels(char.cls).forEach(function(L){
-    if(L>char.level) return; /* higher-level data stays stored but inactive while the level is lowered */
+  for(var L=2;L<=char.level;L++){
+    if(!hasASIAt(L)) continue; /* higher-level data stays stored but inactive while the level is lowered */
     if((char.asiMode||{})[L]==='feat' && char.asiFeat && char.asiFeat[L]) out.push({level:L,name:char.asiFeat[L]});
-  });
+  }
   return out;
 }
 function hpMax(){
-  if(!char.cls) return 0;
-  var hd = CLASSES[char.cls].hd;
   var ab = Object.assign({}, char.abilities);
-  var total = hd + mod(ab.CON||10);
-  for(var l=2;l<=char.level;l++){
-    if(char.asi[l] && (char.asiMode||{})[l]!=='feat') char.asi[l].forEach(function(a){ ab[a]++; });
-    var ld = char.levelData[l]||{};
-    var die = (ld.hpMode==='roll') ? (ld.hpDie||0) : avgDie(hd);
-    total += die + mod(ab.CON||10);
+  if(!ab.STR) ABILITIES.forEach(function(a){ ab[a]=10; });
+  var total = 0;
+  for(var l=1;l<=char.level;l++){
+    var C = CLASSES[clsAt(l)]; if(!C) continue;
+    if(hasASIAt(l) && char.asi[l] && (char.asiMode||{})[l]!=='feat') char.asi[l].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
+    var cm = mod(ab.CON||10), ld = char.levelData[l]||{};
+    var die = (l===1) ? C.hd : ((ld.hpMode==='roll') ? (ld.hpDie||0) : avgDie(C.hd));
+    total += die + cm;
   }
   var _ah=(char.ancestry&&char.heritage&&ANCESTRIES[char.ancestry])?ANCESTRIES[char.ancestry].heritages[char.heritage]:null;
   if(_ah&&_ah.hpPerLevel) total+=_ah.hpPerLevel*char.level;
   return total;
 }
 function ceReserveSum(){
-  if(char.cls==='Heavenly Restriction') return 0;
-  var sum = 0;
-  var res = CLASSES[char.cls] ? CLASSES[char.cls].reserve : 0;
-  var fixed = CLASSES[char.cls] ? CLASSES[char.cls].fixed : 0;
-  for(var l=2;l<=char.level;l++){
+  if(clsAt(1)==='Heavenly Restriction') return 0; /* Pure Body: no reserve at all */
+  var sum = 0, dieMax = 0;
+  for(var l=1;l<=char.level;l++){
+    var C = CLASSES[clsAt(l)]; if(!C||!C.reserve) continue; /* HR levels add no CE */
     var ld = char.levelData[l]||{};
-    sum += (ld.ceMode==='roll') ? (ld.ceDie||0) : fixed;
+    if(l===1) dieMax = C.reserve; /* max Reserve Die of the starting class */
+    else sum += (ld.ceMode==='roll') ? (ld.ceDie||0) : C.fixed;
   }
-  return {dieMax:res, sum:sum};
+  return {dieMax:dieMax, sum:sum};
 }
 function ceMax(){
-  if(char.cls==='Heavenly Restriction') return 0;
+  if(clsAt(1)==='Heavenly Restriction') return 0;
   var r = ceReserveSum();
   var ab = abilitiesAt(char.level);
   var ceMod = char.ceAbility ? mod(ab[char.ceAbility]||10) : 0;
   return r.dieMax + r.sum + ceMod + (parseInt(char.ceBonus,10)||0);
 }
-function isHR(){ return char.cls==='Heavenly Restriction'; }
-function getTechnique(){
-  if(!char.technique) return null;
-  var arr = char.technique.catalog==='originals' ? ORIGINALS : FIGURES;
-  for(var i=0;i<arr.length;i++) if(arr[i].id===char.technique.id) return arr[i];
+function isHR(){ return clsAt(1)==='Heavenly Restriction'; }
+/* multiclassing: which class was taken at character level l */
+function clsAt(l){ return (char.classLevels||{})[l] || char.cls || null; }
+function ensureClassLevels(){
+  char.classLevels=char.classLevels||{};
+  for(var l=1;l<=char.level;l++){
+    if(!char.classLevels[l]) char.classLevels[l]=(l>1&&char.classLevels[l-1])?char.classLevels[l-1]:(char.cls||null);
+  }
+}
+/* levels taken in cls up to (and including) character level upto */
+function classLevelCount(cls,upto){
+  var n=0; for(var l=1;l<=upto;l++) if(clsAt(l)===cls) n++; return n;
+}
+/* ASI at character level l? each class's schedule advances on its own class levels */
+function hasASIAt(l){ var c=clsAt(l); if(!c) return false; return asiLevels(c).indexOf(classLevelCount(c,l))>=0; }
+function classesTaken(){
+  var out=[]; for(var l=1;l<=char.level;l++){ var c=clsAt(l); if(c&&out.indexOf(c)<0) out.push(c); }
+  return out;
+}
+function classBreakdown(){
+  return classesTaken().map(function(c){ return c+' '+classLevelCount(c,char.level); }).join(' / ');
+}
+/* migrate pre-multiclass / pre-dual-technique saves */
+function migrateChar(c){
+  if(!c.classLevels||!Object.keys(c.classLevels).length){
+    c.classLevels={}; for(var l=1;l<=(c.level||1);l++) c.classLevels[l]=c.cls;
+  }
+  if(!c.techniques){ c.techniques=c.technique?[c.technique]:[]; delete c.technique; }
+  return c;
+}
+function techEntryFor(t){
+  if(!t) return null;
+  var arr = t.catalog==='originals' ? ORIGINALS : FIGURES;
+  for(var i=0;i<arr.length;i++) if(arr[i].id===t.id) return arr[i];
   return null;
 }
+function getTechniques(){ return (char.techniques||[]).map(techEntryFor).filter(function(e){return !!e;}); }
+function chosenTechEntries(){ return getTechniques(); }
 function featLists(entry, level){
   /* split features into active (level<=charLevel or un-leveled) and locked roadmap */
   var lvl = (level==null?1:level);
@@ -911,11 +948,11 @@ function renderManager(){
           saveAll(arr2.filter(function(x){ return x.id!==id; })), renderManager();
       }else if(act==='dup' && found){
         var copy = deep(found); copy.id = uid(); copy.name = (copy.name||'Unnamed')+' (copy)';
-        arr2.push(copy); saveAll(arr2); renderManager();
+        migrateChar(copy); arr2.push(copy); saveAll(arr2); renderManager();
       }else if(act==='load' && found){
-        char = deep(found); startWizard(8);
+        char = migrateChar(deep(found)); startWizard(8);
       }else if(act==='edit' && found){
-        char = deep(found); startWizard(1); /* same ID — saving later updates this character */
+        char = migrateChar(deep(found)); startWizard(1); /* same ID — saving later updates this character */
       }
     });
   });
@@ -940,6 +977,7 @@ function renderStepBar(){
 }
 var STEP_VALID = {};
 function renderStep(){
+  migrateChar(char); ensureClassLevels();
   renderStepBar();
   var title = char.name ? esc(char.name) : 'New Sorcerer';
   $('wizTitle').innerHTML = title;
@@ -1080,7 +1118,7 @@ function ancestryBonuses(){
 
 /* ═══════════ STEP 3 — CLASS ═══════════ */
 function stepClass(body){
-  var html='<h2>Step 3 — Class</h2><p class="sub">Seven paths through jujutsu. Hit die drives HP; the Reserve Die drives your Cursed Energy.</p>';
+  var html='<h2>Step 3 — Starting Class</h2><p class="sub">Seven paths through jujutsu. Hit die drives HP; the Reserve Die drives your Cursed Energy. You can take levels in other classes as you level up — each level’s class is chosen in Step 6.</p>';
   html+='<div class="opt-grid">'+CLASS_ORDER.map(function(c){
     var C=CLASSES[c];
     var res = c==='Heavenly Restriction' ? '— (Pure Body: no CE)' : ('d'+C.reserve+' / +'+C.fixed+' fixed');
@@ -1093,9 +1131,10 @@ function stepClass(body){
   body.innerHTML=html;
   body.querySelectorAll('.opt-card').forEach(function(card){
     var pick=function(){
-      var wasHR=isHR();
+      var wasHR=(clsAt(1)==='Heavenly Restriction');
       char.cls=card.getAttribute('data-c');
-      if(isHR()){ char.ceAbility=''; char.technique=null; }
+      char.classLevels[1]=char.cls; ensureClassLevels();
+      if(isHR()){ char.ceAbility=''; char.techniques=[]; }
       if(wasHR!==isHR()){ char.levelData={}; } /* CE structure changed */
       renderStep();
     };
@@ -1331,16 +1370,16 @@ STEP_VALID[4]=function(){
 
 /* ═══════════ STEP 6 — LEVEL-UP ROLLS ═══════════ */
 function levelRows(){
-  var C=CLASSES[char.cls], hd=C.hd;
   var ab=Object.assign({},char.abilities);
   var rows=[];
   for(var l=2;l<=char.level;l++){
-    if(char.asi[l] && (char.asiMode||{})[l]!=='feat') char.asi[l].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
+    var C=CLASSES[clsAt(l)], hd=C.hd;
+    if(hasASIAt(l) && char.asi[l] && (char.asiMode||{})[l]!=='feat') char.asi[l].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
     var cm=mod(ab.CON||10);
     var ld=char.levelData[l]||{};
     var hpDie=(ld.hpMode==='roll')?(ld.hpDie||0):avgDie(hd);
     var ceDie=(ld.ceMode==='roll')?(ld.ceDie||0):C.fixed;
-    rows.push({l:l,con:cm,hpDie:hpDie,hpGain:hpDie+cm,ceDie:isHR()?0:ceDie,asi:asiLevels(char.cls).indexOf(l)>=0});
+    rows.push({l:l,cls:clsAt(l),con:cm,hpDie:hpDie,hpGain:hpDie+cm,ceDie:isHR()?0:ceDie,asi:hasASIAt(l)});
   }
   return rows;
 }
@@ -1355,7 +1394,7 @@ function stepLevelUps(body){
     html+='<div class="banner"><span class="bk">❖ Level 1</span><p>Nothing to roll — your totals below are final. Continue when ready.</p></div>';
   }else{
     html+='<button class="btn btn-small btn-ghost" id="allFixed" type="button">Take fixed for unrolled levels</button> <span class="asi-note">or roll each die individually</span>';
-    html+='<table class="lvl-table"><tr><th>Level</th><th>Ability score increase</th><th>HP gain (d'+hd+' + CON)</th><th>CE Reserve gain'+(isHR()?'':' (d'+C.reserve+' / +'+C.fixed+')')+'</th></tr><tbody id="lvlBody"></tbody></table>';
+    html+='<table class="lvl-table"><tr><th>Level</th><th>Class</th><th>Ability score increase</th><th>HP gain</th><th>CE Reserve gain</th></tr><tbody id="lvlBody"></tbody></table>';
   }
   body.innerHTML=html;
   if(char.level>1){
@@ -1376,9 +1415,12 @@ function renderLvlTotals(){
 }
 function renderLvlRows(){
   var tb=$('lvlBody'); if(!tb) return;
-  var C=CLASSES[char.cls];
   tb.innerHTML=levelRows().map(function(r){
+    var C=CLASSES[r.cls];
     var ld=char.levelData[r.l]||{};
+    var clsCell='<select data-lvlclass="'+r.l+'">'+CLASS_ORDER.map(function(c){
+      return '<option value="'+esc(c)+'"'+(c===r.cls?' selected':'')+'>'+esc(c)+'</option>';
+    }).join('')+'</select>';
     var asiCell='—';
     if(r.asi){
       var mode=((char.asiMode||{})[r.l])||'asi';
@@ -1403,20 +1445,26 @@ function renderLvlRows(){
     var hpCell='<button class="btn btn-small" type="button" data-hproll="'+r.l+'">🎲 Roll d'+C.hd+'</button> '+
                '<button class="btn btn-small btn-ghost" type="button" data-hpfixed="'+r.l+'">Fixed '+avgDie(C.hd)+'</button><br>'+hpRes+
                ' <span class="small" data-hpdice="'+r.l+'"></span>';
-    var ceCell = isHR() ? '<span class="small">— Pure Body</span>' :
+    var ceCell = (isHR()||r.cls==='Heavenly Restriction') ? '<span class="small">— Pure Body</span>' :
       '<button class="btn btn-small" type="button" data-ceroll="'+r.l+'">🎲 Roll d'+C.reserve+'</button> '+
       '<button class="btn btn-small btn-ghost" type="button" data-cefixed="'+r.l+'">Fixed '+C.fixed+'</button><br>'+
       (ld.ceMode==='roll'
         ? '<span class="roll-res">'+ld.ceDie+' <small>CE</small></span>'
         : '<span class="roll-res">'+C.fixed+' <small>CE</small></span>')+
       ' <span class="small" data-cedice="'+r.l+'"></span>';
-    return '<tr><td><span class="lvl-chip">Level '+r.l+'</span></td><td>'+asiCell+'</td><td>'+hpCell+'</td><td>'+ceCell+'</td></tr>';
+    return '<tr><td><span class="lvl-chip">Level '+r.l+'</span></td><td>'+clsCell+'</td><td>'+asiCell+'</td><td>'+hpCell+'</td><td>'+ceCell+'</td></tr>';
   }).join('');
   /* wire */
+  tb.querySelectorAll('[data-lvlclass]').forEach(function(sel){ sel.addEventListener('change',function(){
+    var l=+sel.getAttribute('data-lvlclass');
+    char.classLevels[l]=sel.value;
+    delete char.levelData[l]; /* new Hit Die / Reserve Die — re-roll this level */
+    renderLvlRows(); renderLvlTotals();
+  }); });
   tb.querySelectorAll('[data-hpfixed]').forEach(function(b){ b.addEventListener('click',function(){ var l=+b.getAttribute('data-hpfixed'); char.levelData[l]=char.levelData[l]||{}; char.levelData[l].hpMode='fixed'; char.levelData[l].hpDie=null; renderLvlRows(); renderLvlTotals(); }); });
   tb.querySelectorAll('[data-cefixed]').forEach(function(b){ b.addEventListener('click',function(){ var l=+b.getAttribute('data-cefixed'); char.levelData[l]=char.levelData[l]||{}; char.levelData[l].ceMode='fixed'; char.levelData[l].ceDie=null; renderLvlRows(); renderLvlTotals(); }); });
-  tb.querySelectorAll('[data-hproll]').forEach(function(b){ b.addEventListener('click',function(){ animateSingleDie(b,'hpdice',CLASSES[char.cls].hd,function(v){ var l=+b.getAttribute('data-hproll'); char.levelData[l]=char.levelData[l]||{}; char.levelData[l].hpMode='roll'; char.levelData[l].hpDie=v; renderLvlRows(); renderLvlTotals(); }); }); });
-  tb.querySelectorAll('[data-ceroll]').forEach(function(b){ b.addEventListener('click',function(){ animateSingleDie(b,'cedice',CLASSES[char.cls].reserve,function(v){ var l=+b.getAttribute('data-ceroll'); char.levelData[l]=char.levelData[l]||{}; char.levelData[l].ceMode='roll'; char.levelData[l].ceDie=v; renderLvlRows(); renderLvlTotals(); }); }); });
+  tb.querySelectorAll('[data-hproll]').forEach(function(b){ b.addEventListener('click',function(){ var l=+b.getAttribute('data-hproll'); animateSingleDie(b,'hpdice',CLASSES[clsAt(l)].hd,function(v){ char.levelData[l]=char.levelData[l]||{}; char.levelData[l].hpMode='roll'; char.levelData[l].hpDie=v; renderLvlRows(); renderLvlTotals(); }); }); });
+  tb.querySelectorAll('[data-ceroll]').forEach(function(b){ b.addEventListener('click',function(){ var l=+b.getAttribute('data-ceroll'); animateSingleDie(b,'cedice',CLASSES[clsAt(l)].reserve,function(v){ char.levelData[l]=char.levelData[l]||{}; char.levelData[l].ceMode='roll'; char.levelData[l].ceDie=v; renderLvlRows(); renderLvlTotals(); }); }); });
   tb.querySelectorAll('[data-asi]').forEach(function(s){ s.addEventListener('change',function(){
     var parts=s.getAttribute('data-asi').split('|'), l=+parts[0], idx=+parts[1];
     char.asi[l]=char.asi[l]||['STR','STR']; char.asi[l][idx]=s.value;
@@ -1471,7 +1519,7 @@ function roleBuckets(role){
 }
 var GROUP_ORDER=['Anime & Manga','Video Games','Magic: The Gathering','Marvel','DC','Ben 10','Jujutsu Kaisen','Original Codex','SCP Anomalies','Bestiary \u2014 Cryptids','Bestiary \u2014 Mythology','Cursed Tool Arsenal','Applied Systems'];
 function stepTechnique(body){
-  var html='<h2>Step 5 — Technique</h2>';
+  var html='<h2>Step 5 — Techniques</h2>';
   if(isHR()){
     body.innerHTML=html+'<div class="banner warn"><span class="bk">❖ Pure Body</span>'+
       '<p><b>Heavenly Restriction characters have no Innate Technique.</b> No technique selection, no Maximum, no Domain, no RCT. Your power is the body — the sheet will reflect that.</p></div>';
@@ -1486,7 +1534,7 @@ function stepTechnique(body){
     '<p>You may choose <b>ANY technique from the full codex at character creation</b> — <b>'+PICKABLE_TECH+'</b> of the <b>'+TOTAL_TECH+'</b> entries are pickable, even at level 1. '+
     'The gate is on <b>features, not choice</b>: only features of level ≤ '+char.level+' are active now; everything else unlocks as you level and appears on your sheet as a roadmap.</p>'+
     '<p class="small">Cursed tools — the arsenal, sacred treasures, and Djinn metal vessels — are <b>gear, not techniques</b>: they have their own tab in the codex and are awarded through campaign progression.</p>'+
-    '<p class="small">Vlad III\u2019s Impaler is GM-only (viewable, not selectable). One technique per character. <i>Dual Technique</i> is a known variant — ask your GM; this builder does not implement it.</p></div>';
+    '<p class="small">Vlad III\u2019s Impaler is GM-only (viewable, not selectable). <b>Campaign rule: up to two innate techniques per character.</b> Each technique\u2019s features unlock by your total character level.</p></div>';
   /* filters */
   /* Combat role buckets are canonical (Striker/Tank/Controller/Blaster/Support/
      Utility); the figures' freeform role strings map to them by keyword. */
@@ -1556,7 +1604,7 @@ function techMatches(e){
 }
 function techCard(e,catalog){
   var fig=tIsFigure(e);
-  var sel=char.technique&&char.technique.catalog===catalog&&char.technique.id===e.id;
+  var sel=(char.techniques||[]).some(function(t){ return t.catalog===catalog&&t.id===e.id; });
   var isNPC=e&&e.visibility==='npc'; /* U14: NPC-locked entries are viewable but not selectable */
   var chips='';
   var gchip=fig?(tTier(e)?('Tier '+tTier(e)):''):tGrade(e);
@@ -1638,7 +1686,7 @@ function renderTechResults(){
   /* One unified catalogue: figures first, then originals; every card labels its own origin. */
   var list=FIGURES.filter(techMatches).concat(TECHNIQUES.filter(techMatches));
   var countText='Showing '+list.length+' of '+TOTAL_TECH+' techniques';
-  if(char.technique) countText+=' · 1 selected';
+  if((char.techniques||[]).length) countText+=' · '+(char.techniques||[]).length+' of 2 selected';
   $('techResultCount').textContent=countText;
   var html='';
   if(techOrigin==='all'&&(techFranchise!==''||techGroup!=='')){
@@ -1668,8 +1716,11 @@ function renderTechResults(){
       var pool=catalog==='originals'?ORIGINALS:FIGURES, entry=null;
       for(var gi=0;gi<pool.length;gi++){ if(pool[gi].id===id){ entry=pool[gi]; break; } }
       if(entry&&entry.visibility==='npc') return; /* NPC techniques are not player-selectable */
-      if(char.technique&&char.technique.catalog===catalog&&char.technique.id===id) char.technique=null;
-      else char.technique={catalog:catalog,id:id};
+      char.techniques=char.techniques||[];
+      var ix=char.techniques.findIndex(function(t){ return t.catalog===catalog&&t.id===id; });
+      if(ix>=0) char.techniques.splice(ix,1);
+      else if(char.techniques.length>=2) alert('Two techniques maximum — remove one before choosing another.');
+      else char.techniques.push({catalog:catalog,id:id});
       renderTechResults(); renderStepBar(); renderNav();
     });
   });
@@ -1677,7 +1728,7 @@ function renderTechResults(){
 STEP_VALID[5]=function(){
   if(isHR()) return {ok:true};
   if(!HAS_CODEX&&!HAS_LIB) return {ok:false,msg:'Technique data failed to load — check the data/ folder.'};
-  if(!char.technique) return {ok:false,msg:'Choose a technique — '+PICKABLE_TECH+' of the '+TOTAL_TECH+' entries are pickable at creation (Vlad III is GM-only).'};
+  if(!(char.techniques||[]).length) return {ok:false,msg:'Choose at least one technique — '+PICKABLE_TECH+' of the '+TOTAL_TECH+' entries are pickable at creation (Vlad III is GM-only).'};
   return {ok:true};
 };
 
@@ -1711,44 +1762,9 @@ function stepSheet(body){
   $('btnPrint').addEventListener('click',function(){ window.print(); });
   $('btnNew2').addEventListener('click',function(){ if(confirm('Start a new character? Unsaved changes to this one will be lost.')){ char=blankChar(); startWizard(1); } });
 }
-function sheetHTML(){
-  var A=ANCESTRIES[char.ancestry], H=A?A.heritages[char.heritage]:null;
-  var ab=abilitiesAt(char.level);
-  var P=pb(char.level);
-  var hp=hpMax(), ce=isHR()?null:ceMax();
-  var ceMod=(!isHR()&&char.ceAbility)?mod(ab[char.ceAbility]||10):null;
-  var ancLine=(A?A.name:'—')+(H?' · '+H.name:'');
-  var html='<div class="sheet" id="printSheet"><div class="sheet-head">'+
-    '<div class="s-eyebrow">❖ Ritual Archive · Illustrated · Character Record ❖</div>'+
-    '<h2>'+esc(char.name||'Unnamed')+'</h2>'+
-    '<div class="s-sub">Level '+char.level+' '+esc(char.cls||'—')+' · '+esc(ancLine)+' · Player: '+esc(char.player||'—')+'</div></div>';
-  if(isHR()) html+='<div class="sheet-sec"><div class="banner warn" style="margin:0"><span class="bk">❖ Pure Body — Heavenly Restriction</span><p>No CE ability, CE Reserve, Innate Technique, Domain, RCT, Maximum Output, or Black Flash. Physical, tactical, skill, and cursed-tool features function normally.</p></div></div>';
-  /* abilities */
-  html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Ability Scores</h3><div class="ab-grid">'+
-    ABILITIES.map(function(a){ return '<div class="ab-box"><div class="ab-name">'+a+'</div><div class="ab-score">'+ab[a]+'</div><div class="ab-mod">'+modStr(ab[a])+'</div></div>'; }).join('')+'</div>'+
-    '<p class="small">Final scores include ancestry increases'+(Object.keys(char.asi).length?' and level-up ASIs':'')+(asiFeatEntries().length?' (feats taken instead of an ASI grant no score increase)':'')+'.</p></div>';
-  /* ancestry */
-  html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Ancestry</h3>'+
-    '<p style="font-family:var(--serif);font-size:1.15rem;font-weight:bold;margin:0">'+esc(ancLine)+'</p>'+
-    (A&&A.blurb?'<p class="small">'+esc(A.blurb)+'</p>':'')+
-    (H&&H.traits&&H.traits.length?'<ul style="margin:6px 0 0;padding-left:1.3em">'+H.traits.map(function(t){ return '<li class="small">'+esc(t)+'</li>'; }).join('')+'</ul>':'<p class="small">No ancestry traits recorded.</p>')+'</div>';
-  /* vitals */
-  html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Vitals</h3><div class="vitals">'+
-    '<div><b>'+hp+'</b><span>Max HP (d'+CLASSES[char.cls].hd+')</span></div>'+
-    (isHR()?'<div><b>—</b><span>Max CE (Pure Body)</span></div>'
-      :'<div><b>'+ce+'</b><span>Max CE Reserve</span></div>'+
-       '<div><b>'+char.ceAbility+'</b><span>CE ability ('+(ceMod>=0?'+':'')+ceMod+')</span></div>'+
-       '<div><b>'+((P+ceMod>=0?'+':'')+(P+ceMod))+'</b><span>CE attack</span></div>'+
-       '<div><b>'+(8+P+ceMod)+'</b><span>CE save DC</span></div>')+
-    '<div><b>+'+P+'</b><span>Proficiency</span></div>'+
-    '</div>'+
-    (isHR()?'':'<p class="small">Max CE = max Reserve Die ('+CLASSES[char.cls].reserve+') + per-level gains + CE modifier once + '+(char.ceBonus||0)+' bonus.</p>')+'</div>';
-  /* technique */
-  html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Cursed Technique</h3>';
-  var entry=getTechnique();
-  if(isHR()) html+='<p class="small">None — Pure Body.</p>';
-  else if(!entry) html+='<p class="small">No technique recorded.</p>';
-  else if(tIsFigure(entry)){
+function techniqueSheetHTML(entry){
+  var html='';
+  if(tIsFigure(entry)){
     var parts=featLists(entry, char.level);
     html+='<p style="font-family:var(--serif);font-size:1.5rem;font-weight:bold;margin:0">'+esc(tName(entry))+'</p>'+
       '<p class="small" style="margin-top:2px">'+esc(entry.figure||'')+(entry.tier?' · Tier '+esc(entry.tier):'')+(entry.role?' · '+esc(entry.role):'')+(entry.ce_ability?' · suggested CE '+esc(entry.ce_ability):'')+'</p>'+
@@ -1766,6 +1782,84 @@ function sheetHTML(){
       (tHref(entry)?'<p><a href="'+esc(tHref(entry))+'">Open the full dossier →</a></p>':'')+
       '<p class="small">Level progression lives in the Technique Codex dossier — unlocks tracked with your GM.</p>';
   }
+  return html;
+}
+/* class features on the sheet: per class taken, active at that class's level + roadmap */
+function classFeaturesSheetHTML(){
+  var html='<div class="sheet-sec"><h3><span class="orn">❖</span> Class Features</h3>';
+  var CF=(typeof window!=='undefined'&&window.CLASS_FEATURES)||null;
+  if(!CF){
+    html+='<p class="small">Class feature data is loading — see the class rules in the Field Guide.</p></div>';
+    return html;
+  }
+  classesTaken().forEach(function(c){
+    var cl=classLevelCount(c,char.level);
+    var feats=(CF[c]||[]).filter(function(f){
+      /* Innate Technique / Innate Technique Feature / ASI rows are handled by the Techniques
+         section and Step 6 — showing them here would duplicate them. */
+      return !/^(innate technique( feature)?|ability score improvement)$/i.test(f.name||'');
+    });
+    html+='<div class="lvl"><span class="lvl-chip">'+esc(c)+' '+cl+'</span></div>';
+    var active=feats.filter(function(f){ return (f.level||1)<=cl; });
+    var locked={};
+    feats.forEach(function(f){ if((f.level||1)>cl){ (locked[f.level]=locked[f.level]||[]).push(f); } });
+    if(active.length){
+      html+='<span class="gate-label active">✓ Active</span>'+active.map(function(f){
+        return '<div class="feat"><h5>'+esc(f.name)+'</h5><div class="feat-text">'+esc(f.text)+'</div></div>';
+      }).join('');
+    }else{
+      html+='<p class="small">No class features yet at '+esc(c)+' '+cl+'.</p>';
+    }
+    Object.keys(locked).sort(function(a,b){return a-b;}).forEach(function(lv){
+      html+='<p class="small" style="margin:8px 0 2px"><b>Unlocks at '+esc(c)+' '+lv+':</b> '+locked[lv].map(function(f){return esc(f.name);}).join(', ')+'</p>';
+    });
+  });
+  html+='</div>';
+  return html;
+}
+function sheetHTML(){
+  var A=ANCESTRIES[char.ancestry], H=A?A.heritages[char.heritage]:null;
+  var ab=abilitiesAt(char.level);
+  var P=pb(char.level);
+  var hp=hpMax(), ce=isHR()?null:ceMax();
+  var ceMod=(!isHR()&&char.ceAbility)?mod(ab[char.ceAbility]||10):null;
+  var ancLine=(A?A.name:'—')+(H?' · '+H.name:'');
+  var html='<div class="sheet" id="printSheet"><div class="sheet-head">'+
+    '<div class="s-eyebrow">❖ Ritual Archive · Illustrated · Character Record ❖</div>'+
+    '<h2>'+esc(char.name||'Unnamed')+'</h2>'+
+    '<div class="s-sub">Level '+char.level+' '+esc(classBreakdown()||'—')+' · '+esc(ancLine)+' · Player: '+esc(char.player||'—')+'</div></div>';
+  if(isHR()) html+='<div class="sheet-sec"><div class="banner warn" style="margin:0"><span class="bk">❖ Pure Body — Heavenly Restriction</span><p>No CE ability, CE Reserve, Innate Technique, Domain, RCT, Maximum Output, or Black Flash. Physical, tactical, skill, and cursed-tool features function normally.</p></div></div>';
+  /* abilities */
+  html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Ability Scores</h3><div class="ab-grid">'+
+    ABILITIES.map(function(a){ return '<div class="ab-box"><div class="ab-name">'+a+'</div><div class="ab-score">'+ab[a]+'</div><div class="ab-mod">'+modStr(ab[a])+'</div></div>'; }).join('')+'</div>'+
+    '<p class="small">Final scores include ancestry increases'+(Object.keys(char.asi).length?' and level-up ASIs':'')+(asiFeatEntries().length?' (feats taken instead of an ASI grant no score increase)':'')+'.</p></div>';
+  /* ancestry */
+  html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Ancestry</h3>'+
+    '<p style="font-family:var(--serif);font-size:1.15rem;font-weight:bold;margin:0">'+esc(ancLine)+'</p>'+
+    (A&&A.blurb?'<p class="small">'+esc(A.blurb)+'</p>':'')+
+    (H&&H.traits&&H.traits.length?'<ul style="margin:6px 0 0;padding-left:1.3em">'+H.traits.map(function(t){ return '<li class="small">'+esc(t)+'</li>'; }).join('')+'</ul>':'<p class="small">No ancestry traits recorded.</p>')+'</div>';
+  /* vitals */
+  html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Vitals</h3><div class="vitals">'+
+    '<div><b>'+hp+'</b><span>Max HP ('+classesTaken().map(function(c){ return 'd'+CLASSES[c].hd; }).join(' / ')+')</span></div>'+
+    (isHR()?'<div><b>—</b><span>Max CE (Pure Body)</span></div>'
+      :'<div><b>'+ce+'</b><span>Max CE Reserve</span></div>'+
+       '<div><b>'+char.ceAbility+'</b><span>CE ability ('+(ceMod>=0?'+':'')+ceMod+')</span></div>'+
+       '<div><b>'+((P+ceMod>=0?'+':'')+(P+ceMod))+'</b><span>CE attack</span></div>'+
+       '<div><b>'+(8+P+ceMod)+'</b><span>CE save DC</span></div>')+
+    '<div><b>+'+P+'</b><span>Proficiency</span></div>'+
+    '</div>'+
+    (isHR()?'':'<p class="small">Max CE = starting class max Reserve Die ('+esc(clsAt(1))+') + per-level gains + CE modifier once + '+(char.ceBonus||0)+' bonus.</p>')+'</div>';
+  /* class features */
+  html+=classFeaturesSheetHTML();
+  /* technique */
+  html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Cursed Technique'+(getTechniques().length>1?'s':'')+'</h3>';
+  var techEntries=getTechniques();
+  if(isHR()) html+='<p class="small">None — Pure Body.</p>';
+  else if(!techEntries.length) html+='<p class="small">No technique recorded.</p>';
+  else techEntries.forEach(function(entry,i){
+    if(i>0) html+='<div style="border-top:1px solid var(--line);margin:14px 0;"></div>';
+    html+=techniqueSheetHTML(entry);
+  });
   html+='</div>';
   /* details */
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Details</h3>';
