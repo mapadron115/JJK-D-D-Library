@@ -559,9 +559,54 @@ var ANCESTRIES = {
                 'Spiritual Nature. You do not need to eat, drink, breathe, or sleep, but must remain inactive for 4 hours a day to gain the benefits of a long rest. You have advantage on saving throws against disease and being poisoned, and you have resistance to poison damage. You are immune to nonmagical bludgeoning, piercing, and slashing damage. You are invisible to creatures without cursed energy.',
                 'Cursed Energy Affinity. You cannot use reverse cursed technique, which is positive energy, though you can still restore your body with pure cursed energy. Starting at 5th level, as an action once per turn you can spend cursed energy up to your CE modifier to regain 5 hit points per cursed energy spent.',
                 'Hard Shell. You are a young cursed spirit that has yet to develop. While you are not wearing armor, your AC equals 14 + your Constitution modifier.',
-                'Strong Constitution. Your hit point maximum increases by an amount equal to your level, and increases by 1 whenever you gain a level.']}
+                'Strong Constitution. Your hit point maximum increases by an amount equal to your level, and increases by 1 whenever you gain a level.'],
+        hpPerLevel:1}
+    }
+  },
+  'cursed-vessel': {
+    name:'Cursed Vessel', blurb:'A sorcerer reborn in a stolen or painted body. Humanoid; Small or Medium, matching the host body; 30-ft walking speed; the host body\u2019s remaining natural lifespan; Common and one other language. Choose one incarnation.',
+    heritages:{
+      'reincarnated':{ name:'Reincarnated',
+        asi:'+2 to one ability score and +1 to each of your other five ability scores.',
+        bonus:{STR:1,DEX:1,CON:1,INT:1,WIS:1,CHA:1},
+        pick:{counts:[2]},
+        traits:['This Body Is Mine. You have advantage on saving throws against effects that would unwillingly transform your body or replace your physical form. This does not grant general advantage against possession, charm, or soul damage unless the effect also transforms your body.',
+                'Incomplete and complete states are narrative states, not additional ancestry options \u2014 choose Reincarnated or Death Painting for statistics.',
+                'Ability Score Increase. Increase one ability score by 2 and each of your other five ability scores by 1.',
+                'Life Experience. Gain proficiency in two skills, or one skill and one tool, of your choice.',
+                'Cling to Life. When reduced to 0 HP without dying outright, you may drop to 1 HP instead. Once used, this trait returns after a long rest.']},
+      'death-painting':{ name:'Death Painting',
+        asi:'Charisma +3 (maximum 20).',
+        bonus:{CHA:3},
+        hpPerLevel:2,
+        traits:['This Body Is Mine. You have advantage on saving throws against effects that would unwillingly transform your body or replace your physical form. This does not grant general advantage against possession, charm, or soul damage unless the effect also transforms your body.',
+                'Incomplete and complete states are narrative states, not additional ancestry options \u2014 choose Reincarnated or Death Painting for statistics.',
+                'Ability Score Increase. Your Charisma increases by 3, to a maximum of 20.',
+                'Durable Body. Your HP maximum increases by 2 at level 1 and by 2 whenever your total character level increases (2 \u00d7 character level).',
+                'Poisonous Blood. When a creature within 5 feet deals piercing or slashing damage to you, use your reaction to splash it or another creature within 5 feet. The target takes poison damage equal to PB and makes a Constitution save against 8 + PB + Constitution modifier. On a failure, it is poisoned until the end of your next turn.']}
+    }
+  },
+  'cursed-corpse': {
+    name:'Cursed Corpse', blurb:'An animated construct given a purpose. Construct; Common; 35-ft walking speed; no natural maximum lifespan while repaired; choose Small, Medium, or Large; choose a Softbody or Hard Shell frame.',
+    heritages:{
+      'softbody':{ name:'Softbody',
+        asi:'+4 to one ability score of your choice (maximum 20).',
+        pick:{counts:[4]},
+        traits:['Purpose-Built. One ability score of your choice increases by 4, to a maximum of 20.',
+                'Constructed Size. A Large corpse occupies a 10-foot space but gains no automatic reach or larger weapon dice. It squeezes through spaces normally and uses its actual size for grappling and carrying.',
+                'Unnatural Nature. You do not need to breathe, eat, drink, or sleep, and magic cannot put you to sleep. You must still complete rests normally. Hit Dice, ordinary healing, and RCT can restore your HP unless an effect expressly excludes Constructs; describe rest recovery as repair materials and maintenance.',
+                'Tailored Appearance. Choose Intimidation, Persuasion, or Performance. You gain proficiency in the chosen skill and double PB for checks made with it.',
+                'Surprise. After posing as a mundane object or nonsentient body, use an action to make Charisma (Performance) against a creature\u2019s passive Insight. On a success, reveal yourself and choose that creature within 30 feet if it can see you. It makes a Wisdom save against 10 + PB + Charisma modifier; on a failure it is stunned until the end of your next turn. Once used, finish a long rest before using it again.']},
+      'hard-shell':{ name:'Hard Shell',
+        asi:'+4 to one ability score of your choice (maximum 20).',
+        pick:{counts:[4]},
+        traits:['Purpose-Built. One ability score of your choice increases by 4, to a maximum of 20.',
+                'Constructed Size. A Large corpse occupies a 10-foot space but gains no automatic reach or larger weapon dice. It squeezes through spaces normally and uses its actual size for grappling and carrying.',
+                'Unnatural Nature. You do not need to breathe, eat, drink, or sleep, and magic cannot put you to sleep. You must still complete rests normally. Hit Dice, ordinary healing, and RCT can restore your HP unless an effect expressly excludes Constructs; describe rest recovery as repair materials and maintenance.',
+                'Integrated Armor. You gain a +1 bonus to AC. You may wear only armor with which you are proficient. Incorporating or removing armor takes 1 hour in contact with it, and may occur during a rest. Integrated armor cannot be removed against your will while you live. The +1 is a flat bonus and applies after the chosen AC calculation, including worn armor and a shield.']}
     }
   }
+
 };
 
 /* Preset lists below are canon-only: every name must appear verbatim in the
@@ -671,6 +716,8 @@ function hpMax(){
     var die = (ld.hpMode==='roll') ? (ld.hpDie||0) : avgDie(hd);
     total += die + mod(ab.CON||10);
   }
+  var _ah=(char.ancestry&&char.heritage&&ANCESTRIES[char.ancestry])?ANCESTRIES[char.ancestry].heritages[char.heritage]:null;
+  if(_ah&&_ah.hpPerLevel) total+=_ah.hpPerLevel*char.level;
   return total;
 }
 function ceReserveSum(){
@@ -866,10 +913,10 @@ STEP_VALID[1]=function(){
 
 /* ═══════════ STEP 2 — ANCESTRY ═══════════ */
 function stepAncestry(body){
-  var html='<h2>Step 2 — Ancestry</h2><p class="sub">Every sorcerer is born of something. Humans choose a heritage; cursed spirits choose what kind of curse they are.</p>';
+  var html='<h2>Step 2 — Ancestry</h2><p class="sub">Every sorcerer is born of something. Humans choose a heritage; cursed spirits choose what kind of curse they are; vessels choose an incarnation; corpses choose a frame.</p>';
   html+='<div class="seg" id="ancSeg">'+
     '<button type="button" class="seg-btn'+(char.ancestry==='human'?' is-active':'')+'" data-a="human">Human</button>'+
-    '<button type="button" class="seg-btn'+(char.ancestry==='cursed-spirit'?' is-active':'')+'" data-a="cursed-spirit">Cursed Spirit</button></div>';
+    '<button type="button" class="seg-btn'+(char.ancestry==='cursed-spirit'?' is-active':'')+'" data-a="cursed-spirit">Cursed Spirit</button>'+ '<button type="button" class="seg-btn'+(char.ancestry==='cursed-vessel'?' is-active':'')+'" data-a="cursed-vessel">Cursed Vessel</button>'+ '<button type="button" class="seg-btn'+(char.ancestry==='cursed-corpse'?' is-active':'')+'" data-a="cursed-corpse">Cursed Corpse</button></div>';
   html+='<div id="heritGrid"></div><div id="heritDetail"></div>';
   body.innerHTML=html;
   body.querySelectorAll('#ancSeg .seg-btn').forEach(function(b){
@@ -882,7 +929,7 @@ function stepAncestry(body){
 }
 function renderHeritages(){
   var g=$('heritGrid'), d=$('heritDetail');
-  if(!char.ancestry){ g.innerHTML='<p class="small">Choose Human or Cursed Spirit above.</p>'; d.innerHTML=''; return; }
+  if(!char.ancestry){ g.innerHTML='<p class="small">Choose an ancestry above.</p>'; d.innerHTML=''; return; }
   var A=ANCESTRIES[char.ancestry];
   var html='<h3>'+esc(A.name)+' heritages</h3>';
   if(A.draft) html+='<div class="banner draft"><span class="bk">❖ No published traits</span><p>The player guide names these subraces but prints no ancestry traits for them — define traits and ability increases with your GM before play.</p></div>';

@@ -2055,7 +2055,7 @@
    "module": "37",
    "figure": "Jack the Ripper",
    "title": "JACK THE RIPPER",
-   "detail": "summary",
+   "detail": "full",
    "technique": "Malicious Blessing",
    "tier": "IV",
    "role": null,
@@ -2066,11 +2066,78 @@
    "culture": "English",
    "concept": "They never caught him — so the world never stopped inventing him, and the invention learned to kill.",
    "serves": null,
-   "features": [],
-   "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "*Faithful summary of U15-01; mechanics per the audited dossier, not reinvented here.*\n\n- **Core loop:** bonus action, 1 CE, touch via the Gentleman's Gloves — one unattended handheld throwable mundane object becomes a **Blessed Weapon** for 1 minute (counts as a cursed tool; minimum 1 Murder Die base damage; wielder is proficient; uses Dex or CE ability). **Property slots:** 1 (L1) → 2 (L6) → 3 (L11) → 4 (L18). **Murder Die:** d6 → d8 → d10 → d12. **One-damage-rider-per-hit** anti-stacking law.\n- **Properties:** six base (Razor, Needle, Anchor, Thread, Return, False Innocence) + Execution/Guard (L6) + Guillotine/Bloodhound/Betrayal (L11).\n- **L3:** **Prepared Murder** (action + 1 CE; PB trigger traps, 2×PB at 18) and **London Bridge** (5-ft free move, no action; once/turn ricochet reroll, no action — each free once per turn).\n- **L6–18:** **Grand Blessing** — environmental features, each blessing costing an **action** plus: Large 2 CE / Huge 4 CE / Structure 6 CE (baseline 2/4/6 dice + CE mod).\n- **L11 Maximum: Dear God** (action, 10 CE, 1 min): blood-coated objects and unarmored strikes carry every known Murder Property; **Final Execution**: 8 Murder Dice + CE mod, ignores-resistance rider.\n- **L18:** hour-long handheld Blessings; no-action blessing once/turn.\n- **L20 — The World Will Not Name Him:** once per long rest, when you would be detected, identified, or remembered — scrying, truesight, testimony, any record — the attempt fails (Heaven declines to fix you, as your vow provides), and you may teleport up to 60 ft to an unoccupied space you can see as part of the same reaction. *He will never be caught. He will never be known, either.*\n- **Domain Expansion: London Bridge Is Falling Down** (20 CE, full-turn action, 60-ft enclosed): at initiative 20, the sure-hit auto-assigns one temporary Murder Property **plus** one autonomous hostile action to enemies (save halves). **800 clash points · 5-round burnout · 2-minute duration** · barrier HP per approved formula (per zack's 10 Sept 2026 bookkeeping ruling).",
+   "features": [
+    {
+     "name": "Malicious Blessing",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Bonus action · 1 CE · touch (via the Gentleman's Gloves).",
+     "text": "Touch one unattended, handheld, throwable mundane object. For 1 minute it becomes a **Blessed Weapon**: it counts as a cursed tool, its base damage is a minimum of 1 Murder Die, you are proficient with it, and it uses your Dexterity or CE ability. **Property slots:** 1 (2 at L6, 3 at L11, 4 at L18). **Murder Die:** d6 (d8 at L6, d10 at L11, d12 at L18). **Anti-stacking law:** only one damage rider applies per hit, no matter how many properties the weapon carries. Choose 1 **Murder Property** when you bless the object: **Razor** (the surgical cut — the object's strikes open deep, clean cuts); **Needle** (the precise puncture — the object's strikes find vitals); **Anchor** (the weight that holds you down — the object's strikes drag and pin); **Thread** (the ligature — the object's strikes bind and strangle); **Return** (the throw that comes back — a thrown blessed object returns to your hand); **False Innocence** (the weapon appears mundane to passive CE perception; active inspection contests your technique DC)."
+    },
+    {
+     "name": "Prepared Murder",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Action · 1 CE per trap.",
+     "text": "Bless objects and leave them. You may prepare up to PB trigger traps (2×PB at L18); each trap needs its legal target and its cursed energy, and each one is honest about what sets it off. Run the room as a dungeon the enemy walks into — the blessing was there before they arrived."
+    },
+    {
+     "name": "London Bridge",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Free (no action).",
+     "text": "You get a 5-foot free move that costs no action, and once per turn you may reroll a ricochet — each free once per turn. You slide through the fight the way you slide away from a scene."
+    },
+    {
+     "name": "Grand Blessing",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Action · 2 CE (Large) / 4 CE (Huge) / 6 CE (Structure).",
+     "text": "Bless the environment itself: Large features for 2 CE, Huge for 4 CE, a whole Structure for 6 CE. The staircase is blessed. The chandelier is blessed. The bridge is blessed. Baseline damage: 2 dice (Large), 4 dice (Huge), or 6 dice (Structure) + your CE modifier. Your property slots become 2, your Murder Die becomes d8, and you learn two new Murder Properties: **Execution** (the finishing cut — the object's strikes punish the already-wounded) and **Guard** (reaction: reduce incoming damage by 2 Murder Dice + your modifier)."
+    },
+    {
+     "name": "Wider Repertoire",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "Your property slots become 3, your Murder Die becomes d10, and you learn three new Murder Properties: **Guillotine** (the falling blade — the object's strikes fall heaviest on the helpless); **Bloodhound** (the blessed object unerringly seeks a marked target); **Betrayal** (bless a hostile's worn or carried object after a melee CE hit, then use a bonus action to activate it against its owner — hostile offense, not body horror: the blessing lands on the object, and the object is worn)."
+    },
+    {
+     "name": "The Blessing Lingers",
+     "level": 18,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "Your property slots become 4 and your Murder Die becomes d12. Handheld Blessings now last 1 hour, and once per turn you may bless an object with no action."
+    }
+   ],
+   "maximum": {
+    "name": "Dear God",
+    "kind": "maximum",
+    "level": 11,
+    "cost_line": "Action · 10 CE.",
+    "text": "For 1 minute, blood-coated objects and your unarmored strikes carry **every known Murder Property**. **Final Execution:** 8 Murder Dice + your CE modifier, with an ignores-resistance rider. When you stop experimenting and commit, the gloves come off."
+   },
+   "domain": {
+    "name": "London Bridge Is Falling Down",
+    "kind": "domain",
+    "level": null,
+    "cost_line": "Full-turn action · 20 CE · 800 clash points · burnout 5 rounds · duration 2 minutes · 60-ft enclosed.",
+    "text": "At initiative 20, the sure-hit auto-assigns one temporary Murder Property **plus** one autonomous hostile action to your enemies (save halves). Inside the Domain, the nursery rhyme is not a song. It is a procedure.",
+    "clash_points": 800,
+    "burnout_rounds": 5,
+    "duration_min": 2,
+    "radius": "60-ft radius",
+    "activation": "full-turn action",
+    "ce_cost": 20
+   },
+   "l20": {
+    "name": "The World Will Not Name Him",
+    "kind": "l20",
+    "level": 20,
+    "cost_line": "Once per long rest · reaction.",
+    "text": "When you would be detected, identified, or remembered — scrying, truesight, testimony, any record — the attempt fails. Heaven declines to fix you, as your vow provides. As part of the same reaction, you may teleport up to 60 feet to an unoccupied space you can see. He will never be caught. He will never be known, either."
+   },
+   "summary_text": null,
    "source_file": "37-jack.md"
   },
   {
@@ -2078,7 +2145,7 @@
    "module": "38",
    "figure": "Qin Shi Huang",
    "title": "QIN SHI HUANG",
-   "detail": "summary",
+   "detail": "full",
    "technique": "Mandate of the First Emperor",
    "tier": "V",
    "role": null,
@@ -2089,11 +2156,134 @@
    "culture": "Chinese",
    "concept": "He unified all under heaven and found it insufficient — so he set out to unify heaven too.",
    "serves": null,
-   "features": [],
-   "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "*Faithful summary of U15-02; mechanics per the audited dossier.*\n\n- **Core loop:** **Crux Star** perception (60-ft Gaze, bonus action, 1 CE, 1 min) → **Flow Break** debuff (attack −1 Imperial Die; one damage roll −1 die + mod; save DC −1; L6 **Imperial Disruption** targets a specific Technique Star) → **Tribute** resource (cap PB → PB+CE mod at 18; gain 1/round on meaningful damage reduction, failed attack, or redirect).\n- **Fivefold Chi You forms:** **Drifting Tortoise** (replace attack, 1 CE: ranged Crux strike applies Flow Break, no damage); **Heavenly Phoenix** (reaction, 2 CE: reduce damage 2 Imperial Dice + mod; consume Flow Break → 3 dice; reduce ≥10 → 1 Tribute); **Mount Tai Dragon Claw** (L3: replace attack, 2 CE, 2 dice + mod piercing, Tribute slow); **White Tiger Crescent Moon** (L3: action/replace, 2 CE, 2 dice + mod bludgeoning + push 15 ft/prone); **Swallow Slash** (L11: sword, 2 CE, weapon + 2 dice, up to 3 Tribute → +1 die each).\n- **L6:** **Sovereign Sight**; **Celestial Reversal** (Phoenix to 0 + 1 Tribute → free unarmed strike in the same reaction).\n- **L11:** **Goujian** (CE sword; stores reduced force → next Swallow Slash + Tribute dice); **No King Stands Above Me** (successful save vs. hostile technique with Gaze active: reaction + 2 CE applies Flow Break to the creator, once/round); **Maximum: King of All Beginnings** (action, 10 CE, requires maximum Tribute: all visible hostiles/effects have Flow Break until end of next turn; consume any number once each; first Phoenix free).\n- **L18:** Imperial Die d12; Tribute cap PB+CE mod; PB Flow Break targets.\n- **L20 — Tianxia, Complete:** once per long rest (bonus action): for 1 minute, Flow Break rests on every hostile creature you can see — no Gaze targeting required, the gaze becomes the sky — and your Tribute cap is doubled. *All under heaven, administered all at once.*\n- **Drawback:** **Mirror-Touch Synesthesia** — 1 Imperial Die psychic when a visible creature takes ≥10 damage.\n- **Domain: All Under Heaven — Throne of the First Emperor** (20 CE, full-turn, 60-ft enclosed): at initiative 20, **Imperial Meridian** auto-Flow-Breaks one hostile; **Tribute of Heaven** uncaps gain; **Five Forms One Emperor** chains 3 different forms paying costs without action/reaction spend. **1,000 clash points · 3-round burnout · 3-minute duration** · barrier HP per approved formula (per zack's 10 Sept 2026 bookkeeping ruling).",
+   "features": [
+    {
+     "name": "Crux Star Perception",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Bonus action · 1 CE · 1 minute.",
+     "text": "Your gaze extends 60 feet: you perceive the **Crux Stars** — where power converges in creatures, objects, and effects. The Gaze reveals, never the hidden rules. **Price — Mirror-Touch Synesthesia:** whenever a creature you can see takes 10 or more damage, you take 1 Imperial Die of psychic damage. Your Imperial Die is a d6 (d8 at L6, d12 at L18)."
+    },
+    {
+     "name": "Flow Break",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Applied through the Fivefold Chi You forms.",
+     "text": "Your signature debility. A creature under Flow Break suffers: −1 Imperial Die to attack rolls; −1 die + your modifier to one damage roll; −1 to save DCs. You maintain Flow Break on 1 target (2 at L6, PB at L18)."
+    },
+    {
+     "name": "Tribute",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Passive resource.",
+     "text": "Your Tribute cap is PB (PB + CE modifier at L18). Gain 1 Tribute per round (it persists 1 minute) when you: meaningfully reduce damage with Heavenly Phoenix, cause a failed attack through Flow Break, or redirect force with a Chi You form."
+    },
+    {
+     "name": "Drifting Tortoise",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Replace one attack · 1 CE.",
+     "text": "A ranged Crux strike that applies Flow Break and deals no damage. The tortoise drifts; the blow lands where the power converges."
+    },
+    {
+     "name": "Heavenly Phoenix",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Reaction · 2 CE.",
+     "text": "Reduce incoming damage by 2 Imperial Dice + your modifier; consume the attacker's Flow Break to roll 3 dice instead. If you reduce 10 or more, gain 1 Tribute. A melee attacker is pushed 5 feet."
+    },
+    {
+     "name": "Mount Tai Dragon Claw",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Replace one attack · 2 CE.",
+     "text": "2 Imperial Dice + modifier piercing damage. Spend Tribute to slow the target."
+    },
+    {
+     "name": "White Tiger Crescent Moon",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Action (or replace one attack) · 2 CE.",
+     "text": "2 Imperial Dice + modifier bludgeoning damage; push the target 15 feet or knock it prone."
+    },
+    {
+     "name": "Sovereign Sight",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "Your Imperial Die becomes d8. You perceive Crux Stars in cursed tools, barriers, and shikigami — not just creatures. You may maintain Flow Break on 2 targets."
+    },
+    {
+     "name": "Celestial Reversal",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Reaction · 1 Tribute (trigger: reduce damage to 0 with Heavenly Phoenix).",
+     "text": "When Heavenly Phoenix reduces damage to 0, spend 1 Tribute to make a free unarmed strike in the same reaction: +1 Imperial Die force damage, against an attacker within 15 feet."
+    },
+    {
+     "name": "Imperial Disruption",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "Your Flow Break may target a specific Technique Star: −1 die to its attack rolls, −2 dice to its damage, −2 to its save DC."
+    },
+    {
+     "name": "Goujian",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Bonus action · 3 CE · 1 minute.",
+     "text": "You forge a CE sword (1d8). **Imperial Power Embrace:** force you reduce is stored in the blade; your next Swallow Slash gains the stored dice plus Tribute-generated dice."
+    },
+    {
+     "name": "Swallow Slash",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "2 CE (sword attack).",
+     "text": "Weapon damage + 2 Imperial Dice; spend up to 3 Tribute for +1 die each."
+    },
+    {
+     "name": "No King Stands Above Me",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Reaction · 2 CE · once per round (trigger: you succeed on a save vs. a hostile technique while your Gaze is active).",
+     "text": "Apply Flow Break to the technique's creator."
+    },
+    {
+     "name": "The Mandate Perfected",
+     "level": 18,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "Your Imperial Die becomes d12. Your Tribute cap becomes PB + CE modifier. You may maintain Flow Break on PB targets. Consuming Flow Break grants 1 Tribute, ignoring the 1/round limit."
+    }
+   ],
+   "maximum": {
+    "name": "King of All Beginnings",
+    "kind": "maximum",
+    "level": 11,
+    "cost_line": "Action · 10 CE · requires maximum Tribute.",
+    "text": "Until the end of your next turn, every hostile creature and effect you can see has Flow Break. Consume any number of Flow Breaks once each; your first Heavenly Phoenix is free; your next Swallow Slash gains +1 die per Flow Break consumed (cap PB)."
+   },
+   "domain": {
+    "name": "All Under Heaven — Throne of the First Emperor",
+    "kind": "domain",
+    "level": null,
+    "cost_line": "Full-turn action · 20 CE · 1,000 clash points · burnout 3 rounds · duration 3 minutes · 60-ft enclosed.",
+    "text": "At initiative 20, the sure-hit **Imperial Meridian** automatically Flow-Breaks one hostile. **Tribute of Heaven** uncaps your Tribute gain. **Five Forms One Emperor:** chain 3 different Chi You forms, paying their CE costs without spending actions or reactions.",
+    "clash_points": 1000,
+    "burnout_rounds": 3,
+    "duration_min": 3,
+    "radius": "60-ft radius",
+    "activation": "full-turn action",
+    "ce_cost": 20
+   },
+   "l20": {
+    "name": "Tianxia, Complete",
+    "kind": "l20",
+    "level": 20,
+    "cost_line": "Once per long rest · bonus action.",
+    "text": "For 1 minute, Flow Break rests on every hostile creature you can see — no Gaze targeting required; the gaze becomes the sky — and your Tribute cap is doubled. All under heaven, administered all at once."
+   },
+   "summary_text": null,
    "source_file": "38-qin.md"
   },
   {
@@ -2101,7 +2291,7 @@
    "module": "39",
    "figure": "Nikola Tesla",
    "title": "NIKOLA TESLA",
-   "detail": "summary",
+   "detail": "full",
    "technique": "Super Automaton β",
    "tier": "V",
    "role": null,
@@ -2112,11 +2302,65 @@
    "culture": "Serbian-American",
    "concept": "He tried to give the world free lightning, and the world billed him for it — so he came back to collect.",
    "serves": null,
-   "features": [],
+   "features": [
+    {
+     "name": "Vector-Locked Armor",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Bonus action · 1 CE · 10 minutes.",
+     "text": "All your voluntary movement must be straight-line **Vectors** of at least 10 feet — no curving. **Broken Equation:** if you are forcibly stopped before completing 10 feet, your speed is zeroed (and inside your Domain you lose 1 Acceleration Stage). Your attack profiles key off your final uninterrupted Vector length: **PPP** (10+ ft: +1d6 force); **PPJ** (20+ ft: Strength save or pushed 15 ft along the incoming Vector, and you follow 10 ft); **PPB** (30+ ft: prone, or drop a mundane item, or suppress reactions, or disadvantage on the next Str/Dex save); **Maximum Velocity** (40+ ft: 3d6 force rider + Strength save or push and prone; **Overrun** forces +10 ft of continuation)."
+    },
+    {
+     "name": "Ground Fault",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Reaction · PB times per long rest (trigger: your Broken Equation triggers).",
+     "text": "Each creature within 10 feet makes a Dexterity save vs. your technique DC: 2d8 lightning on a failure, half on a success. (zack-delegated feature.)"
+    },
+    {
+     "name": "Domain: Gematria Zone — Prison of the Gods",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Action · 10 CE (8 CE at 18th) · ~32-ft cube.",
+     "text": "Unlocks at 6th (per zack's ruling). A nonlethal rule-Domain with no lethal sure-hit: at initiative 20 it generates an **Experiment** from a d6 table (distance, angle, impact, circuit, boundary, reversal trials); success advances your **Acceleration Stage** (0→II at 6–10; begins at II, cap IV at 11–17; begins at II with direct experiment choice, cap V at 18). Each Stage: +10 ft speed. **Stage II — Tesla Step:** preserve your Vector through one 90° turn (segments still ≥10 ft). **Stage III:** Vectors may run along walls, ceilings, and air-grids. Enemies may contest, body-block lanes, grapple, or trigger your Broken Equation — the counterplay is the point."
+    },
+    {
+     "name": "Super Tesla Coils",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "3 coils per long rest (not restorable by CE, short rest, or RCT).",
+     "text": "You carry 3 Super Tesla Coils. **Tesla Warp** (bonus action, 4 CE, 1 Coil): teleport to a coordinate you prepared at the end of a turn inside the Zone, preserving Vector continuity."
+    },
+    {
+     "name": "Acceleration Stage V",
+     "level": 18,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "Your Acceleration Stage cap becomes V: PB Tesla Steps per turn with 90° turns in 3D. Your Domain costs 8 CE."
+    }
+   ],
    "maximum": null,
-   "domain": null,
-   "l20": null,
-   "summary_text": "*Faithful summary of U15-03; mechanics per the audited dossier including zack's 10 Sept 2026 rulings.*\n\n- **Core loop:** **Vector-locked armor** (bonus action, 1 CE, 10 min): all voluntary movement must be straight-line **Vectors** ≥10 ft; **Broken Equation** — forcibly stopped before completing 10 ft → speed zeroed. **Attack profiles** keyed to final uninterrupted Vector length: **PPP** (10+ ft: +1d6 force), **PPJ** (20+: Str save or pushed 15 ft, follow 10 ft), **PPB** (30+: prone / drop item / suppress reactions / disadvantage on next Str/Dex save), **Maximum Velocity** (40+: 3d6 force rider + Str save or push+prone; **Overrun** forces +10 ft continuation).\n- **L3: Ground Fault** (zack-delegated feature): when Broken Equation triggers, reaction — each creature within 10 ft makes a Dex save vs. technique DC: 2d8 lightning on failure, half on success. Usable PB times per long rest.\n- **L6: Domain — Gematria Zone, Prison of the Gods** (prototype): nonlethal rule-Domain, no lethal sure-hit; at initiative 20, generates an **Experiment** (d6 table); success advances **Acceleration Stage** (0→II at 6–10; begins at II, cap IV at 11–17; begins at II, choose experiment, cap V at 18). Stages: +10 ft speed each; **II = Tesla Step** (preserve Vector through one 90° turn); **III** = walls/ceilings/air-grid vectors; **V (18)** = PB Tesla Steps/turn in 3D. Cost: **action, 10 CE** (8 CE at 18th); ~32-ft cube (named R038 exception). Per zack's ruling, the Domain unlocks at **6th** (moved from 3rd).\n- **L11:** 3 **Super Tesla Coils**/long rest (not restorable by CE/short rest/RCT); **Tesla Warp** (bonus action, 4 CE, 1 Coil: teleport to a coordinate prepared at end of a turn inside the Zone, preserving Vector continuity).\n- **Explicit counterplay** (per dossier): contest, body-block lanes, grapple, trigger Broken Equation.\n- **L20 — The Current Decides:** once per long rest (reaction): when your Broken Equation triggers, instead of grounding at your position you may place the Ground Fault burst at any point within 60 ft of you — the current chooses its path — and you regain one expended Super Tesla Coil. *The current goes where it goes.*\n- **Bookkeeping:** **1,000 clash points · 3-round burnout · 3-minute duration** · barrier HP per approved formula (per zack's 10 Sept 2026 rulings).",
+   "domain": {
+    "name": "Gematria Zone — Prison of the Gods",
+    "kind": "domain",
+    "level": null,
+    "cost_line": "Action · 10 CE (8 CE at 18th) · 1,000 clash points · burnout 3 rounds · duration 3 minutes · ~32-ft cube (named R038 exception).",
+    "text": "A nonlethal rule-Domain: movement laws and the Experimental Protocol, no damage sure-hit. At initiative 20, an Experiment is generated; success advances Acceleration Stage. Tesla's priced exception: action-speed deployment at 10 CE.",
+    "clash_points": 1000,
+    "burnout_rounds": 3,
+    "duration_min": 3,
+    "radius": "~32-ft cube",
+    "activation": "action",
+    "ce_cost": 10
+   },
+   "l20": {
+    "name": "The Current Decides",
+    "kind": "l20",
+    "level": 20,
+    "cost_line": "Once per long rest · reaction (trigger: your Broken Equation triggers).",
+    "text": "Instead of grounding at your position, you may place the Ground Fault burst at any point within 60 feet of you — the current chooses its path — and you regain one expended Super Tesla Coil."
+   },
+   "summary_text": null,
    "source_file": "39-tesla.md"
   },
   {
@@ -2147,7 +2391,7 @@
    "module": "41",
    "figure": "Raiden Tameemon",
    "title": "RAIDEN TAMEEMON",
-   "detail": "summary",
+   "detail": "full",
    "technique": "Hundred Seals Physique",
    "tier": "IV",
    "role": null,
@@ -2158,11 +2402,66 @@
    "culture": "Japanese",
    "concept": "Two hundred and fifty-four bouts. Ten draws. Zero losses. Death had to cheat — it couldn't beat him in the ring.",
    "serves": null,
-   "features": [],
-   "maximum": null,
+   "features": [
+    {
+     "name": "The Muscle Map",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "Twelve **Muscle Bands** across four regions — Left Arm, Right Arm, Legs, Frame — default 3/3/3/3. Bands are never spent; all twelve always exist unless capacity damage applies. **Arm:** 1 — disadvantage on arm attacks and Athletics, no two-handed support; 2 — basic function; 3 — balanced; 4 — advantage on arm Athletics, once per turn one direct attack gains +PB damage (not multiplied on crits). **Legs:** 1 — speed −20, standing costs your remaining movement; 2 — speed −10; 3 — balanced; 4 — speed +10, advantage vs. prone, jumps doubled. **Frame:** 1 — −2 AC, disadvantage on Con saves and vs. forced movement; 2 — −1 AC; 3 — balanced; 4 — +1 AC, advantage vs. forced movement and prone. This technique never modifies ability scores."
+    },
+    {
+     "name": "Muscle Migration",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Bonus action.",
+     "text": "Move up to PB Bands between regions, obeying capacity limits. Strength is never created, only moved."
+    },
+    {
+     "name": "The Forbidden Four",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Replace one attack (each gated on body configuration).",
+     "text": "**Harite** (arm 4+): on hit, Con save or the target loses reactions until your next turn and your next attack against it gains +2 to hit. **Sabaori** (arms total 7+, frame 3+, requires grapple): Str save or take your unarmed damage, fall prone, and remain grappled. **Kannuki** (both arms 4+, on a successful grapple): Str save or both arms are locked — no two-arm attacks, no hand or somatic components requiring those limbs, disadvantage to escape; repeat the save at end of turn. Limb-gated interference only: this never generically suppresses cursed techniques. **Teppo** (legs 4+ and arm 4+): move 10+ ft toward the target; on hit +PB damage; Str save or pushed 10 ft."
+    },
+    {
+     "name": "Full Muscle Control",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "Max region capacity becomes 5. **Overpressure:** strenuous use of a 5-Band region deals PB internal damage afterward — cannot be resisted or redirected. **5-Band Arm:** first direct attack per turn +2×PB damage; grapple one size larger than normal. **5-Band Legs:** speed +20, no running start for jumps, first leg-driven attack per turn +PB damage. **5-Band Frame:** +2 AC, advantage on Str/Con saves, count one size larger vs. forced movement. **Instant Migration:** once per turn before one attack, Athletics check, or Str/Con save, move 1 Band without an action and resolve with the new configuration. **Wild Boar** (arm 5+ and grapple, 2 CE, replace one attack): Con save or 2×PB + Str/CE modifier bludgeoning, and attacks primarily using that limb have disadvantage until your next turn. **Miyama** (reaction, 2 CE, when hit by melee): migrate 1 Band into each Arm from legal regions; reduce the damage by the total Bands in both Arms + PB (typed as damage reduction)."
+    },
+    {
+     "name": "Hundred Seals Release",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Bonus action · 4 CE · 1 minute.",
+     "text": "Region capacity becomes 6; Instant Migration moves 2 Bands. **Forbidden Output:** strenuous use of a 6-Band region deals 2×PB internal damage afterward. **6-Band Arm:** first direct attack per turn +3×PB damage, ignoring bludgeoning resistance. **6-Band Legs:** speed +30; cannot be knocked prone while grounded unless incapacitated; first leg-driven attack per turn +2×PB damage. **6-Band Frame:** +3 AC, advantage on Str/Con saves; while grounded you cannot be forcibly moved unless a hostile effect wins a contest against your technique DC — maintaining this through the end of your turn causes Forbidden Output damage."
+    },
+    {
+     "name": "The Peerless Rikishi",
+     "level": 18,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "**Perfect Migration:** at the start of each of your turns, redistribute any number of Bands once without an action. **No More Holding Back:** once per turn, the first strenuous use of a 5-Band region causes no Overpressure damage (6 Bands still hurts). **Forbidden Technique Mastery:** the Forbidden Four no longer replace an attack when their triggering movement or grapple naturally fulfills the condition; each remains once per turn."
+    }
+   ],
+   "maximum": {
+    "name": "Yatagarasu (The Three-Legged Crow)",
+    "kind": "maximum",
+    "level": 11,
+    "cost_line": "Action · 10 CE · requires Hundred Seals Release.",
+    "text": "Requires Legs ≥ 5 Bands and striking Arm ≥ 4. Move 10+ ft directly toward the target as part of the action. **Final Migration:** every Band in your Legs above 1 migrates into the striking Arm (it may exceed the 6-Band limit for this attack only). One direct unarmed attack: on hit, add PB damage per Band in the striking Arm; then Str save or be pushed 30 ft, knocked prone, and lose reactions until your next turn; blocking or parrying damage reduction is halved against the strike. **Recoil:** you take 10% of your max HP as damage and the striking Arm's maximum capacity drops by 1 for the rest of the encounter (**Muscular Rupture** — RCT heals the HP, not the capacity). Redistribute into a legal body afterward; you choose the post-attack configuration."
+   },
    "domain": null,
-   "l20": null,
-   "summary_text": "*Faithful summary of U15-05; mechanics per the audited dossier.*\n\n- **Core loop:** twelve **Muscle Bands** across four regions (Left Arm / Right Arm / Legs / Frame), default 3/3/3/3; **Muscle Migration** (bonus action): move up to PB Bands between regions within capacity limits; Bands are never spent. **Region states** by band count — Arms: disadvantage → basic → balanced → advantage + once/turn +PB damage at 4; Legs: speed −20 → −10 → balanced → +10 at 4; Frame: −2 AC → −1 AC → balanced → +1 AC at 4. (Never modifies ability scores — no cap interaction.)\n- **L3: The Forbidden Four** — **Harite** (arm 4+); **Sabaori** (arms 7+ + grapple); **Kannuki** (both arms 4+ — limb-gated interference only, never generic technique suppression, per dossier); **Teppo** (legs 4+ and arm 4+). Each Forbidden technique replaces one attack when its Band requirement is naturally fulfilled (per L18 Forbidden Technique Mastery).\n- **L6: Full Muscle Control** — capacity 5; **Overpressure** (strenuous 5-Band use deals PB internal damage afterward — \"cannot be resisted or redirected\"); 5-Band region bonuses; **Instant Migration** (once/turn, move 1 Band without an action before an attack/check/save); **Wild Boar** (arm 5+ + grapple, 2 CE); **Miyama** (reaction, 2 CE: reduce melee damage by Bands in both Arms + PB — typed as damage reduction).\n- **L11: Hundred Seals Release** (bonus action, 4 CE, 1 min: capacity 6, Instant Migration moves 2; **Forbidden Output** 2×PB internal damage); **Maximum: Yatagarasu** (action, 10 CE, requires Release: Legs ≥ 5, striking Arm ≥ 4; as part of the action, charge in a straight line toward the target, minimum 10 ft; **Final Migration** sends all Leg Bands above 1 into the striking Arm — may exceed 6 for this attack; one unarmed attack: on hit +PB damage per Band in the Arm; Str save or push 30 ft + prone + lose reactions; blocking/parrying reduction halved; **Recoil:** 10% max HP damage + striking Arm capacity −1 for the encounter — RCT heals HP, not capacity).\n- **L18: Perfect Migration** (start-of-turn free redistribution); **No More Holding Back** (once/turn free 5-Band use); **Forbidden Technique Mastery** (Forbidden Four no longer replace an attack when naturally fulfilled, once/turn each).\n- **L20 — Yokozuna, At Last:** the rank denied, finally taken. Your Muscle Migration may move up to PB+2 Bands, region capacity becomes 7, and once per long rest you may use Yatagarasu without the Release requirement — the bout, on his terms at last.\n- **Domain:** **NONE — per dossier, explicit.** Clash points N/A.\n- **Hygiene notes** (per dossier): flat +×PB damage bonuses do not multiply on critical hits; \"Muscular Rupture\" names the capacity-loss keyword.",
+   "l20": {
+    "name": "Yokozuna, At Last",
+    "kind": "l20",
+    "level": 20,
+    "cost_line": "Passive · once per long rest (Yatagarasu without Release).",
+    "text": "The rank denied, finally taken. Your Muscle Migration may move up to PB+2 Bands, region capacity becomes 7, and once per long rest you may use Yatagarasu without the Release requirement — the bout, on his terms at last."
+   },
+   "summary_text": null,
    "source_file": "41-raiden.md"
   },
   {
@@ -2170,7 +2469,7 @@
    "module": "42",
    "figure": "Okita Sōji",
    "title": "OKITA SŌJI",
-   "detail": "summary",
+   "detail": "full",
    "technique": "Unlived Blade",
    "tier": "IV",
    "role": null,
@@ -2181,11 +2480,66 @@
    "culture": "Japanese",
    "concept": "The Shinsengumi's genius died of tuberculosis at twenty-five — and his sword has been waiting for its duel ever since.",
    "serves": null,
-   "features": [],
-   "maximum": null,
+   "features": [
+    {
+     "name": "Present Swordsmanship",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Passive stance engine · techniques cost as listed.",
+     "text": "Four stances: **HIGH** (raised power), **CENTER** (precision/thrust), **LOW** (compressed launch), **PASSING** (moving through the opponent). **Recenter** (bonus action): choose any stance; breaks the current combination. **Perfect Link:** every named sword technique has an ENTRY → EXIT; if the previous technique's Exit matches the next technique's Entry and it immediately follows, the second is Linked and gains its printed Perfect Link benefit. At character creation, choose **DEX or WIS** as your CE ability for this technique (zack-ruled); locked thereafter. **Sandanzuki** (CENTER→CENTER, replace one attack, 1 CE): one katana attack; on hit, weapon damage + one additional weapon damage die. Perfect Link: +one more weapon damage die. **Ryuubiken** (HIGH→LOW, replace one attack, 1 CE): on hit, the target suffers **Open Guard** (−2 AC against your next sword attack before the end of your turn). Perfect Link: the target also gains no AC bonus from a reaction against that next Linked attack. **Kisoutotsu** (LOW→PASSING, replace one attack, 1 CE): move up to 10 ft directly toward a creature (no movement spent), then one katana attack; on hit, move up to 5 ft through or around the target if a legal destination exists. Perfect Link: the approach becomes 15 ft and does not provoke from that target."
+    },
+    {
+     "name": "Demon Child",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Bonus action · 2 CE · up to 1 minute.",
+     "text": "Speed +10 ft — the body keeping up with legal sword routes, not a generic buff. **Demon Follow-Through:** once per turn after hitting with a named sword technique, if its Exit matches the Entry of a *different* named technique you know, immediately perform that technique as part of the same action and pay its normal cost. After the sequence, take PB internal damage — cannot be resisted or redirected."
+    },
+    {
+     "name": "Sword Time",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Passive · Future Forms cost as listed.",
+     "text": "Three **Unlived Future Forms**. Each begins every long rest **UNLIVED**; first use makes it **SPENT** until the next long rest. A Future Form may ignore its Entry requirement when invoked; its printed Exit still applies; naturally entering from the correct stance grants its Perfect Link benefit. A spent future cannot be lived twice. **Hiryuu** (PASSING→HIGH, 0 CE): leap up to 10 ft (including vertically), one katana attack, land within 5 ft of the target. Perfect Link: the attack has advantage. Then SPENT. **Sharyuu** (LOW→CENTER, 0 CE): one katana attack; on hit, rotate into another open space within 5 ft without provoking from the target, and another hostile creature within your reach takes slashing damage equal to PB. Perfect Link: the secondary damage becomes 2×PB. Then SPENT. **Torao** (HIGH→CENTER, 0 CE): heavy descending katana attack; on hit, weapon damage +2 weapon damage dice; target Str save or falls prone. Perfect Link: non-Domain damage reduction against Torao is reduced by PB. Then SPENT. **No-Kamae** (reaction, 1 CE, when missed by a melee attack): move 5 ft without provoking from that creature and choose any stance — a survival tool, not a Perfect Link."
+    },
+    {
+     "name": "Demon Child Release",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Bonus action · 4 CE · once per long rest · requires Demon Child · up to 1 minute.",
+     "text": "Speed bonus becomes +20 ft; Demon Follow-Through may trigger twice per turn; movement inside named techniques +5 ft. Each Follow-Through still deals PB internal damage. When Release ends: 10% max HP damage — it cannot reduce you below 1 HP unless you voluntarily kept the state active after reaching half HP."
+    },
+    {
+     "name": "Combination Recipe — Kisou Sandanzuki",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Normal CE costs of both techniques.",
+     "text": "During Release, Kisoutotsu → Sandanzuki may be performed as a single uninterrupted Perfect Link — the recipe bridges PASSING→CENTER. Sandanzuki is made at advantage; on hit, normal Sandanzuki damage +1 additional weapon damage die, ignoring resistance to the technique's slashing damage, and the target cannot use reactions against that attack."
+    },
+    {
+     "name": "Sword Demon of Truth",
+     "level": 18,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "**Realized Future:** at the end of each long rest, choose one of Hiryuu, Sharyuu, or Torao — it becomes REALIZED until the next long rest (2 CE per use, no longer becomes SPENT, must obey its printed Entry normally). **Perfect Sword Time:** once per turn when a Linked sword technique hits, alter its printed Exit into one other stance (never Recenter — the technique itself ends differently)."
+    }
+   ],
+   "maximum": {
+    "name": "Enpi Reiten (Black Kite's Heavenly Return)",
+    "kind": "maximum",
+    "level": 11,
+    "cost_line": "Action · 10 CE · requires Demon Child Release.",
+    "text": "Choose up to PB distinct sword techniques you know and arrange them into a sequence. Present Forms obey Entry/Exit normally; Unlived Future Forms may bridge any Entry mismatch even if already SPENT — a bridging Future Form counts as selected for the distinct-technique rule. Each technique keeps its normal attack roll, damage, and effect. No technique creates another Demon Follow-Through. After the last strike, Release ends immediately; take 5% max HP for every attack after the first; then normal Technique Burnout."
+   },
    "domain": null,
-   "l20": null,
-   "summary_text": "*Faithful summary of U15-06; mechanics per the audited dossier including zack's 10 Sept 2026 rulings.*\n\n- **Core loop:** stance combo tree — **HIGH / CENTER / LOW / PASSING**; **Recenter** (bonus action); **Perfect Link** (previous Exit = next Entry → Linked, gains printed benefit).\n- **L1 — Present Swordsmanship:** **Sandanzuki** (CENTER→CENTER, replace attack, 1 CE: weapon +1 die; Link: +1 more die); **Ryuubiken** (HIGH→LOW, replace attack, 1 CE: on hit, Open Guard — target's AC is −2 vs. your next sword attack; Link: the target gains no AC bonus from a reaction against that attack); **Kisoutotsu** (LOW→PASSING, 1 CE: 10-ft approach, attack, 5-ft pass-through; Link: 15 ft, no provoke).\n- **L3:** **Demon Child** (bonus action, 2 CE, 1 min: +10 speed); **Demon Follow-Through** — once/turn after hitting with a named technique, if its Exit matches a different known technique's Entry, perform it as part of the same action at normal cost; after the sequence, take PB internal damage (unpreventable).\n- **L6 — Sword Time:** three **Unlived Future Forms** (each long rest: UNLIVED → SPENT on first use; an Unlived Future Form may ignore its Entry, keeps its Exit; natural entry grants Perfect Link): **Hiryuu** (PASSING→HIGH, 0 CE: 10-ft leap incl. vertical, attack; Link: advantage); **Sharyuu** (LOW→CENTER, 0 CE: attack; on hit rotate 5 ft no provoke, another hostile in reach takes PB slashing [Link: 2×PB]); **Torao** (HIGH→CENTER, 0 CE: weapon +2 dice; Str save or prone; Link: non-Domain damage reduction vs. Torao reduced by PB). **No-Kamae** (reaction, 1 CE, when missed by melee: 5-ft shift, choose stance).\n- **L11:** **Demon Child Release** (bonus action, 4 CE, once/long rest, 1 min: +20 speed, Follow-Through twice/turn, +5 ft inside techniques; each Follow-Through still deals PB internal; on end: 10% max HP damage — cannot drop below 1 HP \"unless you voluntarily kept the state active after reaching half HP\"); **Combination Recipe Kisou Sandanzuki** — Kisoutotsu → Sandanzuki may be performed as a single Demon Follow-Through chain (the recipe bridges PASSING→CENTER), each technique at its normal CE cost; the completed chain gains Perfect Link benefits; **Maximum: Enpi Reiten** (action, 10 CE, requires Release: choose up to PB distinct known techniques, arrange a sequence; Present Forms obey Entry/Exit; Unlived Future Forms may bridge any Entry mismatch even if SPENT; no technique creates Follow-Through; each technique different; after the last strike Release ends; 5% max HP per attack after the first; then normal Technique Burnout).\n- **L18: Sword Demon of Truth** — **Realized Future** (one form, chosen at long rest, repeatable at 2 CE/use with Entry enforced); **Perfect Sword Time** (once/turn alter a Linked technique's printed Exit); **Final Combination: Tenshou Sandanzuki** — see L20.\n- **L20 — Tenshou Sandanzuki, Realized:** once per long rest (action, 4 CE): the combination he never got to perform — three thrusts in one motion. Make three sword attacks, against one creature or divided among creatures within your reach: each deals weapon damage +2 dice, and the third thrust ignores AC bonuses from cover and reactions. This use never triggers Demon Follow-Through — the future, finally lived on its own terms.\n- **CE ability** (zack-ruled): player's choice of **DEX or WIS** at character creation, locked thereafter; all CE-ability-keyed features follow the choice.\n- **Domain:** **NONE — per dossier, explicit.** Clash points N/A.\n- **Clarification** (per dossier): an Unlived Future Form used as a bridge in Enpi Reiten counts as \"selected\" for the distinct-technique rule.",
+   "l20": {
+    "name": "Tenshou Sandanzuki, Realized",
+    "kind": "l20",
+    "level": 20,
+    "cost_line": "Once per long rest · action · 4 CE.",
+    "text": "The combination he never got to perform — three thrusts in one motion. Make three sword attacks, against one creature or divided among creatures within your reach: each deals weapon damage +2 dice, and the third thrust ignores AC bonuses from cover and reactions. This use never triggers Demon Follow-Through — the future, finally lived on its own terms."
+   },
+   "summary_text": null,
    "source_file": "42-okita.md"
   },
   {
