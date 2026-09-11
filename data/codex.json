@@ -2032,22 +2032,77 @@
    "module": "36",
    "figure": "Shaka Zulu",
    "title": "SHAKA ZULU",
-   "detail": "summary",
+   "detail": "full",
    "technique": "Horns of the Bull — Impondo Zenkhomo",
    "tier": "IV",
-   "role": "role-formation controller / single-target encirclement",
-   "ce_ability": "CHA",
+   "role": null,
+   "ce_ability": null,
    "primary_verb": "Form",
    "region": "Southern Africa",
    "era": "1787–1828 · 19th c.",
    "culture": "Zulu",
    "concept": "He forged a nation from a cattle-herding chiefdom — and his brothers killed him for it.",
    "serves": null,
-   "features": [],
-   "maximum": null,
+   "features": [
+    {
+     "name": "Assign the Bull",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Bonus action · 1 CE.",
+     "text": "Choose one hostile **Quarry** you can see within 60 feet, and assign four willing creatures to the bull's roles — **Chest**, **Left Horn**, **Right Horn**, **Loins Reserve**. You may take one role yourself; no creature holds two roles. The formation lasts 1 minute. Your technique DC uses your CE ability — choose CHA or STR at creation (locked). Roles go only to the willing: this is the formation's gate."
+    },
+    {
+     "name": "Chest Holds",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "If the Chest begins and ends its turn within 10 feet of the Quarry (or the Chest's reach, if longer), the formation is **Fixed**. When a Fixed Quarry moves away from the Chest, the Chest may use its reaction to follow 5 feet — debited from the Chest's next turn's movement. Printed out: Fixed ends when the Chest leaves reach. Every state of the formation has a printed exit."
+    },
+    {
+     "name": "Horns Close",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Free (no action).",
+     "text": "After the Chest hits the Quarry with an attack, each Horn may shift up to 5 feet around the Quarry — no action, once per round each, toward opposite sides. When both Horns are within reach of the Quarry on opposite sides, it is **Surrounded** until the geometry breaks. Printed outs: Surrounded ends when both Horns are forced to the same side, all three roles lose reach, or the Quarry moves vertically or teleports. You will see the horns closing."
+    },
+    {
+     "name": "Loins Commit",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Reaction.",
+     "text": "The Loins hold outside the Quarry's reach as the reserve. When a role-holder is incapacitated, displaced 15 or more feet, or leaves the formation, the Loins may use their reaction to move up to half their speed and inherit the broken role. The reserve is the breach answer — the formation heals."
+    },
+    {
+     "name": "Encirclement",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "A Surrounded Quarry treats its first 10 feet of movement each turn as difficult terrain. If the Quarry takes the Disengage action, it avoids opportunity attacks from only one role-holder that turn — the horns still close."
+    },
+    {
+     "name": "Living Formation",
+     "level": 18,
+     "kind": "feature",
+     "cost_line": "No action · once per round.",
+     "text": "Once per round, after any formation member moves, you may swap two willing members' roles — no action. The swap grants no extra actions or movement."
+    }
+   ],
+   "maximum": {
+    "name": "The Bull Closes",
+    "kind": "maximum",
+    "level": 11,
+    "cost_line": "Action · 8 CE · Focus · 1 minute.",
+    "text": "While the Quarry is Surrounded, the formation self-corrects: once per round, when the Quarry exits a member's reach, another member may use their reaction to move up to 10 feet into the vacated arc. Printed outs: scatter the roles, move vertically or teleport, incapacitate members. There is no invisible cage."
+   },
    "domain": null,
-   "l20": null,
-   "summary_text": "*Tier IV · role-formation controller / single-target encirclement · verb: Form · suggested CE ability CHA or STR · **No Domain**.*\n\n- **L1 — Assign the Bull:** Bonus Action, 1 CE, 1 min — choose one hostile **Quarry** you can see within 60 ft; assign *willing* creatures to roles: Chest, Left Horn, Right Horn, Loins Reserve. No creature holds two roles.\n- **L1 — Chest Holds:** if the Chest begins and ends its turn within reach/10 ft of the Quarry, the formation is **Fixed**. When a Fixed Quarry moves away, the Chest may Reaction-follow 5 ft (debited from its next turn's movement).\n- **L3 — Horns Close:** after the Chest hits the Quarry, each Horn may once/round shift 5 ft around it (free, toward opposite sides). Both Horns within reach on opposite sides = **Surrounded** until the geometry breaks.\n- **L6 — Loins Commit:** the Loins begin outside the Quarry's reach; when a role-holder is incapacitated, displaced 15+ ft, or leaves, the Loins may Reaction-move half speed and inherit the role. Breach answer = reserve discipline.\n- **L11 — Encirclement:** a Surrounded Quarry treats its first 10 ft of movement each turn as difficult terrain. Disengage protects against only one role per turn.\n- **L18 — Living Formation:** once/round after any member moves, Shaka may swap two willing members' roles (no action; grants no extra actions or movement).\n- **Maximum — The Bull Closes (Action, 8 CE, Focus, 1 min):** while Surrounded, the formation self-corrects — once/round, when the Quarry exits a member's reach, another member may Reaction-move 10 ft into the vacated arc. Printed outs: scatter the roles, vertical/teleport movement, incapacitate members. *\"There is no invisible cage.\"*\n- **L20 — The Bull Remembers:** once per long rest, declared as part of Assign the Bull — the formation that refused to end. The Loins may hold a second role simultaneously (the reserve deepens), and if Surrounded is broken, the formation re-forms at the start of your next turn without a new assignment — the bull remembers its shape — provided at least two willing members remain.\n\n## IX. Reveal & Escalation\n\n1. **The formation.** A network kill team the party tracks moves *wrong* — not like soldiers, like an animal. Chest, horns, loins. Someone is teaching the old geometry.\n2. **The iklwa.** A close-quarters massacre with a signature: short-spear wounds, encirclement, no survivors on the flanks. The bull has been here.\n3. **The drill.** Captured footage or a survivor's account of a *drill* — a thousand network operatives moving as one animal, and a tall man's voice calling the roles. He is building an army the old way.\n4. **The brothers.** The party uncovers the assassination — Dingane, Mhlangana, the bodyguard's knife. They understand, suddenly, why the most disciplined formation in the network is commanded by the man most afraid of his own blood.\n5. **The Quarry.** Shaka names one — and the name is someone the party loves. The horns are closing. The geometry is visible. The exits are printed. *Run.*\n\n## X. D&D Combat Function\n\n**Single-target encirclement controller.** Shaka is Hannibal's cousin and opposite: where Hannibal folds *armies*, Shaka closes around *one*. At the table he plays like a pack hunter with a rulebook — designate the Quarry, assign the roles, close the horns, and the target's movement becomes a puzzle with printed exits. He needs willing allies the way fire needs air; deny him the formation and he's a strong man with a spear. Give him the formation and the Quarry is *inside the bull* — and the bull has horns, and the horns do not open.",
+   "l20": {
+    "name": "The Bull Remembers",
+    "kind": "l20",
+    "level": 20,
+    "cost_line": "Once per long rest · declared as part of Assign the Bull.",
+    "text": "The formation that refused to end. The Loins may hold a second role simultaneously — the reserve deepens — and if Surrounded is broken, the formation re-forms at the start of your next turn without a new assignment, provided at least two willing members remain. The bull remembers its shape."
+   },
+   "summary_text": null,
    "source_file": "36-shaka.md"
   },
   {
@@ -2368,7 +2423,7 @@
    "module": "40",
    "figure": "Simo Häyhä",
    "title": "SIMO HÄYHÄ",
-   "detail": "summary",
+   "detail": "full",
    "technique": "White Death",
    "tier": "V",
    "role": null,
@@ -2379,11 +2434,80 @@
    "culture": "Finnish",
    "concept": "Five hundred and five confirmed — and the one bullet that found him only made him harder to kill.",
    "serves": null,
-   "features": [],
-   "maximum": null,
+   "features": [
+    {
+     "name": "Isänmaalle Flesh Round",
+     "level": 1,
+     "kind": "feature",
+     "cost_line": "Loading: 1 CE + PB hit points (see text).",
+     "text": "Your rifle loads your own blood and cursed breath — the body as ammunition. Loading a Flesh Round costs 1 CE and PB hit points; sacrificed hit points cannot be restored until the start of your next turn. Shots you fire while stationary ignore long-range disadvantage. **The Tally:** every enemy you can see is tracked independently, Unknown → Bearing → Located. Each time you hit a tracked enemy with a rifle attack, they advance one stage. **Bearing:** your rifle attacks against them ignore half cover. **Located:** your rifle attacks against them ignore three-quarters cover and add your PB to the damage roll. You do not see targets. You see stages of knowing."
+    },
+    {
+     "name": "Sniper's Nest",
+     "level": 3,
+     "kind": "feature",
+     "cost_line": "Action · 1 CE.",
+     "text": "You prepare a firing position. While you remain within 5 feet of your Nest, firing your rifle does not end your Stealth — but your shots never auto-advance a target from Bearing to Located. You trade knowledge for invisibility. You are the snow. The snow shoots back."
+    },
+    {
+     "name": "Kidney — Ilmatar's Piercing Hail",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Part of a Flesh Round · −10% max HP (see text).",
+     "text": "Organ rounds are true sacrifices: the max-HP cost cannot be restored during the encounter — no RCT, healing, temporary hit points, or other feature restores it; a long rest restores all sacrificed organs. (Agree the body-horror narration at character creation — the costs are self-directed.) **Kidney — Ilmatar:** reduce your max HP by 10%. Your Flesh Round deals an extra 2d6 piercing, then hail bursts 20 feet around the impact: each creature there makes a Dexterity save against your technique DC or takes 4d6 piercing (5d6 at L11, 6d6 at L18)."
+    },
+    {
+     "name": "Liver — Lemminkäinen, Who Passed Through Death",
+     "level": 6,
+     "kind": "feature",
+     "cost_line": "Part of a Flesh Round · −15% max HP.",
+     "text": "Reduce your max HP by 15%. You fire one round along a visible line out to your rifle's maximum range, making a single attack roll against every creature in the line — each creature whose AC is beaten is hit. The first hit deals an extra 3d6 piercing; later hits deal an extra 2d6. The round ignores cover and ignores piercing resistance. Iron sights, not a scope: a scope glints, and a glint is death."
+    },
+    {
+     "name": "Spleen — Mielikki's Interdiction",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Reaction · −15% max HP.",
+     "text": "The veto. When a creature you can see begins an action — including a legendary action, but not a lair action or an initiative-20 Domain effect — you may use your reaction to fire before it resolves. Reduce your max HP by 15%. If your shot leaves the target at 0 hit points or incapacitated, the triggering action never occurs: the veto that unmakes the act it answers."
+    },
+    {
+     "name": "Pancreas — Ukonvasara, the Thunder That Cannot Be Stopped",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Action · −20% max HP.",
+     "text": "Reduce your max HP by 20%. One Flesh Round: rifle damage + 8d6 piercing. No creature may use a reaction in response to the shot. It ignores piercing resistance (immunity becomes resistance), and it deals no less than half its rolled damage unless the reduction comes from a Domain effect."
+    },
+    {
+     "name": "543",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "You know which deaths are final. When a creature you can see falls to 0 hit points, you immediately know whether the death is true — feigned death, regeneration, and refusals do not fool you. In a war where half the dead refuse to stay down, that knowledge is worth more than the rifle."
+    },
+    {
+     "name": "The Nest Remembers",
+     "level": 18,
+     "kind": "feature",
+     "cost_line": "Passive.",
+     "text": "When you voluntarily leave a Sniper's Nest, every enemy you are tracking advances one information stage (Unknown → Bearing → Located) — the angles you memorized stay with you — and allies who spend 1 minute studying the abandoned Nest learn your tracked stages. The snow keeps your sight-lines."
+    }
+   ],
+   "maximum": {
+    "name": "The 543rd Bullet / Salvation",
+    "kind": "maximum",
+    "level": 11,
+    "cost_line": "Action · 5 CE · the heart sacrifice (requires all four organ rounds fired this encounter).",
+    "text": "Your max HP becomes 1; your current HP becomes 1. You gain no hit points or temporary hit points until the shot resolves, and you cannot move voluntarily. One rifle attack: no disadvantage, ignores cover except total cover, ignores resistance (immunity becomes resistance), and deals no less than half its rolled damage unless the reduction comes from a Domain effect. On hit: rifle damage + 12d6 piercing, then the target makes a Constitution save against your technique DC or suffers a **Mortal Wound** — its max HP is reduced by the piercing damage dealt, until the end of your next turn. After the shot resolves, you fall unconscious and begin making death saving throws."
+   },
    "domain": null,
-   "l20": null,
-   "summary_text": "*Faithful summary of U15-04; mechanics per the audited dossier including zack's 10 Sept 2026 fills.*\n\n- **Core loop:** body-as-ammunition sniper; every enemy independently tracked **Unknown → Bearing → Located**.\n- **L1: Isänmaalle Flesh Round** (loading: 1 CE + PB HP; sacrificed HP unhealable until start of next turn; stationary shots ignore long-range disadvantage).\n- **L3: Sniper's Nest** (action, 1 CE; firing doesn't end Stealth within 5 ft; never auto-raises Bearing → Located).\n- **L6 — organ rounds** (true sacrifices; organ unrestorable during the encounter by RCT/healing/temp HP/another feature; long rest restores all): **Kidney/Ilmatar** (−10% max HP: rifle + 2d6, then 20-ft Dex-save piercing — 4d6 at L6, 5d6 at L11, 6d6 at L18); **Liver/Lemminkäinen** (−15%: one roll along a visible line to rifle max range, every beaten AC hit; first rifle + 3d6, later 2d6; ignores cover, ignores piercing resistance); **No Scope**.\n- **L11:** **Spleen/Mielikki** (reaction, −15% max HP: fire before a triggering action resolves; target at 0 HP or incapacitated → the triggering action never occurs; per zack's fill, triggering actions include legendary actions, but not lair actions or initiative-20 Domain effects); **Pancreas/Ukonvasara** (action, −20%: rifle + 8d6, no reactions against the shot, ignores piercing resistance [immunity → resistance], non-Domain damage floor of half); **543** (knows true death verdicts).\n- **L18:** Nest-exit information drops.\n- **L20 — The Face That Lived:** once per long rest, when you are reduced to 0 hit points, you are reduced to 1 HP instead — the bullet that found him only made him harder to kill — and every enemy you are tracking advances one information stage (Unknown → Bearing → Located), the snow learning their faces at last.\n- **Maximum: The 543rd Bullet / Salvation** (action, 5 CE, heart sacrifice; requires all four organ rounds fired): max HP = 1, current HP = 1, no HP/temp HP until the shot resolves, cannot voluntarily move; one rifle attack — no disadvantage, ignores cover except total, ignores resistance [immunity → resistance], non-Domain damage floor half; on hit: rifle + 12d6 piercing, then Con save or **Mortal Wound** until end of Simo's next turn (target max HP reduced by piercing damage dealt). After the shot, Simo falls unconscious and dying; RCT permitted only after the shot resolves.\n- **Domain:** **NONE — per dossier, explicit.** Clash points N/A.\n- **Table note** (per zack's fill): the body-horror *narration* is agreed at character creation; the costs are self-directed and consent-inherent.",
+   "l20": {
+    "name": "The Face That Lived",
+    "kind": "l20",
+    "level": 20,
+    "cost_line": "Once per long rest · passive (trigger: you are reduced to 0 hit points).",
+    "text": "The bullet that found him only made him harder to kill. When you are reduced to 0 hit points, you are reduced to 1 hit point instead — and every enemy you are tracking advances one information stage (Unknown → Bearing → Located): the snow learning their faces at last."
+   },
+   "summary_text": null,
    "source_file": "40-simo.md"
   },
   {
@@ -5023,7 +5147,7 @@
    "figure": "Michael Jackson",
    "title": "MICHAEL JACKSON",
    "detail": "bespoke",
-   "technique": null,
+   "technique": "King of POP",
    "tier": "IV",
    "role": null,
    "ce_ability": null,

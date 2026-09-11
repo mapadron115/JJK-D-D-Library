@@ -20,9 +20,10 @@ import json, re, os, datetime
 DRAFTS = os.path.expanduser("~/workspace/goals/ritual-archive-campaign-lore-bible/hidden_files/drafts")
 
 # Modules whose codex entries were hand-built as full playable techniques
-# (2026-09-11 RoR rebuild: Jack/37, Qin/38, Tesla/39, Raiden/41, Okita/42).
+# (2026-09-11 RoR rebuild: Shaka/36, Jack/37, Qin/38, Tesla/39, Simo/40,
+# Raiden/41, Okita/42).
 # A regen must preserve the existing full entry, never downgrade it to a summary.
-FULL_OVERRIDE_MODULES = {"37", "38", "39", "41", "42"}
+FULL_OVERRIDE_MODULES = {"36", "37", "38", "39", "40", "41", "42"}
 OUTDIR = os.path.dirname(os.path.abspath(__file__))  # repo/data
 SKIP_FILES = {
     "43-master-timeline.md", "44-chapter-houses.md", "45-commentators.md",
