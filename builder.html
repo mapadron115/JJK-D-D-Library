@@ -441,6 +441,7 @@ img{max-width:100%;height:auto}
 
 <!-- cache-bust: bump ?v= on the script tags below whenever data/*.js or assets/*.js changes -->
 <script src="data/codex.js?v=20260911g"></script>
+<script src="data/codex_inner_circle.js?v=20260911h"></script>
 <script src="data/library.js?v=20260911g"></script>
 <script src="data/technique_feats.js?v=20260911f"></script>
 <script src="data/codex_feats.js?v=20260911g"></script>
@@ -800,6 +801,7 @@ function asiFeatEntries(){
   var out=[];
   if(!char.cls) return out;
   asiLevels(char.cls).forEach(function(L){
+    if(L>char.level) return; /* higher-level data stays stored but inactive while the level is lowered */
     if((char.asiMode||{})[L]==='feat' && char.asiFeat && char.asiFeat[L]) out.push({level:L,name:char.asiFeat[L]});
   });
   return out;
@@ -891,6 +893,7 @@ function renderManager(){
         '<p class="m-tech">'+(t?esc(tName(t))+(tIsFigure(t)&&t.figure?' — '+esc(t.figure):''):'No technique chosen')+'</p>'+
         '<div class="mgr-actions">'+
         '<button class="btn btn-small" data-act="load" data-id="'+esc(c.id)+'">Load</button>'+
+        '<button class="btn btn-small" data-act="edit" data-id="'+esc(c.id)+'">Edit</button>'+
         '<button class="btn btn-small btn-ghost" data-act="dup" data-id="'+esc(c.id)+'">Duplicate</button>'+
         '<button class="btn btn-small btn-danger" data-act="del" data-id="'+esc(c.id)+'">Delete</button>'+
         '</div></div>';
@@ -911,6 +914,8 @@ function renderManager(){
         arr2.push(copy); saveAll(arr2); renderManager();
       }else if(act==='load' && found){
         char = deep(found); startWizard(8);
+      }else if(act==='edit' && found){
+        char = deep(found); startWizard(1); /* same ID — saving later updates this character */
       }
     });
   });
@@ -990,14 +995,17 @@ function levelOptions(){
   return o;
 }
 function stepConcept(body){
+  var isEdit = loadAll().some(function(x){ return x.id===char.id; });
   body.innerHTML =
-    '<h2>Step 1 — Concept</h2><p class="sub">Who walks into the story? A name, the player behind them, and the level the campaign starts them at.</p>'+
+    '<h2>Step 1 — Concept</h2><p class="sub">Who walks into the story? A name, the player behind them, and '+(isEdit?'their current level.':'the level the campaign starts them at.')+'</p>'+
     '<div class="grid2">'+
     '<div class="field"><label for="cName">Character name</label><input id="cName" maxlength="60" value="'+esc(char.name)+'" placeholder="e.g. Kaito Mori"></div>'+
     '<div class="field"><label for="cPlayer">Player name</label><input id="cPlayer" maxlength="60" value="'+esc(char.player)+'" placeholder="e.g. Alex"></div></div>'+
-    '<div class="field" style="max-width:260px"><label for="cLevel">Starting level</label>'+
+    '<div class="field" style="max-width:260px"><label for="cLevel">'+(isEdit?'Character level':'Starting level')+'</label>'+
     '<select id="cLevel">'+levelOptions()+'</select></div>'+
-    '<div class="banner"><span class="bk">❖ Campaign note</span><p>This campaign opens at level 1 with 4–8 sorcerers — but the builder supports starting as high as level 20, with per-level HP and CE Reserve rolls handled in Step 6.</p></div>';
+    (isEdit
+      ? '<div class="banner"><span class="bk">❖ Leveling up</span><p>Raise the level, then complete the new rows in <b>Step 6</b> — every roll, ASI, and feat choice you already made is kept. Lowering the level keeps the higher-level data stored but inactive.</p></div>'
+      : '<div class="banner"><span class="bk">❖ Campaign note</span><p>This campaign opens at level 1 with 4–8 sorcerers — but the builder supports starting as high as level 20, with per-level HP and CE Reserve rolls handled in Step 6.</p></div>');
   $('cName').addEventListener('input',function(e){ char.name=e.target.value; refreshNav(); });
   $('cPlayer').addEventListener('input',function(e){ char.player=e.target.value; });
   $('cLevel').addEventListener('change',function(e){
@@ -1346,14 +1354,14 @@ function stepLevelUps(body){
   if(char.level===1){
     html+='<div class="banner"><span class="bk">❖ Level 1</span><p>Nothing to roll — your totals below are final. Continue when ready.</p></div>';
   }else{
-    html+='<button class="btn btn-small btn-ghost" id="allFixed" type="button">Take fixed for every level</button> <span class="asi-note">or roll each die individually</span>';
+    html+='<button class="btn btn-small btn-ghost" id="allFixed" type="button">Take fixed for unrolled levels</button> <span class="asi-note">or roll each die individually</span>';
     html+='<table class="lvl-table"><tr><th>Level</th><th>Ability score increase</th><th>HP gain (d'+hd+' + CON)</th><th>CE Reserve gain'+(isHR()?'':' (d'+C.reserve+' / +'+C.fixed+')')+'</th></tr><tbody id="lvlBody"></tbody></table>';
   }
   body.innerHTML=html;
   if(char.level>1){
     renderLvlRows();
     $('allFixed').addEventListener('click',function(){
-      for(var l=2;l<=char.level;l++){ char.levelData[l]={hpMode:'fixed',hpDie:null,ceMode:'fixed',ceDie:null}; }
+      for(var l=2;l<=char.level;l++){ if(!char.levelData[l]) char.levelData[l]={hpMode:'fixed',hpDie:null,ceMode:'fixed',ceDie:null}; }
       renderLvlRows();
     });
   }
