@@ -122,7 +122,7 @@ function matches(t, st) {
   /* Figures carry no collection — any active collection filter excludes them. */
   if (st.collection) return false;
   if (st.tier && (t.tier || '') !== st.tier) return false;
-  if (st.role && (t.role || '').toLowerCase() !== st.role.toLowerCase()) return false;
+  if (st.role && roleBuckets(t.role).indexOf(st.role) < 0) return false;
   if (st.region && (t.region || '') !== st.region) return false;
   if (st.culture && (t.culture || '') !== st.culture) return false;
   if (st.detail && (t.detail || '') !== st.detail) return false;
@@ -298,6 +298,26 @@ var openIds = new Set();
 var state = { q: '', tier: '', role: '', region: '', culture: '', detail: '',
   origin: 'all', collection: '', tab: 'tech' };
 
+/* Canonical six combat roles — the same buckets the builder's technique picker uses.
+ * Free-text figure roles (60+ distinct strings) map into these; the dropdown
+ * offers only the six, and filtering matches by bucket. */
+var ROLE_ORDER=['Striker','Tank','Controller','Blaster','Support','Utility'];
+var ROLE_PATTERNS=[
+  ['Striker',/striker|duelist/i],
+  ['Tank',/tank|brute|grappl|defen[cs]e|defender/i],
+  ['Controller',/controll|debuff|denial|snare|edict|fear|geometry|encirclement/i],
+  ['Blaster',/\bblaster\b|\bcaster\b/i],
+  ['Support',/support|buffer|liberator|morale/i],
+  ['Utility',/utility|exploration|mobility|infiltrat|escape|divination/i]
+];
+var ROLE_OVERRIDES={'redistribution / inversion':['Controller']};
+function roleBuckets(role){
+  if(!role) return [];
+  if(ROLE_OVERRIDES[role]) return ROLE_OVERRIDES[role];
+  var out=[];
+  ROLE_PATTERNS.forEach(function(p){ if(p[1].test(role)) out.push(p[0]); });
+  return out;
+}
 function uniqSorted(vals, cmp) {
   var seen = {}, out = [];
   vals.forEach(function (v) { if (v && !seen[v]) { seen[v] = 1; out.push(v); } });
@@ -342,8 +362,7 @@ if (typeof document !== 'undefined') {
       uniqSorted(TECHS.map(function (t) { return t.tier; }), function (a, b) {
         return (TIER_ORDER[a] == null ? 99 : TIER_ORDER[a]) - (TIER_ORDER[b] == null ? 99 : TIER_ORDER[b]);
       }), 'All tiers');
-    fillSelect(document.getElementById('fRole'),
-      uniqSorted(TECHS.map(function (t) { return t.role; })), 'All roles');
+    fillSelect(document.getElementById('fRole'), ROLE_ORDER.slice(), 'All roles');
     fillSelect(document.getElementById('fRegion'),
       uniqSorted(TECHS.map(function (t) { return t.region; })), 'All regions');
     fillSelect(document.getElementById('fCulture'),

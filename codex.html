@@ -330,8 +330,9 @@ h1 .amp{color:var(--red)}
 <!-- cache-bust: bump ?v= on the script tags below whenever data/*.js or assets/*.js changes -->
 <script src="data/library.js?v=20260911g"></script>
 <script src="data/codex.js?v=20260911g"></script>
+<script src="data/codex_role_fixups.js?v=20260911a"></script>
 <script src="data/codex_inner_circle.js?v=20260911h"></script>
-<script src="assets/codex.js?v=20260911d"></script>
+<script src="assets/codex.js?v=20260911e"></script>
 <script>
 /* responsive nav toggle (added 2026-09-11) */
 (function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(open){t.classList.toggle('nav-open',open);b.setAttribute('aria-expanded',open?'true':'false');b.textContent=open?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});t.querySelectorAll('.navlinks a').forEach(function(a){a.addEventListener('click',function(){set(false);});});document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});})();
