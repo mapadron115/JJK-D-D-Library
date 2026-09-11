@@ -774,10 +774,10 @@
    "domain": null,
    "l20": {
     "level": 20,
-    "name": "\"I Hope the Exit Is Joyful\" (Capstone)",
+    "name": "The Painting Finishes (Capstone)",
     "cost_line": "",
     "kind": "l20",
-    "text": "- **The Pain That Stays** (passive, triggers on death): Frida's last journal entry — *\"I hope the exit is joyful, and I hope never to return\"* — was Heaven-witnessed, and Heaven keeps its promises slantwise. When Frida dies, she does not leave the room: - For the **remainder of the story arc**, her presence lingers within 60 ft of where she fell as *the pain that stays in the room after the body leaves*. - Once per round, when an ally within that radius takes damage, the attacker takes psychic damage equal to her CON modifier + PB — no action, no CE, no save. *Exhibited pain, still exhibiting.* - Any ally who *witnesses* this (who understands what they're seeing) gains advantage on saves against fear for the rest of the arc. *She is still teaching.* - This is not world-shaking. It was never meant to be. It is a woman's last painting, hung where her friends can see it, refusing — one final time — to suffer privately."
+    "text": "- **The Witness Canvas** (passive): Frida's pain is exhibited, stroke by stroke. Whenever she takes damage from any source — or damage dealt to an ally is redirected to her through the Shared Wound — the canvas records it. At the end of each round in which she took damage, one stroke appears on the Witness Canvas: a self-portrait of cursed energy manifesting in the air around her, visible to all. Strokes are never spent and never fade until the canvas completes. The canvas completes at **eight strokes**.\n- **The Judgment** (no action, no CE): when the eighth stroke lands, the portrait is finished — and at the start of her next turn, it *judges*. Every hostile creature that dealt damage to Frida during this combat must make a WIS save vs her technique DC. On a failure, it takes psychic damage equal to half the total damage it dealt to her this combat and is stunned until the end of its next turn. On a success, it takes half as much and is not stunned. Creatures that never damaged her are unaffected — *the painting judges only its witnesses.* The canvas then goes blank, and a new one begins.\n- The strokes are visible; enemies can count them. Stop striking her and the canvas starves — which was always the point. This is the exhibition-vow made final: pain shown publicly, witnessed by Heaven — and Heaven keeps the receipt. *She painted her pain so the world would have to look — and now the looking has a verdict.*"
    },
    "summary_text": null,
    "source_file": "09-frida.md"
@@ -4114,10 +4114,10 @@
    },
    "l20": {
     "level": 20,
-    "name": "THE PANTHER NEVER LANDS (passive)",
+    "name": "THE BANNER PLANTS ITSELF (passive)",
     "cost_line": "passive",
     "kind": "l20",
-    "text": "Tecumseh can never be surprised — not even alone, not even asleep; the sky is always watching for him. Once per long rest, when he would be reduced to 0 HP, the comet crosses the sky and he is reduced to **1 HP instead**, immediately moving up to his speed without provoking opportunity attacks. And once: should he fall unconscious, his Confederacy aura **persists for 1 minute** without him. The line holds. It learned how."
+    "text": "Tecumseh can never be surprised — not even alone, not even asleep; the sky is always watching for him. Once per long rest, when Tecumseh drops to 0 hit points, his war-banner plants itself where he falls and fights on without him. For 1 minute, the banner is an allied presence occupying his space: it is immobile, has AC 16 and 50 hit points, and is immune to psychic and poison damage (if destroyed, the effect ends). While it stands, the Confederacy aura (60 ft — shared watch, silent communication) persists anchored to the banner; willing creatures in the aura gain +2 to attack rolls; and once per round, when a willing creature in the aura hits with an attack, a different willing creature in the aura may make one weapon attack as a reaction against the same target (Shared Strikes, no CE). Tecumseh himself remains at 0 hit points and makes death saving throws normally. The line holds. It learned how."
    },
    "summary_text": null,
    "source_file": "55-tecumseh.md"
@@ -4779,10 +4779,10 @@
    },
    "l20": {
     "level": 20,
-    "name": "The Story Goes On",
+    "name": "The Tale Outlives",
     "cost_line": "Once per long rest.",
     "kind": "l20",
-    "text": "When Kiviuq is reduced to 0 hit points, he does not fall — the tale refuses the ending: he drops to 1 hit point instead, teleports up to 60 ft to an unoccupied space he can see, and becomes invisible until the end of his next turn. Each hostile creature that saw him fall must succeed on a Wisdom save against his technique DC or be frightened for 1 minute (frightened of *where he went*). (Wars end. Stories don't.)"
+    "text": "Once per long rest, when Kiviuq drops to 0 hit points, a tale he told becomes true — choose one: **The tale carried them** — up to six willing creatures he can see vanish from where they stood and reappear in unoccupied spaces he chooses within 60 ft (the story needed them elsewhere); or **The ground remembers** — the terrain in a 40-ft radius centered on him becomes difficult terrain for hostile creatures for 1 minute, which his allies ignore, as the story's landscape asserts itself. And always: **his death cannot be entered into any ledger** — no divination, scrying, or remote viewing can record, locate, or confirm it; no binding vow, witnessed bargain, or price can be collected on it; effects that trigger on a witnessed death fail against him. (Heaven knows the difference between a man and a telling.) Kiviuq remains at 0 hit points and makes death saving throws normally. Wars end. Stories don't."
    },
    "summary_text": null,
    "source_file": "64-kiviuq.md"
@@ -5059,10 +5059,10 @@
    },
    "l20": {
     "level": 20,
-    "name": "The Last Laugh",
+    "name": "The Laugh Teaches",
     "cost_line": "Passive · once per long rest.",
     "kind": "l20",
-    "text": "When he would be reduced to 0 hit points, he instead drops to 1 hit point and laughs: each hostile creature within 60 ft that can hear him must succeed on a Wisdom saving throw against his technique DC or lose all temporary HP, and one beneficial magical effect of Milarepa's choice on it ends. Additionally, his body cannot be animated, bound, or raised as undead by any means — Heaven claimed it nine centuries ago. (He has been laughing at death for nine hundred years. Death has noticed.)"
+    "text": "Once per long rest, when Milarepa drops to 0 hit points, he laughs — one last song, no action required — and the laugh *teaches*. Each willing creature within 60 ft that can hear him learns the retribution for 1 minute: when a hostile creature deals damage to a taught ally, the ally may use a reaction to sing the tower down — the attacker must succeed on a Wisdom saving throw against Milarepa's technique DC or lose all temporary HP, and one beneficial magical effect of the ally's choice on it ends. Additionally, the creature that dropped Milarepa is marked by the lesson: taught allies have advantage on attack rolls against it for the duration. Milarepa remains at 0 hit points and makes death saving throws normally. His body cannot be animated, bound, or raised as undead by any means — Heaven claimed it nine centuries ago. (He has been laughing at death for nine hundred years. Death has noticed.)"
    },
    "summary_text": null,
    "source_file": "67-milarepa.md"
@@ -5157,10 +5157,10 @@
    },
    "l20": {
     "level": 20,
-    "name": "The Epic Does Not End",
+    "name": "The Epic Continues",
     "cost_line": "Passive.",
     "kind": "l20",
-    "text": "Once per long rest, when he would be reduced to 0 hit points, he instead drops to 1 hit point. Additionally, while at least one willing ally within 120 ft spends its reaction at the start of its turn to keep singing, he cannot be reduced below 1 hit point; the singing ends as soon as no ally spends its reaction. (Kill the king and the song keeps him. Silence the singers first.)"
+    "text": "Once per long rest, when Gesar drops to 0 hit points, the epic does not end — it changes singers. Each willing creature within 120 ft that can hear him may immediately invoke ONE of his deeds (no action): **Name the Demon** — name one hostile creature they can see; it becomes Named as by his L1 Naming (its resistances, immunities, and vulnerabilities are revealed, and attacks against it deal an additional 1d4 force damage) for 1 minute; **Muster the Host** — gain temporary HP equal to his CHA modifier + PB and move up to half their speed without provoking opportunity attacks; **Endure Like the Mountain** — gain resistance to one damage type of their choice for 1 minute. Gesar remains at 0 hit points and makes death saving throws normally. (Kill the king and the song keeps going — in other voices.)"
    },
    "summary_text": null,
    "source_file": "68-gesar-of-ling.md"
@@ -5444,10 +5444,10 @@
    },
    "l20": {
     "level": 20,
-    "name": "HE NEVER SURRENDERED",
+    "name": "THE WOUND IS THE CONFEDERATION'S",
     "cost_line": "Passive.",
     "kind": "l20",
-    "text": "Once per long rest, when Ajuricaba would be reduced to 0 HP, he is reduced to **1 HP** instead, and every willing creature in the Confederation gains **temporary HP equal to his CON modifier + proficiency bonus**. He is immune to any effect that would compel him to surrender, ask quarter, or lay down arms — frightened and charmed effects that carry such commands fail against him automatically. The vow holds. It always held."
+    "text": "Once per long rest, when Ajuricaba drops to 0 hit points, the wound becomes the confederation's. Each willing creature within 60 ft may take onto itself any amount of the damage that dropped him (declared freely, no action) — the sharing is never compelled, and a decliner is passed by, as always. For every 10 damage willingly carried in this way, the creature that struck the blow takes 10 force damage as the confederation answers (CON save vs his technique DC halves the total) — the line does not forgive the arithmetic. Additionally, for 1 minute, No One Bleeds Alone costs 0 CE. Ajuricaba remains at 0 hit points and makes death saving throws normally. He is immune to any effect that would compel him to surrender, ask quarter, or lay down arms — frightened and charmed effects that carry such commands fail against him automatically. The vow holds. It always held."
    },
    "summary_text": null,
    "source_file": "71-ajuricaba.md"
