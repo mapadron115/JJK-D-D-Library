@@ -8,7 +8,7 @@
 
 var CODEX = (typeof window !== 'undefined' && window.CODEX) || { techniques: [] };
 var TECHS = Array.isArray(CODEX.techniques) ? CODEX.techniques : [];
-/* Original techniques: the 244 library dossiers (window.LIBRARY_ENTRIES). */
+/* Original techniques: the 243 library dossiers (window.LIBRARY_ENTRIES). */
 var LIBS = (typeof window !== 'undefined' && Array.isArray(window.LIBRARY_ENTRIES))
   ? window.LIBRARY_ENTRIES : [];
 
