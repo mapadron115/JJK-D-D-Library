@@ -3,22 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ritual Archive field manual: guided D&D Beyond-style character builder for the Jujutsu Kaisen 5e homebrew.">
-<title>Character Builder — Ritual Archive Field Manual</title>
+<meta name="description" content="Ritual Archive grimoire: guided D&D Beyond-style character builder for the Jujutsu Kaisen 5e homebrew.">
+<title>Character Builder — Ritual Archive Grimoire</title>
 <style>
 :root{
-  --paper:#f4efe2; --paper2:#ece4cf; --card:#fbf8ee; --card2:#f6f1e1;
-  --ink:#221d14; --ink2:#57503f; --ink3:#7d7563;
-  --line:#d9cfae; --line2:#c9bfa1;
-  --red:#b33a2b; --red-deep:#8c2a1f;
-  --olive:#5f6238; --stone:#8a8474;
-  --serif:Georgia,'Times New Roman',Charter,'Bitstream Charter','Iowan Old Style',serif;
-  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --paper:#0e0b08; --paper2:#14100b; --card:#181310; --card2:#1f1812;
+  --ink:#ece0c6; --ink2:#c6b998; --ink3:#968a6f;
+  --line:#38301f; --line2:#4d422a;
+  --red:#e0573f; --red-deep:#ef8468;
+  --olive:#a8ad6d; --stone:#968b76;
+  --serif:"Palatino Linotype",Palatino,"Book Antiqua","Noto Serif","Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK SC",Georgia,serif;
+  --sans:Georgia,Charter,"Bitstream Charter","Iowan Old Style","Noto Serif","Noto Serif CJK SC",serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;font-size:16px;
-  background-image:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(34,29,20,.028) 31px,rgba(34,29,20,.028) 32px);}
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(0,0,0,.028) 31px,rgba(0,0,0,.028) 32px);}
 ::selection{background:var(--red);color:var(--paper)}
 .shell{max-width:1080px;margin:0 auto;padding:0 24px}
 a{color:var(--red-deep)}
@@ -41,7 +41,7 @@ h1{font-family:var(--serif);font-size:3rem;line-height:1.05;margin:0 0 12px;lett
 h1 .amp{color:var(--red)}
 .lede{font-size:1.05rem;color:var(--ink2);max-width:62ch;margin:0 0 24px}
 /* ── panels / wizard ─────────────────────── */
-.panel{background:var(--card);border:1px solid var(--line2);border-top:4px solid var(--ink);margin:0 0 28px;box-shadow:0 2px 0 rgba(34,29,20,.08)}
+.panel{background:var(--card);border:1px solid var(--line2);border-top:4px solid var(--ink);margin:0 0 28px;box-shadow:0 2px 0 rgba(0,0,0,.08)}
 .panel-pad{padding:26px 28px}
 .panel h2{font-family:var(--serif);font-size:1.7rem;margin:0 0 6px}
 .panel h3{font-family:var(--serif);font-size:1.2rem;margin:26px 0 10px}
@@ -77,7 +77,7 @@ h1 .amp{color:var(--red)}
 .opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin:16px 0}
 .opt-card{background:var(--paper);border:1px solid var(--line2);border-radius:3px;padding:16px 18px;cursor:pointer;position:relative}
 .opt-card:hover{border-color:var(--red)}
-.opt-card.is-selected{border:2px solid var(--red);background:var(--card);box-shadow:0 2px 0 rgba(179,58,43,.25)}
+.opt-card.is-selected{border:2px solid var(--red);background:var(--card);box-shadow:0 2px 0 rgba(224,87,63,.25)}
 .opt-card h4{font-family:var(--serif);font-size:1.15rem;margin:0 0 6px}
 .opt-card .tagline{font-size:.85rem;color:var(--ink2);font-style:italic;margin:0 0 10px}
 .opt-card dl{margin:0;font-size:.82rem}
@@ -101,7 +101,7 @@ h1 .amp{color:var(--red)}
 .dice-row{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0}
 .dice-set{background:var(--paper2);border:1px solid var(--line2);border-radius:4px;padding:10px 12px;text-align:center;min-width:118px}
 .dice-set .dice{display:flex;gap:6px;justify-content:center;margin-bottom:8px}
-.die{width:34px;height:34px;display:inline-grid;place-items:center;background:var(--card);border:2px solid var(--ink);border-radius:6px;font-family:var(--serif);font-weight:bold;font-size:1rem;box-shadow:0 2px 0 rgba(34,29,20,.2)}
+.die{width:34px;height:34px;display:inline-grid;place-items:center;background:var(--card);border:2px solid var(--ink);border-radius:6px;font-family:var(--serif);font-weight:bold;font-size:1rem;box-shadow:0 2px 0 rgba(0,0,0,.2)}
 .die.dropped{opacity:.35;border-style:dashed;text-decoration:line-through}
 .die.rolling{border-color:var(--red);color:var(--red)}
 .set-total{font-family:var(--serif);font-weight:bold;font-size:1.25rem}
@@ -131,7 +131,7 @@ h1 .amp{color:var(--red)}
 #techResultCount{font-family:var(--serif);font-weight:bold;color:var(--ink)}
 .tech-sec{font-family:var(--serif);font-size:1.3rem;margin:26px 0 12px;display:flex;align-items:baseline;gap:12px}
 .tech-sec .sub-n{font-size:.82rem;color:var(--ink3);font-family:var(--sans);letter-spacing:1px}
-.tech-card{background:var(--card);border:1px solid var(--line2);border-left:5px solid var(--red);margin-bottom:14px;box-shadow:0 2px 0 rgba(34,29,20,.08)}
+.tech-card{background:var(--card);border:1px solid var(--line2);border-left:5px solid var(--red);margin-bottom:14px;box-shadow:0 2px 0 rgba(0,0,0,.08)}
 .tech-card.is-selected{border:2px solid var(--red);border-left-width:5px}
 .tech-head{display:flex;justify-content:space-between;gap:18px;padding:18px 22px}
 .tech-head .t-figure{font-size:.68rem;letter-spacing:2.5px;color:var(--red);text-transform:uppercase;display:block;margin-bottom:4px}
@@ -173,7 +173,7 @@ h1 .amp{color:var(--red)}
 .callout-maximum{border-color:var(--olive)}
 .callout-maximum .callout-kicker{color:var(--olive)}
 .callout-domain{border-color:var(--red)}
-.callout-domain .callout-head{background:rgba(179,58,43,.06)}
+.callout-domain .callout-head{background:rgba(224,87,63,.06)}
 .callout-domain .callout-kicker{color:var(--red)}
 .callout.locked-co{opacity:.75;border-style:dashed}
 /* ── character sheet ─────────────────────── */
@@ -203,14 +203,14 @@ h1 .amp{color:var(--red)}
 .preset-chips .btn-small{border-style:dashed}
 /* ── manager ─────────────────────────────── */
 .mgr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;margin:20px 0}
-.mgr-card{background:var(--card);border:1px solid var(--line2);border-top:4px solid var(--red);padding:20px 22px;box-shadow:0 2px 0 rgba(34,29,20,.08)}
+.mgr-card{background:var(--card);border:1px solid var(--line2);border-top:4px solid var(--red);padding:20px 22px;box-shadow:0 2px 0 rgba(0,0,0,.08)}
 .mgr-card h3{font-family:var(--serif);font-size:1.35rem;margin:0 0 4px}
 .mgr-card .m-sub{color:var(--ink2);font-size:.88rem;margin:0 0 6px}
 .mgr-card .m-tech{font-style:italic;font-size:.86rem;color:var(--ink3);margin:0 0 14px}
 .mgr-actions{display:flex;gap:8px;flex-wrap:wrap}
 .store-note{font-size:.82rem;color:var(--ink3);font-style:italic;margin:18px 0}
 .empty-mgr{text-align:center;padding:48px 20px;font-family:var(--serif);font-size:1.15rem;color:var(--ink3)}
-.err{background:#f7e8e4;border:2px solid var(--red);padding:16px 20px;margin:16px 0;font-size:.92rem}
+.err{background:#2c1512;border:2px solid var(--red);padding:16px 20px;margin:16px 0;font-size:.92rem}
 .err b{color:var(--red-deep)}
 .footer{border-top:3px double var(--ink);padding:28px 0 48px;font-size:.8rem;color:var(--ink3);margin-top:40px}
 .footer .shell{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
@@ -237,13 +237,50 @@ h1 .amp{color:var(--red)}
   .sheet-sec{break-inside:avoid}
   a{color:#000;text-decoration:none}
 }
+
+/* ══════════ Grimoire ornament: sumi ink, bone text, vermillion seals ══════════ */
+body{
+  border-top:6px solid var(--red);
+  background-image:
+    radial-gradient(1200px 480px at 50% -140px, rgba(224,87,63,.08), transparent 62%),
+    radial-gradient(900px 620px at 88% 112%, rgba(224,87,63,.05), transparent 60%),
+    repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(236,225,200,.030) 31px,rgba(236,225,200,.030) 32px);
+  font-size:17px;line-height:1.7;
+}
+.topbar{border-bottom:3px double var(--red);box-shadow:0 4px 18px rgba(0,0,0,.5)}
+.brand-mark{color:#160f0a;transform:rotate(-4deg);border-radius:2px;
+  box-shadow:inset 0 0 0 2px rgba(22,15,10,.55),0 0 14px rgba(224,87,63,.35)}
+.doc-head{position:relative}
+.doc-head::after{content:"\5490";position:absolute;right:6px;top:6px;font-family:var(--serif);
+  font-size:6.5rem;line-height:1;color:transparent;-webkit-text-stroke:1px rgba(224,87,63,.14);
+  pointer-events:none;user-select:none}
+.eyebrow .orn{color:var(--red)}
+h1{text-shadow:0 0 26px rgba(224,87,63,.18)}
+.entry,.panel,.tech-card,.mgr-card,.controls,.about,.cheat-card,.statstrip,.card,.deck .card,.letter{
+  box-shadow:0 3px 0 rgba(0,0,0,.55),0 0 22px rgba(224,87,63,.04)}
+.die{box-shadow:0 2px 0 rgba(0,0,0,.5)}
+.hr-rule{border-top:3px double var(--red)}
+.footer{border-bottom:6px solid var(--red)}
+.editions{display:block;width:100%;margin-top:10px;font-size:.78rem;letter-spacing:1px;color:var(--ink3)}
+.editions a{color:var(--red-deep)}
+.ed-current{color:var(--red);border:1px solid var(--red);border-radius:2px;padding:1px 8px;
+  font-size:.72rem;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+.seal-mark{display:grid;place-items:center;width:134px;height:134px;margin:0 auto 22px;
+  border:3px double var(--red);border-radius:50%;font-family:var(--serif);font-size:3.4rem;
+  color:var(--red);transform:rotate(-4deg);
+  box-shadow:0 0 34px rgba(224,87,63,.28),inset 0 0 20px rgba(224,87,63,.12)}
+.wax-seal{background:radial-gradient(circle at 35% 30%, #f0684e, #c2432c 45%, #7e2a1c 80%)}
+::-webkit-scrollbar{width:12px;background:var(--paper)}
+::-webkit-scrollbar-thumb{background:#3a2f22;border:3px solid var(--paper);border-radius:7px}
+@media (max-width:700px){.doc-head::after{font-size:4rem;opacity:.7}}
+@media print{body{border-top:none}}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="shell nav">
 <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
 <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html" class="is-current">Character Builder</a><a href="codex.html">Technique Codex</a><a href="lore.html">Story So Far</a></nav>
-<span class="doc-tag">Field Manual · Builder</span>
+<span class="doc-tag">Grimoire · Builder</span>
 </div></header>
 
 <main class="shell">
@@ -281,12 +318,12 @@ h1 .amp{color:var(--red)}
 
 <footer class="footer no-print"><div class="shell">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <span>FM-RA-02 · Character Builder · fan-made JJK 5e homebrew reference. CE Reserve per the campaign canon — Reserve Dice, one CE ability modifier, permanent bonuses added after.</span>
-  <span class="tiny">Editions: <b>Field Manual</b> · <a href="grimoire/index.html">Grimoire</a> · <a href="illustrated/index.html">Illustrated</a></span>
+  <span>GR-RA-02 · Character Builder · fan-made JJK 5e homebrew reference. CE Reserve per the campaign canon — Reserve Dice, one CE ability modifier, permanent bonuses added after.</span>
+  <span class="editions">Editions: <a href="../index.html">Field Manual</a> · <span class="ed-current">Grimoire · current</span> · <a href="../illustrated/index.html">Illustrated</a></span>
 </div></footer>
 
-<script src="data/codex.js"></script>
-<script src="data/library.js"></script>
+<script src="../data/codex.js"></script>
+<script src="../data/library.js"></script>
 <script>
 /* ════════════════════════════════════════════════════════════════
    Ritual Archive — Character Builder (FM-RA-02)
@@ -445,7 +482,7 @@ function tTier(e){ return e ? (e.tier || '') : ''; }
 function tRole(e){ return e ? (e.role || e.kind || '') : ''; }
 function tCe(e){ return e ? (e.ce_ability || '') : ''; }
 function tConcept(e){ return e ? (e.concept || e.summary || '') : ''; }
-function tHref(e){ return e ? (e.href || '') : ''; }
+function tHref(e){ var h = e ? (e.href || '') : ''; return (h.indexOf('dossiers/')===0) ? '../'+h : h; } /* grimoire edition: dossiers live at site root */
 
 /* ── character state ── */
 var LS_KEY = 'ritual-archive-characters';
@@ -1258,7 +1295,7 @@ function stepDetails(body){
   var html='<h2>Step 7 — Details</h2><p class="sub">Feats, cursed tools, and the odds and ends that make the character yours. A permanent CE bonus here feeds straight into your Max CE (primer: bonuses are added <b>after</b> the reserve).</p>';
   html+='<div class="field" style="max-width:280px"><label for="ceBonus">Permanent CE bonus (feats, vows, items)</label>'+
     '<input id="ceBonus" type="number" min="0" max="999" value="'+(parseInt(char.ceBonus,10)||0)+'"></div>';
-  html+='<h3>Feats</h3><p class="small">The player guide carries the full <a href="library/player-guide.html#feats">feat catalog (175 printed entries)</a> — find the feat there, then add its exact name below.</p><div class="preset-chips" id="featChips">'+PRESET_FEATS.map(function(f){
+  html+='<h3>Feats</h3><p class="small">The player guide carries the full <a href="../library/player-guide.html#feats">feat catalog (175 printed entries)</a> — find the feat there, then add its exact name below.</p><div class="preset-chips" id="featChips">'+PRESET_FEATS.map(function(f){
     var has=char.feats.indexOf(f)>=0;
     return '<button class="btn btn-small" type="button" data-feat="'+esc(f)+'" style="'+(has?'border-color:var(--red);color:var(--red-deep)':'')+'">'+(has?'✓ ':'+ ')+esc(f)+'</button>';
   }).join('')+'</div>'+

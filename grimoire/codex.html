@@ -3,22 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ritual Archive field manual: the player-facing technique codex — every campaign technique with full level-by-level mechanics.">
-<title>Technique Codex — Ritual Archive Field Manual</title>
+<meta name="description" content="Ritual Archive grimoire: the player-facing technique codex — every campaign technique with full level-by-level mechanics.">
+<title>Technique Codex — Ritual Archive Grimoire</title>
 <style>
 :root{
-  --paper:#f4efe2; --paper2:#ece4cf; --card:#fbf8ee; --card2:#f6f1e1;
-  --ink:#221d14; --ink2:#57503f; --ink3:#7d7563;
-  --line:#d9cfae; --line2:#c9bfa1;
-  --red:#b33a2b; --red-deep:#8c2a1f;
-  --olive:#5f6238; --stone:#8a8474;
-  --serif:Georgia,'Times New Roman',Charter,'Bitstream Charter','Iowan Old Style',serif;
-  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --paper:#0e0b08; --paper2:#14100b; --card:#181310; --card2:#1f1812;
+  --ink:#ece0c6; --ink2:#c6b998; --ink3:#968a6f;
+  --line:#38301f; --line2:#4d422a;
+  --red:#e0573f; --red-deep:#ef8468;
+  --olive:#a8ad6d; --stone:#968b76;
+  --serif:"Palatino Linotype",Palatino,"Book Antiqua","Noto Serif","Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK SC",Georgia,serif;
+  --sans:Georgia,Charter,"Bitstream Charter","Iowan Old Style","Noto Serif","Noto Serif CJK SC",serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;font-size:16px;
-  background-image:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(34,29,20,.028) 31px,rgba(34,29,20,.028) 32px);}
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(0,0,0,.028) 31px,rgba(0,0,0,.028) 32px);}
 ::selection{background:var(--red);color:var(--paper)}
 .shell{max-width:1080px;margin:0 auto;padding:0 24px}
 a{color:var(--red-deep)}
@@ -81,7 +81,7 @@ h1 .amp{color:var(--red)}
 .hint{font-size:.78rem;color:var(--ink3)}
 /* ── entries ─────────────────────────────── */
 #entries{padding:24px 0 64px}
-.entry{background:var(--card);border:1px solid var(--line2);margin-bottom:18px;box-shadow:0 2px 0 rgba(34,29,20,.08)}
+.entry{background:var(--card);border:1px solid var(--line2);margin-bottom:18px;box-shadow:0 2px 0 rgba(0,0,0,.08)}
 .entry-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;width:100%;text-align:left;background:none;border:none;font:inherit;color:inherit;padding:22px 26px;cursor:pointer}
 .entry-head:hover{background:var(--card2)}
 .entry-no{display:block;font-size:.7rem;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:6px}
@@ -90,7 +90,7 @@ h1 .amp{color:var(--red)}
 .meta-line{display:block;font-size:.8rem;color:var(--ink3);margin-top:8px;letter-spacing:.5px}
 .concept{display:block;font-style:italic;color:var(--ink2);margin-top:10px;max-width:64ch;font-size:.95rem}
 .head-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;padding-top:4px}
-.tier-stamp{display:inline-block;font-family:var(--serif);font-weight:bold;letter-spacing:3px;font-size:1rem;color:var(--red);border:2px solid var(--red);border-radius:4px;padding:3px 12px 3px 15px;transform:rotate(-3deg);box-shadow:inset 0 0 0 2px var(--card),inset 0 0 0 3px rgba(179,58,43,.55)}
+.tier-stamp{display:inline-block;font-family:var(--serif);font-weight:bold;letter-spacing:3px;font-size:1rem;color:var(--red);border:2px solid var(--red);border-radius:4px;padding:3px 12px 3px 15px;transform:rotate(-3deg);box-shadow:inset 0 0 0 2px var(--card),inset 0 0 0 3px rgba(224,87,63,.55)}
 .role-tag{font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--olive);border:1px solid var(--olive);border-radius:20px;padding:3px 12px;max-width:230px;text-align:center}
 .detail-tag{font-size:.66rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase}
 .chev{font-family:var(--serif);font-size:1.3rem;color:var(--red-deep);margin-top:4px}
@@ -125,7 +125,7 @@ h1 .amp{color:var(--red)}
 .callout-maximum{border-color:var(--olive)}
 .callout-maximum .callout-kicker{color:var(--olive)}
 .callout-domain{border-color:var(--red)}
-.callout-domain .callout-head{background:rgba(179,58,43,.06)}
+.callout-domain .callout-head{background:rgba(224,87,63,.06)}
 .callout-domain .callout-kicker{color:var(--red)}
 .callout-l20 .callout-kicker{color:var(--ink3)}
 .domain-data{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border-bottom:1px solid var(--line2)}
@@ -152,13 +152,50 @@ h1 .amp{color:var(--red)}
   .ctrl-grid{grid-template-columns:1fr}
   .resultline{flex-direction:column;align-items:flex-start;gap:4px}
 }
+
+/* ══════════ Grimoire ornament: sumi ink, bone text, vermillion seals ══════════ */
+body{
+  border-top:6px solid var(--red);
+  background-image:
+    radial-gradient(1200px 480px at 50% -140px, rgba(224,87,63,.08), transparent 62%),
+    radial-gradient(900px 620px at 88% 112%, rgba(224,87,63,.05), transparent 60%),
+    repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(236,225,200,.030) 31px,rgba(236,225,200,.030) 32px);
+  font-size:17px;line-height:1.7;
+}
+.topbar{border-bottom:3px double var(--red);box-shadow:0 4px 18px rgba(0,0,0,.5)}
+.brand-mark{color:#160f0a;transform:rotate(-4deg);border-radius:2px;
+  box-shadow:inset 0 0 0 2px rgba(22,15,10,.55),0 0 14px rgba(224,87,63,.35)}
+.doc-head{position:relative}
+.doc-head::after{content:"\5490";position:absolute;right:6px;top:6px;font-family:var(--serif);
+  font-size:6.5rem;line-height:1;color:transparent;-webkit-text-stroke:1px rgba(224,87,63,.14);
+  pointer-events:none;user-select:none}
+.eyebrow .orn{color:var(--red)}
+h1{text-shadow:0 0 26px rgba(224,87,63,.18)}
+.entry,.panel,.tech-card,.mgr-card,.controls,.about,.cheat-card,.statstrip,.card,.deck .card,.letter{
+  box-shadow:0 3px 0 rgba(0,0,0,.55),0 0 22px rgba(224,87,63,.04)}
+.die{box-shadow:0 2px 0 rgba(0,0,0,.5)}
+.hr-rule{border-top:3px double var(--red)}
+.footer{border-bottom:6px solid var(--red)}
+.editions{display:block;width:100%;margin-top:10px;font-size:.78rem;letter-spacing:1px;color:var(--ink3)}
+.editions a{color:var(--red-deep)}
+.ed-current{color:var(--red);border:1px solid var(--red);border-radius:2px;padding:1px 8px;
+  font-size:.72rem;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+.seal-mark{display:grid;place-items:center;width:134px;height:134px;margin:0 auto 22px;
+  border:3px double var(--red);border-radius:50%;font-family:var(--serif);font-size:3.4rem;
+  color:var(--red);transform:rotate(-4deg);
+  box-shadow:0 0 34px rgba(224,87,63,.28),inset 0 0 20px rgba(224,87,63,.12)}
+.wax-seal{background:radial-gradient(circle at 35% 30%, #f0684e, #c2432c 45%, #7e2a1c 80%)}
+::-webkit-scrollbar{width:12px;background:var(--paper)}
+::-webkit-scrollbar-thumb{background:#3a2f22;border:3px solid var(--paper);border-radius:7px}
+@media (max-width:700px){.doc-head::after{font-size:4rem;opacity:.7}}
+@media print{body{border-top:none}}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="shell nav">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
   <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html">Character Builder</a><a href="codex.html" class="is-current">Technique Codex</a><a href="lore.html">Story So Far</a></nav>
-  <span class="doc-tag">Field Manual · Technique Codex</span>
+  <span class="doc-tag">Grimoire · Technique Codex</span>
 </div></header>
 
 <main>
@@ -212,12 +249,12 @@ h1 .amp{color:var(--red)}
 
 <footer class="footer"><div class="shell">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <span>FM-RA-01 · Technique Codex · fan-made JJK 5e homebrew reference. Domain profiles per the audited canon — figure Domains are Specific Domains.</span>
-  <span class="tiny">Editions: <b>Field Manual</b> · <a href="grimoire/index.html">Grimoire</a> · <a href="illustrated/index.html">Illustrated</a></span>
+  <span>GR-RA-01 · Technique Codex · fan-made JJK 5e homebrew reference. Domain profiles per the audited canon — figure Domains are Specific Domains.</span>
+  <span class="editions">Editions: <a href="../index.html">Field Manual</a> · <span class="ed-current">Grimoire · current</span> · <a href="../illustrated/index.html">Illustrated</a></span>
 </div></footer>
 
-<script src="data/library.js"></script>
-<script src="data/codex.js"></script>
-<script src="assets/codex.js"></script>
+<script src="../data/library.js"></script>
+<script src="../data/codex.js"></script>
+<script src="../assets/codex.js"></script>
 </body>
 </html>

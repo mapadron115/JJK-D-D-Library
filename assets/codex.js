@@ -15,6 +15,18 @@ var LIBS = (typeof window !== 'undefined' && Array.isArray(window.LIBRARY_ENTRIE
 var TIER_ORDER = { 'I': 0, 'II': 1, 'III': 2, 'IV': 3, 'V': 4 };
 var DETAIL_LABEL = { full: 'FULL PROGRESSION', summary: 'DOSSIER SUMMARY', bespoke: 'BESPOKE RECORD' };
 
+/* Edition-aware dossier base: dossiers/ lives beside assets/ at the site root.
+   Derived from this script's own URL so subdirectory editions (grimoire/,
+   illustrated/) resolve dossier links correctly. Root behavior unchanged. */
+var DOSSIER_BASE = (function () {
+  try {
+    var src = (document.currentScript && document.currentScript.src) || '';
+    var m = src.match(/^(.*)\/assets\/codex\.js(\?.*)?$/);
+    if (m) return m[1] + '/dossiers/';
+  } catch (e) {}
+  return 'dossiers/';
+})();
+
 /* ── text helpers ─────────────────────────────── */
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -102,7 +114,8 @@ function matchesLib(e, st) {
 function renderLibCard(e) {
   e = e || {};
   var accent = e.accent || '#b33a2b';
-  var href = e.href || ('dossiers/' + (e.id || '') + '.html');
+  var raw = e.href || ((e.id || '') + '.html');
+  var href = (/^dossiers\//.test(raw) && typeof DOSSIER_BASE === 'string') ? DOSSIER_BASE + raw.slice(9) : raw;
   return '<article class="entry lib-card" style="--accent:' + esc(accent) + '">' +
     '<a class="lib-link" href="' + esc(href) + '">' +
     '<span class="entry-no">Original · ' + esc(e.collection || 'Library') + '</span>' +

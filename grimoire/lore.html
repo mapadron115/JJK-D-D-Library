@@ -3,22 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ritual Archive field manual: the Story So Far — the acceptance letter, the school, and the memorandum, everything the players know.">
-<title>Story So Far — Ritual Archive Field Manual</title>
+<meta name="description" content="Ritual Archive grimoire: the Story So Far — the acceptance letter, the school, and the memorandum, everything the players know.">
+<title>Story So Far — Ritual Archive Grimoire</title>
 <style>
 :root{
-  --paper:#f4efe2; --paper2:#ece4cf; --card:#fbf8ee; --card2:#f6f1e1;
-  --ink:#221d14; --ink2:#57503f; --ink3:#7d7563;
-  --line:#d9cfae; --line2:#c9bfa1;
-  --red:#b33a2b; --red-deep:#8c2a1f;
-  --olive:#5f6238; --stone:#8a8474;
-  --serif:Georgia,'Times New Roman',Charter,'Bitstream Charter','Iowan Old Style',serif;
-  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --paper:#0e0b08; --paper2:#14100b; --card:#181310; --card2:#1f1812;
+  --ink:#ece0c6; --ink2:#c6b998; --ink3:#968a6f;
+  --line:#38301f; --line2:#4d422a;
+  --red:#e0573f; --red-deep:#ef8468;
+  --olive:#a8ad6d; --stone:#968b76;
+  --serif:"Palatino Linotype",Palatino,"Book Antiqua","Noto Serif","Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK SC",Georgia,serif;
+  --sans:Georgia,Charter,"Bitstream Charter","Iowan Old Style","Noto Serif","Noto Serif CJK SC",serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;font-size:16px;
-  background-image:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(34,29,20,.028) 31px,rgba(34,29,20,.028) 32px);}
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(0,0,0,.028) 31px,rgba(0,0,0,.028) 32px);}
 ::selection{background:var(--red);color:var(--paper)}
 .shell{max-width:1080px;margin:0 auto;padding:0 24px}
 a{color:var(--red-deep)}
@@ -47,7 +47,7 @@ h1 .amp{color:var(--red)}
 /* ── the letter artifact ─────────────────── */
 .letter-wrap{position:relative;margin:28px 0 8px}
 .letter{background:var(--card);border:1px solid var(--line2);outline:4px double var(--ink);outline-offset:6px;
-  box-shadow:0 10px 30px rgba(34,29,20,.22);padding:56px 64px;max-width:900px;margin:0 auto;
+  box-shadow:0 10px 30px rgba(0,0,0,.22);padding:56px 64px;max-width:900px;margin:0 auto;
   font-family:var(--serif);color:var(--ink);position:relative}
 .letterhead{display:flex;align-items:center;gap:20px;border-bottom:2px solid var(--ink);padding-bottom:22px;margin-bottom:10px}
 .crest{width:74px;height:74px;border:2px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-size:2.4rem;font-family:var(--serif);flex-shrink:0;background:var(--card2)}
@@ -64,7 +64,7 @@ h1 .amp{color:var(--red)}
 .signature{font-size:1.3rem;font-weight:bold;margin:6px 0 2px}
 .sig-title{font-size:.82rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink2);font-family:var(--sans)}
 .wax-seal{position:absolute;right:54px;top:120px;width:104px;height:104px;border-radius:50%;
-  background:radial-gradient(circle at 35% 30%, #d2503e, var(--red) 45%, var(--red-deep) 80%);
+  background:radial-gradient(circle at 35% 30%, #f0684e, var(--red) 45%, var(--red-deep) 80%);
   box-shadow:0 4px 10px rgba(0,0,0,.35), inset 0 2px 6px rgba(255,255,255,.25), inset 0 -3px 8px rgba(0,0,0,.3);
   display:grid;place-items:center;transform:rotate(-12deg)}
 .wax-seal span{display:grid;place-items:center;width:74px;height:74px;border:2px solid rgba(244,239,226,.75);border-radius:50%;
@@ -80,10 +80,10 @@ h1 .amp{color:var(--red)}
 .seal-row{display:flex;justify-content:flex-end;margin-top:34px;padding-top:16px;border-top:1px solid var(--line)}
 .seal-stamp{font-family:var(--serif);font-weight:bold;letter-spacing:3px;font-size:1rem;color:var(--red);
   border:2px solid var(--red);border-radius:4px;padding:6px 18px 6px 22px;transform:rotate(-4deg);
-  box-shadow:inset 0 0 0 2px var(--card),inset 0 0 0 3px rgba(179,58,43,.55)}
+  box-shadow:inset 0 0 0 2px var(--card),inset 0 0 0 3px rgba(224,87,63,.55)}
 /* ── know cards ──────────────────────────── */
 .know-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:18px 0 8px}
-.know{background:var(--card);border:1px solid var(--line2);border-top:4px solid var(--ink);padding:24px 26px;box-shadow:0 2px 0 rgba(34,29,20,.08)}
+.know{background:var(--card);border:1px solid var(--line2);border-top:4px solid var(--ink);padding:24px 26px;box-shadow:0 2px 0 rgba(0,0,0,.08)}
 .know h3{font-family:var(--serif);font-size:1.2rem;margin:0 0 10px}
 .know h3 .k{color:var(--red);font-size:.85em;letter-spacing:2px}
 .know p{margin:.7em 0;color:var(--ink);font-size:.96rem}
@@ -97,7 +97,7 @@ h1 .amp{color:var(--red)}
 .plain-box ol li{margin:.8em 0}
 .plain-box ol li b{font-family:var(--serif)}
 /* ── story so far ────────────────────────── */
-.story{background:var(--card);border:1px solid var(--line2);margin:18px 0 64px;padding:40px 44px;box-shadow:0 2px 0 rgba(34,29,20,.08);text-align:center}
+.story{background:var(--card);border:1px solid var(--line2);margin:18px 0 64px;padding:40px 44px;box-shadow:0 2px 0 rgba(0,0,0,.08);text-align:center}
 .story .ch{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:12px}
 .story p{font-family:var(--serif);font-size:1.15rem;font-style:italic;color:var(--ink2);max-width:52ch;margin:.6em auto}
 .story .orn{color:var(--red);font-style:normal;letter-spacing:6px}
@@ -114,13 +114,50 @@ h1 .amp{color:var(--red)}
   .school-name{font-size:1.15rem}
   .story{padding:30px 22px}
 }
+
+/* ══════════ Grimoire ornament: sumi ink, bone text, vermillion seals ══════════ */
+body{
+  border-top:6px solid var(--red);
+  background-image:
+    radial-gradient(1200px 480px at 50% -140px, rgba(224,87,63,.08), transparent 62%),
+    radial-gradient(900px 620px at 88% 112%, rgba(224,87,63,.05), transparent 60%),
+    repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(236,225,200,.030) 31px,rgba(236,225,200,.030) 32px);
+  font-size:17px;line-height:1.7;
+}
+.topbar{border-bottom:3px double var(--red);box-shadow:0 4px 18px rgba(0,0,0,.5)}
+.brand-mark{color:#160f0a;transform:rotate(-4deg);border-radius:2px;
+  box-shadow:inset 0 0 0 2px rgba(22,15,10,.55),0 0 14px rgba(224,87,63,.35)}
+.doc-head{position:relative}
+.doc-head::after{content:"\5490";position:absolute;right:6px;top:6px;font-family:var(--serif);
+  font-size:6.5rem;line-height:1;color:transparent;-webkit-text-stroke:1px rgba(224,87,63,.14);
+  pointer-events:none;user-select:none}
+.eyebrow .orn{color:var(--red)}
+h1{text-shadow:0 0 26px rgba(224,87,63,.18)}
+.entry,.panel,.tech-card,.mgr-card,.controls,.about,.cheat-card,.statstrip,.card,.deck .card,.letter{
+  box-shadow:0 3px 0 rgba(0,0,0,.55),0 0 22px rgba(224,87,63,.04)}
+.die{box-shadow:0 2px 0 rgba(0,0,0,.5)}
+.hr-rule{border-top:3px double var(--red)}
+.footer{border-bottom:6px solid var(--red)}
+.editions{display:block;width:100%;margin-top:10px;font-size:.78rem;letter-spacing:1px;color:var(--ink3)}
+.editions a{color:var(--red-deep)}
+.ed-current{color:var(--red);border:1px solid var(--red);border-radius:2px;padding:1px 8px;
+  font-size:.72rem;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+.seal-mark{display:grid;place-items:center;width:134px;height:134px;margin:0 auto 22px;
+  border:3px double var(--red);border-radius:50%;font-family:var(--serif);font-size:3.4rem;
+  color:var(--red);transform:rotate(-4deg);
+  box-shadow:0 0 34px rgba(224,87,63,.28),inset 0 0 20px rgba(224,87,63,.12)}
+.wax-seal{background:radial-gradient(circle at 35% 30%, #f0684e, #c2432c 45%, #7e2a1c 80%)}
+::-webkit-scrollbar{width:12px;background:var(--paper)}
+::-webkit-scrollbar-thumb{background:#3a2f22;border:3px solid var(--paper);border-radius:7px}
+@media (max-width:700px){.doc-head::after{font-size:4rem;opacity:.7}}
+@media print{body{border-top:none}}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="shell nav">
 <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
 <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html">Character Builder</a><a href="codex.html">Technique Codex</a><a href="lore.html" class="is-current">Story So Far</a></nav>
-<span class="doc-tag">Field Manual · Story</span>
+<span class="doc-tag">Grimoire · Story</span>
 </div></header>
 
 <main>
@@ -274,8 +311,8 @@ h1 .amp{color:var(--red)}
 
 <footer class="footer"><div class="shell">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <span>FM-RA-04 · Story So Far · player-safe record only. Fan-made JJK 5e homebrew reference.</span>
-  <span class="tiny">Editions: <b>Field Manual</b> · <a href="grimoire/index.html">Grimoire</a> · <a href="illustrated/index.html">Illustrated</a></span>
+  <span>GR-RA-04 · Story So Far · player-safe record only. Fan-made JJK 5e homebrew reference.</span>
+  <span class="editions">Editions: <a href="../index.html">Field Manual</a> · <span class="ed-current">Grimoire · current</span> · <a href="../illustrated/index.html">Illustrated</a></span>
 </div></footer>
 </body>
 </html>
