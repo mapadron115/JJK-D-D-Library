@@ -395,7 +395,7 @@ img{max-width:100%;height:auto}
 <section id="view-manager">
   <div class="doc-head">
 <div class="hero-art" aria-hidden="true"><img src="assets/img/hero-pagoda-battle.jpg" alt="" loading="eager"></div>
-    <div class="eyebrow"><span class="orn">❖</span> Field Manual · FM-RA-02 · Character Builder <span class="orn">❖</span></div>
+    <div class="eyebrow"><span class="orn">❖</span> Illustrated · IL-RA-02 · Character Builder <span class="orn">❖</span></div>
     <h1>Character <span class="amp">Builder</span></h1>
     <p class="lede">Walk from concept to finished character sheet in eight steps — D&amp;D Beyond order, Ritual Archive canon. Roll your dice, pick any technique from the full codex, and the sheet builds itself.</p>
   </div>
@@ -412,7 +412,7 @@ img{max-width:100%;height:auto}
 <section id="view-wizard" style="display:none">
   <div class="doc-head">
 <div class="hero-art" aria-hidden="true"><img src="assets/img/hero-pagoda-battle.jpg" alt="" loading="eager"></div>
-    <div class="eyebrow"><span class="orn">❖</span> Field Manual · FM-RA-02 · Character Builder <span class="orn">❖</span></div>
+    <div class="eyebrow"><span class="orn">❖</span> Illustrated · IL-RA-02 · Character Builder <span class="orn">❖</span></div>
     <h1 id="wizTitle">New <span class="amp">Sorcerer</span></h1>
   </div>
   <div class="steps no-print" id="stepBar"></div>
@@ -426,7 +426,7 @@ img{max-width:100%;height:auto}
 
 <footer class="footer no-print"><div class="shell">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <span class="tiny">FM-RA-02 · Character Builder · fan-made JJK 5e homebrew reference. CE Reserve per the campaign canon — Reserve Dice, one CE ability modifier, permanent bonuses added after.</span>
+  <span class="tiny">IL-RA-02 · Character Builder · fan-made JJK 5e homebrew reference. CE Reserve per the campaign canon — Reserve Dice, one CE ability modifier, permanent bonuses added after.</span>
   <span class="editions">Editions: <a href="field-manual/index.html">Field Manual</a> · <a href="grimoire/index.html">Grimoire</a> · <span class="ed-current">Illustrated · current</span></span>
   <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA — manga &amp; anime art from the author's JJK 5e PDFs, used for personal, non-commercial fan purposes only. No AI art.</span>
 </div></footer>
@@ -436,7 +436,7 @@ img{max-width:100%;height:auto}
 <script src="data/codex_inner_circle.js"></script>
 <script>
 /* ════════════════════════════════════════════════════════════════
-   Ritual Archive — Character Builder (FM-RA-02)
+   Ritual Archive — Character Builder (IL-RA-02)
    Dependency-free. Reads window.CODEX (data/codex.js) and
    window.LIBRARY_ENTRIES (data/library.js) at runtime — never
    hardcodes technique counts or ids.
@@ -1478,7 +1478,7 @@ function sheetHTML(){
   var ceMod=(!isHR()&&char.ceAbility)?mod(ab[char.ceAbility]||10):null;
   var ancLine=(A?A.name:'—')+(H?' · '+H.name:'');
   var html='<div class="sheet" id="printSheet"><div class="sheet-head">'+
-    '<div class="s-eyebrow">❖ Ritual Archive · Field Manual · Character Record ❖</div>'+
+    '<div class="s-eyebrow">❖ Ritual Archive · Illustrated · Character Record ❖</div>'+
     '<h2>'+esc(char.name||'Unnamed')+'</h2>'+
     '<div class="s-sub">Level '+char.level+' '+esc(char.cls||'—')+' · '+esc(ancLine)+' · Player: '+esc(char.player||'—')+'</div></div>';
   if(isHR()) html+='<div class="sheet-sec"><div class="banner warn" style="margin:0"><span class="bk">❖ Pure Body — Heavenly Restriction</span><p>No CE ability, CE Reserve, Innate Technique, Domain, RCT, Maximum Output, or Black Flash. Physical, tactical, skill, and cursed-tool features function normally.</p></div></div>';
@@ -1529,7 +1529,7 @@ function sheetHTML(){
     (char.tools.length?'<ul class="tag-list">'+char.tools.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ul>':'<p class="small">—</p>');
   if(char.notes) html+='<p class="small" style="margin:12px 0 4px;letter-spacing:2px;text-transform:uppercase">Notes</p><div class="feat-text">'+md(char.notes)+'</div>';
   html+='</div>';
-  html+='<div class="sheet-sec"><p class="small" style="margin:0">FM-RA-02 · generated '+new Date().toISOString().slice(0,10)+' · codex v'+esc(HAS_CODEX?window.CODEX.codex_version:'?')+' · CE Reserve per campaign canon.</p></div>';
+  html+='<div class="sheet-sec"><p class="small" style="margin:0">IL-RA-02 · generated '+new Date().toISOString().slice(0,10)+' · codex v'+esc(HAS_CODEX?window.CODEX.codex_version:'?')+' · CE Reserve per campaign canon.</p></div>';
   html+='</div>';
   return html;
 }
