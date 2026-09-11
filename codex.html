@@ -317,9 +317,10 @@ h1 .amp{color:var(--red)}
   <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA and respective rights holders — manga &amp; anime art from the author's JJK 5e PDFs plus sourced franchise/comic/game imagery, used for personal, non-commercial fan purposes only. <a href="image-credits.html">Full image credits</a>.</span>
 </div></footer>
 
-<script src="data/library.js"></script>
-<script src="data/codex.js"></script>
-<script src="assets/codex.js"></script>
+<!-- cache-bust: bump ?v= on the script tags below whenever data/*.js or assets/*.js changes -->
+<script src="data/library.js?v=20260911c"></script>
+<script src="data/codex.js?v=20260911c"></script>
+<script src="assets/codex.js?v=20260911c"></script>
 <script>
 /* responsive nav toggle (added 2026-09-11) */
 (function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(open){t.classList.toggle('nav-open',open);b.setAttribute('aria-expanded',open?'true':'false');b.textContent=open?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});t.querySelectorAll('.navlinks a').forEach(function(a){a.addEventListener('click',function(){set(false);});});document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});})();
