@@ -447,6 +447,9 @@ img{max-width:100%;height:auto}
 <script src="data/technique_feats.js?v=20260911f"></script>
 <script src="data/codex_feats.js?v=20260911g"></script>
 <script src="data/class_features.js?v=20260911a"></script>
+<script src="data/backgrounds.js?v=20260913a"></script>
+<script src="data/mindsets.js?v=20260913a"></script>
+<script src="data/general_feats.js?v=20260913a"></script>
 <script>
 /* ════════════════════════════════════════════════════════════════
    Ritual Archive — Character Builder (IL-RA-02)
@@ -657,6 +660,11 @@ function techFeatsFor(entry){
 function featInfo(name){
   var tf = techFeatsForAll();
   for(var i=0;i<tf.length;i++){ if(tf[i].name===name) return tf[i]; }
+  if(window.GENERAL_FEATS){
+    var cats=Object.keys(window.GENERAL_FEATS);
+    for(var c=0;c<cats.length;c++){ var arr=window.GENERAL_FEATS[cats[c]];
+      for(var j=0;j<arr.length;j++){ if(arr[j].name===name) return arr[j]; } }
+  }
   return null;
 }
 function featInfoHTML(name){
@@ -693,7 +701,7 @@ function featSelectOptions(selected){
   return html;
 }
 
-var STEP_NAMES = ['Concept','Ancestry','Class','Abilities','Technique','Level-Up Rolls','Details','Sheet'];
+var STEP_NAMES = ['Concept','Ancestry','Class','Abilities','Technique','Background','Level-Up Rolls','Details','Sheet'];
 
 /* ── utils ── */
 function $(id){ return document.getElementById(id); }
@@ -751,7 +759,7 @@ function tHref(e){ var h=e?(e.href||''):''; return (h.indexOf('dossiers/')===0)?
 
 /* ── character state ── */
 var LS_KEY = 'ritual-archive-characters';
-var SCHEMA_VERSION = 2; /* bump when the save shape changes; migrateChar upgrades older saves */
+var SCHEMA_VERSION = 3; /* bump when the save shape changes; migrateChar upgrades older saves */
 var char = null;
 var currentStep = 1;
 var dicePool = [];      // rolled/standard-array pool for ability assignment
@@ -771,6 +779,8 @@ function blankChar(){
     levelData:{}, // {level:{hpMode,hpDie,ceMode,ceDie}}
     classLevels:{}, // {charLevel:className} — multiclassing; level 1 is the starting class
     techniques:[], // [{catalog:'figures'|'originals', id}] — up to 2 innate techniques
+    background:'', backgroundFeat:'', backgroundTool:'', backgroundEquipment:[],
+    mindset:'',
     feats:[], tools:[], notes:'', ceBonus:0,
     v: SCHEMA_VERSION
   };
@@ -877,9 +887,15 @@ function classBreakdown(){
 /* migrate pre-multiclass / pre-dual-technique saves */
 function migrateChar(c){
   if(c.v!==SCHEMA_VERSION){
-    /* future schema changes branch here: if(c.v<3){ ... } */
+    /* future schema changes branch here: if(c.v<4){ ... } */
     c.v=SCHEMA_VERSION;
   }
+  /* v3: background & mindset */
+  if(!('background' in c)) c.background='';
+  if(!('backgroundFeat' in c)) c.backgroundFeat='';
+  if(!('backgroundTool' in c)) c.backgroundTool='';
+  if(!Array.isArray(c.backgroundEquipment)) c.backgroundEquipment=[];
+  if(!('mindset' in c)) c.mindset='';
   if(!c.classLevels||!Object.keys(c.classLevels).length){
     c.classLevels={}; for(var l=1;l<=(c.level||1);l++) c.classLevels[l]=c.cls;
   }
@@ -1007,7 +1023,7 @@ function renderStep(){
   $('wizTitle').innerHTML = title;
   var body = $('stepBody'), nav = $('wizNav');
   body.innerHTML=''; nav.innerHTML='';
-  ({1:stepConcept,2:stepAncestry,3:stepClass,4:stepAbilities,5:stepTechnique,6:stepLevelUps,7:stepDetails,8:stepSheet})[currentStep](body);
+  ({1:stepConcept,2:stepAncestry,3:stepClass,4:stepAbilities,5:stepTechnique,6:stepBackground,7:stepLevelUps,8:stepDetails,9:stepSheet})[currentStep](body);
   renderNav();
 }
 function renderNav(){
@@ -1024,7 +1040,7 @@ function renderNav(){
     nav.appendChild(ex);
   }
   var spacer=document.createElement('span'); nav.appendChild(spacer);
-  if(currentStep<8){
+  if(currentStep<9){
     var next=document.createElement('button'); next.className='btn btn-primary'; next.type='button'; next.textContent='Next →';
     var v = STEP_VALID[currentStep];
     var res = v?v():{ok:true};
@@ -1042,7 +1058,7 @@ function renderNav(){
    step, so without this the Next button stays disabled forever once a
    step renders with validation failing. */
 function refreshNav(){
-  var nav=$('wizNav'); if(!nav||currentStep>=8) return;
+  var nav=$('wizNav'); if(!nav||currentStep>=9) return;
   var next=nav.querySelector('.btn-primary'); if(!next) return;
   var v=STEP_VALID[currentStep];
   var res=v?v():{ok:true};
@@ -1066,8 +1082,8 @@ function stepConcept(body){
     '<div class="field" style="max-width:260px"><label for="cLevel">'+(isEdit?'Character level':'Starting level')+'</label>'+
     '<select id="cLevel">'+levelOptions()+'</select></div>'+
     (isEdit
-      ? '<div class="banner"><span class="bk">❖ Leveling up</span><p>Raise the level, then complete the new rows in <b>Step 6</b> — every roll, ASI, and feat choice you already made is kept. Lowering the level keeps the higher-level data stored but inactive.</p></div>'
-      : '<div class="banner"><span class="bk">❖ Campaign note</span><p>This campaign opens at level 1 with 4–8 sorcerers — but the builder supports starting as high as level 20, with per-level HP and CE Reserve rolls handled in Step 6.</p></div>');
+      ? '<div class="banner"><span class="bk">❖ Leveling up</span><p>Raise the level, then complete the new rows in <b>Step 7</b> — every roll, ASI, and feat choice you already made is kept. Lowering the level keeps the higher-level data stored but inactive.</p></div>'
+      : '<div class="banner"><span class="bk">❖ Campaign note</span><p>This campaign opens at level 1 with 4–8 sorcerers — but the builder supports starting as high as level 20, with per-level HP and CE Reserve rolls handled in Step 7.</p></div>');
   $('cName').addEventListener('input',function(e){ char.name=e.target.value; refreshNav(); });
   $('cPlayer').addEventListener('input',function(e){ char.player=e.target.value; });
   $('cLevel').addEventListener('change',function(e){
@@ -1142,7 +1158,7 @@ function ancestryBonuses(){
 
 /* ═══════════ STEP 3 — CLASS ═══════════ */
 function stepClass(body){
-  var html='<h2>Step 3 — Starting Class</h2><p class="sub">Seven paths through jujutsu. Hit die drives HP; the Reserve Die drives your Cursed Energy. You can take levels in other classes as you level up — each level’s class is chosen in Step 6.</p>';
+  var html='<h2>Step 3 — Starting Class</h2><p class="sub">Seven paths through jujutsu. Hit die drives HP; the Reserve Die drives your Cursed Energy. You can take levels in other classes as you level up — each level’s class is chosen in Step 7.</p>';
   html+='<div class="opt-grid">'+CLASS_ORDER.map(function(c){
     var C=CLASSES[c];
     var res = c==='Heavenly Restriction' ? '— (Pure Body: no CE)' : ('d'+C.reserve+' / +'+C.fixed+' fixed');
@@ -1369,7 +1385,7 @@ function renderFinal(){
     html+='<h3>Final scores</h3><table class="assign-table"><tr><th>Ability</th><th>Score</th><th>Modifier</th></tr>'+
       ABILITIES.map(function(a){ return '<tr><td>'+ABIL_NAMES[a]+' ('+a+')</td><td class="roll-res">'+char.abilities[a]+'</td><td>'+modStr(char.abilities[a])+'</td></tr>'; }).join('')+'</table>';
     if(char.ceAbility&&!isHR()){
-      html+='<p class="small">CE ability <b>'+char.ceAbility+'</b> modifier '+modStr(char.abilities[char.ceAbility])+' — added to your CE Reserve <b>once</b> (Step 6).</p>';
+      html+='<p class="small">CE ability <b>'+char.ceAbility+'</b> modifier '+modStr(char.abilities[char.ceAbility])+' — added to your CE Reserve <b>once</b> (Step 7).</p>';
     }
   }
   el.innerHTML=html;
@@ -1400,7 +1416,113 @@ STEP_VALID[4]=function(){
   return {ok:true};
 };
 
-/* ═══════════ STEP 6 — LEVEL-UP ROLLS ═══════════ */
+/* ═══════════ STEP 6 — BACKGROUND & MINDSET ═══════════ */
+function bgById(id){ var a=window.BACKGROUNDS||[]; for(var i=0;i<a.length;i++) if(a[i].id===id) return a[i]; return null; }
+function msById(id){ var a=window.MINDSETS||[]; for(var i=0;i<a.length;i++) if(a[i].id===id) return a[i]; return null; }
+function addToolOnce(t){ if(t&&char.tools.indexOf(t)<0) char.tools.push(t); }
+function removeTool(t){ if(t) char.tools=char.tools.filter(function(x){ return x!==t; }); }
+function setBackground(id){
+  removeTool(char.backgroundTool);
+  char.background=id; char.backgroundFeat=''; char.backgroundTool='';
+  var bg=bgById(id);
+  char.backgroundEquipment=bg?bg.equipment.slice():[];
+  if(bg&&bg.tool&&bg.tool.fixed){ char.backgroundTool=bg.tool.fixed; addToolOnce(bg.tool.fixed); }
+  renderStep();
+}
+/* <option> list for a background's granted feat: Innate Technique reuses the
+   technique-feat picker; the other four categories draw on GENERAL_FEATS. */
+function bgFeatOptions(bg, selected){
+  if(!bg) return '';
+  if(bg.featCat==='innate') return featSelectOptions(selected);
+  var arr=(window.GENERAL_FEATS&&window.GENERAL_FEATS[bg.featCat])||[];
+  var html='<option value="">— choose a feat —</option><optgroup label="General feats">'+
+    arr.map(function(f){
+      var pr=(f.prereq&&f.prereq!=='N/A')?f.prereq:'';
+      var label=f.name+(pr?' ('+pr+')':'');
+      return '<option value="'+esc(f.name)+'"'+(selected===f.name?' selected':'')+
+        ' title="'+esc((pr?pr+'. ':'')+f.text)+'">'+esc(label)+'</option>';
+    }).join('')+'</optgroup>';
+  var known=arr.map(function(f){ return f.name; });
+  if(selected&&known.indexOf(selected)<0){
+    html+='<optgroup label="Previously chosen"><option value="'+esc(selected)+'" selected>'+esc(selected)+' (kept from earlier)</option></optgroup>';
+  }
+  return html;
+}
+function stepBackground(body){
+  var html='<h2>Step 6 — Background &amp; Mindset</h2>'+
+    '<p class="sub">Who you were before jujutsu found you — and the conviction that shapes how your power answers. Your background grants a feat, skill proficiencies, equipment, and a feature; your mindset replaces the inspiration system.</p>';
+  if(!(window.BACKGROUNDS&&window.MINDSETS&&window.GENERAL_FEATS)){
+    body.innerHTML=html+'<div class="banner warn"><span class="bk">❖ Missing data</span><p>Background data failed to load — check the data/ folder.</p></div>';
+    return;
+  }
+  html+='<h3>Background</h3><div class="opt-grid">'+window.BACKGROUNDS.map(function(b){
+    return '<div class="opt-card'+(char.background===b.id?' is-selected':'')+'" data-bg="'+b.id+'" tabindex="0" role="button" aria-pressed="'+(char.background===b.id)+'">'+
+      '<span class="check">✦</span><h4>'+esc(b.name)+'</h4><p class="tagline">'+esc(b.featLabel)+'</p></div>';
+  }).join('')+'</div><div id="bgDetail"></div>';
+  html+='<h3>Mindset</h3><p class="small">In sorcery your mindset affects your power. When you use your inspiration, you gain the stated effect.</p>'+
+    '<div class="opt-grid">'+window.MINDSETS.map(function(m){
+    return '<div class="opt-card'+(char.mindset===m.id?' is-selected':'')+'" data-ms="'+m.id+'" tabindex="0" role="button" aria-pressed="'+(char.mindset===m.id)+'" title="'+esc(m.effect)+'">'+
+      '<span class="check">✦</span><h4>'+esc(m.name)+'</h4><p class="tagline">'+esc(m.flavor)+'</p></div>';
+  }).join('')+'</div>';
+  body.innerHTML=html;
+  body.querySelectorAll('[data-bg]').forEach(function(c){
+    var pick=function(){ if(char.background!==c.getAttribute('data-bg')) setBackground(c.getAttribute('data-bg')); };
+    c.addEventListener('click',pick);
+    c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
+  });
+  body.querySelectorAll('[data-ms]').forEach(function(c){
+    var pick=function(){ char.mindset=c.getAttribute('data-ms'); renderStep(); };
+    c.addEventListener('click',pick);
+    c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
+  });
+  renderBgDetail();
+}
+function renderBgDetail(){
+  var d=$('bgDetail'); if(!d) return;
+  var bg=bgById(char.background);
+  if(!bg){ d.innerHTML='<p class="small">Choose a background above.</p>'; return; }
+  var html='<div class="banner"><span class="bk">❖ '+esc(bg.name)+'</span><p>'+esc(bg.desc)+'</p>'+
+    '<p style="margin:8px 0 0"><b>Skill proficiencies:</b> '+esc(bg.skills.join(', '))+'</p>';
+  if(bg.tool){
+    if(bg.tool.fixed) html+='<p style="margin:4px 0 0"><b>Tool proficiency:</b> '+esc(bg.tool.fixed)+'</p>';
+    else html+='<div class="field" style="max-width:320px;margin-top:8px"><label for="bgTool">Tool proficiency — choose one</label>'+
+      '<select id="bgTool"><option value="">— choose —</option>'+bg.tool.choice.map(function(t){
+        return '<option value="'+esc(t)+'"'+(char.backgroundTool===t?' selected':'')+'>'+esc(t)+'</option>';
+      }).join('')+'</select></div>';
+  }
+  html+='<p style="margin:8px 0 0"><b>Equipment:</b></p><ul style="margin:4px 0;padding-left:1.3em">'+
+    bg.equipment.map(function(e){ return '<li class="small">'+esc(e)+'</li>'; }).join('')+'</ul>'+
+    '<p style="margin:8px 0 0"><b>Feature: '+esc(bg.featureName)+'.</b> '+esc(bg.featureText)+'</p></div>';
+  html+='<div class="field" style="max-width:420px"><label for="bgFeat">'+esc(bg.featLabel)+'</label>'+
+    '<select id="bgFeat">'+bgFeatOptions(bg,char.backgroundFeat)+'</select><div id="bgFeatNote"></div></div>';
+  d.innerHTML=html;
+  var showNote=function(){
+    var n=$('bgFeatNote');
+    if(n) n.innerHTML=featInfoHTML(char.backgroundFeat);
+  };
+  showNote();
+  $('bgFeat').addEventListener('change',function(e){ char.backgroundFeat=e.target.value; showNote(); refreshNav(); });
+  var ts=$('bgTool');
+  if(ts) ts.addEventListener('change',function(e){
+    removeTool(char.backgroundTool);
+    char.backgroundTool=e.target.value; addToolOnce(char.backgroundTool);
+    refreshNav();
+  });
+}
+STEP_VALID[6]=function(){
+  if(!(window.BACKGROUNDS&&window.MINDSETS&&window.GENERAL_FEATS))
+    return {ok:false,msg:'Background data failed to load — check the data/ folder.'};
+  if(!char.background) return {ok:false,msg:'Choose a background to continue.'};
+  var bg=bgById(char.background);
+  if(!bg) return {ok:false,msg:'Choose a background to continue.'};
+  if(bg.tool&&bg.tool.choice&&!char.backgroundTool)
+    return {ok:false,msg:'Choose your background tool proficiency.'};
+  if(!char.backgroundFeat) return {ok:false,msg:'Choose your background feat — '+bg.featLabel+'.'};
+  if(!char.mindset) return {ok:false,msg:'Choose a mindset to continue.'};
+  return {ok:true};
+};
+
+/* ═══════════ STEP 7 — LEVEL-UP ROLLS ═══════════ */
 function levelRows(){
   var ab=Object.assign({},char.abilities);
   var rows=[];
@@ -1417,7 +1539,7 @@ function levelRows(){
 }
 function stepLevelUps(body){
   var C=CLASSES[char.cls], hd=C.hd;
-  var html='<h2>Step 6 — Level-Up Rolls</h2>'+
+  var html='<h2>Step 7 — Level-Up Rolls</h2>'+
     '<p class="sub">Level 1 is fixed: <b>HP = '+hd+' + CON</b>'+(isHR()?'.':' and <b>CE = '+C.reserve+' (max Reserve Die)</b>')+'. '+
     'For each later level, roll the die (watch it land) or take the fixed value. Your CE ability modifier is added <b>once</b> to the whole reserve — never per level.</p>';
   if(isHR()) html+='<div class="banner warn"><span class="bk">❖ Pure Body</span><p>No CE Reserve to roll — Heavenly Restriction gains neither a Reserve Die nor a CE modifier. Roll HP only.</p></div>';
@@ -1530,7 +1652,7 @@ function animateSingleDie(btn,spanAttr,sides,done){
     if(ticks>7){ clearInterval(iv); btn.disabled=false; span.innerHTML=''; done(rollDie(sides)); }
   },80);
 }
-STEP_VALID[6]=function(){ return {ok:true}; };
+STEP_VALID[7]=function(){ return {ok:true}; };
 
 /* ═══════════ STEP 5 — TECHNIQUE ═══════════ */
 var techQ='', techGrade='', techGroup='', techRole='', techFranchise='', techOrigin='all';
@@ -1770,9 +1892,9 @@ STEP_VALID[5]=function(){
   return {ok:true};
 };
 
-/* ═══════════ STEP 7 — DETAILS ═══════════ */
+/* ═══════════ STEP 8 — DETAILS ═══════════ */
 function stepDetails(body){
-  var html='<h2>Step 7 — Details</h2><p class="sub">The odds and ends that make the character yours. A permanent CE bonus here feeds straight into your Max CE (primer: bonuses are added <b>after</b> the reserve).</p>';
+  var html='<h2>Step 8 — Details</h2><p class="sub">The odds and ends that make the character yours. A permanent CE bonus here feeds straight into your Max CE (primer: bonuses are added <b>after</b> the reserve).</p>';
   if(!isHR()) html+='<div class="field" style="max-width:280px"><label for="ceBonus">Permanent CE bonus (feats, vows, items)</label>'+
     '<input id="ceBonus" type="number" min="0" max="999" value="'+(parseInt(char.ceBonus,10)||0)+'"></div>';
   html+='<h3>Cursed tools</h3><p class="small">Cursed tools are awarded through campaign progression — your GM grants them in play, so they aren\u2019t chosen here. The full arsenal lives in the codex\u2019s Cursed Tools tab.</p>';
@@ -1782,11 +1904,11 @@ function stepDetails(body){
   var ceB=$('ceBonus'); if(ceB) ceB.addEventListener('change',function(e){ char.ceBonus=Math.max(0,parseInt(e.target.value,10)||0); });
   $('notes').addEventListener('input',function(e){ char.notes=e.target.value; });
 }
-STEP_VALID[7]=function(){ return {ok:true}; };
+STEP_VALID[8]=function(){ return {ok:true}; };
 
-/* ═══════════ STEP 8 — SHEET ═══════════ */
+/* ═══════════ STEP 9 — SHEET ═══════════ */
 function stepSheet(body){
-  body.innerHTML='<h2 class="no-print">Step 8 — Character Sheet</h2><p class="sub no-print">Review the finished sheet. <b>Save</b> stores it on this device; <b>Print</b> renders a clean paper sheet.</p><div id="sheetWrap">'+sheetHTML()+'</div>'+
+  body.innerHTML='<h2 class="no-print">Step 9 — Character Sheet</h2><p class="sub no-print">Review the finished sheet. <b>Save</b> stores it on this device; <b>Print</b> renders a clean paper sheet.</p><div id="sheetWrap">'+sheetHTML()+'</div>'+
   '<div class="wiz-nav no-print" style="border-top:none;margin-top:8px;padding-top:0">'+
   '<button class="btn btn-primary" id="btnSave" type="button">💾 Save character</button>'+
   '<button class="btn" id="btnPrint" type="button">🖨 Print sheet</button>'+
@@ -1834,7 +1956,7 @@ function classFeaturesSheetHTML(){
     var cl=classLevelCount(c,char.level);
     var feats=(CF[c]||[]).filter(function(f){
       /* Innate Technique / Innate Technique Feature / ASI rows are handled by the Techniques
-         section and Step 6 — showing them here would duplicate them. */
+         section and Step 7 — showing them here would duplicate them. */
       return !/^(innate technique( feature)?|ability score improvement)$/i.test(f.name||'');
     });
     html+='<div class="lvl"><span class="lvl-chip">'+esc(c)+' '+cl+'</span></div>';
@@ -1876,6 +1998,26 @@ function sheetHTML(){
     '<p style="font-family:var(--serif);font-size:1.15rem;font-weight:bold;margin:0">'+esc(ancLine)+'</p>'+
     (A&&A.blurb?'<p class="small">'+esc(A.blurb)+'</p>':'')+
     (H&&H.traits&&H.traits.length?'<ul style="margin:6px 0 0;padding-left:1.3em">'+H.traits.map(function(t){ return '<li class="small">'+esc(t)+'</li>'; }).join('')+'</ul>':'<p class="small">No ancestry traits recorded.</p>')+'</div>';
+  /* background & mindset */
+  (function(){
+    var bg=bgById(char.background), ms=msById(char.mindset);
+    if(!bg&&!ms) return;
+    html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Background &amp; Mindset</h3>';
+    if(bg){
+      html+='<p style="font-family:var(--serif);font-size:1.15rem;font-weight:bold;margin:0">'+esc(bg.name)+'</p>'+
+        '<p class="small">'+esc(bg.desc)+'</p>'+
+        '<p class="small" style="margin:6px 0 0"><b>Skill proficiencies:</b> '+esc(bg.skills.join(', '))+
+        (char.backgroundTool?'<br><b>Tool proficiency:</b> '+esc(char.backgroundTool):'')+
+        '<br><b>Equipment:</b> '+esc((char.backgroundEquipment||[]).join('; '))+'</p>'+
+        '<p class="small" style="margin:6px 0 0"><b>Feature: '+esc(bg.featureName)+'.</b> '+esc(bg.featureText)+'</p>';
+    }
+    if(ms){
+      html+='<p style="font-family:var(--serif);font-size:1.05rem;font-weight:bold;margin:'+(bg?'12px':'0')+' 0 0">Mindset: '+esc(ms.name)+'</p>'+
+        '<p class="small" style="font-style:italic;margin:2px 0">'+esc(ms.flavor)+'</p>'+
+        '<p class="small" style="margin:2px 0"><b>When you use your inspiration:</b> '+esc(ms.effect)+'</p>';
+    }
+    html+='</div>';
+  })();
   /* vitals */
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Vitals</h3><div class="vitals">'+
     '<div><b>'+hp+'</b><span>Max HP ('+classesTaken().map(function(c){ return 'd'+CLASSES[c].hd; }).join(' / ')+')</span></div>'+
@@ -1907,6 +2049,7 @@ function sheetHTML(){
       /* Jujutsu Sorcerers automatically have the Cursed Energy feat (unusable under Pure Body) */
       var autoFeats=(char.heritage==='sorcerer'&&!isHR())?['Beginner Cursed Energy']:[];
       var items=autoFeats.map(function(f){return '<li>'+esc(f)+' <span class="small">(heritage)</span>'+featNote(f)+'</li>';})
+        .concat(char.backgroundFeat?['<li>'+esc(char.backgroundFeat)+' <span class="small">(background)</span>'+featNote(char.backgroundFeat)+'</li>']:[])
         .concat(char.feats.map(function(f){return '<li>'+esc(f)+featNote(f)+'</li>';}))
         .concat(asiFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat)</span>'+featNote(e.name)+'</li>';}));
       /* dedupe: identical feat names collapse, heritage entry (listed first) wins */
