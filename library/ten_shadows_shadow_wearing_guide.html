@@ -1,1 +1,957 @@
-<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=../dossiers/e035.html"><a href="../dossiers/e035.html">Open repaired source</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ten Shadows: Shadow Wearing Guide</title>
+  <style>
+    :root {
+      --bg: #0a0b10;
+      --bg2: #10131c;
+      --ink: #f7f1e7;
+      --muted: #c7bcae;
+      --soft: rgba(255,255,255,.08);
+      --line: rgba(255,255,255,.16);
+      --gold: #d7b66a;
+      --red: #b94b4b;
+      --blue: #6684ff;
+      --green: #83b68a;
+      --violet: #9e7bf7;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(115, 92, 35, .35), transparent 38rem),
+        radial-gradient(circle at 88% 10%, rgba(82, 92, 160, .25), transparent 28rem),
+        linear-gradient(135deg, var(--bg), #08090d 45%, #141017);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .06;
+      background-image:
+        linear-gradient(45deg, #fff 1px, transparent 1px),
+        linear-gradient(-45deg, #fff 1px, transparent 1px);
+      background-size: 38px 38px;
+      mix-blend-mode: screen;
+    }
+
+    a { color: inherit; }
+    .page { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+
+    header {
+      position: relative;
+      padding: 74px 0 32px;
+      overflow: hidden;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 10px);
+      padding: clamp(28px, 5vw, 56px);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.03)),
+        radial-gradient(circle at 16% 20%, rgba(215,182,106,.20), transparent 28rem),
+        radial-gradient(circle at 80% 30%, rgba(90,75,160,.20), transparent 20rem);
+      box-shadow: var(--shadow);
+      position: relative;
+      isolation: isolate;
+    }
+
+    .hero::after {
+      content: "十";
+      position: absolute;
+      right: clamp(18px, 5vw, 60px);
+      bottom: -86px;
+      font-size: clamp(220px, 30vw, 420px);
+      font-weight: 900;
+      color: rgba(255,255,255,.035);
+      z-index: -1;
+      line-height: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border: 1px solid rgba(215,182,106,.45);
+      border-radius: 999px;
+      color: var(--gold);
+      background: rgba(215,182,106,.10);
+      font-size: .88rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 7.2rem);
+      line-height: .9;
+      margin: 26px 0 22px;
+      letter-spacing: -.07em;
+    }
+
+    .subtitle {
+      max-width: 800px;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      margin: 0;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 24px;
+      align-items: end;
+      margin-top: 34px;
+    }
+
+    .quote {
+      padding: 20px 22px;
+      border-radius: 20px;
+      border: 1px solid rgba(215,182,106,.35);
+      background: rgba(0,0,0,.22);
+      color: #fff8e6;
+      font-size: 1.05rem;
+    }
+
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      padding: 15px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.13);
+    }
+
+    .stat .label { color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
+    .stat .value { color: var(--ink); font-size: 1.2rem; font-weight: 800; margin-top: 3px; }
+
+    .section-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(10,11,16,.78);
+      border-bottom: 1px solid var(--line);
+      margin: 0 calc(50% - 50vw);
+      padding: 0 calc(50vw - 50%);
+    }
+
+    .nav-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 12px 0;
+    }
+
+    .section-nav a {
+      white-space: nowrap;
+      text-decoration: none;
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: .2s ease;
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .section-nav a:hover { color: var(--ink); background: var(--soft); border-color: var(--line); }
+
+    .archive-bar {
+      margin: 0 calc(50% - 50vw);
+      padding: 0 calc(50vw - 50%);
+      border-bottom: 1px solid var(--line);
+      background: rgba(6,7,11,.9);
+    }
+    .archive-inner {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 64px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .archive-brand { color: var(--ink); font-family: Georgia, serif; font-weight: 800; text-decoration: none; }
+    .archive-brand span { color: var(--red); }
+    .archive-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .archive-links a { padding: 8px 12px; color: var(--muted); border-radius: 999px; text-decoration: none; font-size: .9rem; font-weight: 700; }
+    .archive-links a:hover, .archive-links a[aria-current="page"] { color: white; background: var(--soft); }
+
+    main { padding: 30px 0 80px; }
+    section { margin: 36px 0; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3.8rem);
+      line-height: .95;
+      margin: 0;
+      letter-spacing: -.055em;
+    }
+
+    .kicker { color: var(--gold); font-size: .9rem; text-transform: uppercase; letter-spacing: .12em; font-weight: 800; }
+    h3 { margin: 0 0 10px; font-size: 1.35rem; letter-spacing: -.02em; }
+    h4 { margin: 0 0 8px; color: var(--gold); }
+    p { color: var(--muted); margin: 0 0 12px; }
+
+    .grid { display: grid; gap: 16px; }
+    .two { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .three { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .four { grid-template-columns: repeat(4, minmax(0,1fr)); }
+
+    .card, .panel, .feature-card {
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.045));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 14px 35px rgba(0,0,0,.25);
+    }
+
+    .card p:last-child, .panel p:last-child, .feature-card p:last-child { margin-bottom: 0; }
+
+    .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 0; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(215,182,106,.12);
+      color: #f2d99d;
+      border: 1px solid rgba(215,182,106,.25);
+      font-size: .78rem;
+      font-weight: 800;
+    }
+    .tag.blue { background: rgba(102,132,255,.12); color: #c6d0ff; border-color: rgba(102,132,255,.28); }
+    .tag.green { background: rgba(131,182,138,.12); color: #cbeccf; border-color: rgba(131,182,138,.28); }
+    .tag.red { background: rgba(185,75,75,.14); color: #ffc4c4; border-color: rgba(185,75,75,.34); }
+    .tag.violet { background: rgba(158,123,247,.13); color: #dbcfff; border-color: rgba(158,123,247,.30); }
+
+    .callout {
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      background: linear-gradient(135deg, rgba(215,182,106,.17), rgba(185,75,75,.10));
+      border: 1px solid rgba(215,182,106,.33);
+      color: #fff6df;
+      margin: 16px 0;
+    }
+
+    .warning {
+      background: linear-gradient(135deg, rgba(185,75,75,.20), rgba(255,255,255,.04));
+      border-color: rgba(185,75,75,.42);
+    }
+
+    .rules-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .rules-list li {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.10);
+      color: var(--muted);
+    }
+    .rules-list strong { color: var(--ink); }
+
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: rgba(255,255,255,.045); }
+    table { border-collapse: collapse; width: 100%; min-width: 780px; }
+    th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.10); vertical-align: top; }
+    th { color: #f4d999; background: rgba(215,182,106,.10); font-size: .78rem; text-transform: uppercase; letter-spacing: .11em; }
+    td { color: var(--muted); }
+    td strong { color: var(--ink); }
+    tr:last-child td { border-bottom: 0; }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+      align-items: end;
+    }
+    label { display: block; color: var(--gold); font-size: .78rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; margin: 0 0 7px; }
+    input, select {
+      width: 100%;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.18);
+      color: var(--ink);
+      border-radius: 15px;
+      padding: 12px 13px;
+      outline: none;
+      font: inherit;
+    }
+    input:focus, select:focus { border-color: rgba(215,182,106,.65); box-shadow: 0 0 0 3px rgba(215,182,106,.12); }
+
+    .forms-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+    .feature-card { position: relative; overflow: hidden; }
+    .feature-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      opacity: .9;
+    }
+    .feature-card[data-tier="basic"]::before { background: linear-gradient(90deg, var(--green), transparent); }
+    .feature-card[data-tier="mobility"]::before { background: linear-gradient(90deg, var(--blue), transparent); }
+    .feature-card[data-tier="control"]::before { background: linear-gradient(90deg, var(--violet), transparent); }
+    .feature-card[data-tier="power"]::before { background: linear-gradient(90deg, var(--red), transparent); }
+    .feature-top { display: flex; justify-content: space-between; gap: 12px; align-items: start; margin-bottom: 10px; }
+    .feature-title { font-size: 1.25rem; color: var(--ink); font-weight: 900; letter-spacing: -.02em; }
+    .cost-pill {
+      min-width: 58px;
+      text-align: center;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.16);
+      color: #fff;
+      font-weight: 900;
+      font-size: .86rem;
+    }
+    .feature-name { color: var(--gold); font-weight: 900; margin-bottom: 6px; }
+    .small { font-size: .9rem; color: var(--muted); }
+
+    .spotlight {
+      display: grid;
+      grid-template-columns: .82fr 1.18fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .wheel {
+      min-height: 340px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(215,182,106,.30);
+      background:
+        radial-gradient(circle, rgba(215,182,106,.25) 0 2px, transparent 3px),
+        radial-gradient(circle at center, rgba(215,182,106,.12), transparent 57%),
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .wheel::before {
+      content: "";
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      border: 12px solid rgba(215,182,106,.68);
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.4), 0 0 80px rgba(215,182,106,.2);
+      position: absolute;
+      animation: turn 18s linear infinite;
+    }
+    .wheel::after {
+      content: "✦";
+      color: rgba(255,248,228,.72);
+      font-size: 7rem;
+      text-shadow: 0 0 40px rgba(215,182,106,.45);
+      animation: pulse 3.5s ease-in-out infinite;
+    }
+    .spoke { position: absolute; width: 14px; height: 250px; border-radius: 999px; background: rgba(215,182,106,.42); transform-origin: center; }
+    .spoke:nth-child(1) { transform: rotate(0deg); }
+    .spoke:nth-child(2) { transform: rotate(45deg); }
+    .spoke:nth-child(3) { transform: rotate(90deg); }
+    .spoke:nth-child(4) { transform: rotate(135deg); }
+    @keyframes turn { to { transform: rotate(360deg); } }
+    @keyframes pulse { 0%,100% { opacity: .55; transform: scale(.96);} 50% { opacity: 1; transform: scale(1.03);} }
+
+    .flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px,1fr)); gap: 14px; counter-reset: step; }
+    .flow-item {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,.055);
+      padding: 18px;
+      position: relative;
+    }
+    .flow-item::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #150f05;
+      background: var(--gold);
+      font-weight: 900;
+    }
+
+    .calc-output {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .calc-output .stat { background: rgba(0,0,0,.24); }
+
+    .print-card {
+      background: #f8f2e7;
+      color: #211b15;
+      border-radius: 22px;
+      padding: 24px;
+      border: 1px solid rgba(0,0,0,.15);
+    }
+    .print-card h3, .print-card h4, .print-card strong { color: #111; }
+    .print-card p, .print-card li { color: #3b332b; }
+    .print-card .mini-table { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+    .mini-box { border: 1px solid rgba(0,0,0,.15); border-radius: 14px; padding: 10px; background: white; }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      padding: 34px 0 70px;
+      border-top: 1px solid var(--line);
+    }
+
+    .btn {
+      border: 1px solid rgba(215,182,106,.42);
+      background: rgba(215,182,106,.12);
+      color: #ffe5a5;
+      font-weight: 900;
+      border-radius: 999px;
+      padding: 11px 15px;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); background: rgba(215,182,106,.20); }
+
+    @media (max-width: 900px) {
+      .hero-grid, .spotlight, .two, .three, .four, .forms-grid { grid-template-columns: 1fr; }
+      .controls { grid-template-columns: repeat(2, 1fr); }
+      .flow { grid-template-columns: repeat(2, 1fr); }
+      .calc-output { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .page { width: min(100% - 20px, 1180px); }
+      .archive-inner { width: min(100% - 20px, 1180px); align-items: flex-start; flex-direction: column; padding: 12px 0; }
+      .archive-links { gap: 4px; }
+      .archive-links a { padding: 6px 8px; font-size: .8rem; }
+      header { padding-top: 28px; }
+      .hero { padding: 24px; }
+      .quick-stats, .controls, .flow, .calc-output { grid-template-columns: 1fr; }
+      .section-head { align-items: start; flex-direction: column; }
+    }
+
+    @media print {
+      body { background: white; color: #111; }
+      body::before, nav, .archive-bar, .controls, .btn, .wheel { display: none; }
+      .page { width: 100%; }
+      header { padding: 0 0 12px; }
+      .hero, .card, .panel, .feature-card, .table-wrap, .flow-item, .print-card { box-shadow: none; background: white; color: #111; border-color: #777; break-inside: avoid; }
+      h1, h2, h3, h4, .feature-title, .feature-name, .stat .value { color: #111; }
+      p, td, li, .subtitle, .small, .stat .label { color: #222; }
+      th { background: #eee; color: #111; }
+      .tag, .cost-pill { color: #111; border-color: #777; background: white; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="archive-bar" aria-label="Ten Shadows Archive">
+    <div class="archive-inner">
+      <a class="archive-brand" href="ten_shadows_technique_guide.html"><span>十</span> Ten Shadows Archive</a>
+      <div class="archive-links">
+        <a href="ten_shadows_technique_guide.html">Technique</a>
+        <a href="ten_shadows_shikigami_guide.html">Shikigami</a>
+        <a href="ten_shadows_shadow_wearing_guide.html" aria-current="page">Shadow Wearing</a>
+        <a href="wells_unknown_abyss_fusion_guide.html">Fusion Catalog</a>
+      </div>
+    </div>
+  </nav>
+  <div class="page">
+    <header>
+      <div class="hero">
+        <span class="eyebrow">JJK 5e Homebrew • Ten Shadows</span>
+        <h1>Shadow Wearing</h1>
+        <p class="subtitle">A defined 8th-level Ten Shadows feature that lets a user wear one tamed shikigami’s trait on their own body instead of fully manifesting it. Built for table play, clean rulings, and actual character progression.</p>
+        <div class="hero-grid">
+          <div class="quote">“A shadow cannot exist without a body. A master of the Ten Shadows learns not only to cast their shikigami outward, but to let those shadows answer from within.”</div>
+          <div class="quick-stats" role="group" aria-label="Quick stats">
+            <div class="stat"><div class="label">Unlock</div><div class="value">Level 8</div></div>
+            <div class="stat"><div class="label">Action</div><div class="value">Bonus Action</div></div>
+            <div class="stat"><div class="label">Duration</div><div class="value">1 Minute</div></div>
+            <div class="stat"><div class="label">Capstone</div><div class="value">Wheel Wearing</div></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="section-nav" aria-label="Shadow Wearing sections">
+      <div class="nav-inner">
+        <a href="#feature">Feature Text</a>
+        <a href="#forms">Forms</a>
+        <a href="#mahoraga">Mahoraga</a>
+        <a href="#calculator">Quick Calculator</a>
+        <a href="#progression">Progression</a>
+        <a href="#print">Printable Summary</a>
+      </div>
+    </nav>
+
+    <main>
+      <section id="feature">
+        <div class="section-head">
+          <div>
+            <div class="kicker">Official table wording</div>
+            <h2>Level 8 Feature</h2>
+          </div>
+        </div>
+        <div class="grid two">
+          <article class="panel">
+            <h3>Shadow Wearing</h3>
+            <p>At 8th level, you learn to draw a tamed shikigami’s shadow over your own body rather than fully manifesting it.</p>
+            <ul class="rules-list">
+              <li><strong>Activation:</strong> As a bonus action, choose one tamed, available shikigami that is not currently manifested or contributing to a fusion.</li>
+              <li><strong>Cost:</strong> Spend cursed energy equal to half that shikigami’s normal summon cost, rounded up. Minimum 1 CE.</li>
+              <li><strong>Duration:</strong> 1 minute. It ends early if you become unconscious, dismiss it without an action, or activate another Shadow Wearing form.</li>
+              <li><strong>Limit:</strong> You can wear only one shikigami at a time.</li>
+              <li><strong>Source Lock:</strong> While wearing a shikigami, you cannot manifest it or use it as the base or donor of either fusion system.</li>
+              <li><strong>Other Shadows:</strong> Wearing is not a manifestation and occupies no manifestation slot. You may manifest and command other shikigami normally.</li>
+              <li><strong>Unavailable Shadows:</strong> If that shikigami is unavailable because it was reduced to 0 hit points and has not recovered, you cannot wear it.</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <h3>Attack &amp; Save Rules</h3>
+            <p>Shadow Wearing is a body-overlap technique, so the user supplies the accuracy, control, and cursed energy output.</p>
+            <ul class="rules-list">
+              <li><strong>Attacks:</strong> Any attack caused by Shadow Wearing uses your Cursed Energy attack bonus unless the DM rules a weapon attack is more appropriate.</li>
+              <li><strong>Saves:</strong> Any saving throw caused by Shadow Wearing uses your Cursed Energy save DC.</li>
+              <li><strong>Your Actions:</strong> Wearing abilities use your actions, bonus actions, and reactions as written. They require no shikigami command.</li>
+              <li><strong>Once per Activation:</strong> An expended once-per-activation ability returns only when you pay to begin a new activation of that form.</li>
+              <li><strong>Body Risk:</strong> Shadow Wearing is your body bearing a shikigami’s function, not a second creature or a separate pool of hit points.</li>
+            </ul>
+          </article>
+        </div>
+        <div class="callout">
+          <strong>Design intent:</strong> Shadow Wearing gives Ten Shadows a mid-level identity between basic summoning and later shikigami fusion. It rewards creative use without replacing the importance of actual summons.
+        </div>
+      </section>
+
+      <section id="forms">
+        <div class="section-head">
+          <div>
+            <div class="kicker">Choose a shadow</div>
+            <h2>Shadow Wearing Forms</h2>
+          </div>
+        </div>
+        <div class="controls" role="group" aria-label="Filter Shadow Wearing forms">
+          <div>
+            <label for="search">Search</label>
+            <input id="search" type="search" placeholder="dog, flight, grapple...">
+          </div>
+          <div>
+            <label for="tierFilter">Role</label>
+            <select id="tierFilter">
+              <option value="all">All roles</option>
+              <option value="basic">Basic</option>
+              <option value="mobility">Mobility</option>
+              <option value="control">Control</option>
+              <option value="power">Power</option>
+              <option value="support">Support</option>
+            </select>
+          </div>
+          <div>
+            <label for="maxCost">Max CE Cost</label>
+            <select id="maxCost">
+              <option value="99">Any</option>
+              <option value="1">1 CE</option>
+              <option value="2">2 CE</option>
+              <option value="3">3 CE</option>
+              <option value="4">4 CE</option>
+              <option value="5">5 CE</option>
+              <option value="10">10 CE</option>
+            </select>
+          </div>
+          <div>
+            <label for="showMahoraga">Mahoraga</label>
+            <select id="showMahoraga">
+              <option value="hide">Hide locked form</option>
+              <option value="show">Show locked form</option>
+            </select>
+          </div>
+          <button class="btn" id="resetFilters" type="button">Reset</button>
+        </div>
+        <div class="forms-grid" id="formsGrid"></div>
+      </section>
+
+      <section id="mahoraga">
+        <div class="section-head">
+          <div>
+            <div class="kicker">Capstone / Breakthrough</div>
+            <h2>Wheel Wearing</h2>
+          </div>
+        </div>
+        <div class="spotlight">
+          <div class="wheel" role="img" aria-label="Eight-Handled Wheel visual">
+            <span class="spoke"></span><span class="spoke"></span><span class="spoke"></span><span class="spoke"></span>
+          </div>
+          <article class="panel">
+            <h3>Mahoraga Shadow Wearing</h3>
+            <p><strong>Prerequisite:</strong> 17th level, Shadow Wearing, and Mahoraga tamed and currently available.</p>
+            <p>As a bonus action, spend <strong>10 CE</strong> to wear the shadow of the Eight-Handled Sword Divergent Sila Divine General Mahoraga. This form lasts for 1 minute, locks Mahoraga as its source shadow, and can be used only once per long rest.</p>
+            <div class="callout warning"><strong>DM note:</strong> This should feel like the final summit of Ten Shadows. It is not just another stance; it is controlled adaptation wearing the body of the user.</div>
+          </article>
+        </div>
+        <br>
+        <div class="grid two">
+          <article class="card">
+            <h3>Adaptive Wheel</h3>
+            <p>When you take damage or fail a saving throw against a phenomenon, you may open an adaptation track for that specific damage type, attack, technique, condition, or environmental obstacle. You may maintain a number of tracks equal to your proficiency bonus.</p>
+            <p>At the end of your turn, advance one track by one turn if you were exposed to its phenomenon since the end of your previous turn. A track cannot advance this way more than once per round.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Wheel Turns</th><th>Effect</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>1 Turn</strong></td><td>You gain advantage on future saves/checks against that specific effect.</td></tr>
+                  <tr><td><strong>2 Turns</strong></td><td>You gain resistance to that specific damage or advantage on saves and checks against that effect. If neither applies, the DM removes one limited part of it.</td></tr>
+                  <tr><td><strong>3 Turns</strong></td><td>You become adapted. For the rest of Wheel Wearing, you are immune to that specific damage or condition, or can ignore or counteract that exact obstacle as the DM determines.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+          <article class="card">
+            <h3>Wheel Tools</h3>
+            <ul class="rules-list">
+              <li><strong>Quick Adaptation:</strong> As a reaction when you are exposed to a phenomenon on an existing track, spend 3 CE to advance that track once immediately. You may do this a number of times equal to your proficiency bonus per long rest.</li>
+              <li><strong>General’s Recovery:</strong> At the start of your turn, regain hit points equal to your proficiency bonus + your CE modifier.</li>
+              <li><strong>Executioner’s Edge:</strong> Once per turn when you hit a cursed spirit or undead creature with a melee attack, deal an extra 3d12 radiant damage.</li>
+              <li><strong>Strain of Adaptation:</strong> When Wheel Wearing ends, you cannot activate Shadow Wearing, manifest Mahoraga, or use either fusion system until the end of your next turn.</li>
+              <li><strong>Heavy Strain:</strong> If you completed three or more adaptation tracks, gain 1 level of exhaustion when the form ends.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="calculator">
+        <div class="section-head">
+          <div>
+            <div class="kicker">At-table helper</div>
+            <h2>Quick Calculator</h2>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="controls">
+            <div>
+              <label for="level">User Level</label>
+              <input id="level" type="number" min="1" max="20" value="8">
+            </div>
+            <div>
+              <label for="ceMod">CE Ability Mod</label>
+              <input id="ceMod" type="number" min="-5" max="10" value="4">
+            </div>
+            <div>
+              <label for="formSelect">Form</label>
+              <select id="formSelect"></select>
+            </div>
+            <div>
+              <label for="profOverride">Proficiency</label>
+              <select id="profOverride">
+                <option value="">Automatic</option>
+                <option value="2">+2</option>
+                <option value="3">+3</option>
+                <option value="4">+4</option>
+                <option value="5">+5</option>
+                <option value="6">+6</option>
+              </select>
+            </div>
+            <button class="btn" id="copyTurn" type="button">Copy Turn Summary</button>
+          </div>
+          <div class="calc-output">
+            <div class="stat"><div class="label">Proficiency</div><div class="value" id="outProf">+3</div></div>
+            <div class="stat"><div class="label">CE Attack</div><div class="value" id="outAttack">+7</div></div>
+            <div class="stat"><div class="label">CE Save DC</div><div class="value" id="outDc">15</div></div>
+            <div class="stat"><div class="label">Wear Cost</div><div class="value" id="outCost">1 CE</div></div>
+          </div>
+          <div class="callout" id="turnSummary">Select a form to generate a quick summary.</div>
+        </div>
+      </section>
+
+      <section id="progression">
+        <div class="section-head">
+          <div>
+            <div class="kicker">Campaign pacing</div>
+            <h2>Suggested Progression</h2>
+          </div>
+        </div>
+        <div class="flow">
+          <article class="flow-item"><h3>Levels 1–5</h3><p>Summon, command, tame. Learn the basic shikigami rhythm and the danger of losing shadows.</p></article>
+          <article class="flow-item"><h3>Level 6</h3><p>Shadow Storage expands the technique’s utility and makes the user feel like the shadow is part of their body.</p></article>
+          <article class="flow-item"><h3>Level 8</h3><p>Shadow Wearing unlocks for every tamed and available shadow. No additional roster gate is imposed.</p></article>
+          <article class="flow-item"><h3>Level 11</h3><p>Wells Unknown Abyss begins the external fusion route, while Shadow Wearing remains internal mastery.</p></article>
+          <article class="flow-item"><h3>Level 17</h3><p>A user who has single-handedly tamed Mahoraga unlocks Wheel Wearing as a once-per-long-rest capstone.</p></article>
+          <article class="flow-item"><h3>Level 18</h3><p>Chimera Shadow Garden completes the technique’s progression by turning the battlefield itself into living shadow.</p></article>
+        </div>
+        <br>
+        <div class="grid two">
+          <div class="card"><h3>Training Arc Advice</h3><p>Begin with senses, movement, and defense. Heavy forms such as Mourn Tiger, Max Elephant, Round Deer, and Piercing Ox are not level-gated, but their costs and body-forward tactics make them natural later breakthroughs.</p></div>
+          <div class="card"><h3>Balance Philosophy</h3><p>Shadow Wearing should make the Ten Shadows user more versatile, not better at everything at once. The biggest limiter is choosing one form and giving up that shikigami as a summon during the duration.</p></div>
+        </div>
+      </section>
+
+      <section id="print">
+        <div class="section-head">
+          <div>
+            <div class="kicker">Handout mode</div>
+            <h2>Printable Summary</h2>
+          </div>
+          <button class="btn" type="button" onclick="window.print()">Print / Save PDF</button>
+        </div>
+        <div class="print-card">
+          <h3>Shadow Wearing — Level 8 Ten Shadows Feature</h3>
+          <p><strong>Bonus action.</strong> Choose one tamed, available shikigami that is not manifested or contributing to a fusion. Spend half its normal manifestation cost, rounded up, minimum 1 CE. For 1 minute, you gain its Shadow Wearing feature. The source shadow is locked from manifestation and fusion, but the form occupies no manifestation slot. Only one form at a time.</p>
+          <div class="mini-table">
+            <div class="mini-box"><strong>Best starter forms:</strong><br>Divine Dog, Gama, Rabbit Escape, Nue.</div>
+            <div class="mini-box"><strong>Advanced forms:</strong><br>Great Serpent, Round Deer, Piercing Ox, Mourn Tiger, Max Elephant.</div>
+            <div class="mini-box"><strong>Capstone:</strong><br>Wheel Wearing at level 17, provided Mahoraga is tamed and currently available.</div>
+            <div class="mini-box"><strong>Core rule:</strong><br>Use your CE attack bonus and CE save DC for all Shadow Wearing attacks and saves.</div>
+          </div>
+          <h4>DM One-Liner</h4>
+          <p>Shadow Wearing is the user putting a shikigami’s function on their own body. It is strong because it grants tactical flexibility, but balanced because it consumes CE, lasts briefly, and prevents summoning that shikigami at the same time.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Ten Shadows: Shadow Wearing • Level 8 Homebrew Feature • Designed for JJK 5e table play
+    </footer>
+  </div>
+
+  <script>
+    const forms = [
+      {
+        shikigami: "Divine Dog",
+        role: "basic",
+        summon: 1,
+        cost: 1,
+        feature: "Keen Hunt",
+        text: "You gain advantage on Wisdom (Perception) checks relying on hearing or smell. Once per turn, if one of your allies is within 5 ft. of a creature, you have advantage on one melee attack against that creature.",
+        tags: ["senses", "advantage", "teamwork"]
+      },
+      {
+        shikigami: "Divine Dog Totality",
+        role: "power",
+        summon: 2,
+        cost: 1,
+        feature: "Black Fang",
+        text: "Once on each of your turns when you hit with a melee attack, you deal an extra 1d6 piercing or slashing damage, and a Large or smaller target must make a Strength save or fall prone.",
+        tags: ["damage", "prone", "melee"]
+      },
+      {
+        shikigami: "Gama",
+        role: "control",
+        summon: 1,
+        cost: 1,
+        feature: "Shadow Tongue",
+        text: "As an action, make a melee cursed energy attack with 15 ft. reach. On hit, the target takes 1d6 + your CE modifier bludgeoning damage and is grappled. The target can use its action to escape with a successful Athletics or Acrobatics check against your CE save DC. While the grapple lasts, you may pull the target 10 ft. toward you or yourself 10 ft. toward it as a bonus action. You can hold only one target this way.",
+        tags: ["grapple", "reach", "movement"]
+      },
+      {
+        shikigami: "Rabbit Escape",
+        role: "basic",
+        summon: 2,
+        cost: 1,
+        feature: "Swarm Slip",
+        text: "As a reaction when you or an ally within 5 ft. is attacked, shadow rabbits erupt and grant the target a bonus to AC equal to your proficiency bonus against that attack. You can also move through spaces large enough for a Tiny creature without squeezing.",
+        tags: ["reaction", "defense", "tiny spaces"]
+      },
+      {
+        shikigami: "Nue",
+        role: "mobility",
+        summon: 3,
+        cost: 2,
+        feature: "Static Wings",
+        text: "You can fly up to your walking speed during your turn, but you must land by the end of that turn. This movement does not provoke opportunity attacks. Once on each of your turns after flying at least 10 ft., your next melee hit deals an extra 2d4 lightning damage, and the target must make a Constitution save or lose its reaction until the start of its next turn.",
+        tags: ["flight", "lightning", "no reactions"]
+      },
+      {
+        shikigami: "Great Serpent",
+        role: "control",
+        summon: 6,
+        cost: 3,
+        feature: "Serpent Coil",
+        text: "As an action, make a melee cursed energy attack with 10 ft. reach. On hit, the target takes 2d8 + your CE modifier bludgeoning damage, and a Large or smaller target must make a Strength save or become grappled and restrained. It can use its action to escape with a successful Athletics or Acrobatics check against your CE save DC. You can hold only one target this way.",
+        tags: ["restrain", "reach", "lockdown"]
+      },
+      {
+        shikigami: "Round Deer",
+        role: "support",
+        summon: 7,
+        cost: 4,
+        feature: "Reverse Aura",
+        text: "Once per activation, as a bonus action, you and allies of your choice within 10 ft. regain 10 hit points. Until the start of your next turn, when a hostile cursed technique first enters that aura or first attempts to affect a protected creature, its creator must succeed on a CE ability check against your CE save DC. On a failure, that effect is suppressed only within the aura until the aura ends; the technique itself does not end.",
+        tags: ["healing", "suppression", "aura"]
+      },
+      {
+        shikigami: "Piercing Ox",
+        role: "power",
+        summon: 8,
+        cost: 4,
+        feature: "Unrelenting Charge",
+        text: "Once per activation, after moving at least 20 ft. directly toward a target without turning, empower your next melee attack against it. On a hit, add 1d12 piercing damage per 10 ft. moved, capped at a number of d12s equal to your proficiency bonus. The charge is expended when you make the attack, hit or miss.",
+        tags: ["charge", "burst", "straight line"]
+      },
+      {
+        shikigami: "Mourn Tiger",
+        role: "mobility",
+        summon: 9,
+        cost: 5,
+        feature: "Predator Step",
+        text: "You can move through creatures and objects as difficult terrain during your turn. If you end your turn inside an object, you take 2d4 force damage and are shunted to the nearest empty space. Once on each of your turns after passing through a creature or object, your next melee hit deals an extra 1d8 slashing damage.",
+        tags: ["incorporeal", "ambush", "slashing"]
+      },
+      {
+        shikigami: "Max Elephant",
+        role: "power",
+        summon: 10,
+        cost: 5,
+        feature: "Flood Mantle",
+        text: "As an action, release water in a 30 ft. cone. Creatures in the cone make a Dexterity save. On a failure, they take 6d6 bludgeoning or cold damage and are pushed 15 ft. On a success, they take half damage and are not pushed. Once per activation.",
+        tags: ["cone", "area", "push"]
+      },
+      {
+        shikigami: "Mahoraga",
+        role: "power",
+        summon: 20,
+        cost: 10,
+        locked: true,
+        feature: "Wheel Wearing",
+        text: "Locked until 17th level and until Mahoraga is tamed and currently available. As a bonus action, spend 10 CE for 1 minute. The wheel adapts to repeated specific damage, techniques, conditions, or obstacles over 1–3 turns. Once per long rest.",
+        tags: ["adaptation", "capstone", "long rest"]
+      }
+    ];
+
+    const formsGrid = document.getElementById('formsGrid');
+    const search = document.getElementById('search');
+    const tierFilter = document.getElementById('tierFilter');
+    const maxCost = document.getElementById('maxCost');
+    const showMahoraga = document.getElementById('showMahoraga');
+    const resetFilters = document.getElementById('resetFilters');
+    const formSelect = document.getElementById('formSelect');
+
+    function roleLabel(role) {
+      return role[0].toUpperCase() + role.slice(1);
+    }
+
+    function renderForms() {
+      const q = search.value.trim().toLowerCase();
+      const role = tierFilter.value;
+      const cost = Number(maxCost.value);
+      const showLocked = showMahoraga.value === 'show';
+      formsGrid.innerHTML = '';
+      forms.filter(f => {
+        const hay = `${f.shikigami} ${f.feature} ${f.text} ${f.tags.join(' ')}`.toLowerCase();
+        return (!q || hay.includes(q)) &&
+          (role === 'all' || f.role === role) &&
+          f.cost <= cost &&
+          (!f.locked || showLocked);
+      }).forEach(f => {
+        const article = document.createElement('article');
+        article.className = 'feature-card';
+        article.dataset.tier = f.role === 'support' ? 'control' : f.role;
+        article.innerHTML = `
+          <div class="feature-top">
+            <div>
+              <div class="feature-title">${f.shikigami}</div>
+              <div class="small">Summon Cost: ${f.summon} CE • Wear Cost: ${f.cost} CE</div>
+            </div>
+            <div class="cost-pill">${f.cost} CE</div>
+          </div>
+          <div class="feature-name">${f.feature}${f.locked ? ' • Locked' : ''}</div>
+          <p>${f.text}</p>
+          <div class="tag-row">
+            <span class="tag ${f.role === 'power' ? 'red' : f.role === 'mobility' ? 'blue' : f.role === 'support' ? 'green' : f.role === 'control' ? 'violet' : ''}">${roleLabel(f.role)}</span>
+            ${f.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+          </div>
+        `;
+        formsGrid.appendChild(article);
+      });
+      if (!formsGrid.children.length) {
+        formsGrid.innerHTML = '<div class="panel"><h3>No forms match.</h3><p>Try clearing filters or showing the locked Mahoraga form.</p></div>';
+      }
+    }
+
+    function populateSelect() {
+      formSelect.innerHTML = forms.map((f, idx) => `<option value="${idx}">${f.shikigami} — ${f.feature}</option>`).join('');
+    }
+
+    function proficiency(level) {
+      if (level >= 17) return 6;
+      if (level >= 13) return 5;
+      if (level >= 9) return 4;
+      if (level >= 5) return 3;
+      return 2;
+    }
+
+    function updateCalc() {
+      const level = Math.max(1, Math.min(20, Number(document.getElementById('level').value) || 1));
+      let prof = proficiency(level);
+      const override = Number(document.getElementById('profOverride').value);
+      if (override >= 2 && override <= 6) prof = override;
+      const ceMod = Number(document.getElementById('ceMod').value) || 0;
+      const f = forms[Number(formSelect.value) || 0];
+      document.getElementById('outProf').textContent = `+${prof}`;
+      document.getElementById('outAttack').textContent = `+${prof + ceMod}`;
+      document.getElementById('outDc').textContent = `${8 + prof + ceMod}`;
+      document.getElementById('outCost').textContent = `${f.cost} CE`;
+      const gate = level < 8
+        ? '<strong>Locked:</strong> Shadow Wearing unlocks at level 8. '
+        : f.locked && level < 17
+          ? '<strong>Locked:</strong> Wheel Wearing unlocks at level 17 and still requires Mahoraga to be tamed and available. '
+          : f.locked
+            ? '<strong>Prerequisite:</strong> Mahoraga must be tamed and available. '
+            : '';
+      document.getElementById('turnSummary').innerHTML = `${gate}<strong>${f.shikigami}: ${f.feature}.</strong> Activate as a bonus action for <strong>${f.cost} CE</strong>. CE Attack <strong>+${prof + ceMod}</strong>, CE Save DC <strong>${8 + prof + ceMod}</strong>. ${f.text}`;
+    }
+
+    function copySummary() {
+      const text = document.getElementById('turnSummary').innerText;
+      navigator.clipboard?.writeText(text);
+      const btn = document.getElementById('copyTurn');
+      const old = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = old, 1200);
+    }
+
+    [search, tierFilter, maxCost, showMahoraga].forEach(el => el.addEventListener('input', renderForms));
+    resetFilters.addEventListener('click', () => {
+      search.value = '';
+      tierFilter.value = 'all';
+      maxCost.value = '99';
+      showMahoraga.value = 'hide';
+      renderForms();
+    });
+    ['level','ceMod','profOverride','formSelect'].forEach(id => document.getElementById(id).addEventListener('input', updateCalc));
+    document.getElementById('copyTurn').addEventListener('click', copySummary);
+
+    populateSelect();
+    renderForms();
+    updateCalc();
+  </script>
+</body>
+</html>
