@@ -392,8 +392,15 @@ if (typeof document !== 'undefined') {
     document.getElementById('statCollections').textContent = collections.length;
 
     // filter dropdowns built from live data
+    // Tier options: figure tiers plus any extra numerals the original library
+    // uses (e.g. Tier X), so every stamped card is filterable.
+    var tierOpts = TECHS.map(function (t) { return t.tier; });
+    LIBS.forEach(function (e) {
+      var n = tierNumeral(e);
+      if (n && tierOpts.indexOf(n) < 0) tierOpts.push(n);
+    });
     fillSelect(document.getElementById('fTier'),
-      uniqSorted(TECHS.map(function (t) { return t.tier; }), function (a, b) {
+      uniqSorted(tierOpts, function (a, b) {
         return (TIER_ORDER[a] == null ? 99 : TIER_ORDER[a]) - (TIER_ORDER[b] == null ? 99 : TIER_ORDER[b]);
       }), 'All tiers');
     fillSelect(document.getElementById('fRole'), ROLE_ORDER.slice(), 'All roles');
