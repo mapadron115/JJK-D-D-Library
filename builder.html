@@ -1851,9 +1851,6 @@ function renderTechResults(){
   if(techOrigin==='all'&&(techFranchise!==''||techGroup!=='')){
     html+='<p class="small">Franchise and grouping describe the Original Library — historical figures carry neither, so they fall out while either filter is set.</p>';
   }
-  if(techOrigin==='all'&&techRole!==''){
-    html+='<p class="small">Combat role describes the historical figures — original-library entries carry no role data, so they fall out while the filter is set.</p>';
-  }
   html+=list.map(function(e){ return techCard(e, tIsFigure(e)?'figures':'originals'); }).join('')||
     '<p class="small">No techniques match the current filters.</p>';
   res.innerHTML=html;
