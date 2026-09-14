@@ -740,14 +740,14 @@
   ],
   "e041": [
    {
-    "name": "Unbreakable Adhesive",
+    "name": "Reel the Arsenal",
     "prereq": "Prerequisite: Cast a Strand",
-    "text": "Your strands have AC equal to 14 + PB and HP equal to 10 × PB. When a creature succeeds on the action used to peel your gum, it removes a maximum number of endpoints equal to half your PB, rounded up, rather than PB. Technique removal and suppression still work normally."
+    "text": "When a strand is attached to an object held by a creature, you may use Elastic Recall on that strand to rip it free: the holder makes a Strength saving throw against your Technique DC, and on a failure it drops the object, which is pulled up to the Contraction distance toward the strand’s other endpoint. To attach to a held object, hit the holder with an attack and spend 1 CE to leave the string on the object instead of the creature."
    },
    {
     "name": "Snapback Counter",
     "prereq": "Prerequisite: Reel-In Counter",
-    "text": "When a hostile creature attached to one of your strands completes at least 10 feet of voluntary movement, use your reaction and spend 1 CE to immediately use Elastic Recall on that strand. If the creature fails its save and ends within your reach, make one weapon or unarmed attack against it as part of the same reaction. On hit, add one Gum Die per 10 feet the Recall moved it, maximum PB dice."
+    "text": "When a hostile creature attached to one of your strands completes at least 10 feet of voluntary movement, use your reaction and spend 1 CE to immediately use Elastic Recall on that strand. If the creature fails its save and ends within your reach, make one weapon or unarmed attack against it as part of the same reaction. On hit, the target cannot take reactions until the start of its next turn."
    },
    {
     "name": "Living Texture",
@@ -757,7 +757,7 @@
    {
     "name": "Catch the Impossible",
     "prereq": "Prerequisite: Return to Sender, level 11",
-    "text": "Elastic Guard can catch a ranged spell attack, CE attack, or visible energy projectile as well as a physical ranged attack. If your reduction makes its damage 0, Return to Sender may launch a gum facsimile at a creature within Gum Range: make a ranged CE attack that deals PB Gum Dice + CE modifier force damage. It never copies the original effect, damage pool, conditions, area, spell level, or other riders."
+    "text": "Elastic Guard can catch a ranged spell attack, CE attack, or visible energy projectile as well as a physical ranged attack. If your Elastic Guard negates it entirely and catches it, Return to Sender may launch a gum facsimile at a creature within Gum Range: make a ranged CE attack that deals the same damage the caught attack would have dealt. It never copies the original effect, conditions, area, spell level, or other riders."
    }
   ],
   "e042": [
@@ -786,7 +786,7 @@
    {
     "name": "Many Names, One Banner",
     "prereq": "Prerequisite: War God's Household",
-    "text": "Your Active Limit increases by 2. Every Regalia's Integrity maximum increases by twice your character level, and the first Battle Muster you use after rolling initiative costs 0 CE. This feat increases breadth; repeated form passives still do not stack."
+    "text": "Your names answer from afar. When you use Battle Muster, you may call one Regalia into vessel form at a point you can see within 60 feet instead of beside you — a Sky Lion where your allies need it, a shield already in a friend's hands. It still counts against your Active Limit."
    },
    {
     "name": "Line That Casts Out Evil",
@@ -796,7 +796,7 @@
    {
     "name": "Blessed Beyond Death",
     "prereq": "Prerequisite: Blessed Vessel, level 12",
-    "text": "After its own breakthrough event, one additional Regalia becomes Blessed. When any of your Blessed Vessels uses Sacrificial Bloom, it remains at 1 Integrity instead of becoming Broken; after the reaction resolves it is immediately dismissed and cannot be called again until the end of your next turn."
+    "text": "A blessed vessel's devotion extends to its kin. When a non-Blessed Regalia would become Broken, your Blessed Vessel may use its reaction to suffer the breaking in its place: the Blessed Vessel becomes Broken instead, and the other Regalia remains at 1 Integrity."
    },
    {
     "name": "Cavalry of Heaven",
@@ -848,21 +848,21 @@
     "text": "When you succeed on a save against forced movement or prone, use your reaction to place an Anchor mark on yourself and Pull the source 15 feet toward you if it is within Gravity Range."
    },
    {
-    "name": "Star-Crushing Grip",
+    "name": "Starcaller’s Mark",
     "prereq": "Prerequisite: Starcaller Cry",
-    "text": "A creature that fails Starcaller Cry by 5+ is restrained by gravity until the end of your next turn instead of merely prone."
+    "text": "What the cry cannot crush, it claims. Each creature that succeeds on its save against Starcaller Cry gains a Gravity Mark with the Anchor vector for 1 minute, with no additional save; a creature can carry only one such mark at a time."
    },
    {
-    "name": "Meteor General",
+    "name": "Grand Conjunction",
     "prereq": "Prerequisite: Maximum: Festival of Falling Stars",
-    "text": "Your Maximum can hold 12 meteors and forms four per turn instead of three; launching more than four in one bonus action costs 1 CE per extra meteor."
+    "text": "You merge held meteors into a greater one. When you launch meteors as a bonus action, you may merge two or more into a single burst: it creates a 15-foot-radius burst dealing 4d8 per merged meteor, with a Dexterity save for half. Declare the merger before launching."
    }
   ],
   "e047": [
    {
     "name": "Beast’s Agility",
     "prereq": "Prerequisite: Destined Death",
-    "text": "Your speed increases by 10 feet. After using Beast Step, you may climb or move along a wall for that movement without falling until it ends."
+    "text": "After using Beast Step, you may move along walls or ceilings for that movement without falling until it ends, the beast’s stride ignoring the floor’s claim on it."
    },
    {
     "name": "Rune-Eater",
@@ -875,43 +875,43 @@
     "text": "Black Blade Wave ignores half and three-quarters cover and can originate from the edge of your manifested blade even while you are airborne."
    },
    {
-    "name": "Dogged Death",
+    "name": "The Beast Collects",
     "prereq": "Prerequisite: level 11",
-    "text": "When you would drop to 0 HP, spend 5 CE to remain at 1 HP and immediately move up to half your speed. Once used, you cannot use it again until a long rest."
+    "text": "You harvest the dooms you have marked. When you would drop to 0 HP, use your reaction and spend 3 CE to consume all Fate Scars on one creature you can see within 60 feet, regaining 10 HP per scar consumed. If this healing leaves you above 0 HP, you do not fall unconscious."
    }
   ],
   "e048": [
    {
-    "name": "Snow Witch’s Lesson",
+    "name": "Sigil Shatter",
     "prereq": "Prerequisite: Dark Moon Covenant",
-    "text": "Your cold damage ignores resistance from mundane cold adaptation, and you gain proficiency in Arcana or expertise if already proficient."
+    "text": "As a bonus action, consume all Lunar Sigils on one creature you can perceive within Lunar Range. It takes 5 cold damage per sigil consumed, and its speed is reduced by 10 feet until the end of your next turn as the shattered cold sinks into its limbs."
    },
    {
     "name": "Bell of Many Ashes",
     "prereq": "Prerequisite: Ashen Familiar",
-    "text": "Learn two additional cosmetic familiar forms using the same three stat profiles. Once per long rest you can summon one familiar for 0 CE."
+    "text": "When your Ashen Familiar is destroyed, its ashes remember the cold. It bursts into freezing mist: creatures within 10 feet of it make a Constitution save against your Technique DC, taking 5 cold damage and suffering −10 speed until the end of your next turn on a failure, or half damage on a success."
    },
    {
     "name": "Occult Moon",
     "prereq": "Prerequisite: Cold Moon Guard",
-    "text": "If Cold Moon Guard fully negates a technique attack, gain two Moon Shards instead of one, up to your cap."
+    "text": "The dark moon returns what it swallows. When Cold Moon Guard fully negates a ranged technique attack, you may immediately make one Lunar Bolt attack against the attacker as part of the same reaction, spending 1 CE or 1 Moon Shard."
    },
    {
     "name": "Fingerslayer Principle",
     "prereq": "Prerequisite: level 11",
-    "text": "Your Dark Moon receives +PB on checks to suppress control effects, barriers, and technique-created constructs, but not Domains."
+    "text": "Your Dark Moon learns new prey. It may target control effects, barriers, and technique-created constructs in addition to technique manifestations, using the normal suppression check. Domains remain beyond it."
    }
   ],
   "e049": [
    {
-    "name": "Fingerprint Scars",
+    "name": "Feed the Flame",
     "prereq": "Prerequisite: Flame of Frenzy",
-    "text": "Your Madness cannot be reduced below 1 except by long rest, but you gain resistance to psychic damage while at Madness 3+."
+    "text": "As a bonus action, voluntarily gain 1 Madness, feeding the fire on purpose. The next Frenzy feature you use before the end of your turn deals +1 Frenzy Die."
    },
    {
     "name": "Shabriri’s Cry",
     "prereq": "Prerequisite: Howl of Frenzy",
-    "text": "When you activate Howl, creatures within 10 feet make Wisdom saves or become frightened until end of their next turn."
+    "text": "You learn to aim the howl. While Howl of Frenzy is active, you may use your bonus action to loose a focused cry at one creature within 30 feet that can hear you; it makes a Wisdom save against your Technique DC, becoming frightened of you until the end of its next turn on a failure. The cry adds no Madness."
    },
    {
     "name": "Yellow-Eyed Prophet",
@@ -928,17 +928,17 @@
    {
     "name": "Apostle’s Reach",
     "prereq": "Prerequisite: Black Flame Apostasy",
-    "text": "In Apostle stance, opportunity attacks have +5-foot reach and may apply Black Flame once per round."
+    "text": "In Apostle stance, your opportunity attacks may apply Kindling, paying its normal CE cost — the long limb punishes retreat with godfire."
    },
    {
-    "name": "Noble’s Mass",
+    "name": "Shared Vestments",
     "prereq": "Prerequisite: Black Flame Apostasy",
-    "text": "In Noble stance, your carrying capacity doubles and you gain resistance to collision/falling damage caused by forced movement."
+    "text": "As a bonus action for 1 CE, extend your Godskin Stance to one willing creature within 15 feet until the start of your next turn. It gains the stance’s passive benefits — Apostle’s speed and reach, or Noble’s armor and stability — but not your armament, Black Flame, or stance actions."
    },
    {
     "name": "Swaddling Cloth",
     "prereq": "Prerequisite: Swaddling Recovery",
-    "text": "After three melee hits in one round, immediately heal PB + CE modifier HP once per round."
+    "text": "When you would gain temporary HP from Swaddling Recovery, you may instead grant those temporary HP to one willing creature within 15 feet, wrapping it in spectral swaddling cloth."
    },
    {
     "name": "Choir of Two",
@@ -950,22 +950,22 @@
    {
     "name": "Assassin’s Hands",
     "prereq": "Prerequisite: Living Circuit",
-    "text": "Your unarmed strikes may deal slashing damage and use Dexterity. Once per turn after Lightning Palm, move 5 feet without provoking."
+    "text": "Once per turn after Lightning Palm hits, you may move 5 feet without provoking opportunity attacks, the discharge grounding through your step and carrying you clear."
    },
    {
-    "name": "Recharge Discipline",
-    "prereq": "Prerequisite: Thunderbolt",
-    "text": "During a short rest, if you have access to a safe electrical source or spend 5 CE in meditation, gain temporary CE equal PB that can only fuel Living Circuit — it cannot fund Maximum Techniques or Domains — and expires at next rest."
+    "name": "Ground Current",
+    "prereq": "Prerequisite: Living Circuit",
+    "text": "As an action for 2 CE, discharge your Bioelectric Aura into a conductive surface — water, metal, wet stone — within 5 feet of you. Until the start of your next turn, any creature that starts its turn touching that surface within 20 feet of you must succeed on a Constitution save against your Technique DC or lose its reactions until the start of its next turn."
    },
    {
     "name": "Programmed Guard",
     "prereq": "Prerequisite: Whirlwind",
-    "text": "Add “when I fail a Dexterity save → reroute” as a valid program. Once per round spend 2 CE to add one Circuit Die to that failed save, potentially turning it into success."
+    "text": "You may write Reflex Programs keyed to your own failures — ’when I fail a Dexterity save, reroute.’ When such a trigger occurs, you may use your reaction to move up to 10 feet without provoking opportunity attacks, turning the failure into repositioning."
    },
    {
-    "name": "Heart Like a Switch",
+    "name": "Arc Relay",
     "prereq": "Prerequisite: Godspeed",
-    "text": "When initiative is rolled, activate either Whirlwind or Speed of Lightning without a bonus action; pay its normal CE cost."
+    "text": "Your palm’s lightning learns to jump. When Lightning Palm hits, you may spend 1 CE to arc the discharge to one creature within 15 feet of the target; it makes a Constitution save against your Technique DC, losing its reactions until the start of its next turn on a failure."
    }
   ],
   "e052": [
@@ -1019,19 +1019,19 @@
     "text": "Learn one additional lineage’s breath rider; you may apply it to your primary Breath by paying +1 CE, without gaining its resistance."
    },
    {
-    "name": "Stone Scale",
+    "name": "Scale Shelter",
     "prereq": "Prerequisite: Gravel Scales",
-    "text": "While Gravel Scales is active, critical hits against you roll one fewer additional weapon die (minimum normal hit dice)."
+    "text": "While Gravel Scales is active, as a bonus action you may extend stony plates over one willing creature within 5 feet; it gains +1 AC until the start of your next turn. Your own scales are not diminished by the sharing."
    },
    {
     "name": "Winged Predator",
     "prereq": "Prerequisite: Wings",
-    "text": "After descending at least 20 feet before a melee attack, add 2 Dragon Dice once per turn and land without falling damage."
+    "text": "After descending at least 20 feet before a melee attack, the target makes a Strength save or falls prone; you land without falling damage."
    },
    {
     "name": "Dragonlord’s Echo",
     "prereq": "Prerequisite: level 11",
-    "text": "Your Dragonstorm radius increases to 40 feet and you can exclude up to PB creatures from it."
+    "text": "The storm answers at a distance. You may originate Dragonstorm at a point you can see within 90 feet instead of centered on yourself, shaping the same 30-foot-radius storm around that point."
    }
   ],
   "e055": [
@@ -1135,25 +1135,25 @@
    },
    {
     "name": "Trooper Doctrine",
-    "prereq": "Prerequisite: Smoke Troopers",
-    "text": "Choose one preset doctrine after long rest: Guard (+1 AC), Pursue (+10 speed), or Rescue (can drag willing/unconscious allies without speed penalty). All Troopers use it."
+    "prereq": "Prerequisite: Smoke Details",
+    "text": "Choose one preset doctrine after long rest: Guard (+1 AC), Pursue (+10 speed), or Rescue (can drag willing/unconscious allies without speed penalty). All Details use it."
    },
    {
     "name": "Jailhouse Rock",
     "prereq": "Prerequisite: Smoky Jail",
-    "text": "Smoky Jail barrier HP increases by 5×level, but its radius cannot exceed 20 feet when using this bonus."
+    "text": "Your jail can roll. When you create Smoky Jail, you may anchor it to yourself so it moves with you, keeping its radius centered on you. A rolling jail’s barrier HP is reduced by 5 × PB (minimum 10) — mobility has a price in smoke."
    }
   ],
   "e060": [
    {
-    "name": "Weighted Tops",
+    "name": "Low Waltz",
     "prereq": "Prerequisite: Battle Waltz",
-    "text": "Your prepared tops are denser; Top Strike pushes 5 feet on hit once per turn."
+    "text": "As a bonus action, send one active top spinning into a hostile creature’s space within 30 feet of the top. The creature makes a Dexterity save against your Technique DC or falls prone, tripped by the waltzing top; the top then returns to its previous position."
    },
    {
     "name": "Gyro Balance",
     "prereq": "Prerequisite: Dancing Top",
-    "text": "Advantage on Acrobatics checks and saves against prone while at least one top is active within 30 feet."
+    "text": "As a bonus action, attune one willing creature within 30 feet to your tops’ gyroscopic rhythm until the start of your next turn. It has advantage on ability checks and saving throws against being knocked prone, steadied by the hum."
    },
    {
     "name": "Blue Shot",
@@ -2242,12 +2242,12 @@
    {
     "name": "Museum-Grade Repair",
     "prereq": "",
-    "text": "When you repair an object, construct, cursed tool, or barrier, add your proficiency bonus to each Lacquer Die rolled. Mundane objects you fully repair become resistant to the next instance of damage they take."
+    "text": "Your golden seams hold stronger than the original: when you fully repair an object, construct, or cursed tool, you can lace the break with gold. The next time it would take damage, it takes none instead, once per object."
    },
    {
     "name": "Beautiful Scar",
     "prereq": "",
-    "text": "A creature you Mend gains advantage on its next saving throw before the end of your next turn. Once per creature per short rest."
+    "text": "A creature you Mend yourself (an ally’s self-seal with Seal the Seam does not count) gains advantage on its next saving throw before the end of your next turn. Once per creature per short rest."
    },
    {
     "name": "Shatterpoint",
@@ -2259,12 +2259,12 @@
    {
     "name": "Foundation First",
     "prereq": "",
-    "text": "When initiative is rolled, designate one willing creature within 30 feet as a Support for free and gain 1 Load."
+    "text": "You survey foundations before the first blow: if you spend 10 minutes studying a location, you can designate up to PB willing creatures there as Supports the instant initiative is rolled within the next 24 hours, without using an action."
    },
    {
     "name": "Shock Absorber",
     "prereq": "",
-    "text": "When you personally take damage redirected through Weight Distribution, reduce that damage by your proficiency bonus."
+    "text": "When you take damage redirected through Weight Distribution, you can Discharge the shock as part of the same reaction: one creature within 15 feet makes a Dexterity save or takes that damage as thunder and is pushed 10 feet away from you. Once per round."
    },
    {
     "name": "Counterweight",
@@ -2276,7 +2276,7 @@
    {
     "name": "Sailor’s Hands",
     "prereq": "",
-    "text": "Your Knot capacity increases by 2 and you can tie knots to unattended objects within 60 feet instead of 30."
+    "text": "You can splice your cords through existing Knots: when you tie a Knot, you may route it through another creature or object already bearing one of your Knots, extending your tying range to 60 feet for that Knot and ignoring cover between the relay and the target."
    },
    {
     "name": "Quick Release",
@@ -2286,14 +2286,14 @@
    {
     "name": "Executioner’s Knot",
     "prereq": "",
-    "text": "Once per turn when you damage a creature bearing 3+ Knots, add one Knot Die to the damage without consuming a Knot."
+    "text": "As an action for 3 CE, you can tie a hangman's noose around a creature bearing 3+ of your Knots within 30 feet: it makes a Constitution save or is restrained until the end of your next turn, unable to speak or use verbal components while the noose holds."
    }
   ],
   "e147": [
    {
     "name": "Seismograph",
     "prereq": "",
-    "text": "You know the exact location of every creature bearing your Fault within 120 feet unless separated by a Domain/barrier that blocks cursed sensing."
+    "text": "You can read the earth's complaints: as an action, take a seismic reading. You learn how many creatures within 60 feet are touching the ground, and whether any Huge or larger creature is moving within 300 feet."
    },
    {
     "name": "Hairline Crack",
@@ -2303,7 +2303,7 @@
    {
     "name": "Cascade Failure",
     "prereq": "",
-    "text": "After you reduce a creature to 0 HP with Rupture, one Fault within 30 feet immediately gains 2 Strain."
+    "text": "After a creature bearing your Fault drops to 0 HP, one Fault within 30 feet immediately gains 2 Strain."
    }
   ],
   "e148": [
@@ -2327,12 +2327,12 @@
    {
     "name": "Old Growth",
     "prereq": "",
-    "text": "Your Node maximum increases by 2 and Node HP gains your proficiency bonus."
+    "text": "After a long rest, choose one of your Nodes to become old growth: it becomes Large with double HP and counts as two Connected Nodes for adjacency and teleportation, but it can never be converted into a Bloom."
    },
    {
     "name": "Medicinal Culture",
     "prereq": "",
-    "text": "When Symbiotic Pulse rolls its maximum value, the target also gains temporary HP equal to your CE modifier."
+    "text": "You cultivate a healing strain: as an action for 1 Nutrient, graft a poultice onto a willing creature within 10 feet of a Node. The poultice persists until the bearer actually takes damage — it does not expire after 1 minute, and if the bearer phases out of a blow (such as through Distributed Organism) and takes no damage, the poultice remains, ready for the hit that actually lands. When that happens, the poultice bursts and heals it for 2 Spore Dice."
    },
    {
     "name": "Cordyceps Reflex",
@@ -2361,7 +2361,7 @@
    {
     "name": "Emergency Lane",
     "prereq": "",
-    "text": "Reaction when an ally within 30 feet is targeted by an attack: spend 2 CE to create a temporary Green Lane from them 15 feet in any direction and let them move 5 feet. This movement can cause the attack to lose range."
+    "text": "As a bonus action, declare one of your Lanes an emergency lane until the start of your next turn: willing creatures traveling along it gain 10 feet of speed, and the first hostile creature each turn that enters it must make a Strength save or be pushed 10 feet along the lane's direction."
    },
    {
     "name": "Traffic Camera",
@@ -2378,7 +2378,7 @@
    {
     "name": "Perfumer’s Case",
     "prereq": "",
-    "text": "Gain 2 additional Scent Notes after a long rest and one additional prepared bottle can survive indefinitely until used."
+    "text": "You can decant a formula into a thrown vial: as an action, throw one prepared bottle up to 30 feet. It shatters on impact, applying its effect in a 10-foot radius (single-target formulas allow a Dexterity save for half). A thrown Courage Accord is a splash of fortitude: each creature in the radius that fails the Dexterity save gains half the Veil’s temporary HP (rounded down); every creature’s Scent Veil still blooms when depleted."
    },
    {
     "name": "Cold Extraction",
@@ -2388,7 +2388,7 @@
    {
     "name": "Acquired Taste",
     "prereq": "",
-    "text": "A creature that succeeds against Funeral Myrrh is still unable to take reactions until the start of its next turn. Once per creature per short rest."
+    "text": "A creature that fails its save against one of your formulas develops a craving for it: for the next hour, you can use a bonus action and 1 CE to release a trace of that scent. The craving creature must make a Wisdom save or use its reaction to move up to half its speed toward you by the safest route."
    }
   ],
   "e153": [
@@ -2417,7 +2417,7 @@
    {
     "name": "Concrete Idol",
     "prereq": "Blind Spot, level 3",
-    "text": "If you willingly move 0 feet on your turn, you may use a reaction before your next turn to reduce one damage instance by PB Blink Dice + CE modifier."
+    "text": "If you willingly move 0 feet on your turn, you may use a reaction before your next turn to reduce one damage instance by 5 × PB + CE modifier."
    },
    {
     "name": "No Peripheral Vision",
@@ -2427,7 +2427,7 @@
    {
     "name": "Neck-Line Anatomy",
     "prereq": "Blind Spot, level 11",
-    "text": "Once per short rest when Snap Strike hits and the target fails its Constitution save by 5 or more, it is stunned until the end of your next turn instead of merely losing reactions."
+    "text": "Once per short rest when Snap Strike hits and the target fails its Constitution save by 5 or more, it is stunned until the end of your next turn instead of the normal failed-save result."
    }
   ],
   "e155": [
@@ -2500,17 +2500,17 @@
    {
     "name": "Perfect Voiceprint",
     "prereq": "With Many Voices",
-    "text": "Voiceprint capacity becomes PB + CE modifier. You may also reproduce nonverbal sounds made by archived creatures, such as breathing, crying, or footsteps."
+    "text": "Your mimicry extends beyond speech: you can reproduce any nonverbal sound made by a creature whose voice you have archived — breathing, crying, footsteps — and layer two archived sounds at once, a voice calling from one direction and footsteps from another."
    },
    {
     "name": "Dark Hunter",
     "prereq": "Troglobitic Senses",
-    "text": "Your blindsight becomes 60 feet in darkness. Once per turn after moving at least 20 feet while hidden, add one Echo Die to your next Athletics or Acrobatics check before the end of the turn."
+    "text": "Your voice hunts ahead of you: as a bonus action for 1 CE, project a Voiceprint to a point within 60 feet. Until the start of your next turn you can hear through that point as if you were there, and your blindsight extends 30 feet from it."
    },
    {
     "name": "No New Memories",
     "prereq": "Amnestic Breath, level 6",
-    "text": "A creature that fails Amnestic Breath by 5 or more gains 2 Lost Moments instead of 1. Once a creature suffers this effect, it cannot do so again until after a short or long rest."
+    "text": "A creature that fails its save against your Amnestic Breath also loses its short-term memory of the last minute: for the next hour it cannot describe you, recall the room's layout, or remember orders received in that time."
    },
    {
     "name": "Pack Echo",
@@ -2549,7 +2549,7 @@
    {
     "name": "Black Ichor",
     "prereq": "Corrosive Secretion",
-    "text": "When Corrosive Secretion damages an unattended surface, leave a 5-foot corrosive patch until the start of your next turn. A creature entering it for the first time on a turn takes 1 Mask Die acid damage, maximum once per turn."
+    "text": "When Corrosive Secretion corrodes an unattended surface, leave a 5-foot corrosive patch until the start of your next turn. A creature entering it for the first time on a turn has its speed halved until the start of your next turn, maximum once per turn."
    },
    {
     "name": "Borrowed Aptitude",
@@ -2559,29 +2559,29 @@
    {
     "name": "Never Without a Face",
     "prereq": "Host Transfer, level 11",
-    "text": "Once per short rest when a Host ejects you or reaches 0 Integrity, you may transfer to another valid Host within 60 feet without spending CE."
+    "text": "During a short rest, designate one valid nonliving vessel — a corpse, mannequin, or statue you have prepared — within 1 mile as your contingency. The first time within the next 24 hours that a Host ejects you or reaches 0 Integrity, your consciousness transfers to the contingency vessel immediately without spending CE or an action, instead of returning to the Prime Host or falling free."
    }
   ],
   "e161": [
    {
-    "name": "Lab Notes",
+    "name": "Salvage Intake",
     "prereq": "Refining Clockworks",
-    "text": "Once per long rest after rolling Very Fine, reroll and choose either result. Risk is applied only once after the chosen result resolves."
+    "text": "When a construct, vehicle, or unattended object is destroyed within 30 feet of your manifested Clockworks, you may use your reaction to feed the wreckage straight into the Intake, gaining Scrap as though you had used Rough on it for its size, without spending an action."
    },
    {
-    "name": "Interpretive Bias",
+    "name": "Restorative Refinement",
     "prereq": "Very Fine",
-    "text": "After rolling Very Fine, spend 1 Scrap to shift the final result by +1 or −1, maximum one shift per cycle."
+    "text": "When you activate Very Fine, you may choose restoration instead of rolling: rebuild one damaged or broken mundane object, or one non-Special-Grade cursed tool, placed in the Intake, restoring it to full function and clearing the broken condition. Pay the normal activation cost; no roll is made and no Risk is gained."
    },
    {
-    "name": "Portable Crank",
+    "name": "Decoupled Line",
     "prereq": "Portable Clockworks",
-    "text": "Manifest the Clockworks as a bonus action. You may also collapse and re-manifest them within 30 feet as a bonus action without paying the 2 CE manifestation cost, provided their duration has not ended."
+    "text": "When you manifest the Clockworks, you may place the Intake and Output frames up to 30 feet apart — both within 60 feet of you — instead of adjacent. Items fed into the Intake emerge refined from the Output normally."
    },
    {
-    "name": "Clockworker’s Cache",
+    "name": "Hot-Swap Tuning",
     "prereq": "Fine, level 6",
-    "text": "Maintain up to PB Fine outputs simultaneously. When a Fine output’s duration would end, spend 1 Scrap to extend it by 1 minute, maximum once per item."
+    "text": "As a bonus action, move one active Fine upgrade from an item you touch to another valid item you touch; the upgrade’s remaining duration continues on the new item. An item may still hold only one Fine upgrade."
    }
   ],
   "e162": [
@@ -2615,7 +2615,7 @@
    {
     "name": "Scarlet Afterimage",
     "prereq": "",
-    "text": "When Red Warning moves a creature, leave a red afterimage in its old space until the start of its next turn. The first hostile attack made through or into that space is made with disadvantage."
+    "text": "When Eyes Before the Storm moves a creature, leave a red afterimage in its old space until the start of its next turn. The first hostile attack made through or into that space is made with disadvantage."
    },
    {
     "name": "Bad Feeling",
@@ -2630,9 +2630,9 @@
   ],
   "e164": [
    {
-    "name": "Lantern Eyes",
+    "name": "Eddy Reading",
     "prereq": "",
-    "text": "Gain darkvision 120 feet. While your Veil is active you ignore its obscurity and may see through mundane fog, smoke, and gas inside it."
+    "text": "While your Veil is active, you read the atmosphere eddying around bodies: you know the direction and distance of every creature inside the Veil that has at least 1 Exposure, even if you cannot see them."
    },
    {
     "name": "Sickening Trail",
@@ -2647,7 +2647,7 @@
    {
     "name": "Red Star Descent",
     "prereq": "",
-    "text": "Prerequisite: Floating Apparition. When you descend at least 20 feet before using Atmospheric Pulse, add one Veil Die to its damage and push failed targets 10 feet away from the center."
+    "text": "Prerequisite: Floating Apparition. When you descend at least 20 feet immediately before using Atmospheric Pulse, you may drive the Veil down with you: the Pulse affects only creatures within 10 feet of you, but creatures that fail the save gain 2 Exposure instead of 1."
    }
   ],
   "e165": [
@@ -2659,12 +2659,12 @@
    {
     "name": "Hellish Whinny",
     "prereq": "",
-    "text": "When a creature fails Devil’s Cry, you may mark it as your Quarry without a bonus action or CE."
+    "text": "When a creature fails its save against Devil’s Cry, its panic betrays it: for 1 minute you always know its direction and distance, and it cannot become hidden from you. This does not let you see it while invisible, but you know which space it occupies."
    },
    {
-    "name": "Raking Pass",
+    "name": "Near Miss",
     "prereq": "",
-    "text": "Opportunity attacks against you have disadvantage if you have moved at least 30 feet this turn."
+    "text": "When a creature misses you with an opportunity attack, gain 1 Pursuit, once per round. The hunt feeds on near misses."
    },
    {
     "name": "Broken-Bridle Pursuit",
@@ -2686,7 +2686,7 @@
    {
     "name": "Guest Right",
     "prereq": "",
-    "text": "While inside a Threshold whose controller has invited you, gain +1 AC and advantage on checks to notice traps, hidden doors, or deliberate attempts to expel you."
+    "text": "While inside a Threshold whose controller has invited you, you cannot be surprised, and you sense whenever a creature enters or leaves that Threshold."
    },
    {
     "name": "The Eyes Are Wrong",
@@ -2708,7 +2708,7 @@
    {
     "name": "Friendly Procession",
     "prereq": "",
-    "text": "Allies using Procession Path may travel 15 feet instead of 10."
+    "text": "When an ally moves along your Procession Path, you may use your reaction to move up to 15 feet along the same path without provoking opportunity attacks, falling in step behind them."
    },
    {
     "name": "Dropped Frame",
@@ -2745,26 +2745,26 @@
     "text": "You can determine whether a creature you can smell within 30 feet currently has CE and whether it is above or below half HP."
    },
    {
-    "name": "Clean Puncture",
+    "name": "Spraying Wound",
     "prereq": "",
-    "text": "A creature has disadvantage on its check to remove your Feeding Wound if you created it with a critical hit."
+    "text": "Once per turn, when you score a critical hit with a piercing or slashing melee attack, you may mark a second creature within 5 feet of the target with a Feeding Wound without spending CE; it counts against your maximum active wounds."
    },
    {
     "name": "Packless Hunter",
     "prereq": "",
-    "text": "When no ally is within 15 feet of you, gain +1 AC against wounded creatures."
+    "text": "When no ally is within 15 feet of you, your solitude is a weapon: once per turn when you hit a wounded creature, you may drive it from the herd. It makes a Wisdom saving throw against your technique DC, becoming frightened of you until the end of your next turn on a failure."
    },
    {
-    "name": "Starved Burst",
+    "name": "Purging Molt",
     "prereq": "",
-    "text": "When you begin your turn at Gaunt Predator and below half HP, your next successful Feed this turn advances two stages instead of one. Once used, recharge on a short rest."
+    "text": "As an action, regress one stage on the Metamorphosis track (minimum Gaunt Predator) to slough tainted flesh: end one poisoned condition or disease affecting you."
    }
   ],
   "e170": [
    {
     "name": "Sand Listener",
     "prereq": "",
-    "text": "While touching natural ground, tremorsense increases by 15 feet."
+    "text": "As an action, press yourself to one of your Tremor Path segments and read its memory: learn the number, size categories, and direction of travel of creatures that crossed that segment in the last 10 minutes."
    },
    {
     "name": "False Tremor",
@@ -2774,12 +2774,12 @@
    {
     "name": "Venom Static",
     "prereq": "",
-    "text": "When one creature takes both acid and lightning damage from you in the same round, subtract 1d4 from its next saving throw before your next turn."
+    "text": "When one creature takes both acid and lightning damage from you in the same round, its nerves short-circuit: it cannot take reactions until the start of your next turn."
    },
    {
     "name": "Buried Ambush",
     "prereq": "",
-    "text": "If combat begins while you are underground in one of your existing Paths, you have advantage on initiative."
+    "text": "If combat begins while you are underground in one of your existing Paths, you may spend 1 CE to Erupt against a creature within 10 feet of your position before the first round begins, resolving the attack before initiative order starts."
    }
   ],
   "e171": [
@@ -2823,7 +2823,7 @@
    {
     "name": "No Bodies Found",
     "prereq": "",
-    "text": "When the swarm disperses, it leaves no corpse or permanent material. You regain 1 CE the first time per short rest it reforms after being destroyed."
+    "text": "When the swarm disperses, it leaves no corpse or permanent material — and it may complete one last delivery: it deposits one object it is holding in an unoccupied space within 60 feet of its position before vanishing."
    }
   ],
   "e173": [
@@ -2845,14 +2845,14 @@
    {
     "name": "Cracking Stone",
     "prereq": "",
-    "text": "Prerequisite: Calcification 3. Your weapon and unarmed attacks against restrained-by-Calcification targets ignore resistance to bludgeoning, piercing, and slashing damage."
+    "text": "Prerequisite: Calcification 3. Once per round, when a creature with Calcification 3+ is hit by an attack you did not make, you may use your reaction to shatter its calcifying shell: it sheds 1 Calcification and falls prone. This may spare an ally from petrification — or deny an enemy its stony armor — without spending your own attack."
    }
   ],
   "e174": [
    {
     "name": "Swamp-Born",
     "prereq": "",
-    "text": "Gain swim speed equal walking speed and hold breath for 1 hour."
+    "text": "You gain a swim speed equal to your walking speed and can hold your breath for 1 hour. While fully submerged, fire and radiant damage lose their cauterizing edge: a Neck Wound marked on a turn you end underwater cannot be cauterized until after your next turn begins, giving the regrowth time to root. As a bonus action while submerged, you may spend 1 CE to exhale venom-tinged murk into a 15-foot radius around you, heavily obscuring it until the start of your next turn."
    },
    {
     "name": "Guarding Heads",
@@ -2862,7 +2862,7 @@
    {
     "name": "Venom Reservoir",
     "prereq": "",
-    "text": "A creature poisoned by Hydra Venom also has speed −10 feet."
+    "text": "A creature poisoned by your Hydra Venom also has its speed reduced by 10 feet. Your necks track the venom's spread through the victim's body: your Bite's reach extends by 5 feet against a poisoned creature, and when it tries to move away from you, you may spend 1 CE as a reaction to force a Strength saving throw — on a failure its movement ends immediately. The speed penalty and the leash both end when the poison ends."
    },
    {
     "name": "Heracles Problem",
@@ -2872,19 +2872,19 @@
   ],
   "e175": [
    {
-    "name": "Scribe of the Scale",
+    "name": "Weigh the Dead",
     "prereq": "",
-    "text": "Gain proficiency or expertise in Insight. You always know a Weighed creature’s exact Heart Weight."
+    "text": "As an action and 2 CE, you may Weigh the heart of a corpse dead no more than 1 hour; it makes no save. You learn one significant burden it knowingly accepted in life — a bargain, betrayal, or sacrifice — as the GM describes. This offers no Temptations and adds no Heart Weight."
    },
    {
     "name": "Sweet Temptation",
     "prereq": "",
-    "text": "Add Safety: reduce one incoming damage instance by one Scale Die + CE modifier; accepting adds 1 Weight."
+    "text": "Add Safety : when you or an ally within 30 feet would take damage from the Weighed creature, you may offer it Safety as a Temptation without spending an action (once per round). Accept: the damage is halved and it gains 1 Heart Weight. Refuse: the damage lands in full."
    },
    {
     "name": "Borrow the Burden",
     "prereq": "",
-    "text": "When an ally within 30 feet accepts a Temptation, you may take the Heart Weight instead of them once per round."
+    "text": "When an ally within 30 feet accepts a Temptation, you may take the Heart Weight instead of them once per round. Temptations accepted by the hostile Weighed creature (such as Safety) do not trigger this feat — it covers allies’ acceptances only."
    },
    {
     "name": "Devour Excess",
@@ -2901,17 +2901,17 @@
    {
     "name": "Moon-Eater",
     "prereq": "",
-    "text": "When Moon Chain breaks because an enemy opens a Domain, gain 2 Ragnarök instead of 1."
+    "text": "When Moon Chain breaks, you may use your reaction to bite the backlash: the creature whose action triggered the break takes 5 psychic damage as the snapped chain lashes through its overspent cursed energy."
    },
    {
-    "name": "No Leash Holds Twice",
+    "name": "Slipped Leash",
     "prereq": "",
-    "text": "After you succeed on a save against one creature’s grapple/restraint effect, you have advantage against that exact effect from that creature for 1 minute."
+    "text": "When you succeed on a saving throw against a grapple, restraint, or forced-movement effect, you may use your reaction to move up to 10 feet without provoking opportunity attacks, slipping through the failed hold."
    },
    {
-    "name": "Týr’s Respect",
+    "name": "Unbroken Oath",
     "prereq": "",
-    "text": "If you complete an encounter without breaking one prepared Bond, regain 1 spent CE per unbroken Bond, maximum PB, after combat ends."
+    "text": "If you complete an encounter without breaking a prepared Bond, choose one of your prepared Bonds. The next time that Bond’s trigger occurs, you may keep it unbroken instead of breaking it; you gain no Ragnarök from the ignored trigger."
    }
   ],
   "e177": [
@@ -2931,9 +2931,9 @@
     "text": "Poison immunity treats your Coil poison as resistance; poison resistance still functions normally."
    },
    {
-    "name": "Ouroboros Draft",
+    "name": "Closing Snap",
     "prereq": "",
-    "text": "Once per short rest, when your last placed Segment completes a Ring, refund 1 CE."
+    "text": "When a Segment you place completes a Ring, the circuit closes with a snap: one hostile creature of your choice inside the new Ring makes a Strength saving throw against your technique DC; on a failure it is pulled 10 feet toward the Ring’s center."
    }
   ],
   "e178": [
@@ -2950,7 +2950,7 @@
    {
     "name": "Backward Hands",
     "prereq": "",
-    "text": "Once per round when you fail a Sleight of Hand or Deception check while masked, add one Mask Die after seeing the roll but before outcome."
+    "text": "Once per round, when you fail a Sleight of Hand or Deception check while masked, the Mask reads the room: you immediately learn which creatures that witnessed the check are suspicious of you."
    },
    {
     "name": "Predator’s Memory",
@@ -2967,17 +2967,17 @@
    {
     "name": "Jeweled Hood",
     "prereq": "",
-    "text": "While you have a Ward Coil, gain advantage on saves against frightened."
+    "text": "While at least one of your Coils is active, you sense the space around every Coil-bearing creature: you have blindsight to 10 feet centered on each creature bearing one of your Coils, and you cannot be surprised by a creature within that radius."
    },
    {
     "name": "Constriction Expert",
     "prereq": "",
-    "text": "A creature restrained by Tighten cannot be forcibly moved away from you unless the mover succeeds on a Strength check against your CE DC."
+    "text": "When a creature bearing one of your Constrict Coils would be forcibly moved, you can use your reaction to spend that Coil and anchor it in place, negating the movement entirely."
    },
    {
     "name": "Shared Skin",
     "prereq": "",
-    "text": "When Shed Skin removes a condition, the bearer gains one Sacred Die temporary HP."
+    "text": "As a bonus action, a willing creature bearing one of your Ward Coils can pass it to another willing creature within 30 feet; the Coil keeps its remaining duration."
    }
   ],
   "e180": [
@@ -2989,17 +2989,17 @@
    {
     "name": "Blue Foxfire",
     "prereq": "",
-    "text": "Foxfire may deal cold or lightning instead of fire/psychic; choose on attack."
+    "text": "You may kindle a foxfire wisp in the space of one of your Paper Foxes. The first creature that becomes lured by that wisp regards you as a trusted ally while lured, hearing an ally’s voice calling from the flame."
    },
    {
     "name": "Clever Enough to Believe Yourself",
     "prereq": "",
-    "text": "Once per long rest, when you fail a save against frightened or charmed, you may claim it was a lie all along and reroll the save."
+    "text": "When you fail a save against being frightened or charmed, you may use your reaction and spend 1 CE to make one of your Paper Foxes within 30 feet believe the lie instead: the condition ends on you and the illusion is destroyed."
    },
    {
     "name": "Thousand-Year Trick",
     "prereq": "",
-    "text": "Prerequisite: level 11. A creature that successfully identifies one of your illusions does not automatically identify your other illusions."
+    "text": "Prerequisite: level 11. The first time each round a creature identifies one of your illusions, you may treat that wasted inspection as fuel: it counts as a deception that wasted an action for the purpose of claiming your next lie."
    }
   ],
   "e181": [
@@ -3014,14 +3014,14 @@
     "text": "Torso of a Nation may anchor to terrain and counts as a structure for allies using cover or climbing."
    },
    {
-    "name": "Starved Longer",
+    "name": "Starving Maw",
     "prereq": "",
-    "text": "Starvation damage begins only after ending two consecutive turns at Hunger cap."
+    "text": "When you would take starvation damage for ending your turn at Hunger cap, you may instead force one creature grappled by your Jaw to take that damage as necrotic, your manifested skeleton gnawing through its own hunger. The grapple continues."
    },
    {
     "name": "Jaw of Famine",
     "prereq": "",
-    "text": "A creature grappled by Jaw cannot regain HP from food, potions, or mundane medicine until grapple ends; RCT/magic healing functions normally."
+    "text": "As a bonus action while a creature is grappled by your Jaw, you may end the grapple to feed: gain 1 Hunger and temporary HP equal to 5."
    }
   ],
   "e182": [
@@ -3043,7 +3043,7 @@
    {
     "name": "Memory of Fire",
     "prereq": "",
-    "text": "When you spend Resolve Feather on a save against fire, fear, or death effects, the beneficiary gains resistance to the triggering damage until end of that event."
+    "text": "When a willing creature within 60 feet fails a save against fire, fear, or death effects, you may use your reaction and spend 1 CE to record the moment of survival: create one Resolve Feather immediately (once per round, still subject to your cap)."
    }
   ],
   "e183": [
@@ -3358,17 +3358,17 @@
    {
     "name": "Long Arms",
     "prereq": "",
-    "text": "+5 reach transformed."
+    "text": "While transformed, you may use your bonus action to plant Blight with your long arms: touch a point within your reach to create a 5-foot Blight patch there for 1 minute."
    },
    {
     "name": "Murrain Wind",
     "prereq": "",
-    "text": "Blighted Breath cone 20 ft."
+    "text": "When you take the Dash action while transformed, you may exhale your breath behind you, leaving a 5-foot-wide trail of Blight along your path until the start of your next turn."
    },
    {
     "name": "Salt-Air Rot",
     "prereq": "",
-    "text": "2+ Wither gives disadvantage on Constitution checks to maintain Focus."
+    "text": "As a bonus action, you can taste the Wither on a creature within 30 feet that has at least 2 Wither: learn its current HP total and whether it is maintaining Focus on anything."
    },
    {
     "name": "Black Tide (11+)",
@@ -3380,7 +3380,7 @@
    {
     "name": "Roost Walker",
     "prereq": "",
-    "text": "climb speed and hands-free hanging."
+    "text": "You gain a climb speed equal to your walking speed and can hang hands-free from any surface you could climb, talons and tail holding you fast. While hanging hands-free and unseen, From the Sound applies to every attack you make that turn, not just the first. Releasing your grip deliberately is silent: you have advantage on Dexterity (Stealth) checks to land unheard when you drop on purpose."
    },
    {
     "name": "Blood Echo",
@@ -3390,100 +3390,100 @@
    {
     "name": "Silent Wing",
     "prereq": "",
-    "text": "Razor Swoop reveals location only after attack resolves."
+    "text": "When you use Razor Swoop, your passage stays unrevealed until the attack resolves: you are treated as unseen for the swoop's attack, and enemies cannot use reactions triggered by your movement during it. Creatures that had not perceived you before the swoop do not learn your location until after damage is rolled. If the attack misses, you may immediately Swap to an Echo node within 30 feet as part of the same action, gone on the wingbeat."
    },
    {
-    "name": "Obsidian Edge (11+)",
+    "name": "Vanishing Wing (11+)",
     "prereq": "",
-    "text": "Once per short rest, your node swap for Neck-Seeking Blade ignores its 30-foot range."
+    "text": "When you are hit by an attack, you may use your reaction and spend 1 CE to swap with an Echo node within 30 feet; the attack misses if your new position is beyond the attacker's reach or out of its line of sight."
    }
   ],
   "e199": [
    {
     "name": "Precious Plumes",
     "prereq": "",
-    "text": "+1 maximum Wind Road."
+    "text": "When you generate a Plume from a full traversal, you may instead immediately redraw one of your Wind Roads, keeping its length but choosing a new position and direction anchored within 30 feet of you."
    },
    {
     "name": "Tailwind Archer",
     "prereq": "",
-    "text": "ranged attacks along Road ignore half cover."
+    "text": "When you make a ranged attack along the direction of a Wind Road, you may have the attack emerge from a Crossroad within 60 feet of you instead, originating there and ignoring cover between you and the target."
    },
    {
     "name": "Cloud Serpent",
     "prereq": "",
-    "text": "sustain flight within 20 ft of Road."
+    "text": "While flying with Serpent of the Updraft, you may use a bonus action to trace a Wind Road up to 30 feet long along your flight path. It counts against your normal maximum."
    },
    {
     "name": "Four Directions (11+)",
     "prereq": "",
-    "text": "Crossroad teleport range 90 ft."
+    "text": "When you or a willing ally teleports between Crossroads, you may instead swap the positions of two willing creatures standing at two different Crossroads within range."
    }
   ],
   "e200": [
    {
     "name": "Inscribed Gate",
     "prereq": "",
-    "text": "Threshold duration 1 hour outside combat."
+    "text": "When you inscribe a Threshold, you may spend 1 Vigilance to render it invisible to hostile creatures. A hostile creature can spot it with a successful Wisdom (Perception) check against your technique save DC."
    },
    {
     "name": "Winged Guardian",
     "prereq": "",
-    "text": "Intercession moves ally 10 ft."
+    "text": "When you use Bull-Lion Intercession, you may instead teleport the ally from one Threshold to another Threshold within 30 feet of the first, rather than swapping positions with them; you still take the hit either way."
    },
    {
     "name": "Palace Watch",
     "prereq": "",
-    "text": "+2 Vigilance maximum."
+    "text": "As a bonus action, you may spend 2 Vigilance to relocate one Threshold you can see to a new valid anchor within 60 feet."
    },
    {
     "name": "No Unrecorded Passage (11+)",
     "prereq": "",
-    "text": "invisible creatures crossing Threshold revealed until end turn."
+    "text": "Hostile invisible creatures that cross one of your Thresholds are revealed until the end of their turn: invisibility and similar concealment are suppressed for the crossing creature as the gate counts its passage. The creature may attempt a Wisdom save against your technique DC; on a success it remains unseen but still generates Vigilance as normal. You always know the exact space where the crossing occurred. This revelation pierces magical invisibility but not total cover or anti-divination effects."
    }
   ],
   "e201": [
    {
     "name": "Cedar Warden",
     "prereq": "",
-    "text": "Cedar zones AC 15, HP 3×level."
+    "text": "The forest carries your face farther and wider. Your active Terror Face's aura effects now originate from a 20-foot radius around each cedar zone within 120 feet of you (instead of 15 feet within 60 feet). Your own 15-foot personal aura is unchanged."
    },
    {
     "name": "Terrible Countenance",
     "prereq": "",
-    "text": "save DC +1 against creature that damaged Cedar this round."
+    "text": "When a Cedar zone is destroyed, you may immediately switch your Face without using an action and resolve the new Face against the creature that destroyed it."
    },
    {
     "name": "Forest Voice",
     "prereq": "",
-    "text": "switch Face at range even if silenced; not verbal."
+    "text": "Switching your Terror Face is not a verbal act: you may change Faces even while silenced, gagged, or inside magical silence — and while you cannot speak, switching your Face costs no action at all. The forest speaks where your voice cannot."
    },
    {
     "name": "Sevenfold Guardian (11+)",
     "prereq": "",
-    "text": "once/short rest maintain two Faces for one round."
+    "text": "Once per short rest, when you switch your Terror Face, you may maintain two Faces simultaneously until the end of your next turn — your visage splits and both fear-laws hold. Hostiles in your Aura resolve both Faces' effects where applicable, but a single creature cannot suffer more than one failed-save result from this overlap. When the duration ends, you keep the most recently chosen Face and the other fades."
    }
   ],
   "e202": [
    {
-    "name": "Deep Magazine",
+    "name": "Compound Payload",
     "prereq": "",
-    "text": "+PB maximum Spines."
+    "text": "When you spend 2 Spines on a single Tail Volley attack, you may combine two payload effects on that attack, such as a Barbed Venom quill, instead of choosing only one."
    },
    {
     "name": "Scorpion Tail",
     "prereq": "",
-    "text": "Venom becomes save-ends, max 3 rounds."
+    "text": "You may deliver your Venom payload through your Lion’s Maw instead of a quill. When you hit with Lion’s Maw, you may spend 1 Spine to force the target to make the Venom saving throw."
    },
    {
     "name": "Quill Catcher",
     "prereq": "",
-    "text": "once/round when ranged weapon attack misses you, recover 1 Spine."
+    "text": "Once per round, when a ranged weapon attack misses you, you may use your reaction to snatch the projectile from the air and add it to your Tail Magazine, recovering 1 Spine. If you do, you may immediately make a Tail Volley attack against a creature within range without spending a Spine, firing the caught missile back. This return shot follows the normal Tail Volley rules but cannot apply payload effects."
    },
    {
     "name": "Hunter's Mouth",
     "prereq": "",
-    "text": "Maw recovery heals PB HP once/turn."
+    "text": "When you hit an object or a dead or incapacitated creature with Lion’s Maw, you recover 2 Spines instead of 1."
    }
   ],
   "e243": [
@@ -3517,12 +3517,12 @@
    {
     "name": "Blood-Carved Staves",
     "prereq": "",
-    "text": "Once per short rest when you invoke a rune, reduce its CE cost by up to your proficiency bonus. You take unavoidable damage equal to twice the CE reduced."
+    "text": "You may carve a persistent rune directly into your own flesh as a living stave. A rune carved this way moves with you, cannot be dispelled by effects that target objects, and once per short rest you may invoke it as a bonus action instead of an action."
    },
    {
     "name": "Ætt-Binder",
     "prereq": "",
-    "text": "When both runes in a Bindrune belong to the same ætt, remove the normal +1 CE Bindrune surcharge. Wyrd belongs to no ætt and can never benefit from this feat."
+    "text": "When you form a Bindrune from two runes of the same ætt, you may inscribe it on a weapon, shield, or tool you touch. Either component rune can then be invoked separately without breaking the Bindrune. Wyrd belongs to no ætt and can never benefit from this feat."
    },
    {
     "name": "Runeseer",
