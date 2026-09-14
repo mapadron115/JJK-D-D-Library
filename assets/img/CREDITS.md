@@ -361,3 +361,4 @@ for a transformative, non-commercial fan project.
 | c-tool-white-flag.jpg | e217 | white flag on a pole, Mudlife Crisis blog — via https://mudlifecrisis.com — personal non-commercial fan use | https://mudlifecrisis.com |
 | c-tool-carapace.jpg | e239 | stag beetle macro photograph, Ephotozine gallery — via https://www.ephotozine.com — personal non-commercial fan use | https://www.ephotozine.com |
 | c-misc-wyrdscript.jpg | e244 | © Adrian Houston — the Major Oak in mist (Sherwood Forest), via Port Magazine "Arboreal Portraits" — personal non-commercial fan use | https://www.port-magazine.com/art-photography/arboreal-portraits/ |
+| a-marvel-thing.jpg | e293 | © Marvel — Fantastic Four (2025) #1 variant cover art (the Thing), via Marvel’s official image CDN (i.annihil.us) — personal non-commercial fan use | http://i.annihil.us/u/prod/marvel/i/mg/4/00/685d4f13e2847.jpg |
