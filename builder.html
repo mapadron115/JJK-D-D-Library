@@ -1748,10 +1748,9 @@ function techMatches(e){
      neither, so they fall out of the list while either filter is set. */
   if(techGroup && (e.collection||'')!==techGroup) return false;
   if(techFranchise && (e.franchise||'')!==techFranchise) return false;
-  /* Combat role describes only the historical figures — original-library entries
-     carry no role data, so they fall out while the filter is set. */
+  /* Combat role: figures carry freeform role strings, original-library entries
+     carry canonical roles — both map through roleBuckets. */
   if(techRole){
-    if(!fig) return false;
     if(roleBuckets(tRole(e)).indexOf(techRole)<0) return false;
   }
   if(techQ){

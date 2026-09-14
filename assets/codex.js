@@ -136,7 +136,7 @@ function matches(t, st) {
 
 /* ── original techniques (library dossiers) ─── */
 function libHaystack(e) {
-  var bits = [e.id, e.title, e.collection, e.summary, e.kind, e.tier, e.grade, e.source, e.aliases];
+  var bits = [e.id, e.title, e.collection, e.summary, e.kind, e.tier, e.grade, e.role, e.source, e.aliases];
   return bits.filter(Boolean).join(' ').toLowerCase();
 }
 
@@ -144,11 +144,14 @@ function matchesLib(e, st) {
   /* Techniques tab hides tools; Cursed Tools tab shows only tools. */
   if (st.tab === 'tools' ? !isToolEntry(e) : isToolEntry(e)) return false;
   if (st.origin === 'figures') return false;
-  /* Figure-only filters (tier, role, region, culture, record type): original
-     techniques carry none of that data, so any active figure-only filter
-     excludes them — the filter actually filters instead of dumping every
-     original below the matching figures. */
-  if (st.tier || st.role || st.region || st.culture || st.detail) return false;
+  /* Figure-only filters (region, culture, record type): original techniques
+     carry none of that data, so any active figure-only filter excludes them —
+     the filter actually filters instead of dumping every original below the
+     matching figures. Tier and role now exist on originals too, so those two
+     filter them normally. */
+  if (st.region || st.culture || st.detail) return false;
+  if (st.tier && tierNumeral(e) !== st.tier) return false;
+  if (st.role && roleBuckets(e.role || '').indexOf(st.role) < 0) return false;
   if (st.collection && (e.collection || '') !== st.collection) return false;
   if (st.q) {
     var q = st.q.toLowerCase();
@@ -158,20 +161,46 @@ function matchesLib(e, st) {
   return true;
 }
 
+/* Tier numeral for the stamp on original-library cards. Newer entries carry
+   "Tier IV · Special Grade" style tiers; legacy entries fall back to a
+   grade/rank mapping (Special Grade≈IV, Calamity≈V, Grade 1≈III, Grade 2≈II,
+   Grade 3–4≈I). Entries with no mappable tier get no stamp. */
+var GRADE_TIER_FALLBACK = {
+  'Special Grade': 'IV', 'Calamity': 'V',
+  'Grade 1': 'III', 'Grade 2': 'II', 'Grade 3': 'I', 'Grade 4': 'I',
+  'Rank S': 'IV', 'Rank A': 'III', 'Rank B': 'II'
+};
+function tierNumeral(e) {
+  var m = /Tier ([IVX]+)/.exec((e && e.tier) || '');
+  if (m) return m[1];
+  var t = (e && e.tier) || '';
+  if (GRADE_TIER_FALLBACK[t]) return GRADE_TIER_FALLBACK[t];
+  return GRADE_TIER_FALLBACK[(e && e.grade) || ''] || '';
+}
+
 function renderLibCard(e) {
   e = e || {};
   var accent = e.accent || '#b33a2b';
   var raw = e.href || ((e.id || '') + '.html');
   var href = (/^dossiers\//.test(raw) && typeof DOSSIER_BASE === 'string') ? DOSSIER_BASE + raw.slice(9) : raw;
   var ci = cardImg(e);
+  var numeral = tierNumeral(e);
+  var tierStamp = numeral ? '<span class="tier-stamp">' + esc(numeral) + '</span>' : '';
+  var roleTag = e.role ? '<span class="role-tag">' + esc(e.role) + '</span>' : '';
   return '<article class="entry lib-card"' + ci.attr + ' style="--accent:' + esc(accent) + ';' + ci.css + '">' +
     '<a class="lib-link" href="' + esc(href) + '">' +
+    '<span class="lib-headrow">' +
+    '<span class="head-main">' +
     '<span class="entry-no">Original · ' + esc(e.collection || 'Library') + '</span>' +
     '<span class="lib-title">' + esc(e.title || 'Untitled technique') + '</span>' +
     '<span class="lib-chips">' +
     (e.kind ? '<span class="kind-chip">' + esc(e.kind) + '</span>' : '') +
-    (e.grade || e.tier ? '<span class="tier-chip">' + esc(e.grade || e.tier) + '</span>' : '') +
+    (!numeral && (e.grade || e.tier) ? '<span class="tier-chip">' + esc(e.grade || e.tier) + '</span>' : '') +
     '</span>' +
+    '</span>' +
+    '<span class="head-side">' + tierStamp + roleTag +
+    '<span class="detail-tag">Full dossier</span>' +
+    '</span></span>' +
     (e.summary ? '<span class="concept">' + esc(e.summary) + '</span>' : '') +
     '<span class="dossier-cta">Open full dossier →</span>' +
     '</a></article>';
