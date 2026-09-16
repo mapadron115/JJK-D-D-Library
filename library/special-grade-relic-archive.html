@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Special Grade Relic Archive</title>
+<meta name="description" content="A JJK 5e-inspired archive of Special Grade cursed tools drawn from myth, religion, history, folklore, modern legend, and Shangri-La Frontier-inspired designs.">
+<style>
+:root{
+  --bg:#0b0d12;
+  --bg2:#11151d;
+  --panel:#161b24;
+  --panel2:#1d2430;
+  --ink:#f4efe5;
+  --muted:#aaa497;
+  --line:#343c49;
+  --red:#b53b43;
+  --red2:#7a2228;
+  --gold:#d0a85f;
+  --blue:#6f9bc0;
+  --green:#7eaa8c;
+  --shadow:0 18px 50px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(181,59,67,.10), transparent 28%),
+    radial-gradient(circle at 90% 0%, rgba(208,168,95,.07), transparent 26%),
+    linear-gradient(180deg,var(--bg),#090b0f 55%,var(--bg));
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height:1.6;
+}
+a{color:inherit}
+.wrap{width:min(1200px, calc(100% - 32px)); margin:auto}
+header{
+  position:sticky; top:0; z-index:20;
+  background:rgba(9,11,15,.86);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
+}
+.nav{
+  min-height:64px; display:flex; align-items:center; justify-content:space-between; gap:18px;
+}
+.brand{font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:.86rem}
+.brand span{color:var(--gold)}
+.hero{
+  padding:84px 0 58px;
+  border-bottom:1px solid var(--line);
+}
+.kicker{
+  color:var(--gold);
+  text-transform:uppercase;
+  letter-spacing:.22em;
+  font-size:.7rem;
+  font-weight:700;
+}
+h1{
+  margin:.45rem 0 1rem;
+  font-family:Georgia, "Times New Roman", serif;
+  font-size:clamp(3rem, 8vw, 7.4rem);
+  line-height:.9;
+  letter-spacing:-.045em;
+  max-width:980px;
+}
+.hero p{
+  max-width:780px;
+  color:var(--muted);
+  font-size:1.06rem;
+  margin:0;
+}
+.toolbar{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:14px;
+  padding:24px 0;
+  align-items:center;
+}
+.search{
+  width:100%;
+  background:var(--panel);
+  border:1px solid var(--line);
+  color:var(--ink);
+  padding:14px 16px;
+  border-radius:12px;
+  outline:none;
+}
+.search:focus{border-color:var(--gold)}
+.filters{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
+.filter{
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:var(--muted);
+  border-radius:999px;
+  padding:9px 12px;
+  cursor:pointer;
+  font-size:.78rem;
+}
+.filter.active,.filter:hover{color:var(--ink); border-color:var(--gold)}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:18px;
+  padding:8px 0 80px;
+}
+.card{
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.015), transparent 42%),
+    var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.card-head{
+  padding:22px 22px 16px;
+  border-bottom:1px solid var(--line);
+}
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-bottom:12px;
+}
+.tag{
+  border:1px solid var(--line);
+  color:var(--muted);
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:.66rem;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+.tag.grade{color:#fff0ce; border-color:rgba(208,168,95,.55); background:rgba(208,168,95,.07)}
+.card h2{
+  margin:0;
+  font-family:Georgia, "Times New Roman", serif;
+  font-size:2rem;
+  line-height:1.05;
+}
+.subtitle{
+  color:var(--muted);
+  margin-top:6px;
+  font-size:.9rem;
+}
+.card-body{padding:20px 22px 24px}
+.rule{
+  margin:0 0 15px;
+  color:#f0d7d8;
+  font-style:italic;
+  border-left:3px solid var(--red);
+  padding-left:12px;
+}
+.card h3{
+  margin:18px 0 8px;
+  font-size:.82rem;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:var(--gold);
+}
+.card p{margin:0 0 10px}
+.card ul{margin:8px 0 0 1.1rem; padding:0}
+.card li{margin:.45rem 0; color:#d8d3ca}
+.callout{
+  margin-top:16px;
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:13px 14px;
+  color:#dcd7ce;
+}
+.legend{
+  margin:0 0 26px;
+  color:var(--muted);
+  font-size:.88rem;
+}
+footer{
+  border-top:1px solid var(--line);
+  padding:32px 0 50px;
+  color:var(--muted);
+  font-size:.86rem;
+}
+.hidden{display:none!important}
+@media (max-width:840px){
+  .toolbar{grid-template-columns:1fr}
+  .filters{justify-content:flex-start}
+  .grid{grid-template-columns:1fr}
+  h1{font-size:clamp(3.1rem, 15vw, 5.8rem)}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <div class="brand">Special Grade <span>Relic Archive</span></div>
+    <div style="color:var(--muted);font-size:.78rem">JJK 5e Homebrew</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="kicker">Myth · History · Legend · Modern Curse</div>
+    <h1>Special Grade Relic Archive</h1>
+    <p>
+      A curated collection of Special Grade cursed tools built around one rule: the strongest relics do not merely deal more damage—they impose a metaphysical law.
+      Some are historical objects, some are mythic, some are folkloric, and some are modern legends whose stories became curses.
+    </p>
+  </div>
+</section>
+
+<main class="wrap">
+  <div class="toolbar">
+    <input id="search" class="search" placeholder="Search relics, mechanics, themes…" aria-label="Search relics">
+    <div class="filters">
+      <button class="filter active" data-filter="all">All</button>
+      <button class="filter" data-filter="religious">Religious</button>
+      <button class="filter" data-filter="mythic">Mythic</button>
+      <button class="filter" data-filter="egypt">Egypt</button>
+      <button class="filter" data-filter="modern">Modern</button>
+      <button class="filter" data-filter="slf">SLF-Inspired</button>
+    </div>
+  </div>
+
+  <p class="legend">
+    Historical and mythic provenance is intentionally treated as in-world JJK lore. Where an artifact is legendary rather than archaeologically certain, the curse is born from the belief surrounding it.
+  </p>
+
+  <section id="grid" class="grid">
+
+    <article class="card" data-tags="religious mythic spear holy longinus destiny barrier immortal">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Relic Spear</span><span class="tag">Religious Legend</span></div>
+        <h2>The Holy Lance</h2>
+        <div class="subtitle">Spear of Longinus · “Even the divine can be wounded.”</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: Nothing may declare itself absolutely beyond harm.</p>
+        <h3>Core Technique — Absolute Piercing</h3>
+        <p>The lance does not simply bypass armor. It attacks the claim that something cannot be pierced. Barriers, invulnerability, immortality, reincarnation anchors, soul-body separation, and “cannot be harmed” clauses are all treated as valid targets.</p>
+        <ul>
+          <li>Attacks ignore resistance granted specifically by barriers, reinforcement, or invulnerability effects.</li>
+          <li>When striking a barrier, Domain wall, or metaphysical seal, the Lance treats the target as one grade lower.</li>
+          <li>Once per long rest, the wielder may declare a named defense as the target of the strike. On a hit, that defense is suppressed until the end of the wielder’s next turn.</li>
+        </ul>
+        <div class="callout"><b>Archive Warning:</b> Do not describe a defense as “absolute” in the presence of the Lance.</div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="mythic norse sword tyrfing death curse">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Greatsword</span><span class="tag">Norse Legend</span></div>
+        <h2>Tyrfing</h2>
+        <div class="subtitle">The blade that demands a death whenever it is drawn.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: A drawn Tyrfing must be paid for with a life.</p>
+        <h3>Core Technique — Death Debt</h3>
+        <p>Once Tyrfing leaves its sheath, it cannot be willingly sheathed until a creature dies within the encounter.</p>
+        <ul>
+          <li>While the Debt is unpaid, Tyrfing gains escalating bonuses to damage each round.</li>
+          <li>Its strikes ignore mundane hardness and heavily punish defensive stalling.</li>
+          <li>If combat ends without a death, the curse turns inward and selects the nearest valid bearer of the debt.</li>
+        </ul>
+        <div class="callout"><b>Binding Vow:</b> The sword is monstrously powerful precisely because it cannot be drawn safely.</div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="mythic norse sword dainsleif anti-healing rct">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Sword</span><span class="tag">Norse Legend</span></div>
+        <h2>Dáinsleif</h2>
+        <div class="subtitle">The wound that refuses to become whole.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: What Dáinsleif wounds cannot be restored normally.</p>
+        <h3>Core Technique — Unhealing Wound</h3>
+        <ul>
+          <li>Damage dealt by Dáinsleif reduces maximum HP by an equal amount until the curse is broken.</li>
+          <li>RCT cannot restore HP lost to the blade while the wound remains cursed.</li>
+          <li>A critical hit can inflict an Unhealing Injury on a limb, preventing normal restoration of that limb.</li>
+        </ul>
+        <div class="callout">Dáinsleif occupies a different niche from soul-cutting weapons: it does not attack the soul—it attacks <i>recovery itself</i>.</div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="mythic norse ring treasure greed andvaranaut curse">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Ring</span><span class="tag">Norse Legend</span></div>
+        <h2>Andvaranaut</h2>
+        <div class="subtitle">The treasure that teaches its owner to become its dragon.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: Possession becomes power, and power becomes possession.</p>
+        <h3>Core Technique — Hoard</h3>
+        <p>The ring converts wealth and ownership into cursed reinforcement.</p>
+        <ul>
+          <li>The wearer gains bonuses based on the total value of property they personally claim.</li>
+          <li>Stored wealth can be sacrificed for temporary HP, CE recovery, or defensive boosts.</li>
+          <li>As the hoard grows, voluntarily surrendering possessions requires increasingly difficult Wisdom saves.</li>
+          <li>At extreme thresholds, the wearer begins to physically and spiritually “dragonize.”</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card" data-tags="mythic greek necklace harmonia beauty catastrophe curse social">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Necklace</span><span class="tag">Greek Myth</span></div>
+        <h2>Necklace of Harmonia</h2>
+        <div class="subtitle">Perfect fortune for the wearer, ruin for everyone around them.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: The wearer’s blessing is paid for by their attachments.</p>
+        <h3>Core Technique — Transferred Calamity</h3>
+        <ul>
+          <li>The wearer gains supernatural beauty, presence, and resistance to aging.</li>
+          <li>Failed saving throws or catastrophic consequences may be redirected to a bonded ally, lover, family member, or sworn companion.</li>
+          <li>The more benefits invoked, the more severe the transferred misfortune becomes.</li>
+        </ul>
+        <div class="callout">The tool does not make the wearer unlucky. It makes everyone who loves them unlucky.</div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="modern diamond hope curse probability misfortune luck">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Gem</span><span class="tag">Modern Legend</span></div>
+        <h2>The Hope Diamond</h2>
+        <div class="subtitle">A curse made true by people repeating the story.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: Fortune can be bought only by moving misfortune elsewhere.</p>
+        <h3>Core Technique — Borrowed Luck</h3>
+        <ul>
+          <li>The wearer may turn a failed d20 roll into a success.</li>
+          <li>Each correction stores an equal “Misfortune Debt.”</li>
+          <li>The GM may later spend that debt to worsen unrelated outcomes around the wearer.</li>
+          <li>At high debt, improbable accidents become increasingly common.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card" data-tags="religious codex gigas grimoire devil book knowledge curse">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Grimoire</span><span class="tag">Religious Folklore</span></div>
+        <h2>Codex Gigas</h2>
+        <div class="subtitle">The Devil’s Bible · Knowledge that studies the reader back.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: Every truth learned from the Codex grants the Codex an equal truth about you.</p>
+        <h3>Core Technique — Reciprocal Knowledge</h3>
+        <ul>
+          <li>The reader may ask the book a question concerning curses, barriers, rituals, souls, or history.</li>
+          <li>For each answer, the Codex learns one truth of equal significance about the reader.</li>
+          <li>The book may later exploit learned truths to impose disadvantage, reveal secrets, or bypass protections.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card" data-tags="religious silver judas betrayal coins binding vow">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade Set</span><span class="tag">30 Coins</span><span class="tag">Religious Legend</span></div>
+        <h2>The Thirty Pieces of Silver</h2>
+        <div class="subtitle">Payment with enough symbolic weight to purchase betrayal itself.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: Once a price is accepted, the betrayal has already begun.</p>
+        <h3>Core Technique — Price of Treachery</h3>
+        <ul>
+          <li>A coin may be offered as payment for a declared betrayal or broken allegiance.</li>
+          <li>If the recipient willingly accepts, resisting the agreed betrayal becomes increasingly difficult.</li>
+          <li>More coins strengthen the compulsion and broaden what may be “purchased.”</li>
+          <li>All thirty together can form a single catastrophic Binding Vow transaction.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card" data-tags="mythic arthurian excalibur sword legitimacy king">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Sword</span><span class="tag">Arthurian Legend</span></div>
+        <h2>Excalibur</h2>
+        <div class="subtitle">A blade whose strength comes from legitimacy, not raw force.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: Authority accepted is stronger than authority seized.</p>
+        <h3>Core Technique — Rightful Hand</h3>
+        <ul>
+          <li>The weapon’s enhancement scales with how many willing allies recognize the wielder’s authority.</li>
+          <li>Commands made while wielding Excalibur may grant allies temporary bonuses if obeyed willingly.</li>
+          <li>If the wielder betrays those who recognize them, the blade’s bonuses collapse until legitimacy is restored.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card" data-tags="religious grail holy rct healing positive energy">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Vessel</span><span class="tag">Religious Legend</span></div>
+        <h2>The Holy Grail</h2>
+        <div class="subtitle">A vessel capable of holding positive energy without destroying itself.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: What is poured into the Grail may return purified.</p>
+        <h3>Core Technique — Consecrated Reversal</h3>
+        <ul>
+          <li>CE poured into the Grail can be converted into RCE at a steep efficiency loss.</li>
+          <li>The Grail can store positive energy for later use.</li>
+          <li>Once per long rest, it can remove one severe curse, poison, disease, or cursed-energy contamination effect.</li>
+          <li>Overuse risks “purifying” beneficial cursed techniques as well.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card" data-tags="mythic norse freyr sword summer autonomous worthy">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Sword</span><span class="tag">Norse Myth</span></div>
+        <h2>Sword of Summer</h2>
+        <div class="subtitle">Freyr’s self-fighting blade · Worthiness through conduct.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: The sword fights for the worthy, not merely the strong.</p>
+        <h3>Core Technique — Worthy Hand</h3>
+        <ul>
+          <li>The sword can hover, move, and attack independently beside its attuned wielder.</li>
+          <li>At full synchronization, it gains its own turn immediately after the wielder.</li>
+          <li>Acts of cowardice, betrayal, or abandonment of a declared duty suppress its autonomous abilities.</li>
+          <li>If the wielder willingly gives the sword away, they can never attune to it again.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card" data-tags="egypt dagger tutankhamun meteor iron star barrier">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Dagger</span><span class="tag">Ancient Egypt</span></div>
+        <h2>Tutankhamun’s Meteoric Iron Dagger</h2>
+        <div class="subtitle">Star-fallen metal forged before ordinary iron belonged to Egypt.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: Matter born outside the world is not fully recognized by the world’s cursed-energy rules.</p>
+        <h3>Core Technique — Star-Fallen Iron</h3>
+        <ul>
+          <li>Barrier reinforcement and CE-hardening are treated as one grade weaker against the blade.</li>
+          <li>The dagger gains advantage on checks made to damage or sever barrier anchors.</li>
+          <li>It does not nullify techniques; it simply interacts with them as if it were partly foreign to the system enforcing them.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card" data-tags="egypt khopesh horus maat chaos transformation order">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Khopesh</span><span class="tag">Ancient Egypt</span></div>
+        <h2>Khopesh of the Two Horizons</h2>
+        <div class="subtitle">Ma’at over Isfet · Order cuts disorder away.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: Chaos may be forced back toward a stable, truthful state.</p>
+        <h3>Core Technique — Ma’at Over Isfet</h3>
+        <ul>
+          <li>Gain Order when protecting allies, countering attacks, or punishing broken vows.</li>
+          <li>Spend Order to resist forced movement, environmental distortion, or unstable transformations.</li>
+          <li>At maximum Order, a successful strike can temporarily strip one altered state: possession, transformation, summoned armor, monstrous form, or similar overlay.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card" data-tags="egypt wedjat eye horus healing rct protection amulet">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Amulet</span><span class="tag">Ancient Egypt</span></div>
+        <h2>Wedjat Eye of Horus</h2>
+        <div class="subtitle">The restored eye · Protection, wholeness, and return from loss.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: That which was broken may be restored to its intended whole.</p>
+        <h3>Core Technique — Restored Measure</h3>
+        <ul>
+          <li>The bearer gains improved efficiency when using RCT on others.</li>
+          <li>Once per long rest, the Eye can restore a damaged limb or major bodily injury without the usual penalty.</li>
+          <li>When the wearer would be reduced to 0 HP, the Eye may break one stored “segment” to leave them at 1 HP instead.</li>
+          <li>Its strongest restoration cannot revive the truly dead; it restores what still possesses a valid living pattern.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card" data-tags="modern car porsche james dean little bastard momentum curse vehicle">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Cursed Vehicle</span><span class="tag">Modern Legend</span></div>
+        <h2>Little Bastard</h2>
+        <div class="subtitle">Porsche 550 Spyder · A route that wants to become a fatality report.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: Once momentum becomes fate, stopping is the dangerous choice.</p>
+        <h3>Core Technique — Dead Man’s Route</h3>
+        <ul>
+          <li>The vehicle accumulates Fatal Momentum while traveling at high speed without stopping.</li>
+          <li>Fatal Momentum boosts durability, impact damage, and pursuit speed.</li>
+          <li>Once a destination is declared, probability bends toward keeping the route open.</li>
+          <li>Voluntarily stopping becomes harder as Fatal Momentum rises; a crash releases all accumulated force at once.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card" data-tags="modern demon core nuclear criticality cursed object amplifier">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Cursed Object</span><span class="tag">Modern History</span></div>
+        <h2>The Demon Core</h2>
+        <div class="subtitle">Criticality as a cursed-energy law.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: The closer the system comes to disaster, the more power it produces.</p>
+        <h3>Core Technique — Criticality</h3>
+        <ul>
+          <li>The Core can amplify CE invested into a technique, barrier, or Domain.</li>
+          <li>Each doubling raises a Criticality score.</li>
+          <li>At high Criticality, checks are required to prevent runaway discharge.</li>
+          <li>Failure releases a Special Grade CE pulse that ignores allegiance and strikes everyone in range.</li>
+        </ul>
+        <div class="callout"><b>Archive Protocol:</b> No activation without multiple barrier-capable sorcerers present.</div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="slf gauntlets crystal gilta brille exceed charge 168 ce">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Gauntlets</span><span class="tag">SLF-Inspired</span></div>
+        <h2>Gilta Brille</h2>
+        <div class="subtitle">Brilliant Scorpion Gauntlets · A seven-day cursed-energy capacitor.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: Stored cursed energy becomes crystalline violence.</p>
+        <h3>Reservoir</h3>
+        <ul>
+          <li>Maximum capacity: <b>168 Charges</b>.</li>
+          <li>1 CE willingly deposited = 1 Charge.</li>
+          <li>The gauntlets can absorb no more than <b>24 Charges per 24 hours</b>.</li>
+          <li>Stored Charges cannot be withdrawn as CE.</li>
+        </ul>
+        <h3>Crystal Bullet / Growing Up</h3>
+        <p>Fire crystalline seeds into creatures or terrain. Seeds can later erupt for piercing damage, restraint, battlefield control, or mobility.</p>
+        <h3>Exceed Charge: Reject</h3>
+        <p>On a melee hit, discharge the reservoir through the target. Damage scales at <b>1d6 force per stored Charge</b>. A full 168-Charge discharge represents the tool’s true Special Grade output and should carry catastrophic recoil.</p>
+      </div>
+    </article>
+
+    <article class="card" data-tags="slf antinomy greatsword satanel satan armageddon rce ce">
+      <div class="card-head">
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Greatsword</span><span class="tag">SLF-Inspired</span></div>
+        <h2>Antinomy</h2>
+        <div class="subtitle">Greatsword of Gods and Demons · CE and RCE in one impossible circuit.</div>
+      </div>
+      <div class="card-body">
+        <p class="rule">Metaphysical Law: Two contradictory energy states may coexist only long enough to destroy something.</p>
+        <h3>Satanel — Negative Circuit</h3>
+        <p>The black form channels ordinary cursed energy and applies Apocalypse Marks.</p>
+        <h3>Satan — Reversed Circuit</h3>
+        <p>The white form internally reverses CE into positive energy and applies Catastrophe Marks.</p>
+        <h3>Armageddon</h3>
+        <ul>
+          <li>Requires <b>5 Apocalypse Marks</b> and <b>5 Catastrophe Marks</b> on the same target.</li>
+          <li>The wielder must complete the activation chant.</li>
+          <li>The marks collapse into one another for a catastrophic finishing strike.</li>
+          <li>Afterward, the wielder suffers severe stat and technique suppression, while Antinomy itself remains weakened for days.</li>
+        </ul>
+      </div>
+    </article>
+
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Designed for the JJK 5e homebrew archive. These relics are intentionally stronger and stranger than standard magic items; their balance comes from conditions, vows, costs, recharge structures, and narrative consequences.
+  </div>
+</footer>
+
+<script>
+const cards=[...document.querySelectorAll('.card')];
+const search=document.getElementById('search');
+const filters=[...document.querySelectorAll('.filter')];
+let active='all';
+
+function apply(){
+  const q=search.value.trim().toLowerCase();
+  cards.forEach(card=>{
+    const hay=(card.innerText+' '+card.dataset.tags).toLowerCase();
+    const matchText=!q || hay.includes(q);
+    const matchFilter=active==='all' || card.dataset.tags.includes(active);
+    card.classList.toggle('hidden', !(matchText && matchFilter));
+  });
+}
+search.addEventListener('input', apply);
+filters.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    active=btn.dataset.filter;
+    filters.forEach(b=>b.classList.toggle('active',b===btn));
+    apply();
+  });
+});
+</script>
+</body>
+</html>
