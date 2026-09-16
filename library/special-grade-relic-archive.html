@@ -3,596 +3,381 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Special Grade Relic Archive</title>
-<meta name="description" content="A JJK 5e-inspired archive of Special Grade cursed tools drawn from myth, religion, history, folklore, modern legend, and Shangri-La Frontier-inspired designs.">
+<title>Special Grade Relic Archive — Full Mechanical Draft</title>
+<meta name="description" content="JJK 5e Special Grade cursed tools with complete numbers, cursed-energy costs, Binding Vows, lore, and mechanical profiles.">
 <style>
-:root{
-  --bg:#0b0d12;
-  --bg2:#11151d;
-  --panel:#161b24;
-  --panel2:#1d2430;
-  --ink:#f4efe5;
-  --muted:#aaa497;
-  --line:#343c49;
-  --red:#b53b43;
-  --red2:#7a2228;
-  --gold:#d0a85f;
-  --blue:#6f9bc0;
-  --green:#7eaa8c;
-  --shadow:0 18px 50px rgba(0,0,0,.28);
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  color:var(--ink);
-  background:
-    radial-gradient(circle at 10% 0%, rgba(181,59,67,.10), transparent 28%),
-    radial-gradient(circle at 90% 0%, rgba(208,168,95,.07), transparent 26%),
-    linear-gradient(180deg,var(--bg),#090b0f 55%,var(--bg));
-  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  line-height:1.6;
-}
-a{color:inherit}
-.wrap{width:min(1200px, calc(100% - 32px)); margin:auto}
-header{
-  position:sticky; top:0; z-index:20;
-  background:rgba(9,11,15,.86);
-  backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--line);
-}
-.nav{
-  min-height:64px; display:flex; align-items:center; justify-content:space-between; gap:18px;
-}
-.brand{font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:.86rem}
-.brand span{color:var(--gold)}
-.hero{
-  padding:84px 0 58px;
-  border-bottom:1px solid var(--line);
-}
-.kicker{
-  color:var(--gold);
-  text-transform:uppercase;
-  letter-spacing:.22em;
-  font-size:.7rem;
-  font-weight:700;
-}
-h1{
-  margin:.45rem 0 1rem;
-  font-family:Georgia, "Times New Roman", serif;
-  font-size:clamp(3rem, 8vw, 7.4rem);
-  line-height:.9;
-  letter-spacing:-.045em;
-  max-width:980px;
-}
-.hero p{
-  max-width:780px;
-  color:var(--muted);
-  font-size:1.06rem;
-  margin:0;
-}
-.toolbar{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) auto;
-  gap:14px;
-  padding:24px 0;
-  align-items:center;
-}
-.search{
-  width:100%;
-  background:var(--panel);
-  border:1px solid var(--line);
-  color:var(--ink);
-  padding:14px 16px;
-  border-radius:12px;
-  outline:none;
-}
-.search:focus{border-color:var(--gold)}
-.filters{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
-.filter{
-  border:1px solid var(--line);
-  background:var(--panel);
-  color:var(--muted);
-  border-radius:999px;
-  padding:9px 12px;
-  cursor:pointer;
-  font-size:.78rem;
-}
-.filter.active,.filter:hover{color:var(--ink); border-color:var(--gold)}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2, minmax(0,1fr));
-  gap:18px;
-  padding:8px 0 80px;
-}
-.card{
-  background:
-    linear-gradient(145deg, rgba(255,255,255,.015), transparent 42%),
-    var(--panel);
-  border:1px solid var(--line);
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:var(--shadow);
-}
-.card-head{
-  padding:22px 22px 16px;
-  border-bottom:1px solid var(--line);
-}
-.meta{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-  margin-bottom:12px;
-}
-.tag{
-  border:1px solid var(--line);
-  color:var(--muted);
-  padding:4px 8px;
-  border-radius:999px;
-  font-size:.66rem;
-  text-transform:uppercase;
-  letter-spacing:.1em;
-}
-.tag.grade{color:#fff0ce; border-color:rgba(208,168,95,.55); background:rgba(208,168,95,.07)}
-.card h2{
-  margin:0;
-  font-family:Georgia, "Times New Roman", serif;
-  font-size:2rem;
-  line-height:1.05;
-}
-.subtitle{
-  color:var(--muted);
-  margin-top:6px;
-  font-size:.9rem;
-}
-.card-body{padding:20px 22px 24px}
-.rule{
-  margin:0 0 15px;
-  color:#f0d7d8;
-  font-style:italic;
-  border-left:3px solid var(--red);
-  padding-left:12px;
-}
-.card h3{
-  margin:18px 0 8px;
-  font-size:.82rem;
-  text-transform:uppercase;
-  letter-spacing:.14em;
-  color:var(--gold);
-}
-.card p{margin:0 0 10px}
-.card ul{margin:8px 0 0 1.1rem; padding:0}
-.card li{margin:.45rem 0; color:#d8d3ca}
-.callout{
-  margin-top:16px;
-  background:var(--panel2);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:13px 14px;
-  color:#dcd7ce;
-}
-.legend{
-  margin:0 0 26px;
-  color:var(--muted);
-  font-size:.88rem;
-}
-footer{
-  border-top:1px solid var(--line);
-  padding:32px 0 50px;
-  color:var(--muted);
-  font-size:.86rem;
-}
-.hidden{display:none!important}
-@media (max-width:840px){
-  .toolbar{grid-template-columns:1fr}
-  .filters{justify-content:flex-start}
-  .grid{grid-template-columns:1fr}
-  h1{font-size:clamp(3.1rem, 15vw, 5.8rem)}
-}
+:root{--bg:#090b10;--panel:#151a23;--panel2:#1c2330;--ink:#f5efe4;--muted:#aaa396;--line:#353d49;--red:#b94048;--gold:#d2ab63;--blue:#6e9dbf;--green:#80aa8d;--shadow:0 18px 50px rgba(0,0,0,.28)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 8% 0,rgba(185,64,72,.11),transparent 27%),radial-gradient(circle at 92% 0,rgba(210,171,99,.08),transparent 24%),var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}.wrap{width:min(1240px,calc(100% - 32px));margin:auto}header{position:sticky;top:0;z-index:20;background:rgba(8,10,14,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.nav{min-height:62px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font-weight:800;letter-spacing:.11em;text-transform:uppercase;font-size:.82rem}.brand span{color:var(--gold)}.version{font-size:.72rem;color:var(--muted)}.hero{padding:78px 0 48px;border-bottom:1px solid var(--line)}.kicker{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:800}h1{margin:.45rem 0 1rem;font:700 clamp(3rem,8vw,7rem)/.9 Georgia,serif;letter-spacing:-.045em;max-width:1050px}.hero p{max-width:830px;color:var(--muted);font-size:1.04rem}.system{margin-top:26px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.system div{border:1px solid var(--line);background:rgba(21,26,35,.72);padding:14px;border-radius:12px;font-size:.86rem;color:#d9d2c8}.system b{display:block;color:var(--gold);margin-bottom:4px}.toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:24px 0 12px}.search{width:100%;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:14px 16px;border-radius:12px;outline:none}.search:focus{border-color:var(--gold)}.filters{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}button{font:inherit}.filter{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:8px 12px;border-radius:999px;cursor:pointer;font-size:.76rem}.filter.active,.filter:hover{border-color:var(--gold);color:var(--ink)}.legend{margin:0 0 24px;color:var(--muted);font-size:.84rem}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding:8px 0 80px}.card{background:linear-gradient(145deg,rgba(255,255,255,.015),transparent 42%),var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}.card-head{padding:22px 22px 16px;border-bottom:1px solid var(--line)}.meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}.tag{border:1px solid var(--line);color:var(--muted);padding:4px 8px;border-radius:999px;font-size:.64rem;text-transform:uppercase;letter-spacing:.1em}.tag.grade{color:#fff0cd;border-color:rgba(210,171,99,.55);background:rgba(210,171,99,.07)}.card h2{margin:0;font:700 2rem/1.04 Georgia,serif}.subtitle{color:var(--muted);margin-top:6px;font-size:.89rem}.card-body{padding:19px 22px 23px}.profile{display:grid;grid-template-columns:150px 1fr;gap:10px;border:1px solid rgba(210,171,99,.32);background:rgba(210,171,99,.055);padding:12px 13px;border-radius:12px;margin-bottom:17px;font-size:.84rem}.profile b{color:var(--gold)}.card h3{margin:18px 0 8px;font-size:.77rem;text-transform:uppercase;letter-spacing:.16em;color:var(--gold)}.card p{margin:0 0 10px}.law{border-left:3px solid var(--red);padding:10px 12px;margin:14px 0!important;background:rgba(185,64,72,.055);color:#eed9d7}ul{margin:8px 0 0 1.15rem;padding:0}li{margin:.55rem 0;color:#ddd7cd}.vow{margin-top:17px;border:1px solid rgba(185,64,72,.4);background:rgba(185,64,72,.06);border-radius:12px;padding:13px 14px;color:#ead7d5}.vow>b{color:#f2b0b4}.note{margin-top:10px;border:1px solid var(--line);background:var(--panel2);padding:11px 13px;border-radius:11px;color:#c9c3b8;font-size:.84rem}footer{border-top:1px solid var(--line);padding:30px 0 48px;color:var(--muted);font-size:.84rem}.dossier-link{display:inline-block;margin-top:12px;color:var(--gold);font-size:.8rem;text-decoration:none;border:1px solid rgba(210,171,99,.45);padding:7px 14px;border-radius:999px}.dossier-link:hover{background:rgba(210,171,99,.14)}.hidden{display:none!important}
+@media(max-width:900px){.system{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.filters{justify-content:flex-start}.grid{grid-template-columns:1fr}.profile{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap nav">
-    <div class="brand">Special Grade <span>Relic Archive</span></div>
-    <div style="color:var(--muted);font-size:.78rem">JJK 5e Homebrew</div>
-  </div>
-</header>
-
-<section class="hero">
-  <div class="wrap">
-    <div class="kicker">Myth · History · Legend · Modern Curse</div>
-    <h1>Special Grade Relic Archive</h1>
-    <p>
-      A curated collection of Special Grade cursed tools built around one rule: the strongest relics do not merely deal more damage—they impose a metaphysical law.
-      Some are historical objects, some are mythic, some are folkloric, and some are modern legends whose stories became curses.
-    </p>
-  </div>
-</section>
-
+<header><div class="wrap nav"><div class="brand">Special Grade <span>Relic Archive</span></div><div class="version">Full Mechanical Draft · v2</div></div></header>
+<section class="hero"><div class="wrap">
+<div class="kicker">JJK 5e · Cursed Tools · Binding Vows</div>
+<h1>Relics that impose rules on reality.</h1>
+<p>These are not ordinary magic items with historical names painted over them. Each relic is treated as a Jujutsu Kaisen cursed tool: belief, fear, ritual use, death, vows, or concentrated cursed energy created a technique inside the object. Special Grade power comes with a Special Grade condition.</p>
+<div class="system">
+<div><b>Special Grade Baseline</b>Weapon-type relics use the system's +4 Special Grade enhancement unless a feature says otherwise.</div>
+<div><b>Relic DC</b>8 + proficiency bonus + the ability modifier used to wield the relic. CE-powered effects use the wielder's CE modifier; a no-CE wielder may use the relevant physical ability when appropriate.</div>
+<div><b>CE Is Real Cost</b>CE spent into a relic is actually spent. Unless an item explicitly stores withdrawable energy, it cannot be reclaimed as CE.</div>
+</div>
+</div></section>
 <main class="wrap">
-  <div class="toolbar">
-    <input id="search" class="search" placeholder="Search relics, mechanics, themes…" aria-label="Search relics">
-    <div class="filters">
-      <button class="filter active" data-filter="all">All</button>
-      <button class="filter" data-filter="religious">Religious</button>
-      <button class="filter" data-filter="mythic">Mythic</button>
-      <button class="filter" data-filter="egypt">Egypt</button>
-      <button class="filter" data-filter="modern">Modern</button>
-      <button class="filter" data-filter="slf">SLF-Inspired</button>
-    </div>
-  </div>
+<div class="toolbar">
+<input id="search" class="search" placeholder="Search relics, CE costs, Binding Vows, mechanics…" aria-label="Search relics">
+<div class="filters">
+<button class="filter active" data-filter="all">All</button>
+<button class="filter" data-filter="religious">Religious</button>
+<button class="filter" data-filter="mythic">Mythic</button>
+<button class="filter" data-filter="egypt">Egypt</button>
+<button class="filter" data-filter="modern">Modern</button>
+<button class="filter" data-filter="slf">SLF-Inspired</button>
+</div></div>
+<p class="legend">Historical and mythic material is intentionally separated from the in-world jujutsu explanation. Legendary claims are treated as belief-vectors capable of creating cursed effects, not as assertions that the legends were historically literal.</p>
+<section class="grid">
 
-  <p class="legend">
-    Historical and mythic provenance is intentionally treated as in-world JJK lore. Where an artifact is legendary rather than archaeologically certain, the curse is born from the belief surrounding it.
-  </p>
-
-  <section id="grid" class="grid">
-
-    <article class="card" data-tags="religious mythic spear holy longinus destiny barrier immortal">
+    <article class="card" data-tags="religious mythic weapon spear barrier immortality longinus">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Relic Spear</span><span class="tag">Religious Legend</span></div>
-        <h2>The Holy Lance</h2>
-        <div class="subtitle">Spear of Longinus · “Even the divine can be wounded.”</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Weapon (Spear)</span></div>
+        <h2>The Holy Lance</h2><a class="dossier-link" href="../dossiers/e294.html">Full dossier →</a>
+        <div class="subtitle">Spear of Longinus · Spear of Destiny</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: Nothing may declare itself absolutely beyond harm.</p>
-        <h3>Core Technique — Absolute Piercing</h3>
-        <p>The lance does not simply bypass armor. It attacks the claim that something cannot be pierced. Barriers, invulnerability, immortality, reincarnation anchors, soul-body separation, and “cannot be harmed” clauses are all treated as valid targets.</p>
-        <ul>
-          <li>Attacks ignore resistance granted specifically by barriers, reinforcement, or invulnerability effects.</li>
-          <li>When striking a barrier, Domain wall, or metaphysical seal, the Lance treats the target as one grade lower.</li>
-          <li>Once per long rest, the wielder may declare a named defense as the target of the strike. On a hit, that defense is suppressed until the end of the wielder’s next turn.</li>
-        </ul>
-        <div class="callout"><b>Archive Warning:</b> Do not describe a defense as “absolute” in the presence of the Lance.</div>
+        <div class="profile"><b>Mechanical Profile</b><span>1d8 piercing (versatile 1d10) · +4 to attack and damage rolls · Relic DC</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>The Gospel tradition gave the weapon a wound; later centuries gave it a name, a relic cult, and the reputation of a spear that touched the divine. In jujutsu terms, the accumulated belief did not make the spear holy so much as it taught the cursed energy inside the relic one impossible proposition: even the untouchable can be pierced.</p>
+        <p class="law"><b>Metaphysical Law:</b> Nothing may declare itself absolutely beyond harm.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Absolute Piercing.</b> Attacks with the Lance ignore resistance or immunity granted specifically by a barrier, Cursed Technique, cursed-energy reinforcement, or an effect that states the target cannot be damaged. This does not deactivate the feature; it only allows the Lance to pass through it.</li><li><b>Pierce the Absolute — 3 CE.</b> Before making a melee attack, name one active defensive feature on the target. On a hit, the attack deals an additional <b>6d10 force damage</b> and that named feature is suppressed against the Lance until the end of your next turn. Against a barrier or Domain wall, this instead deals <b>12d10 force damage</b> to the barrier.</li><li><b>Godwound — 8 CE, once per 7 days.</b> When the Lance reduces a creature to 0 HP, you may pin its body and soul together. For <b>24 hours</b>, it cannot regain HP, regenerate, reincarnate, revive, or transfer its soul to another vessel. A Special Grade effect may contest this with an Arcana check against your Relic DC.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>Declared Target.</b> Pierce the Absolute only works if the wielder names the protection being challenged before the attack roll. If the attack misses, the 3 CE is still lost. The Lance receives its absurd authority because it never pierces an unnamed abstraction.</div>
+        <div class="note">Designed to sit beside, not replace, the Inverted Spear of Heaven: Longinus pierces a defense; it does not globally deactivate cursed techniques.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="mythic norse sword tyrfing death curse">
+    
+    <article class="card" data-tags="mythic weapon norse sword tyrfing death vow">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Greatsword</span><span class="tag">Norse Legend</span></div>
-        <h2>Tyrfing</h2>
-        <div class="subtitle">The blade that demands a death whenever it is drawn.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Weapon (Greatsword)</span></div>
+        <h2>Tyrfing</h2><a class="dossier-link" href="../dossiers/e295.html">Full dossier →</a>
+        <div class="subtitle">The Sword That Must Be Paid</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: A drawn Tyrfing must be paid for with a life.</p>
-        <h3>Core Technique — Death Debt</h3>
-        <p>Once Tyrfing leaves its sheath, it cannot be willingly sheathed until a creature dies within the encounter.</p>
-        <ul>
-          <li>While the Debt is unpaid, Tyrfing gains escalating bonuses to damage each round.</li>
-          <li>Its strikes ignore mundane hardness and heavily punish defensive stalling.</li>
-          <li>If combat ends without a death, the curse turns inward and selects the nearest valid bearer of the debt.</li>
-        </ul>
-        <div class="callout"><b>Binding Vow:</b> The sword is monstrously powerful precisely because it cannot be drawn safely.</div>
+        <div class="profile"><b>Mechanical Profile</b><span>2d6 slashing · Heavy, Two-Handed · +4 to attack and damage rolls</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>Tyrfing's legend already behaves like a binding vow: extraordinary killing power purchased with a compulsory death whenever the sword is drawn. In this setting, generations of retelling hardened that condition into the weapon itself.</p>
+        <p class="law"><b>Metaphysical Law:</b> If Tyrfing leaves its sheath, a meaningful life must pay for it.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Blood-Hungry Edge.</b> Once per turn on a hit, Tyrfing deals an additional <b>3d10 necrotic damage</b>. While its Blood Debt is unpaid, attacks with Tyrfing score a critical hit on a <b>19–20</b>.</li><li><b>Blood Debt.</b> Drawing Tyrfing begins the debt. The blade cannot be willingly sheathed, dismissed, or abandoned until a non-trivial creature dies within <b>60 ft</b> of the wielder after the draw. Summoned fodder, helpless livestock, and deliberately manufactured sacrifices do not satisfy the curse.</li><li><b>Unpaid Price.</b> If <b>1 minute</b> passes after drawing Tyrfing without satisfying the Blood Debt, the wielder takes <b>12d10 necrotic damage</b> and their maximum HP is reduced by the same amount. This damage ignores resistance and immunity. The effect repeats every minute until a valid death pays the debt.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>A Sword Drawn for Death.</b> Tyrfing receives its critical range and additional damage from the certainty that a death will occur. The curse does not care whose.</div>
+        <div class="note">Tyrfing is the more explosive of the two Norse death-swords: enormous pressure now, horrific payment if the wielder tries to bluff the vow.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="mythic norse sword dainsleif anti-healing rct">
+    
+    <article class="card" data-tags="mythic weapon norse sword dainsleif anti-healing rct death">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Sword</span><span class="tag">Norse Legend</span></div>
-        <h2>Dáinsleif</h2>
-        <div class="subtitle">The wound that refuses to become whole.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Weapon (Longsword)</span></div>
+        <h2>Dáinsleif</h2><a class="dossier-link" href="../dossiers/e296.html">Full dossier →</a>
+        <div class="subtitle">Högni’s Unhealing Sword</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: What Dáinsleif wounds cannot be restored normally.</p>
-        <h3>Core Technique — Unhealing Wound</h3>
-        <ul>
-          <li>Damage dealt by Dáinsleif reduces maximum HP by an equal amount until the curse is broken.</li>
-          <li>RCT cannot restore HP lost to the blade while the wound remains cursed.</li>
-          <li>A critical hit can inflict an Unhealing Injury on a limb, preventing normal restoration of that limb.</li>
-        </ul>
-        <div class="callout">Dáinsleif occupies a different niche from soul-cutting weapons: it does not attack the soul—it attacks <i>recovery itself</i>.</div>
+        <div class="profile"><b>Mechanical Profile</b><span>1d8 slashing (versatile 1d10) · +4 to attack and damage rolls</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>The myth of Dáinsleif gives it three brutal qualities: a stroke that does not fail, wounds that do not heal, and a blade that demands death once drawn. The cursed tool expresses those ideas literally rather than as generic bonus damage.</p>
+        <p class="law"><b>Metaphysical Law:</b> A wound acknowledged by Dáinsleif does not accept restoration.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Fated Stroke — 2 CE, once per turn.</b> After you miss with Dáinsleif, you may spend 2 CE to turn the miss into a hit. A natural 1 cannot be changed this way.</li><li><b>Unhealing Wound.</b> Once per turn when Dáinsleif hits, it deals an additional <b>3d8 necrotic damage</b>. The target's maximum HP is reduced by the necrotic damage dealt. That reduction cannot be repaired by ordinary healing or Reverse Cursed Technique.</li><li><b>Breaking the Wound.</b> A creature can remove all maximum-HP reduction caused by Dáinsleif after a long rest, or by receiving a <b>1-minute RCT ritual costing 5 CE</b>. The healer must succeed on an Arcana check against the wielder's Relic DC.</li><li><b>Death Before Sheathing.</b> If Dáinsleif is drawn in combat, it cannot be sheathed until it has reduced a creature to <b>0 HP</b>.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>Certainty for Permanence.</b> The sword spends cursed energy to force a missed stroke into the written history of the fight as a hit; in exchange, every true wound it creates resists being 'rewritten' by RCT.</div>
+        <div class="note">Unlike the Soul Split Katana, Dáinsleif is not framed as a soul-cutting weapon. Its technique specifically curses the act of healing.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="mythic norse ring treasure greed andvaranaut curse">
+    
+    <article class="card" data-tags="mythic norse ring treasure greed curse fafnir">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Ring</span><span class="tag">Norse Legend</span></div>
-        <h2>Andvaranaut</h2>
-        <div class="subtitle">The treasure that teaches its owner to become its dragon.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Wondrous Cursed Tool (Ring)</span></div>
+        <h2>Andvaranaut</h2><a class="dossier-link" href="../dossiers/e297.html">Full dossier →</a>
+        <div class="subtitle">The Ring of Andvari</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: Possession becomes power, and power becomes possession.</p>
-        <h3>Core Technique — Hoard</h3>
-        <p>The ring converts wealth and ownership into cursed reinforcement.</p>
-        <ul>
-          <li>The wearer gains bonuses based on the total value of property they personally claim.</li>
-          <li>Stored wealth can be sacrificed for temporary HP, CE recovery, or defensive boosts.</li>
-          <li>As the hoard grows, voluntarily surrendering possessions requires increasingly difficult Wisdom saves.</li>
-          <li>At extreme thresholds, the wearer begins to physically and spiritually “dragonize.”</li>
-        </ul>
+        <div class="profile"><b>Mechanical Profile</b><span>Hoard Points 0–20 · +4 to checks made to appraise, conceal, bargain for, or defend owned treasure</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>The cursed hoard of Andvari becomes a perfect jujutsu object because greed itself supplies the negative emotion. Ownership, fear of loss, and murder over wealth continuously feed the ring.</p>
+        <p class="law"><b>Metaphysical Law:</b> Possession becomes power, and power becomes possession.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Hoard Points.</b> The ring can hold up to <b>20 Hoard Points</b>. During a long rest, the wearer may permanently sacrifice valuables worth roughly <b>¥1,000,000 per point</b>, or a cursed tool of Grade 2 or higher for <b>3 points per grade step</b> (Grade 2 = 3, Grade 1 = 6, Special Grade = 9). Destroyed offerings cannot be recovered.</li><li><b>Hoarded Vitality.</b> After a long rest, gain <b>5 temporary HP per Hoard Point</b>, maximum 100.</li><li><b>Spend the Hoard.</b> As a bonus action, spend 1 point to regain <b>2 CE</b> or <b>20 HP</b>; spend 3 points to gain <b>+2 AC for 1 minute</b>; spend 5 points to gain advantage on all saving throws for <b>1 minute</b>.</li><li><b>Fáfnir Threshold.</b> At 20 Hoard Points, the wearer may use an action to transform for <b>1 minute</b>: fly speed 60 ft, resistance to bludgeoning/piercing/slashing, and unarmed attacks become <b>3d10 slashing</b> cursed-tool attacks. When the minute ends, the ring loses 10 Hoard Points.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>The Hoard Owns the Hoarder.</b> To willingly give away, destroy, or abandon something personally owned while carrying 10+ Hoard Points, make a Wisdom save, DC <b>10 + half your current Hoard Points</b>. On a failure, you cannot willingly surrender it for 24 hours.</div>
+        <div class="note">At 20 points, removing the ring voluntarily also requires a DC 20 Wisdom save.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="mythic greek necklace harmonia beauty catastrophe curse social">
+    
+    <article class="card" data-tags="mythic greek necklace harmonia curse social calamity">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Necklace</span><span class="tag">Greek Myth</span></div>
-        <h2>Necklace of Harmonia</h2>
-        <div class="subtitle">Perfect fortune for the wearer, ruin for everyone around them.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Wondrous Cursed Tool (Necklace)</span></div>
+        <h2>Necklace of Harmonia</h2><a class="dossier-link" href="../dossiers/e298.html">Full dossier →</a>
+        <div class="subtitle">The Beautiful Calamity</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: The wearer’s blessing is paid for by their attachments.</p>
-        <h3>Core Technique — Transferred Calamity</h3>
-        <ul>
-          <li>The wearer gains supernatural beauty, presence, and resistance to aging.</li>
-          <li>Failed saving throws or catastrophic consequences may be redirected to a bonded ally, lover, family member, or sworn companion.</li>
-          <li>The more benefits invoked, the more severe the transferred misfortune becomes.</li>
-        </ul>
-        <div class="callout">The tool does not make the wearer unlucky. It makes everyone who loves them unlucky.</div>
+        <div class="profile"><b>Mechanical Profile</b><span>+4 to Charisma (Deception, Performance, Persuasion) checks · Advantage on saves against being charmed</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>The necklace is remembered as an heirloom of impossible beauty that carries disaster from one generation to the next. Jujutsu society classifies it as a transfer-type cursed tool: the wearer is not spared consequence; the consequence is reassigned.</p>
+        <p class="law"><b>Metaphysical Law:</b> The wearer&#x27;s blessing is paid for by the people attached to them.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Perfected Appearance.</b> While worn, the bearer does not visibly age and has advantage on Charisma checks made against a creature that can see them, in addition to the tool's +4 where applicable.</li><li><b>Transferred Calamity — Reaction, 2 CE.</b> When you take damage or fail a saving throw, choose a <b>Bonded</b> creature within 120 ft. A willing Bonded creature takes the damage or suffers the failed-save effect instead. An unwilling Bonded creature makes a Charisma save against your Relic DC; on a success, the transfer fails and the CE is still spent.</li><li><b>Bonded.</b> The necklace recognizes at most <b>PB creatures</b> with whom the wearer has a genuine ongoing personal bond. A bond cannot be created purely to feed the necklace.</li><li><b>Calamity Marks.</b> Each time a creature receives Transferred Calamity, it gains 1 Calamity Mark, maximum 3. Each mark imposes a cumulative <b>-1 to d20 rolls</b>. All marks disappear after that creature finishes a long rest.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>Beauty Cannot Pay Its Own Price.</b> The necklace's defensive power only functions by moving the cost to a relationship the wearer actually values. It refuses disposable substitutes.</div>
+        <div class="note">At 3 Calamity Marks, a creature cannot be selected again until it finishes a long rest.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="modern diamond hope curse probability misfortune luck">
+    
+    <article class="card" data-tags="modern diamond hope curse luck probability folklore">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Gem</span><span class="tag">Modern Legend</span></div>
-        <h2>The Hope Diamond</h2>
-        <div class="subtitle">A curse made true by people repeating the story.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Wondrous Cursed Tool (Gem)</span></div>
+        <h2>The Hope Diamond</h2><a class="dossier-link" href="../dossiers/e299.html">Full dossier →</a>
+        <div class="subtitle">The Curse That Was Told Into Existence</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: Fortune can be bought only by moving misfortune elsewhere.</p>
-        <h3>Core Technique — Borrowed Luck</h3>
-        <ul>
-          <li>The wearer may turn a failed d20 roll into a success.</li>
-          <li>Each correction stores an equal “Misfortune Debt.”</li>
-          <li>The GM may later spend that debt to worsen unrelated outcomes around the wearer.</li>
-          <li>At high debt, improbable accidents become increasingly common.</li>
-        </ul>
+        <div class="profile"><b>Mechanical Profile</b><span>3 Fortune uses per long rest · Doom 0–3</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>Its 'curse' is useful here precisely because much of the popular curse narrative was amplified by sensational retelling. Jujutsu theory treats that as the point: enough people expected catastrophe around the stone that expectation eventually acquired cursed energy and became self-enforcing.</p>
+        <p class="law"><b>Metaphysical Law:</b> Good fortune is not created; its opposite is displaced into the future.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Borrowed Fortune — Reaction.</b> After you or a creature within <b>30 ft</b> rolls a d20 but before the result is resolved, add <b>+10</b> to the roll. You can do this 3 times per long rest. Each use adds 1 Doom to the diamond, maximum 3.</li><li><b>Collected Doom.</b> The GM may spend 1 Doom after the wearer or a creature within 30 ft rolls a d20 to impose <b>-10</b> on that roll. Doom can only be removed by being spent this way; a long rest does not erase it.</li><li><b>Blue Catastrophe.</b> If the diamond is at 3 Doom and would gain another, it instead releases the overflow: the wearer takes <b>8d10 psychic damage</b>, and every creature within 15 ft takes half that amount. Doom then becomes 0.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>Luck Must Balance.</b> Every +10 the diamond gives creates a future -10. Its technique cannot manufacture net probability.</div>
+        <div class="note">Borrowed Fortune cannot modify Black Flash confirmation rolls, Domain clashes, or other rolls the GM rules are metaphysical rather than probabilistic.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="religious codex gigas grimoire devil book knowledge curse">
+    
+    <article class="card" data-tags="religious grimoire codex book knowledge devil curse ritual">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Grimoire</span><span class="tag">Religious Folklore</span></div>
-        <h2>Codex Gigas</h2>
-        <div class="subtitle">The Devil’s Bible · Knowledge that studies the reader back.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Wondrous Cursed Tool (Grimoire)</span></div>
+        <h2>Codex Gigas</h2><a class="dossier-link" href="../dossiers/e300.html">Full dossier →</a>
+        <div class="subtitle">The Devil’s Bible</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: Every truth learned from the Codex grants the Codex an equal truth about you.</p>
-        <h3>Core Technique — Reciprocal Knowledge</h3>
-        <ul>
-          <li>The reader may ask the book a question concerning curses, barriers, rituals, souls, or history.</li>
-          <li>For each answer, the Codex learns one truth of equal significance about the reader.</li>
-          <li>The book may later exploit learned truths to impose disadvantage, reveal secrets, or bypass protections.</li>
-        </ul>
+        <div class="profile"><b>Mechanical Profile</b><span>+4 to Arcana, History, and Religion checks concerning curses, barriers, vows, or cursed objects</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>The manuscript's immense physical presence, demonic imagery, and centuries of legend accumulated into a knowledge-type cursed object. The dangerous part is not that a devil lives in the book; it is that the book has been treated as though something on the other side of the page is always reading back.</p>
+        <p class="law"><b>Metaphysical Law:</b> Every truth taken from the Codex purchases an equal truth about the reader.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Devil's Index — Action, 2 CE.</b> Study one creature, barrier, cursed tool, or visible technique within 60 ft. Make an Arcana check against the source's CE save DC. On a success, learn <b>two</b> of the following: current CE, CE maximum, highest saving throw, lowest saving throw, damage resistances/immunities, current active technique effects, or barrier HP/AC.</li><li><b>Answer in the Margin — 5 CE, once per long rest.</b> Spend 10 minutes asking one concrete question concerning a curse, ritual, historical sorcerer, barrier, or cursed object. The book returns a truthful answer to the extent that the information exists in the campaign. You gain <b>1 Notice</b>.</li><li><b>Notice.</b> Maximum 3. For each Notice, you suffer a cumulative <b>-1 on saving throws against curses, possession, and fear</b>. As an action, you may willingly reveal a personally meaningful secret aloud to erase 1 Notice.</li><li><b>Page of Repetition — 4 CE.</b> Once per long rest after successfully identifying a technique with Devil's Index, gain advantage on the next saving throw you make against that technique before your next long rest.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>Reciprocal Knowledge.</b> The Codex cannot answer without learning. A reader who refuses to become legible cannot use Answer in the Margin.</div>
+        <div class="note">The book is an intelligence relic first and a combat tool second.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="religious silver judas betrayal coins binding vow">
+    
+    <article class="card" data-tags="religious coins betrayal binding vow silver judas">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade Set</span><span class="tag">30 Coins</span><span class="tag">Religious Legend</span></div>
-        <h2>The Thirty Pieces of Silver</h2>
-        <div class="subtitle">Payment with enough symbolic weight to purchase betrayal itself.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Wondrous Cursed Tool Set (30 Coins)</span></div>
+        <h2>The Thirty Pieces of Silver</h2><a class="dossier-link" href="../dossiers/e301.html">Full dossier →</a>
+        <div class="subtitle">Judas Silver · Set of Thirty</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: Once a price is accepted, the betrayal has already begun.</p>
-        <h3>Core Technique — Price of Treachery</h3>
-        <ul>
-          <li>A coin may be offered as payment for a declared betrayal or broken allegiance.</li>
-          <li>If the recipient willingly accepts, resisting the agreed betrayal becomes increasingly difficult.</li>
-          <li>More coins strengthen the compulsion and broaden what may be “purchased.”</li>
-          <li>All thirty together can form a single catastrophic Binding Vow transaction.</li>
-        </ul>
+        <div class="profile"><b>Mechanical Profile</b><span>30 physical coins · Functions through willing acceptance</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>The individual coins are ordinary enough; the story attached to 'thirty pieces of silver' is not. Betrayal, price, guilt, and the idea that loyalty can be purchased condensed into the set as a contractual cursed technique.</p>
+        <p class="law"><b>Metaphysical Law:</b> A betrayal that accepts a price becomes a binding transaction.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Price of Betrayal.</b> Offer <b>1–10 coins</b> to a creature while stating a specific act of betrayal, broken allegiance, or breach of duty. The technique only activates if the creature knowingly and willingly accepts the coins.</li><li><b>Purchased Treachery.</b> For <b>24 hours</b>, if the recipient knowingly acts against the purchased terms, it takes <b>2d10 psychic damage per coin accepted</b> (maximum 20d10 per breach) and loses <b>1 CE per 2 coins</b> accepted, rounded up. This damage cannot be reduced.</li><li><b>Fulfilled Payment.</b> If the recipient completes the purchased betrayal, the coins become inert until the next dawn and then return to the set.</li><li><b>Thirtyfold Purchase — all 30 coins, once per 30 days.</b> If a creature knowingly accepts the complete set for one stated betrayal, breaking that bargain deals <b>30d10 psychic damage</b>, reduces its maximum HP by the damage taken until a long rest, and prevents it from using a Domain Expansion for <b>24 hours</b>.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>Consent Is the Trigger.</b> The coins do not dominate minds. Their terrifying strength comes from the recipient voluntarily agreeing that loyalty has a price.</div>
+        <div class="note">The set is strongest in political, clan, and underworld play because it turns corrupt bargains into literal Binding Vows.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="mythic arthurian excalibur sword legitimacy king">
+    
+    <article class="card" data-tags="mythic arthurian sword excalibur king legitimacy leadership">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Sword</span><span class="tag">Arthurian Legend</span></div>
-        <h2>Excalibur</h2>
-        <div class="subtitle">A blade whose strength comes from legitimacy, not raw force.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Weapon (Longsword)</span></div>
+        <h2>Excalibur</h2><a class="dossier-link" href="../dossiers/e302.html">Full dossier →</a>
+        <div class="subtitle">The Recognized Blade</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: Authority accepted is stronger than authority seized.</p>
-        <h3>Core Technique — Rightful Hand</h3>
-        <ul>
-          <li>The weapon’s enhancement scales with how many willing allies recognize the wielder’s authority.</li>
-          <li>Commands made while wielding Excalibur may grant allies temporary bonuses if obeyed willingly.</li>
-          <li>If the wielder betrays those who recognize them, the blade’s bonuses collapse until legitimacy is restored.</li>
-        </ul>
+        <div class="profile"><b>Mechanical Profile</b><span>1d8 slashing (versatile 1d10) · +4 to attack and damage rolls</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>Rather than treating Excalibur as a generic holy laser sword, this version weaponizes the centuries-old association between the blade and rightful kingship. Its cursed technique is fueled by recognition freely given by other people.</p>
+        <p class="law"><b>Metaphysical Law:</b> Authority accepted is stronger than authority seized.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Recognized.</b> During a short or long rest, a willing creature may formally recognize the wielder as its leader. You may have up to <b>PB Recognized creatures</b> at once. Recognition can be withdrawn freely.</li><li><b>Authority Aura.</b> While at least 2 Recognized creatures are within 60 ft, gain <b>+1 AC</b>. While at least 4 are within 60 ft, Excalibur deals an additional <b>2d8 radiant damage</b> once per turn. If all PB Recognized creatures are present, they gain <b>+1 to saving throws</b> while within 30 ft of you.</li><li><b>King's Command — Action, 5 CE, once per long rest.</b> Each Recognized creature within 60 ft may immediately use its reaction to move up to its speed without provoking opportunity attacks. Up to <b>two</b> of those creatures may also make one weapon or cursed-tool attack.</li><li><b>Promised Protection.</b> When a Recognized creature within 30 ft takes damage, you may use your reaction and spend <b>2 CE</b> to reduce that damage by <b>4d10</b>.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>Legitimacy Cannot Be Stolen.</b> If the wielder knowingly betrays a Recognized creature for personal gain, all special abilities except the +4 weapon bonus shut down for <b>7 days</b> or until meaningful restitution is accepted by the betrayed creature.</div>
+        <div class="note">This keeps Excalibur centered on consent and leadership, not bloodline.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="religious grail holy rct healing positive energy">
+    
+    <article class="card" data-tags="religious grail rct healing positive energy vessel">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Vessel</span><span class="tag">Religious Legend</span></div>
-        <h2>The Holy Grail</h2>
-        <div class="subtitle">A vessel capable of holding positive energy without destroying itself.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Wondrous Cursed Tool (Vessel)</span></div>
+        <h2>The Holy Grail</h2><a class="dossier-link" href="../dossiers/e303.html">Full dossier →</a>
+        <div class="subtitle">Vessel of Consecrated Reversal</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: What is poured into the Grail may return purified.</p>
-        <h3>Core Technique — Consecrated Reversal</h3>
-        <ul>
-          <li>CE poured into the Grail can be converted into RCE at a steep efficiency loss.</li>
-          <li>The Grail can store positive energy for later use.</li>
-          <li>Once per long rest, it can remove one severe curse, poison, disease, or cursed-energy contamination effect.</li>
-          <li>Overuse risks “purifying” beneficial cursed techniques as well.</li>
-        </ul>
+        <div class="profile"><b>Mechanical Profile</b><span>10 Sanctified Charges maximum</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>The Grail is a vessel whose legend is overwhelmingly about sacred contact, restoration, and impossible grace. In jujutsu terms, its structure has become uniquely tolerant of positive energy: it can hold RCE without being destroyed by it.</p>
+        <p class="law"><b>Metaphysical Law:</b> What enters as cursed energy may leave purified.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Consecrated Reservoir.</b> During a short or long rest, a creature may spend CE into the Grail, converting <b>1 CE into 1 Sanctified Charge</b>. The Grail can accept no more than <b>PB charges per long rest</b> and holds 10.</li><li><b>Healing Draught — Action, 1 charge.</b> A living creature touching the Grail regains <b>20 HP</b>. A Cursed Spirit or other creature harmed by positive energy instead takes <b>4d10 radiant damage</b>.</li><li><b>Restoration — Action, 3 charges.</b> End one of the following on a touched creature: blinded, deafened, paralyzed, poisoned, stunned, or one ongoing non-Special-Grade curse. You may instead repair one damaged limb that has not been removed.</li><li><b>Make Whole — 5 charges, 1 minute.</b> Restore a severed limb, remove one level of exhaustion, or attempt to end a Special Grade curse. For a Special Grade curse, make an Arcana check against the source's CE save DC.</li><li><b>Second Breath — Reaction, 10 charges.</b> When a living creature within 5 ft would fall to 0 HP, it instead falls to <b>1 HP</b>, then regains <b>50 HP</b> and removes all non-permanent limb injuries.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>Vessel of Mercy.</b> The Grail cannot use its positive energy to directly damage living humans. It may harm Cursed Spirits and other beings naturally destroyed by RCE.</div>
+        <div class="note">It does not resurrect the truly dead; it restores a living pattern that still exists.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="mythic norse freyr sword summer autonomous worthy">
+    
+    <article class="card" data-tags="mythic norse sword summer freyr autonomous worthy">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Sword</span><span class="tag">Norse Myth</span></div>
-        <h2>Sword of Summer</h2>
-        <div class="subtitle">Freyr’s self-fighting blade · Worthiness through conduct.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Weapon (Longsword)</span></div>
+        <h2>Sword of Summer</h2><a class="dossier-link" href="../dossiers/e304.html">Full dossier →</a>
+        <div class="subtitle">Freyr’s Self-Fighting Sword</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: The sword fights for the worthy, not merely the strong.</p>
-        <h3>Core Technique — Worthy Hand</h3>
-        <ul>
-          <li>The sword can hover, move, and attack independently beside its attuned wielder.</li>
-          <li>At full synchronization, it gains its own turn immediately after the wielder.</li>
-          <li>Acts of cowardice, betrayal, or abandonment of a declared duty suppress its autonomous abilities.</li>
-          <li>If the wielder willingly gives the sword away, they can never attune to it again.</li>
-        </ul>
+        <div class="profile"><b>Mechanical Profile</b><span>1d10 slashing · +4 to attack and damage rolls · Autonomous movement 60 ft</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>Freyr's sword is remembered as capable of fighting on its own. The jujutsu interpretation turns 'worthiness' into a Binding Vow: the sword will spend its own stored cursed technique only for a wielder who continues to act in accordance with a declared duty.</p>
+        <p class="law"><b>Metaphysical Law:</b> The sword fights for the worthy, not merely the strong.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Self-Fighting Blade.</b> As a bonus action, command the sword to fly up to <b>60 ft</b> and make one attack against a creature within 5 ft of it. Use your CE modifier for the attack and damage rolls if it is better than Strength or Dexterity. The autonomous attack deals <b>2d10 slashing damage</b> before modifiers.</li><li><b>Hero's Oath.</b> At the end of a long rest, declare one concrete duty for the coming day. While you are actively honoring it, the sword's autonomous attack requires <b>no bonus action once per turn</b>, but you must spend <b>2 CE</b> each time it attacks this way.</li><li><b>Interposing Steel — Reaction, 2 CE.</b> If the sword is within 30 ft of you or a creature named in your Hero's Oath, move it up to 30 ft and grant the target <b>+4 AC</b> against one attack.</li><li><b>Summer's Edge — 4 CE, once per turn.</b> On a hit, deal an additional <b>5d8 fire or slashing damage</b>.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>The Gift Cannot Be Reclaimed.</b> If you willingly give permanent ownership of the sword to another creature, you can never attune to or command it again. If you knowingly betray your Hero's Oath, autonomous features shut down until your next long rest.</div>
+        <div class="note">The sword's strongest 'extra action' is paid with both CE and conduct, keeping the self-fighting fantasy without granting a free second character.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="egypt dagger tutankhamun meteor iron star barrier">
+    
+    <article class="card" data-tags="egypt ancient egypt dagger meteor iron barrier star">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Dagger</span><span class="tag">Ancient Egypt</span></div>
-        <h2>Tutankhamun’s Meteoric Iron Dagger</h2>
-        <div class="subtitle">Star-fallen metal forged before ordinary iron belonged to Egypt.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Weapon (Dagger)</span></div>
+        <h2>Tutankhamun’s Meteoric Iron Dagger</h2><a class="dossier-link" href="../dossiers/e305.html">Full dossier →</a>
+        <div class="subtitle">Star-Fallen Iron</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: Matter born outside the world is not fully recognized by the world’s cursed-energy rules.</p>
-        <h3>Core Technique — Star-Fallen Iron</h3>
-        <ul>
-          <li>Barrier reinforcement and CE-hardening are treated as one grade weaker against the blade.</li>
-          <li>The dagger gains advantage on checks made to damage or sever barrier anchors.</li>
-          <li>It does not nullify techniques; it simply interacts with them as if it were partly foreign to the system enforcing them.</li>
-        </ul>
+        <div class="profile"><b>Mechanical Profile</b><span>1d6 piercing · Finesse, Light · +4 to attack and damage rolls</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>The historical blade's meteoritic iron becomes the key jujutsu fact. Its material entered Earth's cursed-energy environment from outside it, so barriers and reinforcement do not fully 'recognize' the metal when deciding what should be stopped.</p>
+        <p class="law"><b>Metaphysical Law:</b> Matter born outside the local cursed-energy ecology is only partially subject to its rules.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Foreign Matter.</b> When attacking a creature whose AC is increased by a Cursed Technique, CE reinforcement, cursed armor, or barrier, ignore up to <b>4 points</b> of that magical/CE-derived AC bonus.</li><li><b>Barrier Shear.</b> The dagger deals an additional <b>3d8 force damage</b> to barriers, shikigami, cursed constructs, and objects created by a Cursed Technique.</li><li><b>Starfall Cut — 3 CE, once per turn.</b> On a hit, deal an additional <b>6d8 force damage</b>. If the target is a barrier or cursed construct, roll those 6d8 as maximum damage instead of rolling.</li><li><b>Unfamiliar Signature.</b> Divination or detection effects trying to identify the dagger's cursed-energy signature make their check at disadvantage.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>No Native Circuit.</b> The dagger cannot store CE and cannot be used as a battery or focus for a Domain. Its anti-barrier qualities come from remaining foreign to the system.</div>
+        <div class="note">It bypasses reinforcement; it does not nullify techniques like the Inverted Spear of Heaven.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="egypt khopesh horus maat chaos transformation order">
+    
+    <article class="card" data-tags="egypt ancient egypt khopesh horus maat order chaos transformation">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Khopesh</span><span class="tag">Ancient Egypt</span></div>
-        <h2>Khopesh of the Two Horizons</h2>
-        <div class="subtitle">Ma’at over Isfet · Order cuts disorder away.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Weapon (Khopesh/Scimitar)</span></div>
+        <h2>Khopesh of the Two Horizons</h2><a class="dossier-link" href="../dossiers/e306.html">Full dossier →</a>
+        <div class="subtitle">Ma’at Over Isfet</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: Chaos may be forced back toward a stable, truthful state.</p>
-        <h3>Core Technique — Ma’at Over Isfet</h3>
-        <ul>
-          <li>Gain Order when protecting allies, countering attacks, or punishing broken vows.</li>
-          <li>Spend Order to resist forced movement, environmental distortion, or unstable transformations.</li>
-          <li>At maximum Order, a successful strike can temporarily strip one altered state: possession, transformation, summoned armor, monstrous form, or similar overlay.</li>
-        </ul>
+        <div class="profile"><b>Mechanical Profile</b><span>1d8 slashing · +4 to attack and damage rolls · Order 0–6</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>This is a jujutsu-era reconstruction built around Egyptian royal and cosmic-order symbolism rather than a claim that one specific museum khopesh possessed supernatural powers. Centuries of ritual association between kingship, Horus, Ma'at, and the defeat of chaos gave the weapon its technique.</p>
+        <p class="law"><b>Metaphysical Law:</b> Disorder can be cut away from the state reality recognizes as true.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Order.</b> Maximum <b>6 Order</b>. Once per round, gain 1 Order when you: succeed on a save against a Cursed Technique; cause a Cursed Technique attack to miss you; or hit a creature currently transformed, possessed, fused, or wearing technique-created armor.</li><li><b>Stabilize — Reaction, 1 Order.</b> Gain <b>+2 AC</b> against one attack or <b>+2 to one saving throw</b> after rolling but before the result is resolved.</li><li><b>Cut the Distortion — 2 Order.</b> On a hit, deal an additional <b>4d8 force damage</b> and end one non-Domain buff or transformation effect with a CE cost of 2 or less.</li><li><b>True Form — 6 Order, Action.</b> Make one weapon attack. On a hit, the target makes a Constitution or Charisma save (its choice) against your Relic DC. On a failure, suppress one possession, body transformation, summoned armor, fusion, alternate form, or similar technique overlay for <b>1 minute</b>. It repeats the save at the end of each of its turns. Special Grade sources make the initial save with advantage.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>Order Must Be Earned.</b> The khopesh begins every combat at 0 Order. The wielder cannot preload it with CE; stability only accumulates by confronting actual disorder.</div>
+        <div class="note">This is deliberately a control/dispel weapon instead of another sun-fire sword.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="egypt wedjat eye horus healing rct protection amulet">
+    
+    <article class="card" data-tags="egypt ancient egypt wedjat horus eye amulet healing rct protection">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Amulet</span><span class="tag">Ancient Egypt</span></div>
-        <h2>Wedjat Eye of Horus</h2>
-        <div class="subtitle">The restored eye · Protection, wholeness, and return from loss.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Wondrous Cursed Tool (Amulet)</span></div>
+        <h2>Wedjat Eye of Horus</h2><a class="dossier-link" href="../dossiers/e307.html">Full dossier →</a>
+        <div class="subtitle">The Restored Eye</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: That which was broken may be restored to its intended whole.</p>
-        <h3>Core Technique — Restored Measure</h3>
-        <ul>
-          <li>The bearer gains improved efficiency when using RCT on others.</li>
-          <li>Once per long rest, the Eye can restore a damaged limb or major bodily injury without the usual penalty.</li>
-          <li>When the wearer would be reduced to 0 HP, the Eye may break one stored “segment” to leave them at 1 HP instead.</li>
-          <li>Its strongest restoration cannot revive the truly dead; it restores what still possesses a valid living pattern.</li>
-        </ul>
+        <div class="profile"><b>Mechanical Profile</b><span>6 Eye Segments · Regains 1d3 expended segments at dawn</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>The Wedjat Eye is already a symbol of healing, protection, restoration, and recovered wholeness. In JJK terms, countless protective amulets acted like tiny low-grade cursed tools; this is the singular original pattern that learned how to force damaged bodies back toward the shape they are supposed to possess.</p>
+        <p class="law"><b>Metaphysical Law:</b> What remains part of a living pattern can be restored toward wholeness.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Protective Sight.</b> Gain <b>+4 to Perception checks</b> relying on sight and advantage on saving throws against being blinded.</li><li><b>Eye of Protection — Reaction, 1 segment.</b> Reduce damage dealt to you or a creature you can see within <b>30 ft</b> by <b>3d10 + PB</b>.</li><li><b>Eye of Restoration — Action, 2 segments.</b> A creature within 5 ft regains <b>4d10 + your CE modifier</b> HP. A wielder with no CE uses Wisdom instead.</li><li><b>Recovered Piece — Action, 3 segments.</b> End one blinded, deafened, poisoned, paralyzed, or stunned condition, or repair one damaged limb.</li><li><b>Whole Eye — Reaction, all 6 segments.</b> When you or a creature within 30 ft would be reduced to 0 HP, it instead remains at <b>1 HP</b>, then heals <b>6d10 HP</b> and removes one limb injury.</li><li><b>RCE Reassembly.</b> A creature capable of RCT may spend <b>3 CE</b> during a short rest to restore 1 expended Eye Segment, once per day.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>63/64ths.</b> The Eye can restore what still has a living pattern, but it cannot create the final missing fraction from nothing: it cannot resurrect a creature that is truly dead.</div>
+        <div class="note">A healing relic with a hard metaphysical ceiling rather than unlimited resurrection.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="modern car porsche james dean little bastard momentum curse vehicle">
+    
+    <article class="card" data-tags="modern vehicle porsche james dean little bastard momentum curse">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Cursed Vehicle</span><span class="tag">Modern Legend</span></div>
-        <h2>Little Bastard</h2>
-        <div class="subtitle">Porsche 550 Spyder · A route that wants to become a fatality report.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Vehicle</span></div>
+        <h2>Little Bastard</h2><a class="dossier-link" href="../dossiers/e308.html">Full dossier →</a>
+        <div class="subtitle">Porsche 550 Spyder · Cursed Vehicle</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: Once momentum becomes fate, stopping is the dangerous choice.</p>
-        <h3>Core Technique — Dead Man’s Route</h3>
-        <ul>
-          <li>The vehicle accumulates Fatal Momentum while traveling at high speed without stopping.</li>
-          <li>Fatal Momentum boosts durability, impact damage, and pursuit speed.</li>
-          <li>Once a destination is declared, probability bends toward keeping the route open.</li>
-          <li>Voluntarily stopping becomes harder as Fatal Momentum rises; a crash releases all accumulated force at once.</li>
-        </ul>
+        <div class="profile"><b>Mechanical Profile</b><span>AC 18 · HP 120 · Damage Threshold 10 · Speed 180 ft · 2 seats · Fatal Momentum 0–6</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>The modern curse is not treated as proof that every story surrounding the car was historical fact. In-world, the repeated association of the car with fatality, wreckage, and inherited bad luck is exactly what created the cursed vehicle after the fact.</p>
+        <p class="law"><b>Metaphysical Law:</b> Once momentum becomes fate, stopping becomes more dangerous than continuing.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Cursed Chassis.</b> Add <b>+4</b> to driving checks made with the vehicle. A creature proficient with land vehicles may use Dexterity + PB + 4.</li><li><b>Fatal Momentum.</b> At the end of a round in which the car moves at least <b>120 ft</b>, gain 1 Fatal Momentum, maximum 6. If it ends a round at 0 speed, all Momentum is lost.</li><li><b>Ram.</b> If the car moves at least 60 ft directly toward a creature or object, the driver may make a vehicle attack. On a hit, deal <b>4d10 + 2d10 per Fatal Momentum</b> bludgeoning damage and knock a Huge-or-smaller creature prone. The car takes half the damage dealt after Damage Threshold.</li><li><b>Dead Man's Route — Action, 4 CE, once per long rest.</b> Declare a destination within <b>5 miles</b>. For 10 minutes, the car ignores nonmagical difficult terrain, has advantage on driving checks, and cannot have its speed reduced below half by an external effect unless the source wins a contested check against the driver's result.</li><li><b>Don't Stop.</b> During Dead Man's Route, voluntarily stopping before reaching the destination requires a Wisdom save with DC <b>12 + current Fatal Momentum</b>. On a failure, the driver must continue moving by the safest available route.</li><li><b>Terminal Wreck.</b> If the car is destroyed while at 4+ Momentum, creatures within 20 ft make a Dexterity save against the driver's Relic DC, taking <b>10d10 force damage</b> on a failure or half on a success.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>The Route Wants Completion.</b> Dead Man's Route gains its reality-bending pathfinding because the driver surrenders the uncomplicated right to stop.</div>
+        <div class="note">The car can be repaired by normal means; a creature may also spend 1 CE and 10 minutes to restore 10 HP to its cursed chassis.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="modern demon core nuclear criticality cursed object amplifier">
+    
+    <article class="card" data-tags="modern history demon core nuclear criticality plutonium amplifier cursed object">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Cursed Object</span><span class="tag">Modern History</span></div>
-        <h2>The Demon Core</h2>
-        <div class="subtitle">Criticality as a cursed-energy law.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Cursed Object</span></div>
+        <h2>The Demon Core</h2><a class="dossier-link" href="../dossiers/e309.html">Full dossier →</a>
+        <div class="subtitle">Criticality Engine</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: The closer the system comes to disaster, the more power it produces.</p>
-        <h3>Core Technique — Criticality</h3>
-        <ul>
-          <li>The Core can amplify CE invested into a technique, barrier, or Domain.</li>
-          <li>Each doubling raises a Criticality score.</li>
-          <li>At high Criticality, checks are required to prevent runaway discharge.</li>
-          <li>Failure releases a Special Grade CE pulse that ignores allegiance and strikes everyone in range.</li>
-        </ul>
-        <div class="callout"><b>Archive Protocol:</b> No activation without multiple barrier-capable sorcerers present.</div>
+        <div class="profile"><b>Mechanical Profile</b><span>Criticality Stage 0–4 · 5-ft operating radius</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>Unlike many ancient relics, the Demon Core did not need millennia of folklore. Two fatal criticality accidents, the terror of invisible radiation, and the symbolic weight of early nuclear weapons loaded a very modern object with concentrated fear. The cursed technique mirrors criticality: power rises fastest at the exact point safety disappears.</p>
+        <p class="law"><b>Metaphysical Law:</b> The closer the system is pushed toward catastrophe, the more violently cursed energy multiplies.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Reflector Assembly.</b> A creature within 5 ft that activates a CE-powered feature may choose Criticality Stage 1–4 before resolving it. The feature receives one benefit based on stage: <b>+2/+4/+8/+12 damage dice</b> of one existing damage type, or <b>+1/+2/+3/+4 to its save DC</b>. A feature with no damage roll or save DC cannot be amplified.</li><li><b>Criticality Check.</b> After the amplified feature resolves, the operator makes a Cursed Energy (Arcana) check, or Intelligence (Arcana) if they have no CE. DC is <b>14 / 18 / 22 / 26</b> for stages 1–4.</li><li><b>Runaway Reaction.</b> On a failed Criticality Check, the Core releases a pulse in a radius of <b>15 ft per stage</b>. Every creature in the area, including the operator, takes <b>4d10 force damage per stage</b>; a Constitution save against the same DC halves the damage for everyone except the operator. The operator automatically takes full damage.</li><li><b>Prompt Criticality.</b> On a natural 1 on the Criticality Check, double the Runaway Reaction damage dice and the Core becomes inert for <b>7 days</b>.</li><li><b>Scram — Reaction.</b> A second creature adjacent to the Core may spend <b>3 CE</b> to give the operator advantage on the Criticality Check. Only one creature can Scram per activation.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>Power Requires Proximity to Failure.</b> The Core cannot provide safe amplification. Any attempt to eliminate the Criticality Check also eliminates the bonus.</div>
+        <div class="note">Jujutsu Headquarters would classify transport of the Core itself as a Special Grade incident.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="slf gauntlets crystal gilta brille exceed charge 168 ce">
+    
+    <article class="card" data-tags="slf inspired weapon gauntlets crystal gilta brille exceed charge cursed energy">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Gauntlets</span><span class="tag">SLF-Inspired</span></div>
-        <h2>Gilta Brille</h2>
-        <div class="subtitle">Brilliant Scorpion Gauntlets · A seven-day cursed-energy capacitor.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Weapon (Paired Gauntlets)</span></div>
+        <h2>Gilta Brille</h2><a class="dossier-link" href="../dossiers/e310.html">Full dossier →</a>
+        <div class="subtitle">Brilliant Scorpion Gauntlets · Crystal-CE Armament</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: Stored cursed energy becomes crystalline violence.</p>
-        <h3>Reservoir</h3>
-        <ul>
-          <li>Maximum capacity: <b>168 Charges</b>.</li>
-          <li>1 CE willingly deposited = 1 Charge.</li>
-          <li>The gauntlets can absorb no more than <b>24 Charges per 24 hours</b>.</li>
-          <li>Stored Charges cannot be withdrawn as CE.</li>
-        </ul>
-        <h3>Crystal Bullet / Growing Up</h3>
-        <p>Fire crystalline seeds into creatures or terrain. Seeds can later erupt for piercing damage, restraint, battlefield control, or mobility.</p>
-        <h3>Exceed Charge: Reject</h3>
-        <p>On a melee hit, discharge the reservoir through the target. Damage scales at <b>1d6 force per stored Charge</b>. A full 168-Charge discharge represents the tool’s true Special Grade output and should carry catastrophic recoil.</p>
+        <div class="profile"><b>Mechanical Profile</b><span>2d8 bludgeoning · +4 to attack and damage rolls · Pair counts as one cursed tool</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>In JJK terms, the 'crystal scorpion' material is not mundane crystal. It is <b>cursed energy that has physically crystallized</b> inside the exoskeleton of an ancient Special Grade scorpion curse. The gauntlets grind, seed, regrow, and explosively discharge that mineralized CE. Their visible crystals are literally solid cursed energy.</p>
+        <p class="law"><b>Metaphysical Law:</b> Cursed energy can be stored as matter, planted as matter, and then forced back into violence.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Crystal Bullet — Action.</b> Make a ranged cursed-tool attack against a creature or surface within <b>120 ft</b>. On a hit, deal <b>4d8 piercing damage</b> and plant one crystallized-CE seed. A creature can contain a maximum number of your seeds equal to your <b>PB</b>.</li><li><b>Growing Up — Bonus Action.</b> Detonate one seed within 120 ft. A creature carrying it makes a Constitution save against your Relic DC, taking <b>5d8 piercing damage</b> on a failure or half on a success. On a failure it is also <b>Restrained</b> by CE crystal. It can use its action to make an Athletics check against your Relic DC, ending the restraint on a success.</li><li><b>Terrain Growth.</b> A seed in terrain may instead create a <b>10-ft crystal formation</b> (AC 18, 40 HP) that provides half cover, or launch a willing adjacent creature up to <b>40 ft</b>; that creature takes no falling damage from the launch.</li><li><b>Unbroken Light Dance — 2 CE, once per turn.</b> When you take the Attack action, make one additional gauntlet attack. If that attack hits a creature carrying a Crystal Bullet, you may trigger one of its seeds immediately without using a bonus action.</li><li><b>Cursed Energy Reservoir.</b> The gauntlets store up to <b>168 Charges</b>. A willing creature touching them may spend CE, adding <b>1 Charge per 1 CE</b>. The gauntlets can absorb no more than <b>24 Charges per 24 hours</b>, regardless of how many creatures contribute. Stored Charges remain until used and can never be withdrawn as CE.</li><li><b>Exceed Charge: Reject.</b> When you hit with a melee gauntlet attack, you may discharge any number of stored Charges. The target takes an additional <b>1d6 force damage per Charge</b>. You then take unavoidable recoil damage equal to <b>1 HP per 2 Charges</b> expended, rounded up.</li><li><b>Crystal Conductor.</b> If the Reject target contains one of your seeds, Reject ignores force resistance and the target makes a Constitution save. On a failure, it is Restrained by explosive crystal until it escapes as described under Growing Up.</li><li><b>Full Reject — 168 Charges.</b> A full discharge deals <b>168d6 force damage</b>. After the attack resolves, you are reduced to <b>1 HP</b> if you have more than 1 HP and automatically suffer a severe injury to the firing arm. This HP loss and injury cannot be prevented, redirected, resisted, or absorbed by temporary HP.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>Seven-Day Capacitor.</b> The 24-Charge daily intake is a physical limit of the crystallized-CE lattice, not an arbitrary cooldown. A complete 168-Charge Full Reject therefore requires at least <b>7 days</b> of charging, and every point invested is genuinely gone from the contributor's CE pool until they recover normally.</div>
+        <div class="note">At maximum charge the gauntlets glow with visible crystalline CE; a competent sorcerer can tell at a glance that the weapon is dangerously saturated.</div>
       </div>
     </article>
-
-    <article class="card" data-tags="slf antinomy greatsword satanel satan armageddon rce ce">
+    
+    <article class="card" data-tags="slf inspired weapon greatsword antinomy satanel satan armageddon rce ce">
       <div class="card-head">
-        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Greatsword</span><span class="tag">SLF-Inspired</span></div>
-        <h2>Antinomy</h2>
-        <div class="subtitle">Greatsword of Gods and Demons · CE and RCE in one impossible circuit.</div>
+        <div class="meta"><span class="tag grade">Special Grade</span><span class="tag">Weapon (Greatsword)</span></div>
+        <h2>Antinomy</h2><a class="dossier-link" href="../dossiers/e311.html">Full dossier →</a>
+        <div class="subtitle">Greatsword of Gods and Demons · Satanel / Satan</div>
       </div>
       <div class="card-body">
-        <p class="rule">Metaphysical Law: Two contradictory energy states may coexist only long enough to destroy something.</p>
-        <h3>Satanel — Negative Circuit</h3>
-        <p>The black form channels ordinary cursed energy and applies Apocalypse Marks.</p>
-        <h3>Satan — Reversed Circuit</h3>
-        <p>The white form internally reverses CE into positive energy and applies Catastrophe Marks.</p>
-        <h3>Armageddon</h3>
-        <ul>
-          <li>Requires <b>5 Apocalypse Marks</b> and <b>5 Catastrophe Marks</b> on the same target.</li>
-          <li>The wielder must complete the activation chant.</li>
-          <li>The marks collapse into one another for a catastrophic finishing strike.</li>
-          <li>Afterward, the wielder suffers severe stat and technique suppression, while Antinomy itself remains weakened for days.</li>
-        </ul>
+        <div class="profile"><b>Mechanical Profile</b><span>3d6 slashing · Heavy, Two-Handed · +4 to attack and damage rolls</span></div>
+        <h3>Jujutsu Origin</h3>
+        <p>Antinomy is built around a contradiction that should be impossible in ordinary jujutsu engineering: one cursed tool houses a negative cursed-energy circuit and a reversed positive-energy circuit. A stabilizing Binding Vow forbids the two currents from occupying the blade simultaneously. The only place they are allowed to coexist is inside a marked target.</p>
+        <p class="law"><b>Metaphysical Law:</b> Negative CE and positive energy may coexist only long enough to annihilate the thing containing both.</p>
+        <h3>Special Grade Technique</h3>
+        <ul><li><b>Satanel — Black Circuit.</b> Antinomy begins in Satanel. Once per turn on a hit, spend <b>2 CE</b> to deal an additional <b>4d10 necrotic damage</b> and place 1 <b>Apocalypse Seal</b> on the target, maximum 5.</li><li><b>Principle of Antinomy — Bonus Action.</b> Invert the weapon's internal circuit, switching between Satanel and Satan. The sword never holds both states at once.</li><li><b>Satan — White Circuit.</b> Once per turn on a hit, spend <b>2 CE</b> to deal an additional <b>4d10 radiant damage</b> and place 1 <b>Catastrophe Seal</b> on the target, maximum 5. Creatures of your choice within <b>10 ft</b> of the struck target make a Strength save against your Relic DC; on a failure they are pushed <b>15 ft</b> and knocked prone. While Satan is active, you have resistance to bludgeoning, piercing, and slashing damage.</li><li><b>Armageddon Requirement.</b> One target must carry <b>5 Apocalypse Seals and 5 Catastrophe Seals</b>. The seals last until the end of combat or until Armageddon is attempted.</li><li><b>Armageddon Chant.</b> Spend your action and bonus action chanting. Your speed becomes <b>0</b> until the start of your next turn and you cannot activate another Cursed Technique, Maximum, Reversal, or Domain during the chant. If incapacitated before your next turn, the chant fails but the seals remain.</li><li><b>Armageddon.</b> On your next turn, make one Antinomy attack against the sealed target with <b>advantage</b>. On a hit, in addition to the weapon's normal damage, deal <b>20d12 radiant + 20d12 necrotic + 10d12 force damage</b>. This damage ignores resistance and immunity to radiant and necrotic damage. An effect that would reduce the Armageddon damage to 0 instead reduces it by half.</li><li><b>Aftermath — 24 Hours.</b> For 24 hours after Armageddon, treat all six of your ability scores as <b>half their normal values</b> for attacks, checks, saves, DCs, and derived statistics. You cannot activate Cursed Techniques, Maximum Techniques, Reversals, Domains, or cursed-tool techniques during this period.</li><li><b>Aftermath — 7 Days.</b> For 7 days, Antinomy loses its +4 bonus and all special abilities and functions as an ordinary greatsword.</li></ul>
+        <div class="vow"><b>Binding Vow / Limitation</b><br><b>Mutual Exclusion.</b> Satanel and Satan may never occupy the blade together. The ten seals move the contradiction into the enemy instead. Armageddon is the one permitted instant where all ten collapse into one point, and the week-long ruin of the weapon is the price that allows it.</div>
+        <div class="note">The sword itself performs the reversal needed for Satan; the wielder does not need to know Reverse Cursed Technique.</div>
       </div>
     </article>
-
-  </section>
+    
+</section>
 </main>
-
-<footer>
-  <div class="wrap">
-    Designed for the JJK 5e homebrew archive. These relics are intentionally stronger and stranger than standard magic items; their balance comes from conditions, vows, costs, recharge structures, and narrative consequences.
-  </div>
-</footer>
-
+<footer><div class="wrap">Special Grade Relic Archive · Mechanical draft for the JJK 5e project. Built to the project's high-power cursed-tool philosophy: strong effects are preserved and balanced through CE costs, setup, Binding Vows, recharge, recoil, and consequences rather than by flattening every relic into ordinary weapon math.</div></footer>
 <script>
 const cards=[...document.querySelectorAll('.card')];
 const search=document.getElementById('search');
 const filters=[...document.querySelectorAll('.filter')];
 let active='all';
-
 function apply(){
-  const q=search.value.trim().toLowerCase();
-  cards.forEach(card=>{
-    const hay=(card.innerText+' '+card.dataset.tags).toLowerCase();
-    const matchText=!q || hay.includes(q);
-    const matchFilter=active==='all' || card.dataset.tags.includes(active);
-    card.classList.toggle('hidden', !(matchText && matchFilter));
-  });
+ const q=search.value.trim().toLowerCase();
+ cards.forEach(c=>{
+   const hay=(c.innerText+' '+c.dataset.tags).toLowerCase();
+   const ok=(!q||hay.includes(q))&&(active==='all'||c.dataset.tags.includes(active));
+   c.classList.toggle('hidden',!ok);
+ });
 }
-search.addEventListener('input', apply);
-filters.forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    active=btn.dataset.filter;
-    filters.forEach(b=>b.classList.toggle('active',b===btn));
-    apply();
-  });
-});
+search.addEventListener('input',apply);
+filters.forEach(b=>b.addEventListener('click',()=>{active=b.dataset.filter;filters.forEach(x=>x.classList.toggle('active',x===b));apply();}));
 </script>
-</body>
-</html>
+</body></html>
