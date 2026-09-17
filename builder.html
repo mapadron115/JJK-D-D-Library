@@ -2199,10 +2199,13 @@ function setBackground(id){
 }
 /* <option> list for a background's granted feat: Innate Technique reuses the
    technique-feat picker; the other four categories draw on GENERAL_FEATS. */
+function bgFeatIneligible(bg){
+  return !!(bg&&hrV()==='rce'&&(bg.featCat==='innate'||bg.featCat==='ce'||bg.featCat==='barrier'));
+}
 function bgFeatOptions(bg, selected){
   if(!bg) return '';
   /* RCE Generation: ineligible for Cursed Energy, Barrier, and Innate Technique feats */
-  if(hrV()==='rce'&&(bg.featCat==='innate'||bg.featCat==='ce'||bg.featCat==='barrier')){
+  if(bgFeatIneligible(bg)){
     return '<option value="">— ineligible (Reverse Cursed Energy Generation) —</option>';
   }
   if(bg.featCat==='innate') return featSelectOptions(selected);
@@ -2266,7 +2269,8 @@ function renderBgDetail(){
     bg.equipment.map(function(e){ return '<li class="small">'+esc(e)+'</li>'; }).join('')+'</ul>'+
     '<p style="margin:8px 0 0"><b>Feature: '+esc(bg.featureName)+'.</b> '+esc(bg.featureText)+'</p></div>';
   html+='<div class="field" style="max-width:420px"><label for="bgFeat">'+esc(bg.featLabel)+'</label>'+
-    '<select id="bgFeat">'+bgFeatOptions(bg,char.backgroundFeat)+'</select><div id="bgFeatNote"></div></div>';
+    '<select id="bgFeat"'+(bgFeatIneligible(bg)?' disabled':'')+'>'+bgFeatOptions(bg,char.backgroundFeat)+'</select><div id="bgFeatNote"></div>'+
+    (bgFeatIneligible(bg)?'<p class="small" style="margin:6px 0 0"><b>Reverse Cursed Energy Generation</b> makes you ineligible for this feat — you gain no background feat. Your auto-granted Reverse Cursed Technique feats appear on your sheet.</p>':'')+'</div>';
   d.innerHTML=html;
   var showNote=function(){
     var n=$('bgFeatNote');
@@ -2289,7 +2293,7 @@ STEP_VALID[6]=function(){
   if(!bg) return {ok:false,msg:'Choose a background to continue.'};
   if(bg.tool&&bg.tool.choice&&!char.backgroundTool)
     return {ok:false,msg:'Choose your background tool proficiency.'};
-  if(!char.backgroundFeat) return {ok:false,msg:'Choose your background feat — '+bg.featLabel+'.'};
+  if(!char.backgroundFeat&&!bgFeatIneligible(bg)) return {ok:false,msg:'Choose your background feat — '+bg.featLabel+'.'};
   if(!char.mindset) return {ok:false,msg:'Choose a mindset to continue.'};
   return {ok:true};
 };
@@ -2721,7 +2725,13 @@ function stepSheet(body){
     else alert('Could not save — browser storage is unavailable or full.');
   });
   $('btnPrint').addEventListener('click',function(){ window.print(); });
-  $('btnNew2').addEventListener('click',function(){ if(confirm('Start a new character? Unsaved changes to this one will be lost.')){ char=blankChar(); startWizard(1); } });
+  $('btnNew2').addEventListener('click',function(){
+    var b=$('btnNew2');
+    if(b.getAttribute('data-armed')==='1'){ char=blankChar(); startWizard(1); return; }
+    b.setAttribute('data-armed','1');
+    b.textContent='⚠ Click again — unsaved changes will be lost';
+    setTimeout(function(){ var bb=$('btnNew2'); if(bb){ bb.removeAttribute('data-armed'); bb.textContent='＋ New character'; } },5000);
+  });
 }
 function techniqueSheetHTML(entry){
   var html='';
@@ -2788,6 +2798,7 @@ function hrSheetDetailsHTML(){
     html+='<p class="small" style="margin:6px 0 0"><b>Auto-granted feats:</b> Reverse Cursed Technique, Cursed Technique Reversal, Reverse Cursed Technique Output (1 RCE counts as 2 CE for these).</p>';
     html+='<p class="small" style="margin:6px 0 0"><b>Reverse Cursed Strike</b> replaces Cursed Strike: on a hit with an unarmed strike or melee weapon attack, spend RCE up to your proficiency bonus to deal +2d6 radiant per RCE.</p>';
     html+=callout('Reversal rendering of the chosen technique — work with the GM until codex reversal content exists.');
+    if(hrCEMax()<=0) html+=callout('Your RCE pool equals your normal CE maximum. The Heavenly Restriction class grants no Reserve Die, so with no levels in a CE-granting class (and no CE bonus) the pool is 0 and RCE features have nothing to spend — multiclass into a CE class, add a CE bonus (Step 8), or set a pool with your GM.');
   }
   if(v==='limited-ce'){
     var L=o['limited-ce']||{}, rows=[];
