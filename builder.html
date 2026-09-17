@@ -80,6 +80,7 @@ h1 .amp{color:var(--red)}
 .opt-card.is-selected{border:2px solid var(--red);background:var(--card);box-shadow:0 2px 0 rgba(179,58,43,.25)}
 .opt-card h4{font-family:var(--serif);font-size:1.15rem;margin:0 0 6px}
 .opt-card .tagline{font-size:.85rem;color:var(--ink2);font-style:italic;margin:0 0 10px}
+.opt-card .mech{font-size:.82rem;color:var(--ink);margin:0;border-top:1px solid var(--line);padding-top:8px}
 .opt-card dl{margin:0;font-size:.82rem}
 .opt-card dt{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-top:8px}
 .opt-card dd{margin:0;color:var(--ink)}
@@ -1506,8 +1507,8 @@ function stepBackground(body){
   }).join('')+'</div><div id="bgDetail"></div>';
   html+='<h3>Mindset</h3><p class="small">In sorcery your mindset affects your power. When you use your inspiration, you gain the stated effect.</p>'+
     '<div class="opt-grid">'+window.MINDSETS.map(function(m){
-    return '<div class="opt-card'+(char.mindset===m.id?' is-selected':'')+'" data-ms="'+m.id+'" tabindex="0" role="button" aria-pressed="'+(char.mindset===m.id)+'" title="'+esc(m.effect)+'">'+
-      '<span class="check">✦</span><h4>'+esc(m.name)+'</h4><p class="tagline">'+esc(m.flavor)+'</p></div>';
+    return '<div class="opt-card'+(char.mindset===m.id?' is-selected':'')+'" data-ms="'+m.id+'" tabindex="0" role="button" aria-pressed="'+(char.mindset===m.id)+'">'+
+      '<span class="check">✦</span><h4>'+esc(m.name)+'</h4><p class="tagline">'+esc(m.flavor)+'</p><p class="mech"><b>Inspiration:</b> '+esc(m.effect)+'</p></div>';
   }).join('')+'</div>';
   body.innerHTML=html;
   body.querySelectorAll('[data-bg]').forEach(function(c){
