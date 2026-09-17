@@ -859,6 +859,24 @@ function ceMax(){
   return r.dieMax + r.sum + ceMod + (parseInt(char.ceBonus,10)||0);
 }
 function isHR(){ return clsAt(1)==='Heavenly Restriction'; }
+/* walking speed: ancestry blurb base, heritage traits override */
+function walkSpeed(){
+  var sp = 30, m;
+  var A = ANCESTRIES[char.ancestry], H = A ? A.heritages[char.heritage] : null;
+  if(A && A.blurb && (m = A.blurb.match(/(\d+)-ft (?:walking )?speed|(\d+)-ft walk/i))) sp = parseInt(m[1]||m[2],10);
+  var traits = (H && H.traits) ? H.traits : [];
+  traits.forEach(function(t){ var b=t.match(/base walking speed is (\d+) ?feet/i); if(b) sp=parseInt(b[1],10); });
+  traits.forEach(function(t){ var b=t.match(/your speed becomes (\d+) ?feet/i); if(b) sp=parseInt(b[1],10); });
+  return sp;
+}
+/* base AC the builder can know: unarmored + ancestry adjustments (armor/shields/techniques adjust at the table) */
+function baseAC(){
+  var ab = abilitiesAt(char.level);
+  var ac = 10 + mod(ab.DEX||10), note = 'unarmored';
+  if(char.ancestry==='cursed-spirit' && char.heritage==='womb'){ ac = 14 + mod(ab.CON||10); note = 'Hard Shell, unarmored'; }
+  if(char.ancestry==='cursed-corpse' && char.heritage==='hard-shell'){ ac += 1; note += ' + Integrated Armor'; }
+  return {ac:ac, note:note};
+}
 /* multiclassing: which class was taken at character level l */
 function clsAt(l){
   var c=(char.classLevels||{})[l] || char.cls || null;
@@ -2015,8 +2033,11 @@ function sheetHTML(){
     html+='</div>';
   })();
   /* vitals */
+  var acInfo=baseAC(), spd=walkSpeed();
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Vitals</h3><div class="vitals">'+
     '<div><b>'+hp+'</b><span>Max HP ('+classesTaken().map(function(c){ return 'd'+CLASSES[c].hd; }).join(' / ')+')</span></div>'+
+    '<div><b>'+acInfo.ac+'</b><span>AC ('+esc(acInfo.note)+')</span></div>'+
+    '<div><b>'+spd+' ft</b><span>Speed</span></div>'+
     (isHR()?'<div><b>—</b><span>Max CE (Pure Body)</span></div>'
       :'<div><b>'+ce+'</b><span>Max CE Reserve</span></div>'+
        '<div><b>'+(char.ceAbility||'&mdash;')+'</b><span>CE ability ('+((ceMod==null)?'&mdash;':(ceMod>=0?'+':'')+ceMod)+')</span></div>'+
@@ -2024,7 +2045,8 @@ function sheetHTML(){
        '<div><b>'+(8+P+ceMod)+'</b><span>CE save DC</span></div>')+
     '<div><b>+'+P+'</b><span>Proficiency</span></div>'+
     '</div>'+
-    (isHR()?'':'<p class="small">Max CE = starting class max Reserve Die ('+esc(clsAt(1))+') + per-level gains + CE modifier once + '+(char.ceBonus||0)+' bonus.</p>')+'</div>';
+    (isHR()?'':'<p class="small">Max CE = starting class max Reserve Die ('+esc(clsAt(1))+') + per-level gains + CE modifier once + '+(char.ceBonus||0)+' bonus.</p>')+
+    '<p class="small">AC is your unarmored base — worn armor, shields, and technique features adjust it at the table.</p></div>';
   /* class features */
   html+=classFeaturesSheetHTML();
   /* technique */
