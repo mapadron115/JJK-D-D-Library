@@ -860,13 +860,25 @@ function ceMax(){
 }
 function isHR(){ return clsAt(1)==='Heavenly Restriction'; }
 /* walking speed: ancestry base + heritage overrides + class bonuses.
-   Scout Unparalleled Movement +10 and HR Unarmored Movement +20 are explicit in
-   the feature text; their per-level table scaling is not in the data, so the
-   sheet shows the base bonus and flags table scaling for the table. */
+   Scaling tables from the V6 reference (JJK 5e V.6.pdf):
+   Scout Unparalleled Movement — +10 (1-4), +15 (5-8), +20 (9-12),
+   +25 (13-16), +30 (17-19), +35 (20).
+   HR Unarmored Movement — +20 (1-3), +30 (4-6), +40 (7-9), +50 (10-12),
+   +60 (13-15), +70 (16-18), +80 (19-20); unarmored & no shield. */
+function scoutSpeedBonus(lv){
+  if(lv>=20) return 35; if(lv>=17) return 30; if(lv>=13) return 25;
+  if(lv>=9) return 20; if(lv>=5) return 15; return 10;
+}
+function hrSpeedBonus(lv){
+  if(lv>=19) return 80; if(lv>=16) return 70; if(lv>=13) return 60;
+  if(lv>=10) return 50; if(lv>=7) return 40; if(lv>=4) return 30; return 20;
+}
 function classSpeedInfo(){
   var bonus = 0, notes = [];
-  if(classLevelCount('Scout', char.level) >= 1){ bonus += 10; notes.push('Scout +10'); }
-  if(classLevelCount('Heavenly Restriction', char.level) >= 1){ bonus += 20; notes.push('HR +20, unarmored & no shield'); }
+  var sc = classLevelCount('Scout', char.level);
+  if(sc >= 1){ var b = scoutSpeedBonus(sc); bonus += b; notes.push('Scout +'+b); }
+  var hr = classLevelCount('Heavenly Restriction', char.level);
+  if(hr >= 1){ var h = hrSpeedBonus(hr); bonus += h; notes.push('HR +'+h+', unarmored & no shield'); }
   return {bonus:bonus, notes:notes};
 }
 function walkSpeed(){
@@ -2062,7 +2074,7 @@ function sheetHTML(){
     '</div>'+
     (isHR()?'':'<p class="small">Max CE = starting class max Reserve Die ('+esc(clsAt(1))+') + per-level gains + CE modifier once + '+(char.ceBonus||0)+' bonus.</p>')+
     '<p class="small">AC is your best unarmored formula — worn armor, shields, and technique features adjust it at the table.</p>'+
-    '<p class="small">Scout and Heavenly Restriction speed bonuses above are the base values; their level-table increases apply at the table.</p></div>';
+    '<p class="small">Speed includes class bonuses per the V6 class tables (Scout Unparalleled Movement, HR Unarmored Movement).</p></div>';
   /* class features */
   html+=classFeaturesSheetHTML();
   /* technique */
