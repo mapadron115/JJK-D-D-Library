@@ -264,7 +264,7 @@ window.CLASS_FEATURES = {
   {
     "level": 15,
     "name": "Close Bond",
-    "text": ""
+    "text": "[INVENTED — licensed fill; V6 supplies no text] At 15th level, your bond with your shikigami transcends command. While your companion is manifested, you can see through its eyes and hear through its ears while it remains within 120 feet of you, and it understands any language you speak.\n\nWhen your companion takes damage, you can use your reaction to spend cursed energy — up to your proficiency bonus — forming a ward of shared cursed energy around it. The damage is reduced by 2 for each cursed energy spent.\n\nOnce per long rest, when your companion would be reduced to 0 hit points, it instead drops to 1 hit point."
   },
   {
     "level": 17,

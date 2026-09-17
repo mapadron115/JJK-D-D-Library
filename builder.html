@@ -86,6 +86,8 @@ h1 .amp{color:var(--red)}
 .opt-card dd{margin:0;color:var(--ink)}
 .opt-card .check{position:absolute;top:10px;right:12px;font-family:var(--serif);color:var(--red);font-size:1.2rem;display:none}
 .opt-card.is-selected .check{display:block}
+.opt-card.is-disabled{opacity:.55;cursor:not-allowed}
+.opt-card.is-disabled:hover{border-color:var(--line2)}
 /* ── banners ─────────────────────────────── */
 .banner{border:1px solid var(--line2);border-left:5px solid var(--olive);background:var(--card2);padding:12px 18px;margin:16px 0;font-size:.9rem}
 .banner.warn{border-left-color:var(--red)}
@@ -441,16 +443,16 @@ img{max-width:100%;height:auto}
 </div></footer>
 
 <!-- cache-bust: bump ?v= on the script tags below whenever data/*.js or assets/*.js changes -->
-<script src="data/codex.js?v=20260911g"></script>
+<script src="data/codex.js?v=20260917a"></script>
 <script src="data/codex_role_fixups.js?v=20260911a"></script>
 <script src="data/codex_inner_circle.js?v=20260911h"></script>
-<script src="data/library.js?v=20260911g"></script>
-<script src="data/technique_feats.js?v=20260911f"></script>
+<script src="data/library.js?v=20260917a"></script>
+<script src="data/technique_feats.js?v=20260917a"></script>
 <script src="data/codex_feats.js?v=20260911g"></script>
-<script src="data/class_features.js?v=20260911a"></script>
+<script src="data/class_features.js?v=20260917a"></script>
 <script src="data/backgrounds.js?v=20260913a"></script>
 <script src="data/mindsets.js?v=20260913a"></script>
-<script src="data/general_feats.js?v=20260913a"></script>
+<script src="data/general_feats.js?v=20260917a"></script>
 <script>
 /* ════════════════════════════════════════════════════════════════
    Ritual Archive — Character Builder (IL-RA-02)
@@ -530,6 +532,39 @@ var ANCESTRIES = {
         traits:['Ability Score Increase. Strength and Constitution each increase by 2; your speed becomes 35 feet.',
                 'Athletics proficiency; double your jumping distance; count as one size larger for carrying, pushing, dragging, and lifting.',
                 'Uncanny Endurance. When you take damage, use your reaction to reduce it by 1d12 + your Constitution modifier.']}
+    }
+  },
+  'sumerian': {
+    name:'Sumerian', blurb:'From a different world with different knowledge of jujutsu. Rolloluca powers your techniques, and every Sumerian bears a third eye. Humanoid; Medium (Deskunte may be Large); 30-ft walk; Common and Sumerian. Choose one of the three tribes.',
+    heritages:{
+      'deskunte':{ name:'Deskunte',
+        asi:'+2 to one ability score and +1 to a different score (your choice); size Medium or Large.',
+        pick:{counts:[2,1]},
+        hpPerLevel:1,
+        traits:['Ability Score Increase. Increase one ability score of your choice by 2 and a different score by 1.',
+                'Creature Type. You are Humanoid.',
+                'Size. Your size can be Medium or Large (choose below).',
+                'Third Eye. You gain proficiency in Perception, and the distance you can sense cursed energy from increases by 50 ft.',
+                'Tough Body. Your hit point maximum increases by 1, and increases by 1 again whenever you gain a level.',
+                'Savage Attacks. When you score a critical hit with a melee weapon attack, you can roll one of the weapon\u2019s damage dice one additional time and add it to the extra damage of the critical hit.',
+                'Warrior Training. You have proficiency with light armor and medium armor.']},
+      'rumel':{ name:'Rumel',
+        asi:'+2 to one ability score and +1 to a different score (your choice); all traits automatic.',
+        pick:{counts:[2,1]},
+        traits:['Ability Score Increase. Increase one ability score of your choice by 2 and a different score by 1.',
+                'Creature Type. You are Humanoid. Your size is Medium.',
+                'Third Eye. You gain proficiency in Perception, and the distance you can sense cursed energy from increases by 50 ft.',
+                'Worshipper of Kalyan. Unintelligent curses will not attack you unless provoked. When a curse dies within 1 mile of you, your third eye weeps, alerting you to its death. You have advantage on Religion or Arcana checks related to cursed spirits and kalyans.',
+                'Divine Blessing. When you make an ability check or saving throw, you can roll a d4 and add the number rolled. You can use this feature a number of times equal to your proficiency bonus per long rest.']},
+      'shaama':{ name:'Shaama',
+        asi:'+2 to one ability score and +1 to a different score (your choice); one cantrip, two skills, one artisan\u2019s tool.',
+        pick:{counts:[2,1]},
+        traits:['Ability Score Increase. Increase one ability score of your choice by 2 and a different score by 1.',
+                'Creature Type. You are Humanoid. Your size is Medium.',
+                'Third Eye. You gain proficiency in Perception, and the distance you can sense cursed energy from increases by 50 ft.',
+                'Innate Cursed Technique. You know one cantrip of your choice that fits with your Technique (spellcasting ability: Wisdom or Charisma, your choice). Requires GM approval \u2014 the GM may veto a cantrip that does not fit.',
+                'Refined Study. You gain proficiency in two skills of your choice.',
+                'Tool Proficiency. You gain proficiency with one artisan\u2019s tool of your choice.']}
     }
   },
   'cursed-spirit': {
@@ -690,17 +725,22 @@ function featSelectOptions(selected){
   var entries = chosenTechEntries();
   var tfeats = techFeatsForAll();
   var html = '<option value="">— choose a feat —</option>';
-  entries.forEach(function(entry){
-    var ef = techFeatsFor(entry);
-    if(ef.length){
-      html += '<optgroup label="'+esc(tName(entry))+' — technique feats">' +
-        ef.map(function(f){
-          var label = f.name + (f.prereq ? ' ('+f.prereq+')' : '');
-          return '<option value="'+esc(f.name)+'"'+(selected===f.name?' selected':'')+
-            ' title="'+esc((f.prereq?f.prereq+'. ':'')+f.text)+'">'+esc(label)+'</option>';
-        }).join('') + '</optgroup>';
-    }
-  });
+  /* RCE Generation: ineligible for Innate Technique feats (and CE/Barrier feats) */
+  if(hrV()!=='rce'){
+    entries.forEach(function(entry){
+      var ef = techFeatsFor(entry);
+      if(ef.length){
+        html += '<optgroup label="'+esc(tName(entry))+' — technique feats">' +
+          ef.map(function(f){
+            var label = f.name + (f.prereq ? ' ('+f.prereq+')' : '');
+            return '<option value="'+esc(f.name)+'"'+(selected===f.name?' selected':'')+
+              ' title="'+esc((f.prereq?f.prereq+'. ':'')+f.text)+'">'+esc(label)+'</option>';
+          }).join('') + '</optgroup>';
+      }
+    });
+  }else{
+    html += '<optgroup label="Ineligible"><option value="" disabled>Reverse Cursed Energy Generation — Innate Technique feats unavailable</option></optgroup>';
+  }
   html += '<optgroup label="General feats">' +
     PRESET_FEATS.map(function(f){
       return '<option value="'+esc(f)+'"'+(selected===f?' selected':'')+'>'+esc(f)+'</option>';
@@ -793,6 +833,12 @@ function blankChar(){
     background:'', backgroundFeat:'', backgroundTool:'', backgroundEquipment:[],
     mindset:'',
     feats:[], tools:[], notes:'', ceBonus:0,
+    hrVariant:'',  // Heavenly Restriction package: '' = Pure Body default (set in step 3)
+    hrOpts:{},     // per-variant options, keyed by variant id
+    hrAsi:{},      // Limited-CE bonus ASI grants: {grantKey: ability} e.g. {row1:'STR'}
+    specialTrait:'', // '' | 'perfect-form' | 'cursed-lover' | 'living-prison'
+    lover:{},      // Cursed Lover companion: {name, technique, restsLeft}
+    carvedTechnique:'', // Living Prison: GM-tracked carved feature record
     v: SCHEMA_VERSION
   };
 }
@@ -822,6 +868,7 @@ function upsertChar(c){
 function abilitiesAt(level){
   var ab = Object.assign({}, char.abilities);
   if(!ab.STR) ABILITIES.forEach(function(a){ ab[a]=10; });
+  ab=creationAbilityMods(ab); /* variant decreases, variant/trait increases — level-1-effective */
   for(var L=2;L<=level;L++){
     if(hasASIAt(L) && char.asi[L] && (char.asiMode||{})[L]!=='feat') char.asi[L].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
   }
@@ -839,37 +886,236 @@ function asiFeatEntries(){
 function hpMax(){
   var ab = Object.assign({}, char.abilities);
   if(!ab.STR) ABILITIES.forEach(function(a){ ab[a]=10; });
+  ab=creationAbilityMods(ab);
   var total = 0;
+  /* Limited Physical Potential (row 1): CON modifier never added to HP max */
+  var noConHP = hrV()==='limited-physical' && (hrOpts()['limited-physical']||{}).row1;
   for(var l=1;l<=char.level;l++){
     var C = CLASSES[clsAt(l)]; if(!C) continue;
     if(hasASIAt(l) && char.asi[l] && (char.asiMode||{})[l]!=='feat') char.asi[l].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
-    var cm = mod(ab.CON||10), ld = char.levelData[l]||{};
+    var cm = noConHP?0:mod(ab.CON||10), ld = char.levelData[l]||{};
     var die = (l===1) ? C.hd : ((ld.hpMode==='roll') ? (ld.hpDie||0) : avgDie(C.hd));
     total += die + cm;
   }
   var _ah=(char.ancestry&&char.heritage&&ANCESTRIES[char.ancestry])?ANCESTRIES[char.ancestry].heritages[char.heritage]:null;
   if(_ah&&_ah.hpPerLevel) total+=_ah.hpPerLevel*char.level;
+  total+=hrFlatHP()+traitFlatHP();
   return total;
 }
 function ceReserveSum(){
-  if(clsAt(1)==='Heavenly Restriction') return 0; /* Pure Body: no reserve at all */
+  if(hrV()==='pure-body') return {dieMax:0,sum:0}; /* Pure Body: no reserve at all */
   var sum = 0, dieMax = 0;
   for(var l=1;l<=char.level;l++){
     var C = CLASSES[clsAt(l)]; if(!C||!C.reserve) continue; /* HR levels add no CE */
     var ld = char.levelData[l]||{};
     if(l===1) dieMax = C.reserve; /* max Reserve Die of the starting class */
-    else sum += (ld.ceMode==='roll') ? (ld.ceDie||0) : C.fixed;
+    else sum += ceGainAtLevel(l,C,ld);
   }
   return {dieMax:dieMax, sum:sum};
 }
 function ceMax(){
-  if(clsAt(1)==='Heavenly Restriction') return 0;
+  if(clsAt(1)==='Heavenly Restriction') return hrCEMax();
   var r = ceReserveSum();
   var ab = abilitiesAt(char.level);
   var ceMod = char.ceAbility ? mod(ab[char.ceAbility]||10) : 0;
   return r.dieMax + r.sum + ceMod + (parseInt(char.ceBonus,10)||0);
 }
 function isHR(){ return clsAt(1)==='Heavenly Restriction'; }
+/* ── Heavenly Restriction variant packages (Creeps & Curses) ──
+   'pure-body' is the legacy Toji path: every existing isHR() behavior is
+   preserved exactly when it (or no variant) is selected. All other variants
+   key off hrV() so Pure Body paths stay untouched. */
+var HR_VARIANTS = {
+  'pure-body':{ name:'Pure Body', short:'Pure Body',
+    tag:'The classic Toji path \u2014 absolute physicality, zero cursed energy.',
+    points:['No CE ability, CE Reserve, Innate Technique, Domain, RCT, Maximum Output, or Black Flash.',
+            'Ability ceiling 24 + class level. Class features grant automatic physical increases.'] },
+  'rce':{ name:'Reverse Cursed Energy Generation', short:'RCE Generation',
+    tag:'Your body produces only positive energy \u2014 devastating to cursed spirits, unusable for normal CE features.',
+    points:['Your CE pool becomes a Reverse Cursed Energy (RCE) pool of equal maximum.',
+            'Cannot use features requiring CE; ineligible for Cursed Energy, Barrier, and Innate Technique feats.',
+            'Auto-granted: Reverse Cursed Technique, Cursed Technique Reversal, Reverse Cursed Technique Output (1 RCE counts as 2 CE for these).',
+            'You gain the Reversal of your innate technique instead of its normal features (reversal rendering is GM-adjudicated).',
+            'Cursed Strike becomes Reverse Cursed Strike: spend RCE up to your proficiency bonus on a hit, +2d6 radiant per RCE.'] },
+  'limited-ce':{ name:'Limited Cursed Energy', short:'Limited CE',
+    tag:'Less cursed energy, more body. Choose how deep the limitation goes \u2014 rows 1\u20134 stack.',
+    points:['Each limitation grants physical increases (bonus ASI and/or HP per level).',
+            'Variant-granted ASI cannot push a score above 24 (26 from 6th level).',
+            'The final row (no CE use at all) removes your Innate Technique \u2014 take Physical/Skill feats at technique milestones and bonus Physical feats at 6th, 10th, and 14th instead.'] },
+  'limited-physical':{ name:'Limited Physical Potential', short:'Limited Physical',
+    tag:'A frail or broken body feeding an overflowing CE reserve.',
+    points:['Each physical limitation grants bonus CE; each also gives +30 ft range on one technique and +1 effective CE modifier for DCs/attacks.',
+            'Ability scores cannot drop below 4. Limb loss: +5 CE per limb (max 4).',
+            'All five limitations: choose one technique to maintain from 600 miles away.',
+            'Vulnerability to all damage but psychic is extreme \u2014 take only with GM discussion.'] },
+  'healing':{ name:'Healing Incompatibility', short:'Healing Incompatible',
+    tag:'No technique can knit your wounds \u2014 but you are brutally hard to put down.',
+    points:['Cannot regain HP or remove conditions via cursed techniques or RCT; healing attempts waste the CE and deal necrotic damage equal to the CE spent.',
+            'Hit dice heal double. Advantage on death saves. +2 max HP per level.',
+            'When reduced to 0 HP, drop to 1 HP instead \u2014 1/long rest (2 at 5th, 4 at 11th).',
+            'Mundane healing (healer\u2019s kits, medicine, rests, hit dice) still works.'] },
+  'overgen':{ name:'Overgeneration', short:'Overgeneration',
+    tag:'Cursed energy pours off you endlessly \u2014 and every curse for 120 ft can smell it.',
+    points:['Regain 1 CE per hour while not incapacitated. On a short rest, convert hit dice to CE (CE modifier per die).',
+            'Every cursed spirit within 120 ft automatically senses you \u2014 stealth against curses is impossible.',
+            'A curse starting its turn within 60 ft saves DC 20 WIS or is charmed (attacks you, ignores others) for 1 minute; fail by 5+ and it frenzies with advantage against you. Applies to allied spirits too.'] },
+  'evo':{ name:'Evolutionary Constraint', short:'Evolutionary',
+    tag:'A Cursed Womb\u2019s growing pains \u2014 weak now, reborn stronger at 8th and 11th. Cursed Womb ancestry only.',
+    gate:'womb',
+    points:['Choose constraints at creation; each pairs with a True Rebirth benefit unlocking at 8th or 11th level.',
+            'First growth pangs at 8th (Harder Shell, Strongest Constitution, Talented Sprinter, Greater ASI); true rebirth at 11th (Powerful Affinity, Powerful CE, Mobility, Large Body).',
+            'Your GM may alter thresholds, trigger rebirth at story moments, or trade a constraint for its benefit at level 1.'] }
+};
+var HR_VARIANT_ORDER = ['pure-body','rce','limited-ce','limited-physical','healing','overgen','evo'];
+function hrV(){ return isHR() ? (char.hrVariant||'pure-body') : null; }
+function hrOpts(){ return char.hrOpts||{}; }
+function hrVariantDef(v){ return HR_VARIANTS[v||'pure-body']||HR_VARIANTS['pure-body']; }
+/* does this character have a usable CE pool? (false = Pure Body / fully CE-less) */
+function hasCEPool(){
+  var v=hrV(); if(!v) return true;
+  if(v==='pure-body') return false;
+  if(v==='limited-ce' && (hrOpts()['limited-ce']||{}).row5) return false;
+  return true;
+}
+function cePoolLabel(){ return hrV()==='rce' ? 'RCE' : 'CE'; }
+/* Evolutionary Constraint: racial ASI suppressed while the constraint holds (pre-8th) */
+function evoNoASI(){ return hrV()==='evo' && (hrOpts()['evo']||{}).noASI && char.level<8; }
+/* Limited Physical Potential: +1 effective CE modifier per limitation (DCs/attacks) */
+function hrCEModBonus(){
+  if(hrV()!=='limited-physical') return 0;
+  var P=hrOpts()['limited-physical']||{}, n=0;
+  ['row1','row2','row3','row4','row5'].forEach(function(r){ if(P[r]) n++; });
+  return n;
+}
+/* flat max-HP adjustments from the HR variant (per-level traits handled in hpMax) */
+function hrFlatHP(){
+  var v=hrV(), o=hrOpts(), n=0, L=char.level;
+  if(v==='limited-ce'){ var Lc=o['limited-ce']||{}; if(Lc.row2) n+=1*L; if(Lc.row5) n+=2*L; }
+  if(v==='healing') n+=2*L;
+  if(v==='evo'){ var E=o['evo']||{}; if(E.weakCon) n+=(L<8?-1:1)*E.weakCon*L; /* Weak Constitution → Strongest Constitution at 8th */ }
+  return n;
+}
+/* ── Special Traits (Creeps & Curses): Dormant 1\u20135, Stirring 6\u201313, Awakened 14+ ── */
+var SPECIAL_TRAITS = {
+  'perfect-form':{ name:'Perfect Form', tag:'The perfect body for jujutsu. High-power games only \u2014 requires GM approval. Not available to Cursed Corpses.',
+    stages:{
+      dormant:['Extra Limbs: technique action cost \u22121 step (Full Turn > Action > Bonus Action); +1 melee attack as part of the Attack action.',
+               'Strong Body: +1 max HP per level. One size category larger (does not stack with other size increases).',
+               'Natural Weapons: unarmed strikes deal 1d8 bludgeoning, slashing, or piercing.',
+               'Extra Eyes: advantage on Wisdom (Perception) checks that rely on sight.'],
+      stirring:['Extra Limbs: cost \u22121 step (down to Reaction); ignore one Chanting limitation; +1 melee attack as part of the Attack action.',
+               'Powerful Body (replaces Strong Body): +2 max HP per level; STR, DEX, CON +4 and their maximums +4.',
+               'Natural Weapons: unarmed strikes deal 1d12; an unarmed strike in the Attack action lets you attempt a grapple as a bonus action.'],
+      awakened:['Extra Limbs: cost \u22121 step (down to Free Action); ignore all Chanting limitations; +2 melee attacks as part of the Attack action; advantage on checks to grapple or resist grapples.',
+               'War God\u2019s Body (replaces Powerful Body): +4 max HP per level; STR, DEX, CON +4 again and their maximums +4 again.',
+               'Natural Weapons: unarmed strikes deal 2d8.'] } },
+  'cursed-lover':{ name:'Cursed Lover', tag:'A loved one cursed by your grief haunts you \u2014 and fights for you. High-power games only \u2014 requires GM approval.',
+    stages:{
+      dormant:['Bound Love: a Vengeful Spirit bound to you. Summon as an action for 3 CE; command as a bonus action. If killed, you cannot resummon until you complete 1d4 long rests.',
+               'Innate Technique: if the lover had one in life, they keep it (counts as your level); otherwise the GM designs a unique feature.'],
+      stirring:['Mutual Union: the spirit adds your proficiency bonus to AC; as a reaction spend 1 CE to add your PB to one of its saves.',
+               'Vengeful Love: its Grudge marks grant +1 critical range for 1 minute against the marked creature (stacking); if it is killed you gain +2 critical range against its killer for 1 minute.',
+               'Basic Cursed Energy Manipulation: the spirit gains Cursed Strike and Cursesight (no Awakened Understanding benefits).'],
+      awakened:['Perfect Bond: you share CE with your spirit. Once per turn you can use its Cursed Technique (PB uses per long rest).',
+               'Shared Understanding: the spirit gains one Cursed Feat it qualifies for, plus ability points equal to 2\u00D7 your PB (no score above 22).'] } },
+  'living-prison':{ name:'Living Prison', tag:'A supremely powerful vessel-body, built to contain. High-power games only \u2014 requires GM approval.',
+    stages:{
+      dormant:['Oddly Sturdy: +2 max HP per level; walking speed 40 ft unless already higher.',
+               'Strong Body: STR, DEX, CON +2 (maximum 22); resistance to poison damage, advantage on saves vs. the poisoned condition.',
+               'Prison: reduce DCs to consume or absorb cursed objects by PB + CON; if you fail the save you spit the object out harmlessly.'],
+      stirring:['Bizarrely Sturdy (replaces Oddly Sturdy): +4 max HP per level; speed 40 ft unless higher; Dash as a bonus action.',
+               'Powerful Body: STR, DEX, CON +2 again (maximum 24); poison resistance and immunity to the poisoned condition.',
+               'Ultimate Prison: +PB+CON to checks/saves against being taken over; raise take-over DCs against you by PB+CON (all possession methods).'],
+      awakened:['Strangely Sturdy (replaces Bizarrely Sturdy): +6 max HP per level; speed 50 ft unless higher; Dash as a bonus action.',
+               'Carved Technique: after 6 months as a reincarnated sorcerer\u2019s vessel (incarnating at least once per month), one of their Innate Technique features is carved into you (GM-tracked campaign procedure).'] } }
+};
+var TRAIT_ORDER = ['perfect-form','cursed-lover','living-prison'];
+function traitStage(){
+  if(!char.specialTrait) return null;
+  return char.level>=14 ? 'awakened' : char.level>=6 ? 'stirring' : 'dormant';
+}
+function traitStageName(){ var s=traitStage(); return s==='awakened'?'Awakened (14+)':s==='stirring'?'Stirring (6\u201313)':'Dormant (1\u20135)'; }
+function traitFlatHP(){
+  var t=char.specialTrait, s=traitStage(), n=0, L=char.level;
+  if(t==='perfect-form') n+=(s==='awakened'?4:s==='stirring'?2:1)*L;
+  if(t==='living-prison') n+=(s==='awakened'?6:s==='stirring'?4:2)*L;
+  return n;
+}
+function traitMaxBonus(){
+  var t=char.specialTrait, s=traitStage();
+  if(t==='perfect-form') return s==='awakened'?8:s==='stirring'?4:0;
+  if(t==='living-prison') return s==='stirring'||s==='awakened'?4:2;
+  return 0;
+}
+function abilityCeiling(){ return (isHR()?24+char.level:20)+traitMaxBonus(); }
+/* level-1-effective ability adjustments: variant decreases, variant bonus ASI,
+   trait increases. Applied before level-up ASIs in both abilitiesAt and hpMax. */
+function creationAbilityMods(ab){
+  if(hrV()==='limited-physical'){
+    var d=(hrOpts()['limited-physical']||{}).dec||{};
+    ['STR','DEX','CON'].forEach(function(a){ if(d[a]) ab[a]=Math.max(4,(ab[a]||10)-d[a]); });
+  }
+  var ha=char.hrAsi||{};
+  hrAsiGrants().forEach(function(g){ var a=ha[g.k]; if(a&&ab[a]!=null) ab[a]+=g.n; });
+  /* evoNoASI: applyAncestry() already suppressed the racial ASI — nothing to subtract here */
+  var t=char.specialTrait, s=traitStage();
+  if(t==='perfect-form'){ var pf=s==='awakened'?8:(s==='stirring'?4:0); if(pf){ ab.STR+=pf; ab.DEX+=pf; ab.CON+=pf; } }
+  if(t==='living-prison'&&s){ var lp=(s==='stirring'||s==='awakened')?4:2; ab.STR+=lp; ab.DEX+=lp; ab.CON+=lp; }
+  return ab;
+}
+/* per-level CE gain honoring the Limited-CE row-2 rule (+1 CE per 2 levels) */
+function ceGainAtLevel(l,C,ld){
+  if(hrV()==='limited-ce' && (hrOpts()['limited-ce']||{}).row2) return (l%2===0)?1:0;
+  return (ld.ceMode==='roll')?(ld.ceDie||0):C.fixed;
+}
+/* HR-variant CE maximum. Pure Body (and fully CE-less) have no pool at all. */
+function hrCEMax(){
+  var v=hrV(), o=hrOpts(), r=ceReserveSum();
+  var ab=abilitiesAt(char.level);
+  var ceMod=char.ceAbility?mod(ab[char.ceAbility]||10):0;
+  var bonus=parseInt(char.ceBonus,10)||0;
+  if(v==='pure-body') return 0;
+  if(v==='limited-ce'){
+    var L=o['limited-ce']||{};
+    if(L.row5) return 0; /* possesses ordinary CE but cannot utilize it */
+    var m=L.row1?0:ceMod;
+    if(L.row2) return r.dieMax+Math.floor(char.level/2)+m+bonus;
+    return r.dieMax+r.sum+m+bonus;
+  }
+  var base=r.dieMax+r.sum+ceMod+bonus;
+  if(v==='limited-physical'){
+    var P=o['limited-physical']||{}, conMod=mod(ab.CON||10);
+    if(P.row1) base+=conMod;
+    if(P.row2){ var dec=P.dec||{}; base+=Math.floor(((dec.STR||0)+(dec.DEX||0)+(dec.CON||0))/2); }
+    if(P.row3) base+=5*((P.arms||0)+(P.legs||0));
+    if(P.row4) base+=8;
+    if(P.row5) base+=12;
+  }
+  if(v==='evo'){
+    var E=o['evo']||{}, cm=ceMod;
+    if(E.weakCE) cm=(char.level>=11)?2*ceMod:0; /* Powerful CE (11th): modifier counts double */
+    base=r.dieMax+r.sum+cm+bonus;
+  }
+  return base;
+}
+/* ancestry-granted proficiencies for sheet display */
+var SKILL_LIST=['Acrobatics','Animal Handling','Arcana','Athletics','Deception','History','Insight','Intimidation','Investigation','Medicine','Nature','Perception','Performance','Persuasion','Religion','Sleight of Hand','Stealth','Survival'];
+var ARTISAN_TOOLS=["Alchemist's supplies","Brewer's supplies","Calligrapher's supplies","Carpenter's tools","Cartographer's tools","Cobbler's tools","Cook's utensils","Glassblower's tools","Jeweler's tools","Leatherworker's tools","Mason's tools","Painter's supplies","Potter's tools","Smith's tools","Tinker's tools","Weaver's tools","Woodcarver's tools"];
+function ancestrySkillProfs(){
+  var out=[];
+  if(char.ancestry==='sumerian'){
+    out.push('Perception (Third Eye)');
+    var sk=((char.ancestryPicks||{}).shaamaSkills)||[];
+    sk.forEach(function(s){ if(s&&out.indexOf(s)<0) out.push(s+' (Shaama)'); });
+  }
+  return out;
+}
+function ancestryToolProfs(){
+  var out=[], p=char.ancestryPicks||{};
+  if(char.ancestry==='sumerian'&&char.heritage==='deskunte') out.push('Light armor','Medium armor (Warrior Training)');
+  if(p.shaamaTool) out.push(p.shaamaTool+' (Shaama)');
+  return out;
+}
 /* walking speed: ancestry base + heritage overrides + class bonuses.
    Scaling tables from the V6 reference (JJK 5e V.6.pdf):
    Scout Unparalleled Movement — +10 (1-4), +15 (5-8), +20 (9-12),
@@ -899,8 +1145,26 @@ function walkSpeed(){
   var traits = (H && H.traits) ? H.traits : [];
   traits.forEach(function(t){ var b=t.match(/base walking speed is (\d+) ?feet/i); if(b) sp=parseInt(b[1],10); });
   traits.forEach(function(t){ var b=t.match(/your speed becomes (\d+) ?feet/i); if(b) sp=parseInt(b[1],10); });
+  /* HR variant speed adjustments (before class bonuses) */
+  var v=hrV(), o=hrOpts();
+  if(v==='limited-physical'){
+    var P=o['limited-physical']||{};
+    if(P.legs) sp-=10*P.legs; /* missing legs */
+    if(P.row4) sp=0;
+  }
+  if(v==='evo'){
+    var E=o['evo']||{};
+    if(char.level>=8&&E.slow) sp+=(E.slowAmount||5);      /* Talented Sprinter replaces Slow */
+    else if(E.slow) sp-=(E.slowAmount||5);
+    if(E.sedentary&&char.level<11) sp=20;                 /* Sedentary sets base speed */
+    if(char.level>=11&&E.sedentary) sp=sp>40?sp+10:40;     /* Mobility replaces Sedentary */
+  }
   sp += classSpeedInfo().bonus;
-  return sp;
+  if(v==='limited-physical'&&(o['limited-physical']||{}).row4) return 0; /* speed 0 regardless of bonuses */
+  /* Special Trait speed floors */
+  var t=char.specialTrait, s=traitStage();
+  if(t==='living-prison'&&s) sp=Math.max(sp, s==='awakened'?50:40);
+  return Math.max(0,sp);
 }
 /* base AC the builder can know: best of the applicable unarmored formulas
    (armor/shields/techniques adjust at the table) */
@@ -909,6 +1173,13 @@ function baseAC(){
   var dex = mod(ab.DEX||10), con = mod(ab.CON||10);
   var best = {ac: 10 + dex, note: 'unarmored'};
   function consider(ac, note){ if(ac > best.ac) best = {ac:ac, note:note}; }
+  /* Evolutionary Constraint: Soft Shell replaces Unarmored Defense; Harder Shell at 8th/15th */
+  if(hrV()==='evo'&&(hrOpts()['evo']||{}).softShell){
+    var _con=mod(abilitiesAt(char.level).CON||10);
+    if(char.level>=15) return {ac:10+pb(char.level)+2*_con, note:'Harder Shell, unarmored (reborn, 15+)'};
+    if(char.level>=8) return {ac:10+pb(char.level)+_con, note:'Harder Shell, unarmored (reborn)'};
+    return {ac:10+Math.max(0,_con), note:'Soft Shell, unarmored (no Unarmored Defense)'};
+  }
   if(classLevelCount('Juggernaut', char.level) >= 1) consider(10 + dex + con, 'Juggernaut Unarmored Defense');
   if(classLevelCount('Heavenly Restriction', char.level) >= 1) consider(10 + dex + con, 'HR Supernatural Resilience');
   if(char.ancestry==='cursed-spirit' && char.heritage==='womb') consider(14 + con, 'Hard Shell, unarmored');
@@ -1182,16 +1453,25 @@ STEP_VALID[1]=function(){
 };
 
 /* ═══════════ STEP 2 — ANCESTRY ═══════════ */
+/* Variant/trait legality after ancestry or heritage changes */
+function sanitizeAfterAncestryChange(){
+  if(hrV()==='evo'&&!(char.ancestry==='cursed-spirit'&&char.heritage==='womb')){
+    char.hrVariant='pure-body'; char.hrOpts={}; char.hrAsi={};
+  }
+  if(char.specialTrait==='perfect-form'&&char.ancestry==='cursed-corpse') char.specialTrait='';
+}
 function stepAncestry(body){
-  var html='<h2>Step 2 — Ancestry</h2><p class="sub">Every sorcerer is born of something. Humans choose a heritage; cursed spirits choose what kind of curse they are; vessels choose an incarnation; corpses choose a frame.</p>';
+  var html='<h2>Step 2 — Ancestry</h2><p class="sub">Every sorcerer is born of something. Humans choose a heritage; Sumerians choose a tribe; cursed spirits choose what kind of curse they are; vessels choose an incarnation; corpses choose a frame.</p>';
   html+='<div class="seg" id="ancSeg">'+
     '<button type="button" class="seg-btn'+(char.ancestry==='human'?' is-active':'')+'" data-a="human">Human</button>'+
+    '<button type="button" class="seg-btn'+(char.ancestry==='sumerian'?' is-active':'')+'" data-a="sumerian">Sumerian</button>'+
     '<button type="button" class="seg-btn'+(char.ancestry==='cursed-spirit'?' is-active':'')+'" data-a="cursed-spirit">Cursed Spirit</button>'+ '<button type="button" class="seg-btn'+(char.ancestry==='cursed-vessel'?' is-active':'')+'" data-a="cursed-vessel">Cursed Vessel</button>'+ '<button type="button" class="seg-btn'+(char.ancestry==='cursed-corpse'?' is-active':'')+'" data-a="cursed-corpse">Cursed Corpse</button></div>';
   html+='<div id="heritGrid"></div><div id="heritDetail"></div>';
   body.innerHTML=html;
   body.querySelectorAll('#ancSeg .seg-btn').forEach(function(b){
     b.addEventListener('click',function(){
       char.ancestry=b.getAttribute('data-a'); char.heritage=''; char.ancestryPicks={}; char.abilities={}; char.abilityBase={};
+      sanitizeAfterAncestryChange();
       renderStep();
     });
   });
@@ -1211,7 +1491,7 @@ function renderHeritages(){
   }).join('')+'</div>';
   g.innerHTML=html;
   g.querySelectorAll('.opt-card').forEach(function(c){
-    var pick=function(){ char.heritage=c.getAttribute('data-h'); char.ancestryPicks={}; char.abilities={}; char.abilityBase={}; renderStep(); };
+    var pick=function(){ char.heritage=c.getAttribute('data-h'); char.ancestryPicks={}; char.abilities={}; char.abilityBase={}; sanitizeAfterAncestryChange(); renderStep(); };
     c.addEventListener('click',pick);
     c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
   });
@@ -1226,11 +1506,66 @@ function renderHeritages(){
       var _hr=$('hatedRace');
       if(_hr) _hr.addEventListener('input',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.hatedRace=e.target.value; });
     }
+    if(char.ancestry==='sumerian'&&char.heritage==='deskunte'){
+      var _sz=((char.ancestryPicks||{}).deskunteSize)||'Medium';
+      d.innerHTML+='<p class="small" style="margin-top:8px"><b>Size:</b> <span class="seg" id="dszSeg" style="display:inline-flex">'+
+        '<button type="button" class="seg-btn'+(_sz==='Medium'?' is-active':'')+'" data-sz="Medium">Medium</button>'+
+        '<button type="button" class="seg-btn'+(_sz==='Large'?' is-active':'')+'" data-sz="Large">Large</button></span></p>';
+      d.querySelectorAll('#dszSeg .seg-btn').forEach(function(b){
+        b.addEventListener('click',function(){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.deskunteSize=b.getAttribute('data-sz'); renderStep(); });
+      });
+    }
+    if(char.ancestry==='sumerian'&&char.heritage==='shaama'){
+      var _sp=char.ancestryPicks||{};
+      var _cant=_sp.shaamaCantrip||'', _gmAppr=!!_sp.shaamaCantripGM, _cast=_sp.shaamaCast||'WIS';
+      if(!_sp.shaamaCast){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaCast='WIS'; }
+      var _sk=[_sp.shaamaSkills&&_sp.shaamaSkills[0]||'', _sp.shaamaSkills&&_sp.shaamaSkills[1]||''];
+      var _tool=_sp.shaamaTool||'';
+      var skOpts=function(cur,other){
+        return '<option value="">\u2014 choose \u2014</option>'+SKILL_LIST.map(function(s){
+          var dis=(s==='Perception'||s===other);
+          return '<option value="'+s+'"'+(cur===s?' selected':'')+(dis?' disabled':'')+'>'+s+(s==='Perception'?' (already from Third Eye)':'')+'</option>';
+        }).join('');
+      };
+      d.innerHTML+='<div class="banner" style="margin-top:10px"><span class="bk">\u2756 Shaama choices</span>'+
+        '<div class="field" style="margin-top:6px"><label for="shmCantrip"><b>Cantrip</b> <span class="small">(must fit your Technique)</span></label>'+
+        '<input type="text" id="shmCantrip" value="'+esc(_cant)+'" placeholder="e.g. Light, Minor Illusion" style="max-width:260px"></div>'+
+        '<p class="small"><label><input type="checkbox" id="shmGM"'+(_gmAppr?' checked':'')+'> GM approved this cantrip</label> <span class="small">\u2014 the GM may veto a cantrip that does not fit the character\u2019s Technique.</span></p>'+
+        '<div class="grid2"><div class="field"><label for="shmSk0"><b>Skill proficiency</b> (1 of 2)</label><select id="shmSk0">'+skOpts(_sk[0],_sk[1])+'</select></div>'+
+        '<div class="field"><label for="shmSk1"><b>Skill proficiency</b> (2 of 2)</label><select id="shmSk1">'+skOpts(_sk[1],_sk[0])+'</select></div></div>'+
+        '<div class="grid2"><div class="field"><label for="shmTool"><b>Artisan\u2019s tool proficiency</b></label><select id="shmTool"><option value="">\u2014 choose \u2014</option>'+
+        ARTISAN_TOOLS.map(function(t){ return '<option'+(_tool===t?' selected':'')+'>'+t+'</option>'; }).join('')+'</select></div>'+
+        '<div class="field"><label><b>Spellcasting ability</b></label><span class="seg" id="shmCastSeg" style="display:inline-flex">'+
+        '<button type="button" class="seg-btn'+(_cast==='WIS'?' is-active':'')+'" data-ca="WIS">Wisdom</button>'+
+        '<button type="button" class="seg-btn'+(_cast==='CHA'?' is-active':'')+'" data-ca="CHA">Charisma</button></span></div></div></div>';
+      var _bind=function(id,fn){ var el=$(id); if(el) el.addEventListener('change',fn); };
+      _bind('shmCantrip',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaCantrip=e.target.value; });
+      var _gm=$('shmGM'); if(_gm) _gm.addEventListener('change',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaCantripGM=e.target.checked; });
+      var _skFn=function(){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaSkills=[$('shmSk0').value,$('shmSk1').value]; renderStep(); };
+      _bind('shmSk0',_skFn); _bind('shmSk1',_skFn);
+      _bind('shmTool',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaTool=e.target.value; });
+      d.querySelectorAll('#shmCastSeg .seg-btn').forEach(function(b){
+        b.addEventListener('click',function(){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaCast=b.getAttribute('data-ca'); renderStep(); });
+      });
+    }
   }else d.innerHTML='';
 }
 STEP_VALID[2]=function(){
   if(!char.ancestry) return {ok:false,msg:'Choose an ancestry to continue.'};
   if(!char.heritage) return {ok:false,msg:'Choose a heritage to continue.'};
+  /* Sumerian picks */
+  if(char.ancestry==='sumerian'){
+    var p=char.ancestryPicks||{};
+    if(char.heritage==='deskunte'&&!p.deskunteSize) p.deskunteSize='Medium'; /* default */
+    if(char.heritage==='shaama'){
+      if(!p.shaamaCantrip) return {ok:false,msg:'Name your Shaama cantrip.'};
+      if(!p.shaamaCantripGM) return {ok:false,msg:'Confirm GM approval for your Shaama cantrip.'};
+      if(!(p.shaamaSkills||[]).length||!(p.shaamaSkills||[])[1]||p.shaamaSkills[0]===p.shaamaSkills[1])
+        return {ok:false,msg:'Choose two different Shaama skills.'};
+      if(!p.shaamaTool) return {ok:false,msg:'Choose an artisan tool for Shaama.'};
+      if(!p.shaamaCast) return {ok:false,msg:'Choose your Shaama spellcasting ability.'};
+    }
+  }
   return {ok:true};
 };
 function ancestryBonuses(){
@@ -1267,15 +1602,14 @@ function stepClass(body){
       var wasHR=(clsAt(1)==='Heavenly Restriction');
       char.cls=card.getAttribute('data-c');
       char.classLevels[1]=char.cls; ensureClassLevels();
-      if(isHR()){ char.ceAbility=''; char.techniques=[];
-        /* Pure Body has no technique: drop ASI feats that belong to a technique, keep general feats */
-        if(char.asiFeat && window.TECHNIQUE_FEATS){
-          var allTFeats={};
-          Object.keys(window.TECHNIQUE_FEATS).forEach(function(k){ (window.TECHNIQUE_FEATS[k]||[]).forEach(function(f){ allTFeats[f.name]=1; }); });
-          Object.keys(char.asiFeat).forEach(function(L){
-            if(allTFeats[char.asiFeat[L]]){ delete char.asiFeat[L]; if((char.asiMode||{})[L]==='feat') delete char.asiMode[L]; }
-          });
-        } }
+      if(char.cls==='Heavenly Restriction' && !char.hrVariant) char.hrVariant='pure-body';
+      sanitizeAfterAncestryChange(); /* evo requires Cursed Womb regardless of class-change order */
+      if(isHR()){
+        /* CE-less packages (Pure Body, fully CE-less Limited CE) have no CE ability or technique */
+        if(!hasCEPool()){ char.ceAbility=''; char.techniques=[]; }
+        /* Pure Body, fully CE-less, and RCE packages cannot hold technique feats — keep general feats */
+        if(!hasCEPool()||(char.hrVariant||'pure-body')==='rce') dropTechniqueFeats();
+      }
       if(wasHR!==isHR()){ char.levelData={}; } /* CE structure changed */
       renderStep();
     };
@@ -1283,33 +1617,312 @@ function stepClass(body){
     card.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
   });
   var ex=$('classExtra');
+  /* build the complete section HTML first, assign once — appending with innerHTML+=
+     would destroy listeners already wired on the earlier fragments */
+  var extraHTML='';
   if(char.cls==='Heavenly Restriction'){
-    ex.innerHTML='<div class="banner warn"><span class="bk">❖ Pure Body</span>'+
-      '<p><b>Heavenly Restriction means no CE ability, no CE Reserve, no Innate Technique, no Domain, no RCT, no Maximum Output, no Black Flash.</b> '+
-      'CE drain and recovery do nothing to you. Later steps will skip technique selection and CE rolls; the sheet will show your body, not a reserve.</p>'+
-      '<p class="small">Ability maximum: 24 + class level (25 at level 1, 44 at level 20). Class features grant automatic Strength/Dexterity/Constitution increases — those live in the class rules, not this builder.</p></div>';
+    extraHTML=hrVariantPickerHTML();
+    if(hasCEPool()) extraHTML+='<div style="margin-top:12px">'+ceAbilitySegHTML()+'</div>';
   }else if(char.cls){
-    ex.innerHTML='<div class="field" style="max-width:420px"><label>Cursed Energy ability</label>'+
-      '<div class="seg" id="ceSeg">'+
-      '<button type="button" class="seg-btn'+(char.ceAbility==='WIS'?' is-active':'')+'" data-ce="WIS">Wisdom</button>'+
-      '<button type="button" class="seg-btn'+(char.ceAbility==='CHA'?' is-active':'')+'" data-ce="CHA">Charisma</button></div>'+
-      '<p class="small">Per the Field Guide: choose Wisdom or Charisma when you first gain CE. CE attack = proficiency + CE modifier; CE save DC = 8 + proficiency + CE modifier.</p></div>';
-    ex.querySelectorAll('#ceSeg .seg-btn').forEach(function(b){
-      b.addEventListener('click',function(){ char.ceAbility=b.getAttribute('data-ce'); renderStep(); });
+    extraHTML=ceAbilitySegHTML();
+  }
+  /* Special Trait picker: optional, any class, high-power games only */
+  extraHTML+=specialTraitPickerHTML();
+  ex.innerHTML=extraHTML;
+  wireHrVariantPicker(ex);
+  wireCeSeg(ex);
+  wireSpecialTraitPicker(ex);
+}
+/* Cursed Energy ability picker (shared by normal classes and HR variants with a CE pool) */
+function ceAbilitySegHTML(){
+  return '<div class="field" style="max-width:420px"><label>Cursed Energy ability</label>'+
+    '<div class="seg" id="ceSeg">'+
+    '<button type="button" class="seg-btn'+(char.ceAbility==='WIS'?' is-active':'')+'" data-ce="WIS">Wisdom</button>'+
+    '<button type="button" class="seg-btn'+(char.ceAbility==='CHA'?' is-active':'')+'" data-ce="CHA">Charisma</button></div>'+
+    '<p class="small">Per the Field Guide: choose Wisdom or Charisma when you first gain CE. CE attack = proficiency + CE modifier; CE save DC = 8 + proficiency + CE modifier.</p></div>';
+}
+function wireCeSeg(ex){
+  ex.querySelectorAll('#ceSeg .seg-btn').forEach(function(b){
+    b.addEventListener('click',function(){ char.ceAbility=b.getAttribute('data-ce'); renderStep(); });
+  });
+}
+/* drop ASI feats that belong to an innate technique (used when CE/technique access is lost) */
+function dropTechniqueFeats(){
+  if(char.asiFeat && window.TECHNIQUE_FEATS){
+    var allTFeats={};
+    Object.keys(window.TECHNIQUE_FEATS).forEach(function(k){ (window.TECHNIQUE_FEATS[k]||[]).forEach(function(f){ allTFeats[f.name]=1; }); });
+    Object.keys(char.asiFeat).forEach(function(L){
+      if(allTFeats[char.asiFeat[L]]){ delete char.asiFeat[L]; if((char.asiMode||{})[L]==='feat') delete char.asiMode[L]; }
     });
   }
 }
+/* ── Heavenly Restriction variant picker (Step 3) ── */
+function hrVariantPickerHTML(){
+  var v=char.hrVariant||'pure-body';
+  var html='<h3>Restriction package</h3><p class="small">Creeps &amp; Curses variants. <b>Pure Body</b> is the classic Toji path and the default \u2014 selecting it keeps every existing behavior unchanged. Packages replace one another: a creature can only ever hold one Heavenly Pact.</p>';
+  html+='<div class="opt-grid">'+HR_VARIANT_ORDER.map(function(k){
+    var d=HR_VARIANTS[k];
+    var gated=k==='evo'&&!(char.ancestry==='cursed-spirit'&&char.heritage==='womb');
+    return '<div class="opt-card'+(v===k?' is-selected':'')+(gated?' is-disabled':'')+'" data-hrv="'+k+'" tabindex="0" role="button" aria-pressed="'+(v===k)+'">'+
+      '<span class="check">\u2726</span><h4>'+esc(d.name)+'</h4><p class="tagline">'+esc(d.tag)+'</p>'+
+      (gated?'<p class="small"><b>Requires the Cursed Womb heritage.</b></p>':'')+'</div>';
+  }).join('')+'</div>';
+  var d=hrVariantDef(v);
+  html+='<div class="banner" style="margin-top:10px"><span class="bk">\u2756 '+esc(d.name)+'</span><ul style="margin:6px 0 0;padding-left:1.3em">'+
+    d.points.map(function(p){ return '<li class="small">'+esc(p)+'</li>'; }).join('')+'</ul></div>';
+  if(v==='pure-body'){
+    html+='<div class="banner warn"><span class="bk">\u2756 Pure Body</span>'+
+      '<p><b>Heavenly Restriction means no CE ability, no CE Reserve, no Innate Technique, no Domain, no RCT, no Maximum Output, no Black Flash.</b> '+
+      'CE drain and recovery do nothing to you. Later steps will skip technique selection and CE rolls; the sheet will show your body, not a reserve.</p>'+
+      '<p class="small">Ability maximum: 24 + class level (25 at level 1, 44 at level 20). Class features grant automatic Strength/Dexterity/Constitution increases \u2014 those live in the class rules, not this builder.</p></div>';
+  }
+  html+=hrVariantOptsHTML(v);
+  return html;
+}
+function hrVariantOptsHTML(v){
+  var o=(char.hrOpts||{})[v]||{};
+  if(v==='limited-ce'){
+    var rows=[
+      ['row1','No CE modifier added to CE max','+2 ASI'],
+      ['row2','Only +1 CE per 2 levels (instead of normal gains)','+2 ASI, +1 HP per level'],
+      ['row3','Cannot utilize Basic CE Manipulation','+4 ASI'],
+      ['row4','Cannot see Cursed Spirits normally','+4 ASI'],
+      ['row5','Cannot utilize Cursed Energy in any way','+14 ASI, +2 HP per level; no Innate Technique; Physical feat at 6th, 10th, 14th']
+    ];
+    var html='<div class="banner" style="margin-top:10px"><span class="bk">\u2756 CE limitations</span><p class="small">Rows 1\u20134 stack. The final row cannot combine with rows 1\u20133 (it may combine with row 4). Bonus ASI is assigned in Step 4.</p>';
+    rows.forEach(function(r){
+      var k=r[0];
+      var dis=(k==='row5'&&(o.row1||o.row2||o.row3))||((k==='row1'||k==='row2'||k==='row3')&&o.row5);
+      html+='<p class="small" style="margin:4px 0"><label><input type="checkbox" data-lce="'+k+'"'+(o[k]?' checked':'')+(dis?' disabled':'')+'> <b>'+esc(r[1])+'</b> \u2014 '+esc(r[2])+'</label></p>';
+    });
+    return html+'</div>';
+  }
+  if(v==='limited-physical'){
+    var P=(char.hrOpts||{})['limited-physical']||{};
+    var prows=[
+      ['row1','Do not add CON modifier to HP max','+CON modifier CE'],
+      ['row2','Decrease STR, DEX, CON (1\u20136 each, min 4)','+1 CE per 2 ASI lost'],
+      ['row3','Born without limbs (specify below)','+5 CE per limb'],
+      ['row4','Walking speed 0','+8 CE'],
+      ['row5','Vulnerability to all damage except psychic','+12 CE']
+    ];
+    var html='<div class="banner" style="margin-top:10px"><span class="bk">\u2756 Physical limitations</span><p class="small">Rows stack. Each limitation also grants <b>+30 ft range</b> on one technique and <b>+1 effective CE modifier</b> for DCs/attacks (both applied on the sheet).</p>';
+    prows.forEach(function(r){
+      var k=r[0];
+      var dis=(k==='row4'&&(P.legs||0)>=2);
+      html+='<p class="small" style="margin:4px 0"><label><input type="checkbox" data-lp="'+k+'"'+(P[k]?' checked':'')+(dis?' disabled':'')+'> <b>'+esc(r[1])+'</b> \u2014 '+esc(r[2])+'</label>'+
+        (dis?'<span class="small"> (both legs already missing \u2014 no double-dip)</span>':'')+'</p>';
+    });
+    if(P.row2){
+      var dec=P.dec||{};
+      html+='<div class="grid2"><div class="field"><label>STR decrease (0\u20136)</label><input type="number" min="0" max="6" data-lpdec="STR" value="'+(dec.STR||0)+'" style="width:80px"></div>'+
+        '<div class="field"><label>DEX decrease (0\u20136)</label><input type="number" min="0" max="6" data-lpdec="DEX" value="'+(dec.DEX||0)+'" style="width:80px"></div>'+
+        '<div class="field"><label>CON decrease (0\u20136)</label><input type="number" min="0" max="6" data-lpdec="CON" value="'+(dec.CON||0)+'" style="width:80px"></div></div>';
+    }
+    if(P.row3){
+      html+='<div class="grid2"><div class="field"><label>Arms missing (0\u20132)</label><input type="number" min="0" max="2" data-lplimb="arms" value="'+(P.arms||0)+'" style="width:80px"></div>'+
+        '<div class="field"><label>Legs missing (0\u20132)</label><input type="number" min="0" max="2" data-lplimb="legs" value="'+(P.legs||0)+'" style="width:80px"></div></div>'+
+        '<p class="small">Each missing leg reduces walking speed by 10 ft. A missing arm cannot wield two-handed weapons or two-weapon fight (prosthetics restore function but not the CE).</p>';
+    }
+    var selRows=prows.filter(function(r){ return P[r[0]]; });
+    if(selRows.length){
+      var techs=getTechniques();
+      html+='<p class="small" style="margin:10px 0 4px"><b>+30 ft range assignments</b> \u2014 one technique per limitation'+(techs.length?'':' (choose techniques in Step 5, then return here)')+':</p>';
+      selRows.forEach(function(r){
+        var cur=(P.range||{})[r[0]]; cur=(cur==null?'':cur);
+        html+='<div class="field" style="max-width:420px"><label>'+esc(r[1])+' \u2192 +30 ft on</label><select data-lprange="'+r[0]+'"><option value="">\u2014 choose \u2014</option>'+
+          techs.map(function(t,i){ return '<option value="'+i+'"'+(String(cur)===String(i)?' selected':'')+'>'+esc(tName(t))+'</option>'; }).join('')+'</select></div>';
+      });
+      if(selRows.length===5){
+        var m600=(P.mile600==null?'':P.mile600);
+        html+='<div class="field" style="max-width:420px"><label><b>All five limitations:</b> maintain one technique from 600 miles</label><select data-lp600><option value="">\u2014 choose \u2014</option>'+
+          techs.map(function(t,i){ return '<option value="'+i+'"'+(String(m600)===String(i)?' selected':'')+'>'+esc(tName(t))+'</option>'; }).join('')+'</select></div>';
+      }
+    }
+    return html+'</div>';
+  }
+  if(v==='evo'){
+    var E=(char.hrOpts||{})['evo']||{};
+    var cons=[
+      ['softShell','Soft Shell','AC = 10 + CON modifier (min +0) while not wearing armor; no Unarmored Defense.','Harder Shell \u2014 8th: AC = 10 + PB + CON \u00B7 15th: 10 + PB + 2\u00D7CON'],
+      ['weakCon','Weak Constitution','HP max \u2212(1\u20133 \u00D7 level) \u2014 choose severity below.','Strongest Constitution \u2014 8th: penalty ends, +1\u20133 \u00D7 level'],
+      ['lackingAffinity','Lacking Affinity','No Cursed Energy Affinity healing at 5th level.','Powerful Affinity \u2014 11th: spend CE up to CE modifier, regain 10 HP per CE (bonus action / reaction to damage)'],
+      ['noASI','No ASI','You do not gain your racial ASI.','Greater ASI \u2014 from 8th: an ASI becomes +3 to one score, +1 to three scores, or +2 and +1'],
+      ['weakCE','Weak CE','Do not add your CE modifier to total CE.','Powerful CE \u2014 11th: add twice your CE modifier to total CE'],
+      ['slow','Slow','Walking speed \u22125 or \u221210 ft \u2014 choose below.','Talented Sprinter \u2014 8th: walking speed +5 or +10 ft'],
+      ['sedentary','Sedentary','Walking speed becomes 20 ft.','Mobility \u2014 11th: speed 40 ft (or +10 ft if higher); 20 ft swim and fly (hover)'],
+      ['smallBody','Small Body','Size Small; disadvantage on STR checks and saving throws.','Large Body \u2014 11th: size Large; advantage on STR checks and saving throws']
+    ];
+    var html='<div class="banner" style="margin-top:10px"><span class="bk">\u2756 Evolutionary constraints</span><p class="small">Each constraint pairs with its True Rebirth benefit (shown when selected). Rebirth auto-applies at 8th and 11th level. Slow and Sedentary do not stack \u2014 choose one.</p>';
+    cons.forEach(function(c){
+      var k=c[0];
+      var dis=(k==='slow'&&E.sedentary)||(k==='sedentary'&&E.slow);
+      html+='<p class="small" style="margin:6px 0"><label><input type="checkbox" data-evo="'+k+'"'+(E[k]?' checked':'')+(dis?' disabled':'')+'> <b>'+esc(c[1])+'</b> \u2014 '+esc(c[2])+'</label>'+
+        (E[k]?'<br><span class="small" style="color:var(--ink2)">\u21B3 Rebirth: '+esc(c[3])+'</span>':'')+'</p>';
+    });
+    if(E.weakCon){
+      html+='<div class="field" style="max-width:280px"><label>Weak Constitution severity (fixed at creation)</label><select data-evosev>'+
+        [1,2,3].map(function(n){ return '<option value="'+n+'"'+(E.weakCon===n?' selected':'')+'>\u2212'+n+' \u00D7 level</option>'; }).join('')+'</select></div>';
+    }
+    if(E.slow){
+      html+='<div class="field" style="max-width:280px"><label>Slow severity (fixed at creation)</label><select data-evoslow>'+
+        [5,10].map(function(n){ return '<option value="'+n+'"'+((E.slowAmount||5)===n?' selected':'')+'>\u2212'+n+' ft</option>'; }).join('')+'</select></div>';
+    }
+    html+='<p class="small">GM options (C&amp;C): the GM may alter level thresholds, trigger rebirth at story moments, or trade a constraint for its rebirth benefit at level 1 \u2014 these are recorded on the sheet as adjudication notes.</p></div>';
+    return html;
+  }
+  return '';
+}
+function wireHrVariantPicker(ex){
+  ex.querySelectorAll('[data-hrv]').forEach(function(card){
+    var pick=function(){
+      var k=card.getAttribute('data-hrv');
+      if(k==='evo'&&!(char.ancestry==='cursed-spirit'&&char.heritage==='womb')) return;
+      char.hrVariant=k;
+      char.hrOpts=char.hrOpts||{};
+      if(k!=='limited-ce') char.hrAsi={};
+      if(!hasCEPool()){ char.ceAbility=''; char.techniques=[]; }
+      if(!hasCEPool()||k==='rce') dropTechniqueFeats();
+      renderStep();
+    };
+    card.addEventListener('click',pick);
+    card.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
+  });
+  ex.querySelectorAll('[data-lce]').forEach(function(cb){
+    cb.addEventListener('change',function(){
+      var k=cb.getAttribute('data-lce'), o=char.hrOpts['limited-ce']=char.hrOpts['limited-ce']||{};
+      o[k]=cb.checked;
+      if(k==='row5'&&cb.checked){ o.row1=o.row2=o.row3=false; }
+      if((k==='row1'||k==='row2'||k==='row3')&&cb.checked){ o.row5=false; }
+      if(!hasCEPool()){ char.ceAbility=''; char.techniques=[]; dropTechniqueFeats(); }
+      renderStep();
+    });
+  });
+  ex.querySelectorAll('[data-lp]').forEach(function(cb){
+    cb.addEventListener('change',function(){
+      var k=cb.getAttribute('data-lp'), o=char.hrOpts['limited-physical']=char.hrOpts['limited-physical']||{};
+      o[k]=cb.checked;
+      if(k==='row3'&&!cb.checked){ o.arms=0; o.legs=0; }
+      renderStep();
+    });
+  });
+  ex.querySelectorAll('[data-lpdec]').forEach(function(inp){
+    inp.addEventListener('change',function(){
+      var a=inp.getAttribute('data-lpdec'), o=char.hrOpts['limited-physical']=char.hrOpts['limited-physical']||{};
+      o.dec=o.dec||{}; o.dec[a]=Math.max(0,Math.min(6,parseInt(inp.value,10)||0));
+      renderStep();
+    });
+  });
+  ex.querySelectorAll('[data-lplimb]').forEach(function(inp){
+    inp.addEventListener('change',function(){
+      var w=inp.getAttribute('data-lplimb'), o=char.hrOpts['limited-physical']=char.hrOpts['limited-physical']||{};
+      var v=Math.max(0,Math.min(2,parseInt(inp.value,10)||0));
+      var other=w==='arms'?(o.legs||0):(o.arms||0);
+      if(v+other>4) v=4-other;
+      o[w]=v; inp.value=v;
+      renderStep();
+    });
+  });
+  ex.querySelectorAll('[data-lprange]').forEach(function(sel){
+    sel.addEventListener('change',function(){
+      var k=sel.getAttribute('data-lprange'), o=char.hrOpts['limited-physical']=char.hrOpts['limited-physical']||{};
+      o.range=o.range||{};
+      if(sel.value==='') delete o.range[k]; else o.range[k]=parseInt(sel.value,10);
+    });
+  });
+  var m600=ex.querySelector('[data-lp600]');
+  if(m600) m600.addEventListener('change',function(){
+    var o=char.hrOpts['limited-physical']=char.hrOpts['limited-physical']||{};
+    if(m600.value==='') delete o.mile600; else o.mile600=parseInt(m600.value,10);
+  });
+  ex.querySelectorAll('[data-evo]').forEach(function(cb){
+    cb.addEventListener('change',function(){
+      var k=cb.getAttribute('data-evo'), o=char.hrOpts['evo']=char.hrOpts['evo']||{};
+      o[k]=cb.checked;
+      if(k==='slow'&&cb.checked){ o.sedentary=false; if(!o.slowAmount) o.slowAmount=5; }
+      if(k==='sedentary'&&cb.checked){ o.slow=false; }
+      if(k==='weakCon'&&cb.checked&&!o.weakCon) o.weakCon=1;
+      if(k==='weakCon'&&!cb.checked) delete o.weakCon;
+      if(k==='slow'&&!cb.checked) delete o.slowAmount;
+      renderStep();
+    });
+  });
+  var sev=ex.querySelector('[data-evosev]');
+  if(sev) sev.addEventListener('change',function(){ var o=char.hrOpts['evo']=char.hrOpts['evo']||{}; o.weakCon=parseInt(sev.value,10)||1; });
+  var slw=ex.querySelector('[data-evoslow]');
+  if(slw) slw.addEventListener('change',function(){ var o=char.hrOpts['evo']=char.hrOpts['evo']||{}; o.slowAmount=parseInt(slw.value,10)||5; });
+}
+/* ── Special Trait picker (Step 3, any class) ── */
+function specialTraitPickerHTML(){
+  var t=char.specialTrait||'';
+  var html='<h3 style="margin-top:18px">Special Trait <span class="small">(optional)</span></h3>'+
+    '<p class="small"><b>High-power games only \u2014 requires GM approval.</b> Special Traits grow with you: Dormant (1\u20135) \u2192 Stirring (6\u201313) \u2192 Awakened (14+), advancing automatically with your level.</p>';
+  html+='<div class="opt-grid">';
+  html+='<div class="opt-card'+(!t?' is-selected':'')+'" data-trait="" tabindex="0" role="button" aria-pressed="'+(!t)+'"><span class="check">\u2726</span><h4>None</h4><p class="tagline">No Special Trait.</p></div>';
+  TRAIT_ORDER.forEach(function(k){
+    var d=SPECIAL_TRAITS[k];
+    var gated=k==='perfect-form'&&char.ancestry==='cursed-corpse';
+    html+='<div class="opt-card'+(t===k?' is-selected':'')+(gated?' is-disabled':'')+'" data-trait="'+k+'" tabindex="0" role="button" aria-pressed="'+(t===k)+'">'+
+      '<span class="check">\u2726</span><h4>'+esc(d.name)+'</h4><p class="tagline">'+esc(d.tag)+'</p>'+
+      (gated?'<p class="small"><b>Unavailable to Cursed Corpses.</b></p>':'')+'</div>';
+  });
+  html+='</div>';
+  if(t&&SPECIAL_TRAITS[t]){
+    var d=SPECIAL_TRAITS[t], st=traitStage();
+    html+='<div class="banner" style="margin-top:10px"><span class="bk">\u2756 '+esc(d.name)+' \u2014 '+esc(traitStageName())+'</span>'+
+      '<ul style="margin:6px 0 0;padding-left:1.3em">'+d.stages[st].map(function(p){ return '<li class="small">'+esc(p)+'</li>'; }).join('')+'</ul></div>';
+    if(t==='cursed-lover') html+=loverPanelHTML();
+    if(t==='living-prison'){
+      html+='<div class="field" style="max-width:520px"><label for="carvedTech"><b>Carved Technique</b> <span class="small">(GM-tracked \u2014 record the carved Innate Technique feature here when earned)</span></label>'+
+        '<input type="text" id="carvedTech" value="'+esc(char.carvedTechnique||'')+'" placeholder="e.g. the reincarnated sorcerer\u2019s carved feature"></div>';
+    }
+  }
+  return html;
+}
+/* Cursed Lover companion panel: display + trackers (full automation out of scope) */
+function loverPanelHTML(){
+  var L=char.lover||{};
+  var html='<div class="banner" style="margin-top:10px"><span class="bk">\u2756 Bound Lover \u2014 companion record</span>'+
+    '<div class="grid2"><div class="field"><label for="lovName"><b>Lover\u2019s name</b></label>'+
+    '<input type="text" id="lovName" value="'+esc(L.name||'')+'" placeholder="Who did you curse with love?"></div>'+
+    '<div class="field"><label for="lovTech"><b>Lover\u2019s technique / unique feature</b></label>'+
+    '<input type="text" id="lovTech" value="'+esc(L.technique||'')+'" placeholder="Technique kept in death, or GM-designed feature"></div></div>'+
+    '<p class="small"><b>Summon:</b> action, 3 CE. <b>Command:</b> bonus action. If the lover is killed, roll 1d4 \u2014 you cannot resummon until you complete that many long rests.</p>'+
+    '<p class="small"><label for="lovRests"><b>Long rests until resummon:</b></label> '+
+    '<input type="number" id="lovRests" min="0" max="4" value="'+(L.restsLeft==null?'':L.restsLeft)+'" style="width:70px"> '+
+    '<button type="button" class="btn btn-small" id="lovRoll">\uD83C\uDFB2 Roll 1d4 on death</button> '+
+    '<button type="button" class="btn btn-small btn-ghost" id="lovClear">Clear (resummoned)</button></p></div>';
+  return html;
+}
+function wireSpecialTraitPicker(ex){
+  ex.querySelectorAll('[data-trait]').forEach(function(card){
+    var pick=function(){
+      var k=card.getAttribute('data-trait');
+      if(k==='perfect-form'&&char.ancestry==='cursed-corpse') return;
+      char.specialTrait=k;
+      renderStep();
+    };
+    card.addEventListener('click',pick);
+    card.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
+  });
+  var ln=$('lovName'); if(ln) ln.addEventListener('input',function(e){ char.lover=char.lover||{}; char.lover.name=e.target.value; });
+  var lt=$('lovTech'); if(lt) lt.addEventListener('input',function(e){ char.lover=char.lover||{}; char.lover.technique=e.target.value; });
+  var lr=$('lovRests'); if(lr) lr.addEventListener('change',function(e){ char.lover=char.lover||{}; var v=parseInt(e.target.value,10); char.lover.restsLeft=isNaN(v)?null:Math.max(0,Math.min(4,v)); });
+  var lroll=$('lovRoll'); if(lroll) lroll.addEventListener('click',function(){ char.lover=char.lover||{}; char.lover.restsLeft=1+Math.floor(Math.random()*4); var f=$('lovRests'); if(f) f.value=char.lover.restsLeft; });
+  var lclr=$('lovClear'); if(lclr) lclr.addEventListener('click',function(){ char.lover=char.lover||{}; char.lover.restsLeft=null; var f=$('lovRests'); if(f) f.value=''; });
+  var ct=$('carvedTech'); if(ct) ct.addEventListener('input',function(e){ char.carvedTechnique=e.target.value; });
+}
 STEP_VALID[3]=function(){
   if(!char.cls) return {ok:false,msg:'Choose a class to continue.'};
-  if(!isHR() && !char.ceAbility) return {ok:false,msg:'Choose your Cursed Energy ability (Wisdom or Charisma).'};
+  if(hasCEPool() && !char.ceAbility) return {ok:false,msg:'Choose your Cursed Energy ability (Wisdom or Charisma).'};
   return {ok:true};
 };
 
 /* ═══════════ STEP 4 — ABILITY SCORES ═══════════ */
 function stepAbilities(body){
-  var maxScore = isHR() ? 24+char.level : 20;
+  var maxScore = abilityCeiling();
   var html='<h2>Step 4 — Ability Scores</h2>'+
-    '<p class="sub">Three ways to forge your six scores.'+(isHR()?' Heavenly Restriction raises the ceiling to <b>'+maxScore+'</b> (24 + level).':' Scores cap at <b>20</b>.')+
+    '<p class="sub">Three ways to forge your six scores.'+(isHR()?' Heavenly Restriction raises the ceiling to <b>'+maxScore+'</b> (24 + level).':' Scores cap at <b>'+maxScore+'</b>.')+
     ' Your ancestry\'s increases apply after assignment.</p>';
   html+='<div class="seg" id="mSeg">'+
     '<button type="button" class="seg-btn'+(char.abilityMethod==='dice'?' is-active':'')+'" data-m="dice">🎲 Roll 4d6 drop lowest</button>'+
@@ -1320,7 +1933,8 @@ function stepAbilities(body){
   body.querySelectorAll('#mSeg .seg-btn').forEach(function(b){
     b.addEventListener('click',function(){
       char.abilityMethod=b.getAttribute('data-m');
-      dicePool=[]; diceAssign={}; diceSets=[]; char.abilityBase={}; char.abilities={}; char.ancestryPicks={};
+      dicePool=[]; diceAssign={}; diceSets=[]; char.abilityBase={}; char.abilities={};
+      /* ancestryPicks preserved — Sumerian picks and ASI placement survive method changes */
       renderStep();
     });
   });
@@ -1384,7 +1998,7 @@ function paintDiceSet(setEl,vals,final,total){
 }
 function renderManualUI(){
   var el=$('mBody');
-  var maxScore=isHR()?24+char.level:20;
+  var maxScore=abilityCeiling();
   el.innerHTML='<p class="small">Enter each score directly ('+3+'–'+maxScore+').</p>'+
     '<table class="assign-table"><tr><th>Ability</th><th>Score</th></tr>'+
     ABILITIES.map(function(a){
@@ -1456,14 +2070,44 @@ function applyAncestry(){
     }
   }
   var b=ancestryBonuses(); /* includes fixed bonuses + validated picks */
+  if(evoNoASI()) b={}; /* Evolutionary Constraint (No ASI): racial increase suppressed until 8th */
   Object.keys(b).forEach(function(a){ char.abilities[a]=(char.abilities[a]||0)+b[a]; });
   return true;
+}
+/* Limited-CE bonus ASI grants, keyed by limitation row; assigned in Step 4.
+   Variant-granted ASI cannot push a score above 24 (26 from 6th level). */
+function hrAsiGrants(){
+  if(hrV()!=='limited-ce') return [];
+  var L=(hrOpts()['limited-ce']||{}), g=[];
+  if(L.row1) g.push({k:'row1',n:2});
+  if(L.row2) g.push({k:'row2',n:2});
+  if(L.row3) g.push({k:'row3',n:4});
+  if(L.row4) g.push({k:'row4',n:4});
+  if(L.row5) g.push({k:'row5',n:14});
+  return g;
+}
+function hrAsiTotalFor(a,exceptK){
+  var t=0;
+  hrAsiGrants().forEach(function(g){ if(g.k!==exceptK&&(char.hrAsi||{})[g.k]===a) t+=g.n; });
+  return t;
+}
+function hrBonusAsiHTML(){
+  var grants=hrAsiGrants();
+  if(!grants.length) return '';
+  var cap=char.level>=6?26:24;
+  var html='<h3>Heavenly Restriction bonus increases</h3><p class="small">Your limitations grant bonus ability increases. A variant-granted increase cannot push a score above <b>'+cap+'</b>'+(char.level<6?' (26 from 6th level)':'')+'.</p><div class="grid2">';
+  grants.forEach(function(g){
+    var cur=(char.hrAsi||{})[g.k]||'';
+    html+='<div class="field"><label>+'+g.n+' to\u2026</label><select id="hrasi_'+g.k+'"><option value="">\u2014 choose \u2014</option>'+
+      ABILITIES.map(function(a){ return '<option value="'+a+'"'+(cur===a?' selected':'')+'>'+ABIL_NAMES[a]+'</option>'; }).join('')+'</select></div>';
+  });
+  return html+'</div><p class="small" id="hrasi_warn" style="color:var(--red)"></p>';
 }
 function renderFinal(){
   var el=$('finalArea'); if(!el) return;
   var h=(char.ancestry&&char.heritage)?ANCESTRIES[char.ancestry].heritages[char.heritage]:null;
   var html='';
-  if(h&&h.pick){
+  if(h&&h.pick&&!evoNoASI()){
     html+='<h3>Ancestry increase — your choice</h3><p class="small">'+esc(h.asi)+'</p><div class="grid2">';
     h.pick.counts.forEach(function(n,i){
       var cur=(char.ancestryPicks||{})['p'+i]||'';
@@ -1473,16 +2117,28 @@ function renderFinal(){
     });
     html+='</div>';
   }
+  if(evoNoASI()){
+    html+='<p class="small"><b>Evolutionary Constraint (No ASI):</b> your racial ability increase is suppressed until True Rebirth (8th level).</p>';
+  }
+  html+=hrBonusAsiHTML();
+  if(char.specialTrait==='living-prison'&&traitStage()){
+    var _lpB=traitStage()==='dormant'?2:4, _lpM=traitStage()==='dormant'?22:24;
+    html+='<p class="small"><b>Living Prison ('+esc(traitStageName())+'):</b> +'+_lpB+' STR, DEX, CON applied automatically (maximum '+_lpM+').</p>';
+  }
+  if(char.specialTrait==='perfect-form'&&traitStage()!=='dormant'&&traitStage()){
+    html+='<p class="small"><b>Perfect Form ('+esc(traitStageName())+'):</b> +'+(traitStage()==='awakened'?8:4)+' STR, DEX, CON applied automatically (maximums raised by the same).</p>';
+  }
   var allSet=ABILITIES.every(function(a){ return char.abilities[a]>0; });
   if(allSet){
+    var finAb=creationAbilityMods(Object.assign({},char.abilities));
     html+='<h3>Final scores</h3><table class="assign-table"><tr><th>Ability</th><th>Score</th><th>Modifier</th></tr>'+
-      ABILITIES.map(function(a){ return '<tr><td>'+ABIL_NAMES[a]+' ('+a+')</td><td class="roll-res">'+char.abilities[a]+'</td><td>'+modStr(char.abilities[a])+'</td></tr>'; }).join('')+'</table>';
-    if(char.ceAbility&&!isHR()){
-      html+='<p class="small">CE ability <b>'+char.ceAbility+'</b> modifier '+modStr(char.abilities[char.ceAbility])+' — added to your CE Reserve <b>once</b> (Step 7).</p>';
+      ABILITIES.map(function(a){ return '<tr><td>'+ABIL_NAMES[a]+' ('+a+')</td><td class="roll-res">'+finAb[a]+'</td><td>'+modStr(finAb[a])+'</td></tr>'; }).join('')+'</table>';
+    if(char.ceAbility&&hasCEPool()){
+      html+='<p class="small">CE ability <b>'+char.ceAbility+'</b> modifier '+modStr(finAb[char.ceAbility])+' — added to your '+(hrV()==='rce'?'RCE':'CE')+' Reserve <b>once</b> (Step 7).</p>';
     }
   }
   el.innerHTML=html;
-  if(h&&h.pick){
+  if(h&&h.pick&&!evoNoASI()){
     h.pick.counts.forEach(function(n,i){
       $('apick_'+i).addEventListener('change',function(e){
         char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks['p'+i]=e.target.value;
@@ -1492,6 +2148,23 @@ function renderFinal(){
       });
     });
   }
+  hrAsiGrants().forEach(function(g){
+    var sel=$('hrasi_'+g.k);
+    if(sel) sel.addEventListener('change',function(e){
+      char.hrAsi=char.hrAsi||{};
+      var a=e.target.value;
+      if(!a){ delete char.hrAsi[g.k]; renderFinal(); if(char.abilityMethod!=='manual') renderAssignUI(); refreshNav(); return; }
+      var cap=char.level>=6?26:24;
+      var prospective=(char.abilities[a]||0)+hrAsiTotalFor(a,g.k)+g.n;
+      if(prospective>cap){
+        var w=$('hrasi_warn'); if(w) w.textContent='Cannot assign: '+ABIL_NAMES[a]+' would reach '+prospective+' (cap '+cap+' for variant-granted increases).';
+        e.target.value=char.hrAsi[g.k]||'';
+        return;
+      }
+      char.hrAsi[g.k]=a;
+      renderFinal(); if(char.abilityMethod!=='manual') renderAssignUI(); refreshNav();
+    });
+  });
 }
 STEP_VALID[4]=function(){
   if(!char.abilityMethod) return {ok:false,msg:'Choose an ability-score method.'};
@@ -1501,10 +2174,12 @@ STEP_VALID[4]=function(){
     for(var j=0;j<ABILITIES.length;j++){ var b=ABILITIES[j]; if(diceAssign[b]==null) return {ok:false,msg:'Assign all six rolls to abilities.'}; }
   }
   var h=(char.ancestry&&char.heritage)?ANCESTRIES[char.ancestry].heritages[char.heritage]:null;
-  if(h&&h.pick){
+  if(h&&h.pick&&!evoNoASI()){
     var counts=h.pick.counts, picks=char.ancestryPicks||{}, used={};
     for(var k=0;k<counts.length;k++){ var p=picks['p'+k]; if(!p||used[p]) return {ok:false,msg:'Choose where your ancestry increases go.'}; used[p]=1; }
   }
+  var hg=hrAsiGrants();
+  for(var gi=0;gi<hg.length;gi++){ if(!(char.hrAsi||{})[hg[gi].k]) return {ok:false,msg:'Assign your Heavenly Restriction bonus increases.'}; }
   applyAncestry();
   return {ok:true};
 };
@@ -1526,6 +2201,10 @@ function setBackground(id){
    technique-feat picker; the other four categories draw on GENERAL_FEATS. */
 function bgFeatOptions(bg, selected){
   if(!bg) return '';
+  /* RCE Generation: ineligible for Cursed Energy, Barrier, and Innate Technique feats */
+  if(hrV()==='rce'&&(bg.featCat==='innate'||bg.featCat==='ce'||bg.featCat==='barrier')){
+    return '<option value="">— ineligible (Reverse Cursed Energy Generation) —</option>';
+  }
   if(bg.featCat==='innate') return featSelectOptions(selected);
   var arr=(window.GENERAL_FEATS&&window.GENERAL_FEATS[bg.featCat])||[];
   var html='<option value="">— choose a feat —</option><optgroup label="General feats">'+
@@ -1617,25 +2296,33 @@ STEP_VALID[6]=function(){
 
 /* ═══════════ STEP 7 — LEVEL-UP ROLLS ═══════════ */
 function levelRows(){
-  var ab=Object.assign({},char.abilities);
+  var ab=creationAbilityMods(Object.assign({},char.abilities));
   var rows=[];
+  var noConHP=hrV()==='limited-physical'&&(hrOpts()['limited-physical']||{}).row1;
   for(var l=2;l<=char.level;l++){
     var C=CLASSES[clsAt(l)], hd=C.hd;
     if(hasASIAt(l) && char.asi[l] && (char.asiMode||{})[l]!=='feat') char.asi[l].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
-    var cm=mod(ab.CON||10);
+    var cm=noConHP?0:mod(ab.CON||10);
     var ld=char.levelData[l]||{};
     var hpDie=(ld.hpMode==='roll')?(ld.hpDie||0):avgDie(hd);
-    var ceDie=(ld.ceMode==='roll')?(ld.ceDie||0):C.fixed;
-    rows.push({l:l,cls:clsAt(l),con:cm,hpDie:hpDie,hpGain:hpDie+cm,ceDie:isHR()?0:ceDie,asi:hasASIAt(l)});
+    var ceDie=ceGainAtLevel(l,C,ld);
+    rows.push({l:l,cls:clsAt(l),con:cm,hpDie:hpDie,hpGain:hpDie+cm,ceDie:hasCEPool()?ceDie:0,asi:hasASIAt(l)});
   }
   return rows;
 }
 function stepLevelUps(body){
   var C=CLASSES[char.cls], hd=C.hd;
+  var ceBit;
+  if(!isHR()) ceBit=' and <b>CE = '+C.reserve+' (max Reserve Die)</b>';
+  else if(hasCEPool()) ceBit=' and <b>'+cePoolLabel()+'</b> per your restriction package (HR levels grant no Reserve Die)';
+  else ceBit='.';
   var html='<h2>Step 7 — Level-Up Rolls</h2>'+
-    '<p class="sub">Level 1 is fixed: <b>HP = '+hd+' + CON</b>'+(isHR()?'.':' and <b>CE = '+C.reserve+' (max Reserve Die)</b>')+'. '+
+    '<p class="sub">Level 1 is fixed: <b>HP = '+hd+' + CON</b>'+ceBit+'. '+
     'For each later level, roll the die (watch it land) or take the fixed value. Your CE ability modifier is added <b>once</b> to the whole reserve — never per level.</p>';
-  if(isHR()) html+='<div class="banner warn"><span class="bk">❖ Pure Body</span><p>No CE Reserve to roll — Heavenly Restriction gains neither a Reserve Die nor a CE modifier. Roll HP only.</p></div>';
+  if(isHR()){
+    if(hrV()==='pure-body') html+='<div class="banner warn"><span class="bk">❖ Pure Body</span><p>No CE Reserve to roll — Heavenly Restriction gains neither a Reserve Die nor a CE modifier. Roll HP only.</p></div>';
+    else html+='<div class="banner"><span class="bk">❖ '+esc(hrVariantDef(hrV()).name)+'</span><p class="small">Roll or fix CE per level as normal; your package adjusts the pool (adjusted maximum on the sheet). '+(hrV()==='rce'?'This pool is <b>Reverse Cursed Energy</b>.':'')+'</p></div>';
+  }
   html+='<div class="totals" id="lvlTotals"></div>';
   if(char.level===1){
     html+='<div class="banner"><span class="bk">❖ Level 1</span><p>Nothing to roll — your totals below are final. Continue when ready.</p></div>';
@@ -1655,10 +2342,11 @@ function stepLevelUps(body){
 }
 function renderLvlTotals(){
   var el=$('lvlTotals'); if(!el) return;
-  var hp=hpMax(), ce=isHR()?null:ceMax();
+  var hp=hpMax(), ce=hasCEPool()?ceMax():null;
+  var ceLabel=hrV()==='rce'?'Max RCE pool':(!hasCEPool()&&hrV()==='limited-ce')?'Max CE (cannot utilize)':(!hasCEPool()?'Max CE (Pure Body)':'Max CE Reserve');
   el.innerHTML='<div><b>'+hp+'</b><span>Max HP</span></div>'+
-    (isHR()?'<div><b>—</b><span>Max CE (Pure Body)</span></div>'
-           :'<div><b>'+ce+'</b><span>Max CE Reserve</span></div><div><b>'+(char.ceAbility||'—')+'</b><span>CE ability</span></div>');
+    (hasCEPool()?'<div><b>'+ce+'</b><span>'+ceLabel+'</span></div><div><b>'+(char.ceAbility||'—')+'</b><span>CE ability</span></div>'
+                :'<div><b>—</b><span>'+ceLabel+'</span></div>');
 }
 function renderLvlRows(){
   var tb=$('lvlBody'); if(!tb) return;
@@ -1675,14 +2363,22 @@ function renderLvlRows(){
     var asiCell='—';
     if(r.asi){
       var mode=((char.asiMode||{})[r.l])||'asi';
+      var greaterAvail=hrV()==='evo'&&(hrOpts()['evo']||{}).noASI&&r.l>=8;
       asiCell='<select data-asimode="'+r.l+'">'+
         '<option value="asi"'+(mode==='asi'?' selected':'')+'>ASI +1/+1</option>'+
+        (greaterAvail?'<option value="greater"'+(mode==='greater'?' selected':'')+'>Greater ASI (+1×3)</option>':'')+
         '<option value="feat"'+(mode==='feat'?' selected':'')+'>Feat instead</option></select>';
       if(mode==='feat'){
         var pf=((char.asiFeat||{})[r.l])||'';
         asiCell+='<div style="margin-top:4px"><select data-asifeatpreset="'+r.l+'">'+featSelectOptions(pf)+'</select>'+
           featInfoHTML(pf)+
           '<div class="asi-note">Replaces the ASI (D&D 5e rule). Technique feats list their prerequisite — you must meet it before selecting.</div></div>';
+      }else if(mode==='greater'){
+        var gcur=char.asi[r.l]||['STR','STR','STR'];
+        asiCell+='<div style="margin-top:4px"><select data-asi="'+r.l+'|0">'+ABILITIES.map(function(a){return '<option'+(gcur[0]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select> '+
+                '<select data-asi="'+r.l+'|1">'+ABILITIES.map(function(a){return '<option'+(gcur[1]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select> '+
+                '<select data-asi="'+r.l+'|2">'+ABILITIES.map(function(a){return '<option'+(gcur[2]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select>'+
+                '<div class="asi-note">Greater ASI: +1 × 3 (repeat a score for +2 or +3). Replaces No ASI at 8th.</div></div>';
       }else{
         var cur=char.asi[r.l]||['STR','STR'];
         asiCell+='<div style="margin-top:4px"><select data-asi="'+r.l+'|0">'+ABILITIES.map(function(a){return '<option'+(cur[0]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select> '+
@@ -1696,7 +2392,7 @@ function renderLvlRows(){
     var hpCell='<button class="btn btn-small" type="button" data-hproll="'+r.l+'">🎲 Roll d'+C.hd+'</button> '+
                '<button class="btn btn-small btn-ghost" type="button" data-hpfixed="'+r.l+'">Fixed '+avgDie(C.hd)+'</button><br>'+hpRes+
                ' <span class="small" data-hpdice="'+r.l+'"></span>';
-    var ceCell = (isHR()||r.cls==='Heavenly Restriction') ? '<span class="small">— Pure Body</span>' :
+    var ceCell = (!hasCEPool()||r.cls==='Heavenly Restriction') ? '<span class="small">— '+(!hasCEPool()?esc(hrVariantDef(hrV()).short):'no reserve')+'</span>' :
       '<button class="btn btn-small" type="button" data-ceroll="'+r.l+'">🎲 Roll d'+C.reserve+'</button> '+
       '<button class="btn btn-small btn-ghost" type="button" data-cefixed="'+r.l+'">Fixed '+C.fixed+'</button><br>'+
       (ld.ceMode==='roll'
@@ -1730,6 +2426,10 @@ function renderLvlRows(){
   tb.querySelectorAll('[data-asimode]').forEach(function(s){ s.addEventListener('change',function(){
     var l=+s.getAttribute('data-asimode');
     char.asiMode=char.asiMode||{}; char.asiMode[l]=s.value;
+    /* normalize ASI array length when switching between ASI patterns */
+    char.asi[l]=char.asi[l]||[];
+    if(s.value==='greater'){ while(char.asi[l].length<3) char.asi[l].push(char.asi[l][0]||'STR'); }
+    else { char.asi[l]=char.asi[l].slice(0,2); if(char.asi[l].length<2) char.asi[l]=['STR','STR']; }
     renderLvlRows(); renderLvlTotals();
   }); });
   tb.querySelectorAll('[data-asifeatpreset]').forEach(function(s){ s.addEventListener('change',function(){
@@ -1777,10 +2477,18 @@ function roleBuckets(role){
 var GROUP_ORDER=['Anime & Manga','Video Games','Magic: The Gathering','Marvel','DC','Ben 10','Jujutsu Kaisen','Original Codex','SCP Anomalies','Bestiary \u2014 Cryptids','Bestiary \u2014 Mythology','Cursed Tool Arsenal','Applied Systems'];
 function stepTechnique(body){
   var html='<h2>Step 5 — Techniques</h2>';
-  if(isHR()){
-    body.innerHTML=html+'<div class="banner warn"><span class="bk">❖ Pure Body</span>'+
-      '<p><b>Heavenly Restriction characters have no Innate Technique.</b> No technique selection, no Maximum, no Domain, no RCT. Your power is the body — the sheet will reflect that.</p></div>';
+  if(!hasCEPool()){
+    var _lbl=hrV()==='limited-ce'?'Limited Cursed Energy — no CE use':'Pure Body';
+    body.innerHTML=html+'<div class="banner warn"><span class="bk">❖ '+esc(_lbl)+'</span>'+
+      '<p><b>Heavenly Restriction characters with this package have no Innate Technique.</b> No technique selection, no Maximum, no Domain, no RCT. '+
+      (hrV()==='limited-ce'
+        ?'<b>Instead:</b> take a Physical or Skill feat at each level you would gain an Innate Technique feature, plus a bonus Physical feat at 6th, 10th, and 14th — choose with your GM.</p></div>'
+        :'Your power is the body — the sheet will reflect that.</p></div>');
     return;
+  }
+  if(hrV()==='rce'){
+    html+='<div class="banner"><span class="bk">❖ Reverse Cursed Energy Generation</span>'+
+      '<p>Choose the innate technique whose <b>Reversal</b> you manifest — you gain the Reversal instead of the technique\u2019s normal features. Reversal rendering is GM-adjudicated until codex reversal content exists.</p></div>';
   }
   if(!HAS_CODEX && !HAS_LIB){
     body.innerHTML=html+'<div class="err"><b>Technique data failed to load.</b> <code>data/codex.js</code> and <code>data/library.js</code> are both missing. '+
@@ -1979,16 +2687,16 @@ function renderTechResults(){
   });
 }
 STEP_VALID[5]=function(){
-  if(isHR()) return {ok:true};
+  if(!hasCEPool()) return {ok:true};
   if(!HAS_CODEX&&!HAS_LIB) return {ok:false,msg:'Technique data failed to load — check the data/ folder.'};
-  if(!(char.techniques||[]).length) return {ok:false,msg:'Choose at least one technique — '+PICKABLE_TECH+' of the '+TOTAL_TECH+' entries are pickable at creation (Vlad III is GM-only).'};
+  if(!(char.techniques||[]).length) return {ok:false,msg:'Choose at least one technique — '+PICKABLE_TECH+' of the '+TOTAL_TECH+' entries are pickable at creation (Vlad III is GM-only).'+(hrV()==='rce'?' (You manifest its Reversal.)':'')};
   return {ok:true};
 };
 
 /* ═══════════ STEP 8 — DETAILS ═══════════ */
 function stepDetails(body){
   var html='<h2>Step 8 — Details</h2><p class="sub">The odds and ends that make the character yours. A permanent CE bonus here feeds straight into your Max CE (primer: bonuses are added <b>after</b> the reserve).</p>';
-  if(!isHR()) html+='<div class="field" style="max-width:280px"><label for="ceBonus">Permanent CE bonus (feats, vows, items)</label>'+
+  if(hasCEPool()) html+='<div class="field" style="max-width:280px"><label for="ceBonus">Permanent CE bonus (feats, vows, items)</label>'+
     '<input id="ceBonus" type="number" min="0" max="999" value="'+(parseInt(char.ceBonus,10)||0)+'"></div>';
   html+='<h3>Cursed tools</h3><p class="small">Cursed tools are awarded through campaign progression — your GM grants them in play, so they aren\u2019t chosen here. The full arsenal lives in the codex\u2019s Cursed Tools tab.</p>';
   html+='<h3>Notes</h3><div class="field"><label for="notes">Freeform — backstory, binding vows, GM notes</label>'+
@@ -2072,28 +2780,135 @@ function classFeaturesSheetHTML(){
   html+='</div>';
   return html;
 }
+/* per-variant sheet details + explicit GM-adjudication callouts */
+function hrSheetDetailsHTML(){
+  var v=hrV(), o=hrOpts(), html='';
+  var callout=function(t){ return '<p class="small" style="margin:6px 0 0"><b>GM adjudication:</b> '+esc(t)+'</p>'; };
+  if(v==='rce'){
+    html+='<p class="small" style="margin:6px 0 0"><b>Auto-granted feats:</b> Reverse Cursed Technique, Cursed Technique Reversal, Reverse Cursed Technique Output (1 RCE counts as 2 CE for these).</p>';
+    html+='<p class="small" style="margin:6px 0 0"><b>Reverse Cursed Strike</b> replaces Cursed Strike: on a hit with an unarmed strike or melee weapon attack, spend RCE up to your proficiency bonus to deal +2d6 radiant per RCE.</p>';
+    html+=callout('Reversal rendering of the chosen technique — work with the GM until codex reversal content exists.');
+  }
+  if(v==='limited-ce'){
+    var L=o['limited-ce']||{}, rows=[];
+    if(L.row1) rows.push('no CE modifier to CE max');
+    if(L.row2) rows.push('+1 CE per 2 levels');
+    if(L.row3) rows.push('no Basic CE Manipulation');
+    if(L.row4) rows.push('cannot see cursed spirits normally');
+    if(L.row5) rows.push('cannot utilize CE in any way');
+    if(rows.length) html+='<p class="small" style="margin:6px 0 0"><b>Limitations:</b> '+esc(rows.join('; '))+'. Variant ASI cap: 24 (26 from 6th level).</p>';
+    if(L.row5) html+=callout('Take a Physical or Skill feat at each technique-milestone level, plus a bonus Physical feat at 6th, 10th, and 14th — choose with the GM.');
+  }
+  if(v==='limited-physical'){
+    var P=o['limited-physical']||{}, techs=getTechniques(), bits=[];
+    if(P.row1) bits.push('CON modifier not added to HP max');
+    if(P.row2){ var dec=P.dec||{}; bits.push('STR \u2212'+(dec.STR||0)+', DEX \u2212'+(dec.DEX||0)+', CON \u2212'+(dec.CON||0)+' (min 4)'); }
+    if(P.row3) bits.push('missing limbs: '+(P.arms||0)+' arm(s), '+(P.legs||0)+' leg(s)');
+    if(P.row4) bits.push('walking speed 0');
+    if(P.row5) bits.push('vulnerability to all damage except psychic');
+    if(bits.length) html+='<p class="small" style="margin:6px 0 0"><b>Limitations:</b> '+esc(bits.join('; '))+'. <b>Effective CE modifier +'+hrCEModBonus()+'</b> for CE DCs and attacks (applied above).</p>';
+    var rn=P.range||{}, rl=[];
+    Object.keys(rn).forEach(function(k){ var t=techs[rn[k]]; if(t) rl.push('+30 ft range \u2192 '+tName(t)); });
+    if(P.mile600!=null&&techs[P.mile600]) rl.push('600-mile maintenance \u2192 '+tName(techs[P.mile600]));
+    if(rl.length) html+='<p class="small" style="margin:6px 0 0"><b>Range benefits:</b> '+esc(rl.join('; '))+'.'+(P.mile600!=null?' Table adjudication for 600-mile maintenance.':'')+'</p>';
+  }
+  if(v==='healing'){
+    var uses=char.level>=11?4:char.level>=5?2:1;
+    html+='<p class="small" style="margin:6px 0 0"><b>Not dying:</b> '+uses+' use(s) per long rest — when reduced to 0 HP, drop to 1 HP instead. Hit dice heal double; advantage on death saves.</p>';
+    html+=callout('Healing via cursed techniques/RCT fails and deals necrotic damage equal to the CE spent — the table tracks each attempt.');
+  }
+  if(v==='overgen'){
+    html+='<p class="small" style="margin:6px 0 0"><b>CE regen:</b> 1 CE per hour while not incapacitated (track at the table). <b>Short rest:</b> spend hit dice to regain CE equal to your CE modifier per die.</p>';
+    html+='<p class="small" style="margin:6px 0 0"><b>Drawback:</b> every cursed spirit within 120 ft automatically senses you; a curse starting its turn within 60 ft saves DC 20 WIS or is charmed (attacks you) for 1 minute — frenzy with advantage vs. you on a fail by 5+.</p>';
+  }
+  if(v==='evo'){
+    var E=o['evo']||{}, cl=[];
+    if(E.softShell) cl.push('Soft Shell'+(char.level>=8?' \u2192 Harder Shell (active)':' \u2192 Harder Shell (8th)'));
+    if(E.weakCon) cl.push('Weak Constitution \u2212'+E.weakCon+'\u00D7level'+(char.level>=8?' \u2192 Strongest Constitution (active)':' \u2192 Strongest Constitution (8th)'));
+    if(E.lackingAffinity) cl.push('Lacking Affinity'+(char.level>=11?' \u2192 Powerful Affinity (active)':' \u2192 Powerful Affinity (11th)'));
+    if(E.noASI) cl.push('No ASI'+(char.level>=8?' \u2192 Greater ASI (active)':' \u2192 Greater ASI (8th)'));
+    if(E.weakCE) cl.push('Weak CE'+(char.level>=11?' \u2192 Powerful CE (active)':' \u2192 Powerful CE (11th)'));
+    if(E.slow) cl.push('Slow \u2212'+(E.slowAmount||5)+' ft'+(char.level>=8?' \u2192 Talented Sprinter (active)':' \u2192 Talented Sprinter (8th)'));
+    if(E.sedentary) cl.push('Sedentary'+(char.level>=11?' \u2192 Mobility (active): 20 ft swim and fly (hover)':' \u2192 Mobility (11th)'));
+    if(E.smallBody) cl.push('Small Body'+(char.level<11?' (disadvantage on Strength checks and saves)':'')+(char.level>=11?' \u2192 Large Body (active): advantage on Strength checks and saves':' \u2192 Large Body (11th)'));
+    if(cl.length) html+='<p class="small" style="margin:6px 0 0"><b>Constraints \u2192 rebirth:</b> '+esc(cl.join('; '))+'. Rebirth auto-applies at 8th/11th level.</p>';
+    else html+='<p class="small" style="margin:6px 0 0">No constraints selected.</p>';
+    if(E.lackingAffinity&&char.level>=11){
+      var _paCeMod=char.ceAbility?mod(abilitiesAt(char.level)[char.ceAbility]||10):0;
+      html+='<p class="small" style="margin:6px 0 0"><b>Powerful Affinity:</b> spend CE up to your CE modifier ('+Math.max(0,_paCeMod)+') to regain 10 HP per CE spent, as a bonus action or a reaction to taking damage.</p>';
+    }
+    html+=callout('The GM may alter rebirth thresholds, trigger rebirth at story moments, or trade a constraint for its benefit at level 1.');
+  }
+  return html;
+}
+/* Sumerian heritage picks for the sheet */
+function sumerianSheetHTML(ab,P,ceMod){
+  var p=char.ancestryPicks||{}, html='';
+  if(char.heritage==='deskunte'&&p.deskunteSize) html+='<p class="small" style="margin:6px 0 0"><b>Size:</b> '+esc(p.deskunteSize)+'</p>';
+  if(char.heritage==='shaama'&&p.shaamaCantrip){
+    var castA=(p.shaamaCast==='CHA')?'CHA':'WIS', cam=mod((ab||{})[castA]||10);
+    html+='<p class="small" style="margin:6px 0 0"><b>Cantrip (Innate Cursed Technique):</b> '+esc(p.shaamaCantrip)+' ('+esc(castA==='CHA'?'Charisma':'Wisdom')+')'+(p.shaamaCantripGM?' \u2014 GM approved':' \u2014 <b>needs GM approval</b>')+
+      '<br><b>CE attack (cantrip):</b> +'+(P+cam)+' · DC '+(8+P+cam)+'</p>';
+  }
+  var sp=ancestrySkillProfs();
+  if(sp.length) html+='<p class="small" style="margin:6px 0 0"><b>Skill proficiencies (ancestry):</b> '+esc(sp.join(', '))+'</p>';
+  var tp=ancestryToolProfs();
+  if(tp.length) html+='<p class="small" style="margin:6px 0 0"><b>Other proficiencies (ancestry):</b> '+esc(tp.join(', '))+'</p>';
+  html+='<p class="small" style="margin:6px 0 0"><b>CE sense:</b> +50 ft range (Third Eye; stacks with class sense range).</p>';
+  return html;
+}
+/* Special Trait sheet extras: natural weapons, lover tracker, prison math */
+function traitSheetExtraHTML(){
+  var t=char.specialTrait, html='';
+  if(t==='perfect-form'){
+    var uw=traitStage()==='awakened'?'2d8':traitStage()==='stirring'?'1d12':'1d8';
+    html+='<p class="small" style="margin:6px 0 0"><b>Natural weapon:</b> unarmed strikes '+uw+' (bludgeoning/slashing/piercing). <b>Size:</b> one category larger. <b>Extra attacks:</b> '+(traitStage()==='awakened'?'+2':'+1')+' melee attack(s) as part of the Attack action (stacks with Extra Attack).</p>';
+  }
+  if(t==='cursed-lover'){
+    var L=char.lover||{};
+    html+='<p class="small" style="margin:6px 0 0"><b>Bound lover:</b> '+esc(L.name||'unnamed')+(L.technique?' \u2014 technique/feature: '+esc(L.technique):'')+'</p>';
+    html+='<p class="small" style="margin:6px 0 0"><b>Summon:</b> action, 3 CE \u00B7 <b>Command:</b> bonus action \u00B7 <b>Resummon:</b> '+(L.restsLeft==null?'available':'unavailable \u2014 '+L.restsLeft+' long rest(s) remaining')+'</p>';
+    if(traitStage()==='awakened') html+='<p class="small" style="margin:6px 0 0"><b>Perfect Bond:</b> shared CE pool; use the lover\u2019s technique once per turn ('+pb(char.level)+' uses per long rest). <b>Shared Understanding:</b> lover gains one qualifying Cursed Feat + '+(2*pb(char.level))+' ability points (no score above 22) \u2014 allocate with the GM.</p>';
+  }
+  if(t==='living-prison'){
+    var ab=abilitiesAt(char.level), P=pb(char.level), cm=mod(ab.CON||10);
+    html+='<p class="small" style="margin:6px 0 0"><b>Prison math:</b> consume/absorb DCs reduced by '+(P+cm)+' (PB + CON); take-over resisted with +'+(P+cm)+', take-over DCs against you raised by +'+(P+cm)+'.</p>';
+    if(char.carvedTechnique) html+='<p class="small" style="margin:6px 0 0"><b>Carved Technique:</b> '+esc(char.carvedTechnique)+'</p>';
+  }
+  return html;
+}
 function sheetHTML(){
   var A=ANCESTRIES[char.ancestry], H=A?A.heritages[char.heritage]:null;
   var ab=abilitiesAt(char.level);
   var P=pb(char.level);
-  var hp=hpMax(), ce=isHR()?null:ceMax();
-  var ceMod=(!isHR()&&char.ceAbility)?mod(ab[char.ceAbility]||10):null;
+  var hp=hpMax(), ce=hasCEPool()?ceMax():null;
+  var ceMod=(hasCEPool()&&char.ceAbility)?mod(ab[char.ceAbility]||10):null;
   var ancLine=(A?A.name:'—')+(H?' · '+H.name:'');
   var html='<div class="sheet" id="printSheet"><div class="sheet-head">'+
     '<div class="s-eyebrow">❖ Ritual Archive · Illustrated · Character Record ❖</div>'+
     '<h2>'+esc(char.name||'Unnamed')+'</h2>'+
     '<div class="s-sub">Level '+char.level+' '+esc(classBreakdown()||'—')+' · '+esc(ancLine)+' · Player: '+esc(char.player||'—')+'</div></div>';
-  if(isHR()) html+='<div class="sheet-sec"><div class="banner warn" style="margin:0"><span class="bk">❖ Pure Body — Heavenly Restriction</span><p>No CE ability, CE Reserve, Innate Technique, Domain, RCT, Maximum Output, or Black Flash. Physical, tactical, skill, and cursed-tool features function normally.</p></div></div>';
+  if(isHR()){
+    var _hv=hrV(), _hd=hrVariantDef(_hv);
+    if(_hv==='pure-body'){
+      html+='<div class="sheet-sec"><div class="banner warn" style="margin:0"><span class="bk">❖ Pure Body — Heavenly Restriction</span><p>No CE ability, CE Reserve, Innate Technique, Domain, RCT, Maximum Output, or Black Flash. Physical, tactical, skill, and cursed-tool features function normally.</p></div></div>';
+    }else{
+      html+='<div class="sheet-sec"><div class="banner" style="margin:0"><span class="bk">❖ '+esc(_hd.name)+' — Heavenly Restriction</span><ul style="margin:6px 0 0;padding-left:1.3em">'+
+        _hd.points.map(function(p){ return '<li class="small">'+esc(p)+'</li>'; }).join('')+'</ul>'+hrSheetDetailsHTML()+'</div></div>';
+    }
+  }
   /* abilities */
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Ability Scores</h3><div class="ab-grid">'+
     ABILITIES.map(function(a){ return '<div class="ab-box"><div class="ab-name">'+a+'</div><div class="ab-score">'+ab[a]+'</div><div class="ab-mod">'+modStr(ab[a])+'</div></div>'; }).join('')+'</div>'+
-    '<p class="small">Final scores include ancestry increases'+(Object.keys(char.asi).length?' and level-up ASIs':'')+(asiFeatEntries().length?' (feats taken instead of an ASI grant no score increase)':'')+'.</p></div>';
+    '<p class="small">Final scores include ancestry increases'+(Object.keys(char.asi).length?' and level-up ASIs':'')+(asiFeatEntries().length?' (feats taken instead of an ASI grant no score increase)':'')+
+    (hrV()&&hrV()!=='pure-body'?' and Heavenly Restriction adjustments':'')+(char.specialTrait?' and Special Trait adjustments':'')+(evoNoASI()?' — racial ASI suppressed (No ASI, returns at 8th)':'')+'.</p></div>';
   /* ancestry */
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Ancestry</h3>'+
     '<p style="font-family:var(--serif);font-size:1.15rem;font-weight:bold;margin:0">'+esc(ancLine)+'</p>'+
     (A&&A.blurb?'<p class="small">'+esc(A.blurb)+'</p>':'')+
     (H&&H.traits&&H.traits.length?'<ul style="margin:6px 0 0;padding-left:1.3em">'+H.traits.map(function(t){ return '<li class="small">'+esc(t)+'</li>'; }).join('')+'</ul>':'<p class="small">No ancestry traits recorded.</p>')+
-    (char.heritage==='curse'&&(char.ancestryPicks||{}).hatedRace?'<p class="small" style="margin:6px 0 0"><b>Hated race:</b> '+esc(char.ancestryPicks.hatedRace)+' (+2 to damage rolls against this race)</p>':'')+'</div>';
+    (char.heritage==='curse'&&(char.ancestryPicks||{}).hatedRace?'<p class="small" style="margin:6px 0 0"><b>Hated race:</b> '+esc(char.ancestryPicks.hatedRace)+' (+2 to damage rolls against this race)</p>':'')+
+    (char.ancestry==='sumerian'?sumerianSheetHTML(ab,P,ceMod):'')+'</div>';
   /* background & mindset */
   (function(){
     var bg=bgById(char.background), ms=msById(char.mindset);
@@ -2116,18 +2931,19 @@ function sheetHTML(){
   })();
   /* vitals */
   var acInfo=baseAC(), spd=walkSpeed();
+  var ceLbl=cePoolLabel(), ceEff=ceMod==null?null:ceMod+hrCEModBonus();
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Vitals</h3><div class="vitals">'+
     '<div><b>'+hp+'</b><span>Max HP ('+classesTaken().map(function(c){ return 'd'+CLASSES[c].hd; }).join(' / ')+')</span></div>'+
     '<div><b>'+acInfo.ac+'</b><span>AC ('+esc(acInfo.note)+')</span></div>'+
     '<div><b>'+spd+' ft</b><span>Speed'+(function(){ var n=classSpeedInfo().notes; return n.length?' ('+esc(n.join(', '))+')':''; })()+'</span></div>'+
-    (isHR()?'<div><b>—</b><span>Max CE (Pure Body)</span></div>'
-      :'<div><b>'+ce+'</b><span>Max CE Reserve</span></div>'+
-       '<div><b>'+(char.ceAbility||'&mdash;')+'</b><span>CE ability ('+((ceMod==null)?'&mdash;':(ceMod>=0?'+':'')+ceMod)+')</span></div>'+
-       '<div><b>'+((P+ceMod>=0?'+':'')+(P+ceMod))+'</b><span>CE attack</span></div>'+
-       '<div><b>'+(8+P+ceMod)+'</b><span>CE save DC</span></div>')+
+    (!hasCEPool()?'<div><b>—</b><span>Max CE ('+(hrV()==='limited-ce'?'cannot utilize':'Pure Body')+')</span></div>'
+      :'<div><b>'+ce+'</b><span>Max '+ceLbl+' Reserve</span></div>'+
+       '<div><b>'+(char.ceAbility||'&mdash;')+'</b><span>'+ceLbl+' ability ('+((ceEff==null)?'&mdash;':(ceEff>=0?'+':'')+ceEff)+')</span></div>'+
+       '<div><b>'+((P+ceEff>=0?'+':'')+(P+ceEff))+'</b><span>'+ceLbl+' attack</span></div>'+
+       '<div><b>'+(8+P+ceEff)+'</b><span>'+ceLbl+' save DC</span></div>')+
     '<div><b>+'+P+'</b><span>Proficiency</span></div>'+
     '</div>'+
-    (isHR()?'':'<p class="small">Max CE = starting class max Reserve Die ('+esc(clsAt(1))+') + per-level gains + CE modifier once + '+(char.ceBonus||0)+' bonus.</p>')+
+    (hasCEPool()?'<p class="small">Max '+ceLbl+' = starting class max Reserve Die ('+esc(clsAt(1))+') + per-level gains + '+ceLbl+' modifier once + '+(char.ceBonus||0)+' bonus'+(hrV()==='limited-ce'||hrV()==='limited-physical'||hrV()==='evo'?' (variant-adjusted)':'')+(hrCEModBonus()?' · effective CE modifier +'+hrCEModBonus()+' (Limited Physical Potential)':'')+'.</p>':'')+
     '<p class="small">AC is your best unarmored formula — worn armor, shields, and technique features adjust it at the table.</p>'+
     '<p class="small">Speed includes class bonuses per the V6 class tables (Scout Unparalleled Movement, HR Unarmored Movement).</p></div>';
   /* class features */
@@ -2135,13 +2951,32 @@ function sheetHTML(){
   /* technique */
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Cursed Technique'+(getTechniques().length>1?'s':'')+'</h3>';
   var techEntries=getTechniques();
-  if(isHR()) html+='<p class="small">None — Pure Body.</p>';
+  if(!hasCEPool()) html+='<p class="small">None — '+(hrV()==='limited-ce'?'Limited Cursed Energy (no CE use)':'Pure Body')+'.</p>';
+  else if(hrV()==='rce'){
+    if(!techEntries.length) html+='<p class="small">No technique recorded.</p>';
+    else techEntries.forEach(function(entry,i){
+      if(i>0) html+='<div style="border-top:1px solid var(--line);margin:14px 0;"></div>';
+      html+='<p style="font-family:var(--serif);font-size:1.5rem;font-weight:bold;margin:0">'+esc(tName(entry))+' — Reversal</p>'+
+        '<p class="small">You manifest the <b>Reversal</b> of this technique instead of its normal features. Reversal rendering is GM-adjudicated until codex reversal content exists.</p>';
+    });
+  }
   else if(!techEntries.length) html+='<p class="small">No technique recorded.</p>';
   else techEntries.forEach(function(entry,i){
     if(i>0) html+='<div style="border-top:1px solid var(--line);margin:14px 0;"></div>';
     html+=techniqueSheetHTML(entry);
   });
   html+='</div>';
+  /* special trait */
+  if(char.specialTrait&&SPECIAL_TRAITS[char.specialTrait]){
+    var _st=SPECIAL_TRAITS[char.specialTrait], _ss=traitStage();
+    if(_ss){
+      html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Special Trait</h3>'+
+        '<p style="font-family:var(--serif);font-size:1.15rem;font-weight:bold;margin:0">'+esc(_st.name)+' — '+esc(traitStageName())+'</p>'+
+        '<p class="small"><b>High-power games only — requires GM approval.</b></p>'+
+        '<ul style="margin:6px 0 0;padding-left:1.3em">'+_st.stages[_ss].map(function(p){ return '<li class="small">'+esc(p)+'</li>'; }).join('')+'</ul>'+
+        traitSheetExtraHTML()+'</div>';
+    }
+  }
   /* details */
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Details</h3>';
   html+='<p class="small" style="margin:0 0 4px;letter-spacing:2px;text-transform:uppercase">Feats</p>'+
@@ -2149,7 +2984,11 @@ function sheetHTML(){
       var featNote=function(name){ var fi=featInfo(name); return fi&&fi.prereq?' <span class="small">'+esc(fi.prereq)+'</span>':''; };
       /* Jujutsu Sorcerers automatically have the Cursed Energy feat (unusable under Pure Body) */
       var autoFeats=(char.heritage==='sorcerer'&&!isHR())?['Beginner Cursed Energy']:[];
-      var items=autoFeats.map(function(f){return '<li>'+esc(f)+' <span class="small">(heritage)</span>'+featNote(f)+'</li>';})
+      if(hrV()==='rce') autoFeats=autoFeats.concat(['Reverse Cursed Technique (variant auto-grant)','Cursed Technique Reversal (variant auto-grant)','Reverse Cursed Technique Output (variant auto-grant)']);
+      var items=autoFeats.map(function(f){
+        var tag=f.indexOf('(variant auto-grant)')>=0?' <span class="small">(variant)</span>':' <span class="small">(heritage)</span>';
+        return '<li>'+esc(f)+tag+featNote(f)+'</li>';
+      })
         .concat(char.backgroundFeat?['<li>'+esc(char.backgroundFeat)+' <span class="small">(background)</span>'+featNote(char.backgroundFeat)+'</li>']:[])
         .concat(char.feats.map(function(f){return '<li>'+esc(f)+featNote(f)+'</li>';}))
         .concat(asiFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat)</span>'+featNote(e.name)+'</li>';}));
