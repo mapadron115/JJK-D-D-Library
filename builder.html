@@ -859,7 +859,16 @@ function ceMax(){
   return r.dieMax + r.sum + ceMod + (parseInt(char.ceBonus,10)||0);
 }
 function isHR(){ return clsAt(1)==='Heavenly Restriction'; }
-/* walking speed: ancestry blurb base, heritage traits override */
+/* walking speed: ancestry base + heritage overrides + class bonuses.
+   Scout Unparalleled Movement +10 and HR Unarmored Movement +20 are explicit in
+   the feature text; their per-level table scaling is not in the data, so the
+   sheet shows the base bonus and flags table scaling for the table. */
+function classSpeedInfo(){
+  var bonus = 0, notes = [];
+  if(classLevelCount('Scout', char.level) >= 1){ bonus += 10; notes.push('Scout +10'); }
+  if(classLevelCount('Heavenly Restriction', char.level) >= 1){ bonus += 20; notes.push('HR +20, unarmored & no shield'); }
+  return {bonus:bonus, notes:notes};
+}
 function walkSpeed(){
   var sp = 30, m;
   var A = ANCESTRIES[char.ancestry], H = A ? A.heritages[char.heritage] : null;
@@ -867,15 +876,21 @@ function walkSpeed(){
   var traits = (H && H.traits) ? H.traits : [];
   traits.forEach(function(t){ var b=t.match(/base walking speed is (\d+) ?feet/i); if(b) sp=parseInt(b[1],10); });
   traits.forEach(function(t){ var b=t.match(/your speed becomes (\d+) ?feet/i); if(b) sp=parseInt(b[1],10); });
+  sp += classSpeedInfo().bonus;
   return sp;
 }
-/* base AC the builder can know: unarmored + ancestry adjustments (armor/shields/techniques adjust at the table) */
+/* base AC the builder can know: best of the applicable unarmored formulas
+   (armor/shields/techniques adjust at the table) */
 function baseAC(){
   var ab = abilitiesAt(char.level);
-  var ac = 10 + mod(ab.DEX||10), note = 'unarmored';
-  if(char.ancestry==='cursed-spirit' && char.heritage==='womb'){ ac = 14 + mod(ab.CON||10); note = 'Hard Shell, unarmored'; }
-  if(char.ancestry==='cursed-corpse' && char.heritage==='hard-shell'){ ac += 1; note += ' + Integrated Armor'; }
-  return {ac:ac, note:note};
+  var dex = mod(ab.DEX||10), con = mod(ab.CON||10);
+  var best = {ac: 10 + dex, note: 'unarmored'};
+  function consider(ac, note){ if(ac > best.ac) best = {ac:ac, note:note}; }
+  if(classLevelCount('Juggernaut', char.level) >= 1) consider(10 + dex + con, 'Juggernaut Unarmored Defense');
+  if(classLevelCount('Heavenly Restriction', char.level) >= 1) consider(10 + dex + con, 'HR Supernatural Resilience');
+  if(char.ancestry==='cursed-spirit' && char.heritage==='womb') consider(14 + con, 'Hard Shell, unarmored');
+  if(char.ancestry==='cursed-corpse' && char.heritage==='hard-shell'){ best.ac += 1; best.note += ' + Integrated Armor'; }
+  return best;
 }
 /* multiclassing: which class was taken at character level l */
 function clsAt(l){
@@ -2037,7 +2052,7 @@ function sheetHTML(){
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Vitals</h3><div class="vitals">'+
     '<div><b>'+hp+'</b><span>Max HP ('+classesTaken().map(function(c){ return 'd'+CLASSES[c].hd; }).join(' / ')+')</span></div>'+
     '<div><b>'+acInfo.ac+'</b><span>AC ('+esc(acInfo.note)+')</span></div>'+
-    '<div><b>'+spd+' ft</b><span>Speed</span></div>'+
+    '<div><b>'+spd+' ft</b><span>Speed'+(function(){ var n=classSpeedInfo().notes; return n.length?' ('+esc(n.join(', '))+')':''; })()+'</span></div>'+
     (isHR()?'<div><b>—</b><span>Max CE (Pure Body)</span></div>'
       :'<div><b>'+ce+'</b><span>Max CE Reserve</span></div>'+
        '<div><b>'+(char.ceAbility||'&mdash;')+'</b><span>CE ability ('+((ceMod==null)?'&mdash;':(ceMod>=0?'+':'')+ceMod)+')</span></div>'+
@@ -2046,7 +2061,8 @@ function sheetHTML(){
     '<div><b>+'+P+'</b><span>Proficiency</span></div>'+
     '</div>'+
     (isHR()?'':'<p class="small">Max CE = starting class max Reserve Die ('+esc(clsAt(1))+') + per-level gains + CE modifier once + '+(char.ceBonus||0)+' bonus.</p>')+
-    '<p class="small">AC is your unarmored base — worn armor, shields, and technique features adjust it at the table.</p></div>';
+    '<p class="small">AC is your best unarmored formula — worn armor, shields, and technique features adjust it at the table.</p>'+
+    '<p class="small">Scout and Heavenly Restriction speed bonuses above are the base values; their level-table increases apply at the table.</p></div>';
   /* class features */
   html+=classFeaturesSheetHTML();
   /* technique */
