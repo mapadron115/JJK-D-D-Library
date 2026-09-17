@@ -545,8 +545,18 @@ var ANCESTRIES = {
                 'Speed. Your base walking speed is 30 feet.',
                 'Spiritual Nature. You do not need to eat, drink, breathe, or sleep, but must remain inactive for 4 hours a day to gain the benefits of a long rest. You have advantage on saving throws against disease and being poisoned, and you have resistance to poison damage. You are immune to nonmagical bludgeoning, piercing, and slashing damage. You are invisible to creatures without cursed energy.',
                 'Cursed Energy Affinity. You cannot use reverse cursed technique, which is positive energy, though you can still restore your body with pure cursed energy. Starting at 5th level, as an action once per turn you can spend cursed energy up to your CE modifier to regain 5 hit points per cursed energy spent.',
-                'Grudge. You were once human, but when you died your powerful grudge made you into a curse. When you are reduced to 0 hit points, you can choose to remain at 1 hit point instead. Once per long rest.',
-                'Curse. Choose a race that you hated. You gain a +2 bonus to damage rolls against that race.']},
+                'Grudge. You were once human, but when you died your powerful grudge made you into a curse. When you are reduced to 0 hit points, you can choose to remain at 1 hit point instead. Once per long rest.']},
+      'curse':{ name:'Curse',
+        asi:'+2 to one ability score and +1 to a different score (your choice).',
+        pick:{counts:[2,1]},
+        traits:['Ability Score Increase. Increase one ability score of your choice by 2 and a different score by 1.',
+                'Creature Type. You are Undead.',
+                'Age. You are cursed to live forever.',
+                'Size. Your size can be Small or Medium.',
+                'Speed. Your base walking speed is 30 feet.',
+                'Spiritual Nature. You do not need to eat, drink, breathe, or sleep, but must remain inactive for 4 hours a day to gain the benefits of a long rest. You have advantage on saving throws against disease and being poisoned, and you have resistance to poison damage. You are immune to nonmagical bludgeoning, piercing, and slashing damage. You are invisible to creatures without cursed energy.',
+                'Cursed Energy Affinity. You cannot use reverse cursed technique, which is positive energy, though you can still restore your body with pure cursed energy. Starting at 5th level, as an action once per turn you can spend cursed energy up to your CE modifier to regain 5 hit points per cursed energy spent.',
+                'Curse. When you choose this subrace, choose a race that you hated. You gain a +2 bonus to damage rolls against that race.']},
       'imaginary':{ name:'Imaginary',
         asi:'+2 to one ability score and +1 to a different score (your choice).',
         pick:{counts:[2,1]},
@@ -921,6 +931,35 @@ function ensureClassLevels(){
 function classLevelCount(cls,upto){
   var n=0; for(var l=1;l<=upto;l++) if(clsAt(l)===cls) n++; return n;
 }
+/* V6 class-table damage dice (Combat Prowess / Quick Strikes / Martial Arts).
+   Scales with class level: idx 0 at 1-4, 1 at 5-10, 2 at 11-16, 3 at 17-20. */
+var MARTIAL_DIE = {
+  'Juggernaut':['d6','d8','d10','d12'],
+  'Warrior':['d6','d8','d10','d12'],
+  'Heavenly Restriction':['d6','d8','d10','d12'],
+  'Scout':['d4','d6','d8','d10'],
+  'Shikigami User':['d4','d6','d8','d10']
+};
+function martialDieFor(cls, classLvl){
+  var p=MARTIAL_DIE[cls]; if(!p||!classLvl) return null;
+  var i = classLvl>=17?3 : classLvl>=11?2 : classLvl>=5?1 : 0;
+  return p[i];
+}
+function martialDieProgression(cls){
+  var p=MARTIAL_DIE[cls]; return p?p.join(' \u2192 '):null;
+}
+/* V6 §6.1 multiclass prerequisites: ability score needed to take a level in a
+   new class. Heavenly Restriction is not listed in V6 — no prerequisite shown.
+   Soft warning only; the builder never blocks the choice. */
+var MC_PREREQ = {
+  'Warrior':'STR','Scout':'DEX','Juggernaut':'CON',
+  'Strategist':'INT','Support Specialist':'WIS','Shikigami User':'CHA'
+};
+function mcPrereqAbility(cls){ return MC_PREREQ[cls]||null; }
+function mcPrereqMet(cls){
+  var a=mcPrereqAbility(cls); if(!a) return true;
+  return (abilitiesAt(char.level)[a]||10) >= 13;
+}
 /* ASI at character level l? each class's schedule advances on its own class levels */
 function hasASIAt(l){ var c=clsAt(l); if(!c) return false; return asiLevels(c).indexOf(classLevelCount(c,l))>=0; }
 function classesTaken(){
@@ -1180,6 +1219,13 @@ function renderHeritages(){
     var h=A.heritages[char.heritage];
     d.innerHTML='<h3>'+esc(h.name)+' traits</h3><div class="banner"><ul style="margin:0;padding-left:1.3em">'+
       h.traits.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ul></div>';
+    if(char.heritage==='curse'){
+      d.innerHTML+='<p class="small" style="margin-top:8px"><label><b>Hated race:</b> '+
+        '<input type="text" id="hatedRace" value="'+esc(((char.ancestryPicks||{}).hatedRace)||'')+'" placeholder="e.g. humans" style="max-width:220px"></label>'+
+        ' <span class="small">+2 to damage rolls against this race.</span></p>';
+      var _hr=$('hatedRace');
+      if(_hr) _hr.addEventListener('input',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.hatedRace=e.target.value; });
+    }
   }else d.innerHTML='';
 }
 STEP_VALID[2]=function(){
@@ -1211,7 +1257,8 @@ function stepClass(body){
     return '<div class="opt-card'+(char.cls===c?' is-selected':'')+'" data-c="'+esc(c)+'" tabindex="0" role="button" aria-pressed="'+(char.cls===c)+'">'+
       '<span class="check">✦</span><h4>'+esc(c)+'</h4><p class="tagline">'+esc(C.identity)+'</p>'+
       '<dl><dt>Hit die</dt><dd>d'+C.hd+'</dd><dt>Armor</dt><dd>'+esc(C.armor)+'</dd>'+
-      '<dt>Saving throws</dt><dd>'+esc(C.saves)+'</dd><dt>CE Reserve die / fixed</dt><dd>'+esc(res)+'</dd></dl></div>';
+      '<dt>Saving throws</dt><dd>'+esc(C.saves)+'</dd><dt>CE Reserve die / fixed</dt><dd>'+esc(res)+'</dd>'+
+      '<dt>Martial die</dt><dd>'+esc(martialDieProgression(c)||'\u2014')+'</dd></dl></div>';
   }).join('')+'</div>';
   html+='<div id="classExtra"></div>';
   body.innerHTML=html;
@@ -1621,6 +1668,10 @@ function renderLvlRows(){
     var clsCell='<select data-lvlclass="'+r.l+'">'+CLASS_ORDER.map(function(c){
       return '<option value="'+esc(c)+'"'+(c===r.cls?' selected':'')+'>'+esc(c)+'</option>';
     }).join('')+'</select>';
+    if(r.cls!==char.cls && !mcPrereqMet(r.cls)){
+      clsCell+='<div class="banner warn" style="margin-top:6px;padding:6px 10px"><span class="bk">\u26A0 Prerequisite</span>'+
+        '<p class="small" style="margin:2px 0 0">Multiclassing into '+esc(r.cls)+' needs '+mcPrereqAbility(r.cls)+' 13 (V6 \u00A76.1). The builder will not stop you \u2014 confirm with your GM.</p></div>';
+    }
     var asiCell='—';
     if(r.asi){
       var mode=((char.asiMode||{})[r.l])||'asi';
@@ -2002,6 +2053,8 @@ function classFeaturesSheetHTML(){
       return !/^(innate technique( feature)?|ability score improvement)$/i.test(f.name||'');
     });
     html+='<div class="lvl"><span class="lvl-chip">'+esc(c)+' '+cl+'</span></div>';
+    var _md=martialDieFor(c,cl);
+    if(_md) html+='<p class="small" style="margin:4px 0"><b>Martial die:</b> '+esc(_md)+' (unarmed/natural weapon at '+esc(c)+' '+cl+')</p>';
     var active=feats.filter(function(f){ return (f.level||1)<=cl; });
     var locked={};
     feats.forEach(function(f){ if((f.level||1)>cl){ (locked[f.level]=locked[f.level]||[]).push(f); } });
@@ -2039,7 +2092,8 @@ function sheetHTML(){
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Ancestry</h3>'+
     '<p style="font-family:var(--serif);font-size:1.15rem;font-weight:bold;margin:0">'+esc(ancLine)+'</p>'+
     (A&&A.blurb?'<p class="small">'+esc(A.blurb)+'</p>':'')+
-    (H&&H.traits&&H.traits.length?'<ul style="margin:6px 0 0;padding-left:1.3em">'+H.traits.map(function(t){ return '<li class="small">'+esc(t)+'</li>'; }).join('')+'</ul>':'<p class="small">No ancestry traits recorded.</p>')+'</div>';
+    (H&&H.traits&&H.traits.length?'<ul style="margin:6px 0 0;padding-left:1.3em">'+H.traits.map(function(t){ return '<li class="small">'+esc(t)+'</li>'; }).join('')+'</ul>':'<p class="small">No ancestry traits recorded.</p>')+
+    (char.heritage==='curse'&&(char.ancestryPicks||{}).hatedRace?'<p class="small" style="margin:6px 0 0"><b>Hated race:</b> '+esc(char.ancestryPicks.hatedRace)+' (+2 to damage rolls against this race)</p>':'')+'</div>';
   /* background & mindset */
   (function(){
     var bg=bgById(char.background), ms=msById(char.mindset);

@@ -1,7 +1,7 @@
 {
- "generated": "2026-09-13",
- "source": "extracted from JJK 5e V.6.txt Chapter 6.2 Feats (Barrier/Cursed Energy/Physical/Skill)",
- "count": 68,
+ "generated": "2026-09-17",
+ "source": "extracted from JJK 5e V.6.txt Chapter 6.2 Feats (Barrier/Cursed Energy/Physical/Skill) + RCT feats (2026-09-17) + Six Eyes Special Trait (2026-09-17); Tavern Brawler Skill duplicate removed",
+ "count": 71,
  "feats": {
   "barrier": [
    {
@@ -336,11 +336,6 @@
     "text": "You are an expert at slinking through shadows. You gain the following\nbenefits:\n● You can try to hide when you are lightly obscured from the\ncreature from which you are hiding.\n● When you are hidden from a creature and miss it with a ranged\nweapon attack, making the attack doesn't reveal your position.\n● Dim light doesn't impose disadvantage on your Wisdom\n(Perception) checks relying on sight."
    },
    {
-    "name": "Tavern Brawler",
-    "prereq": "N/A",
-    "text": "Accustomed to the rough-and-tumble fighting using whatever weapons\nhappen to be at hand, you gain the following benefits:\n● Increase your Strength or Constitution score by 1, to a maximum\nof 20.\n● You are proficient with improvised weapons.\n● Your unarmed strike uses a d4 for damage.\n● When you hit a creature with an unarmed strike or an improvised\nweapon on your turn, you can use a bonus action to attempt to\ngrapple the target."
-   },
-   {
     "name": "Tool Maker",
     "prereq": "16+ Cursed Energy score, Proficiency in Arcana",
     "text": "You have the unique ability to create cursed tools. The time it takes\nto make a cursed tool depends on the rarity of the item, and the\nrarity of item you can make is dependent on your level and you can\nspend 8 hours per day working on a cursed tool. After creating a\ncursed tool, you must wait an amount of time equal to its crafting\ntime before working on another cursed tool. The GM decides the cost\nof any materials.\nLevel 1-4: Fourth Grade (Common)\nTime: 72 hours\nLevel 5-8: Third Grade (Uncommon)\nTime: 216 hours\nLevel 9-12: Second Grade (Rare)\nTime: 648 hours\nLevel 13-16: First Grade (Very Rare)\nTime: 1944 hours"
@@ -349,6 +344,30 @@
     "name": "Weapon Expert",
     "prereq": "N/A",
     "text": "You have practiced extensively with a variety of weapons, gaining\nthe following benefits:\n● Increase your Strength or Dexterity score by 1, to a maximum of\n20.\n● You gain proficiency with four weapons of your choice. Each one\nmust be a simple or a martial weapon."
+   }
+  ],
+  "rct": [
+   {
+    "name": "Cursed Technique Reversal",
+    "prereq": "Must have Reverse Cursed Technique",
+    "text": "You have learned to feed your cursed techniques with reverse cursed energy instead of normal. This leads your technique to have the opposite of its normal effect. Turning debuffing into buffing and inverting damage types, resulting in a Reversal."
+   },
+   {
+    "name": "Reverse Cursed Technique Output",
+    "prereq": "Must have Reverse Cursed Technique",
+    "text": "You have learned to offensively use reverse curse technique, whenever you deal damage to a Monstrosity, Undead, or Cursed Spirit with an unarmed strike or melee weapon, you can spend cursed energy to remove hit points from your healing pool adding them as radiant damage."
+   },
+   {
+    "name": "Reverse Technique Prodigy",
+    "prereq": "Must have Reverse Cursed Technique",
+    "text": "You have reached new heights with this new type of energy, becoming an unheard prodigy. You can cause a creature you touch to gain the benefits of reverse cursed technique instead of you and can use reverse cursed technique once per turn as a free action."
+   }
+  ],
+  "special": [
+   {
+    "name": "Six Eyes",
+    "prereq": "Gojo Clan sorcerer family, must be Human. GM permission — high-power Special Trait.",
+    "text": "You have the gift granted only to the Gojo Clan, the Six Eyes. Special Traits are incredibly powerful even for the JJK system and should only be used for purposely high power games; this trait grows through stages as you level.\n\nDormant (levels 1–5).\n● Illuminated Vision. You gain 120 ft of truesight. You can see through thin objects such as a blindfold, allowing you to use it as a way of protecting from the sheer amount of information of your eyes.\n● Information Overload. Due to the amount of information your eyes capture, while not wearing any light object to protect your eyes during combat, you receive 1 level of exhaustion every minute, to a maximum of 3 levels. For every exhaustion level you gain like this, the damage die tier and save DC of your techniques decreases by 1. If you wear eye protection, this resets after a minute of having your eyes covered. Outside of combat, you only gain one level of exhaustion every hour your eyes are uncovered, with the timer and exhaustion resetting if you wear eye protection for 10 minutes. If you have Reverse Cursed Technique, you can remove these exhaustion levels for 20 hit points per level of exhaustion.\n● Perfect Cursed Energy Manipulation. Due to the six eyes, you can manipulate cursed energy on the atomic level. A number of times equal to your proficiency bonus each long rest, you reduce cursed energy you spend by 10 times, even into decimals. (Example: if you spend 3 cursed energy, you only spend 0.3 cursed energy.)\n\nStirring (levels 6–13).\n● Perfect Cursed Energy Manipulation. A number of times equal to your level, you can reduce cursed energy you spend by 10 times, even into decimals.\n● Technique Analyzer. Your eyes allow you to uncover the secrets of techniques. As a reaction to seeing an Extension, Reversal, or Maximum technique used while your eyes are uncovered, or as a bonus action within 1 minute of seeing them used while your eyes were uncovered, you can make an Intelligence (Arcana) check against their cursed energy DC. On a success, you learn the feature and its capabilities. If it is a domain, you learn the guaranteed hit effect and the user’s refinement.\n● Perceptive Eyes. Nothing escapes your watch: you gain expertise in Perception, advantage on all Perception checks, and can add your CE modifier to Perception checks. Additionally, you gain the Cursed Energy Perception feat, and can use it to detect any remains of cursed energy in a 300 ft radius, detecting it even if you can’t see it directly. While wearing eye protection, you do not have advantage on all Perception checks.\n\nAwakened (levels 14+).\n● Perfect Cursed Energy Manipulation. Any cursed energy you spend is reduced by 10 times, even into decimals.\n● Infinity Optimization. The Six Eyes naturally improves the efficiency of Infinity. If you have Reverse Cursed Technique, you can practice to improve the efficiency of Infinity. Once per month during a long rest, you can make a DC 20 Arcana check. On a success, you gain 1 success towards optimizing Infinity. Once you have 12 successes, you no longer need to spend reactions or cursed energy to nullify attacks using Infinity."
    }
   ]
  }

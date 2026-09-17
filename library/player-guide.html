@@ -337,6 +337,7 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
 <th>Armor</th>
 <th>Saving throws</th>
 <th>CE die / fixed</th>
+<th>Martial die</th>
 <th>Core identity</th>
 </tr>
 </thead>
@@ -347,6 +348,7 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
 <td>Light, medium, shields</td>
 <td>Strength, Constitution</td>
 <td>d4 / 3</td>
+<td>d6 / d8 / d10 / d12</td>
 <td>Durable brawler and Battle Focus</td>
 </tr>
 <tr>
@@ -355,6 +357,7 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
 <td>Light</td>
 <td>Strength, Constitution</td>
 <td>d6 / 4</td>
+<td>d4 / d6 / d8 / d10</td>
 <td>Speed, perception, evasive pressure</td>
 </tr>
 <tr>
@@ -363,6 +366,7 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
 <td>None</td>
 <td>Intelligence, Wisdom</td>
 <td>d10 / 6</td>
+<td>&mdash;</td>
 <td>Largest CE reserve and technique modification</td>
 </tr>
 <tr>
@@ -371,6 +375,7 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
 <td>None</td>
 <td>Intelligence, Wisdom</td>
 <td>d6 / 4</td>
+<td>d4 / d6 / d8 / d10</td>
 <td>Permanent companion and coordinated actions</td>
 </tr>
 <tr>
@@ -379,6 +384,7 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
 <td>None</td>
 <td>Intelligence, Wisdom</td>
 <td>d8 / 5</td>
+<td>&mdash;</td>
 <td>Barriers, curtains, and RCT mastery</td>
 </tr>
 <tr>
@@ -387,6 +393,7 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
 <td>All armor, shields</td>
 <td>Dexterity, Wisdom</td>
 <td>d6 / 4</td>
+<td>d6 / d8 / d10 / d12</td>
 <td>Weapon pressure and the largest attack count</td>
 </tr>
 <tr>
@@ -395,6 +402,7 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
 <td>None</td>
 <td>Strength, Constitution</td>
 <td>None</td>
+<td>d6 / d8 / d10 / d12</td>
 <td>Extreme physical growth without CE</td>
 </tr>
 </tbody>
@@ -407,6 +415,17 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
                 levels, roll the die or take its fixed value. Add the CE
                 modifier only once to the entire reserve. Heavenly Restriction
                 gains neither a die nor a CE modifier.
+              </p>
+</div>
+<div class="callout" style="margin-top:10px">
+<p>
+<strong>Martial die:</strong> the unarmed/natural-weapon die granted by
+                Combat Prowess (Juggernaut, Warrior), Quick Strikes (Scout), or
+                Martial Arts (Shikigami User, Heavenly Restriction). It scales
+                with <em>class</em> level, not total character level: the first
+                die at levels 1&ndash;4, the second at 5&ndash;10, the third at
+                11&ndash;16, the fourth at 17&ndash;20. Strategist and Support
+                Specialist gain no martial die.
               </p>
 </div>
 </div>
@@ -740,6 +759,22 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
                 you do.
               </p>
 </article>
+<article class="card">
+<span class="rule">Basic CE use</span>
+<h3 id="cursed-strike">Cursed Strike</h3>
+<p>
+                The most basic offensive use of cursed energy, available to
+                every sorcerer with access to and control over their cursed
+                energy (<em>Creeps and Curses</em>). On a hit with an unarmed
+                strike or melee weapon attack, you can spend cursed energy up
+                to your proficiency bonus to deal an additional
+                <span class="number">1d6 necrotic damage per CE spent</span>.
+                The damage die can improve through campaign growth &mdash; the
+                source lists improvement to d8 or d10 (toward d12) as an
+                example of what awakening, such as after a Black Flash, can
+                bestow.
+              </p>
+</article>
 </div>
 <div class="callout teal">
 <p>
@@ -944,6 +979,19 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
                 Your CE ability modifier is added only once to the combined
                 reserve. Taking a new class never adds that modifier again and
                 never allows you to select a second CE ability.
+              </p>
+</article>
+<article class="card wide">
+<span class="rule">Prerequisite</span>
+<h3 id="multiclass-prerequisites">Ability prerequisites</h3>
+<p>
+                To take a level in a new class you must meet that class's
+                ability prerequisite (V6 &sect;6.1): Warrior 13 Strength,
+                Scout 13 Dexterity, Juggernaut 13 Constitution, Strategist
+                13 Intelligence, Support Specialist 13 Wisdom, Shikigami
+                User 13 Charisma. Heavenly Restriction lists no prerequisite.
+                The builder warns when a new class's prerequisite is unmet;
+                your GM may waive it.
               </p>
 </article>
 <article class="card full teal">
@@ -4667,8 +4715,8 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
                         what can threaten the user; the full kit supplies mass
                         displacement, enormous erasure damage, and a
                         lore-faithful neurological shutdown. Limitless remains
-                        selectable without Six Eyes; any separate Six Eyes
-                        option modifies it only as that option states.
+                        selectable without Six Eyes; any separate <a href="#six-eyes">Six Eyes
+                        option</a> modifies it only as that option states.
                       </p>
 </aside>
 </div>
@@ -7318,15 +7366,111 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
 <div class="chapter-head">
 <div>
 <span class="kicker">Complete source inventory</span>
-<h2 id="all-175-printed-feat-entries">All 175 printed feat entries.</h2>
+<h2 id="all-printed-feat-entries">All printed feat entries.</h2>
 </div>
 <p>
-              The source contains 174 unique feats: Tavern Brawler appears once
-              under Physical and again under Skill. Both printed entries remain
-              visible here so the audit count is exact.
+              The builder carries 71 feat entries across Barrier, Cursed Energy,
+              Physical, Skill, RCT, and Special Traits. The Tavern Brawler
+              duplicate (once under Physical, once under Skill) has been
+              removed; only the Physical entry remains.
             </p><p>
-              The complete feat entries are printed in the source books rather than reproduced here. Find the feat in your copy, then enter its exact name in the character builder&rsquo;s feat step.
+              The complete feat entries are printed in the source books rather than reproduced here. Find the feat in your copy, then enter its exact name in the character builder&rsquo;s feat step. The one exception is the Six Eyes Special Trait below: Limitless and other entries reference it as a separate option, so its full rules are printed here.
             </p>
+</div>
+<div class="cards" style="margin-top:14px">
+<article class="card full">
+<span class="rule">Special Trait</span>
+<h3 id="six-eyes">Six Eyes</h3>
+<p>
+<strong>Prerequisite:</strong> Gojo Clan sorcerer family, must be Human.
+                <strong>GM permission required</strong> &mdash; Special Traits
+                are incredibly powerful even for the JJK system and should only
+                be used for purposely high power games (<em>Creeps and
+                Curses</em>).
+              </p>
+<p>
+                You have the gift granted only to the Gojo Clan, the Six Eyes.
+                Its power grows through stages as you level.
+              </p>
+<h4>Dormant (levels 1&ndash;5)</h4>
+<ul>
+<li>
+<strong>Illuminated Vision.</strong> You gain 120 ft of truesight. You can
+                  see through thin objects such as a blindfold, allowing you to
+                  use it as a way of protecting from the sheer amount of
+                  information of your eyes.
+                </li>
+<li>
+<strong>Information Overload.</strong> Due to the amount of information your
+                  eyes capture, while not wearing any light object to protect
+                  your eyes during combat, you receive 1 level of exhaustion
+                  every minute, to a maximum of 3 levels. For every exhaustion
+                  level you gain like this, the damage die tier and save DC of
+                  your techniques decreases by 1. If you wear eye protection,
+                  this resets after a minute of having your eyes covered.
+                  Outside of combat, you only gain one level of exhaustion
+                  every hour your eyes are uncovered, with the timer and
+                  exhaustion resetting if you wear eye protection for 10
+                  minutes. If you have Reverse Cursed Technique, you can remove
+                  these exhaustion levels for 20 hit points per level of
+                  exhaustion.
+                </li>
+<li>
+<strong>Perfect Cursed Energy Manipulation.</strong> Due to the six eyes,
+                  you can manipulate cursed energy on the atomic level. A
+                  number of times equal to your proficiency bonus each long
+                  rest, you reduce cursed energy you spend by 10 times, even
+                  into decimals. (Example: if you spend 3 cursed energy, you
+                  only spend 0.3 cursed energy.)
+                </li>
+</ul>
+<h4>Stirring (levels 6&ndash;13)</h4>
+<ul>
+<li>
+<strong>Perfect Cursed Energy Manipulation.</strong> A number of times equal
+                  to your level, you can reduce cursed energy you spend by 10
+                  times, even into decimals.
+                </li>
+<li>
+<strong>Technique Analyzer.</strong> Your eyes allow you to uncover the
+                  secrets of techniques. As a reaction to seeing an Extension,
+                  Reversal, or Maximum technique used while your eyes are
+                  uncovered, or as a bonus action within 1 minute of seeing
+                  them used while your eyes were uncovered, you can make an
+                  Intelligence (Arcana) check against their cursed energy DC.
+                  On a success, you learn the feature and its capabilities. If
+                  it is a domain, you learn the guaranteed hit effect and the
+                  user&rsquo;s refinement.
+                </li>
+<li>
+<strong>Perceptive Eyes.</strong> Nothing escapes your watch: you gain
+                  expertise in Perception, advantage on all Perception checks,
+                  and can add your CE modifier to Perception checks.
+                  Additionally, you gain the Cursed Energy Perception feat, and
+                  can use it to detect any remains of cursed energy in a 300 ft
+                  radius, detecting it even if you can&rsquo;t see it directly.
+                  While wearing eye protection, you do not have advantage on
+                  all Perception checks.
+                </li>
+</ul>
+<h4>Awakened (levels 14+)</h4>
+<ul>
+<li>
+<strong>Perfect Cursed Energy Manipulation.</strong> Any cursed energy you
+                  spend is reduced by 10 times, even into decimals.
+                </li>
+<li>
+<strong>Infinity Optimization.</strong> The Six Eyes naturally improves the
+                  efficiency of Infinity. If you have Reverse Cursed Technique,
+                  you can practice to improve the efficiency of Infinity. Once
+                  per month during a long rest, you can make a DC 20 Arcana
+                  check. On a success, you gain 1 success towards optimizing
+                  Infinity. Once you have 12 successes, you no longer need to
+                  spend reactions or cursed energy to nullify attacks using
+                  Infinity.
+                </li>
+</ul>
+</article>
 </div>
 <noscript><div class="callout" style="margin-top: 14px">
 <p>
