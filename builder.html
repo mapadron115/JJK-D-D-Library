@@ -1745,7 +1745,7 @@ function hrVariantOptsHTML(v){
     var E=(char.hrOpts||{})['evo']||{};
     var cons=[
       ['softShell','Soft Shell','AC = 10 + CON modifier (min +0) while not wearing armor; no Unarmored Defense.','Harder Shell \u2014 8th: AC = 10 + PB + CON \u00B7 15th: 10 + PB + 2\u00D7CON'],
-      ['weakCon','Weak Constitution','HP max \u2212(1\u20133 \u00D7 level) \u2014 choose severity below.','Strongest Constitution \u2014 8th: penalty ends, +1\u20133 \u00D7 level'],
+      ['weakCon','Weak Constitution','HP max \u2212(1\u20133 \u00D7 level) \u2014 choose severity below.','Strongest Constitution \u2014 8th: penalty ends, +(your chosen 1\u20133) \u00D7 level'],
       ['lackingAffinity','Lacking Affinity','No Cursed Energy Affinity healing at 5th level.','Powerful Affinity \u2014 11th: spend CE up to CE modifier, regain 10 HP per CE (bonus action / reaction to damage)'],
       ['noASI','No ASI','You do not gain your racial ASI.','Greater ASI \u2014 from 8th: an ASI becomes +3 to one score, +1 to three scores, or +2 and +1'],
       ['weakCE','Weak CE','Do not add your CE modifier to total CE.','Powerful CE \u2014 11th: add twice your CE modifier to total CE'],
@@ -1841,8 +1841,7 @@ function wireHrVariantPicker(ex){
       o[k]=cb.checked;
       if(k==='slow'&&cb.checked){ o.sedentary=false; if(!o.slowAmount) o.slowAmount=5; }
       if(k==='sedentary'&&cb.checked){ o.slow=false; }
-      if(k==='weakCon'&&cb.checked&&!o.weakCon) o.weakCon=1;
-      if(k==='weakCon'&&!cb.checked) delete o.weakCon;
+      if(k==='weakCon'){ if(cb.checked){ if(typeof o.weakCon!=='number') o.weakCon=1; } else delete o.weakCon; }
       if(k==='slow'&&!cb.checked) delete o.slowAmount;
       renderStep();
     });
@@ -2366,7 +2365,12 @@ function renderLvlRows(){
     }
     var asiCell='—';
     if(r.asi){
-      var mode=((char.asiMode||{})[r.l])||'asi';
+      /* The selects below render STR/STR + "ASI +1/+1" as the apparent choice —
+         persist that default so the sheet matches what Step 7 shows. */
+      char.asiMode=char.asiMode||{};
+      if(!char.asiMode[r.l]) char.asiMode[r.l]='asi';
+      if(!char.asi[r.l]) char.asi[r.l]=(char.asiMode[r.l]==='greater'?['STR','STR','STR']:['STR','STR']);
+      var mode=char.asiMode[r.l];
       var greaterAvail=hrV()==='evo'&&(hrOpts()['evo']||{}).noASI&&r.l>=8;
       asiCell='<select data-asimode="'+r.l+'">'+
         '<option value="asi"'+(mode==='asi'?' selected':'')+'>ASI +1/+1</option>'+
