@@ -450,6 +450,7 @@ img{max-width:100%;height:auto}
 <script src="data/technique_feats.js?v=20260917a"></script>
 <script src="data/codex_feats.js?v=20260911g"></script>
 <script src="data/class_features.js?v=20260917a"></script>
+<script src="data/class_choices.js?v=20260919a"></script>
 <script src="data/backgrounds.js?v=20260913a"></script>
 <script src="data/mindsets.js?v=20260913a"></script>
 <script src="data/general_feats.js?v=20260917a"></script>
@@ -810,7 +811,7 @@ function tHref(e){ var h=e?(e.href||''):''; return (h.indexOf('dossiers/')===0)?
 
 /* ── character state ── */
 var LS_KEY = 'ritual-archive-characters';
-var SCHEMA_VERSION = 3; /* bump when the save shape changes; migrateChar upgrades older saves */
+var SCHEMA_VERSION = 4; /* bump when the save shape changes; migrateChar upgrades older saves */
 var char = null;
 var currentStep = 1;
 var dicePool = [];      // rolled/standard-array pool for ability assignment
@@ -827,6 +828,8 @@ function blankChar(){
     asi:{},       // {level:[a,b]}
     asiMode:{},   // {level:'asi'|'feat'} — feat replaces the ASI (D&D 5e rule)
     asiFeat:{},   // {level:'feat name'}
+    classChoices:{}, // class level-up choices: {className:{choiceKey:value}} — keyed by class so
+                     // multiclass reordering never orphans a valid pick; see data/class_choices.js
     levelData:{}, // {level:{hpMode,hpDie,ceMode,ceDie}}
     classLevels:{}, // {charLevel:className} — multiclassing; level 1 is the starting class
     techniques:[], // [{catalog:'figures'|'originals', id}] — up to 2 innate techniques
@@ -1242,11 +1245,14 @@ function classBreakdown(){
 }
 /* migrate pre-multiclass / pre-dual-technique saves */
 function migrateChar(c){
+  var oldV=c.v||0;
   if(c.v!==SCHEMA_VERSION){
-    /* future schema changes branch here: if(c.v<4){ ... } */
+    /* future schema changes branch here: if(oldV<4){ ... } */
     c.v=SCHEMA_VERSION;
   }
-  /* v3: background & mindset */
+  /* v4: class level-up choices (data/class_choices.js) */
+  if(oldV<4 && !c.classChoices) c.classChoices={};
+  if(!c.classChoices) c.classChoices={};
   if(!('background' in c)) c.background='';
   if(!('backgroundFeat' in c)) c.backgroundFeat='';
   if(!('backgroundTool' in c)) c.backgroundTool='';
@@ -1359,6 +1365,11 @@ $('btnNewChar').addEventListener('click', function(){ char = blankChar(); startW
 function startWizard(step){
   currentStep = step||1;
   dicePool=[]; diceAssign={}; diceSets=[];
+  /* restore session ability assignment when editing a saved character (array/dice);
+     otherwise STEP_VALID[4] fails on edit because diceAssign is session-only */
+  if(char && char.abilityMethod && char.abilityMethod!=='manual' && char.abilityBase){
+    ABILITIES.forEach(function(a){ if(char.abilityBase[a]!=null) diceAssign[a]=char.abilityBase[a]; });
+  }
   showView('wizard');
   renderStep();
 }
@@ -2297,6 +2308,239 @@ STEP_VALID[6]=function(){
   return {ok:true};
 };
 
+/* ═══════════ CLASS LEVEL-UP CHOICES (data/class_choices.js) ═══════════
+   Structured pickers for every "choose X" class feature. Choices are keyed by
+   CLASS — char.classChoices[className][choiceKey] — never by character level,
+   so multiclass reordering never orphans a valid pick: a pick goes dormant
+   while its grant level isn't reached and revives if the level is restored. */
+function classChoiceDefs(cls){ return ((typeof window!=='undefined'&&window.CLASS_CHOICES)||{})[cls]||[]; }
+function ccDefByKey(cls,key){
+  var defs=classChoiceDefs(cls);
+  for(var i=0;i<defs.length;i++) if(defs[i].key===key) return defs[i];
+  return null;
+}
+/* character level L where cls reaches class level g (the row that grants it) */
+function grantRow(cls,g){
+  for(var L=1;L<=char.level;L++) if(clsAt(L)===cls&&classLevelCount(cls,L)===g) return L;
+  return 0;
+}
+function ccGet(cls,key){ var c=char.classChoices||{}; return (c[cls]||{})[key]||null; }
+function ccSet(cls,key,val){
+  char.classChoices=char.classChoices||{};
+  char.classChoices[cls]=char.classChoices[cls]||{};
+  if(val==null) delete char.classChoices[cls][key]; else char.classChoices[cls][key]=val;
+}
+/* every option name already taken for this choice point (drives exclusion) */
+function ccTakenNames(cls,cp){
+  var o=ccGet(cls,cp.key)||{}, out=[];
+  Object.keys(o).forEach(function(g){ (o[g]||[]).forEach(function(p){ if(p) out.push(p); }); });
+  return out;
+}
+function ord(n){ n=+n; var s=['th','st','nd','rd'], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
+/* one level row's Class-choices cell (Step 7) */
+function choiceCellHTML(L){
+  var cls=clsAt(L), n=classLevelCount(cls,L), html='';
+  classChoiceDefs(cls).forEach(function(cp){
+    if(cp.type==='pointbuy'){ if(n===cp.level) html+=ccPointbuyHTML(cls,cp); return; }
+    if(cp.type==='freeform'){ if(n===cp.level) html+=ccFreeformHTML(cls,cp); return; }
+    if(cp.type==='allocate'){ if(n===cp.level) html+=ccAllocateHTML(cls,cp); return; }
+    Object.keys(cp.slots||{}).forEach(function(gs){
+      var g=+gs; if(g!==n) return;
+      for(var s=0;s<cp.slots[gs];s++) html+=ccSlotHTML(cls,cp,g,s);
+    });
+  });
+  return html||'<span class="small">\u2014</span>';
+}
+function ccSlotHTML(cls,cp,g,s){
+  var o=ccGet(cls,cp.key)||{}, picks=o[g]||[], cur=picks[s]||'';
+  var taken=ccTakenNames(cls,cp).filter(function(t){ return t!==cur; });
+  var nSlots=cp.slots[g]||1;
+  var label=esc(cp.prompt||cp.name)+(nSlots>1?' '+(s+1)+' of '+nSlots:'')+' <span class="small">('+ord(g)+' lvl)</span>';
+  var opts='<option value="">\u2014 choose \u2014</option>'+(cp.options||[]).map(function(op){
+    if(taken.indexOf(op.name)>=0) return '';
+    return '<option value="'+esc(op.name)+'"'+(cur===op.name?' selected':'')+' title="'+esc(op.text||'')+'">'+esc(op.name)+'</option>';
+  }).join('');
+  var curText=(cp.options||[]).filter(function(op){ return op.name===cur; })[0];
+  return '<div class="field" style="margin:4px 0;min-width:190px"><label>'+label+
+    (cur?'':' <span style="color:#a33">\u26a0</span>')+'</label>'+
+    '<select data-ccslot="'+esc(cls)+'|'+esc(cp.key)+'|'+g+'|'+s+'">'+opts+'</select>'+
+    (curText?'<p class="small" style="margin:2px 0 0">'+esc(curText.text||'')+'</p>':'')+'</div>';
+}
+function ccFreeformHTML(cls,cp){
+  var o=ccGet(cls,cp.key)||{}, cur=o[cp.level]||'';
+  return '<div class="field" style="margin:4px 0;min-width:190px"><label>'+esc(cp.prompt||cp.name)+
+    (cur?'':' <span style="color:#a33">\u26a0</span>')+'</label>'+
+    '<input type="text" data-ccfree="'+esc(cls)+'|'+esc(cp.key)+'|'+cp.level+'" value="'+esc(cur)+
+    '" placeholder="'+esc(cp.placeholder||'')+'" style="width:100%">'+
+    (cp.note?'<p class="small" style="margin:2px 0 0">'+esc(cp.note)+'</p>':'')+'</div>';
+}
+function ccAllocateHTML(cls,cp){
+  var o=ccGet(cls,cp.key)||{}, cur=o[cp.level]||{}, tot=0;
+  ABILITIES.forEach(function(a){ tot+=(+cur[a]||0); });
+  var left=cp.points-tot;
+  var html='<div class="field" style="margin:4px 0;min-width:190px"><label>'+esc(cp.prompt||cp.name)+'</label>';
+  if(cp.blurb) html+='<p class="small" style="margin:2px 0">'+esc(cp.blurb)+'</p>';
+  html+='<div class="grid2">'+ABILITIES.map(function(a){
+    return '<div class="field" style="margin:2px 0"><label>'+a+'</label>'+
+      '<input type="number" min="0" max="'+cp.points+'" data-ccalloc="'+esc(cls)+'|'+esc(cp.key)+'|'+cp.level+'|'+a+
+      '" value="'+(+cur[a]||0)+'" style="width:64px"></div>';
+  }).join('')+'</div>';
+  html+='<p class="small" style="margin:2px 0">'+(left<0?'<span style="color:#a33">\u26a0 '+(0-left)+' over</span>':(left+' of '+cp.points+' left'))+'</p></div>';
+  return html;
+}
+/* ── Body Improvements point-buy ── */
+function pbFindItem(cp,name){
+  for(var i=0;i<cp.categories.length;i++){ var items=cp.categories[i].items;
+    for(var j=0;j<items.length;j++) if(items[j].name===name) return {cat:cp.categories[i], item:items[j]}; }
+  return null;
+}
+function ccPbInfo(cls,cp){
+  var cl=classLevelCount(cls,char.level);
+  var data=ccGet(cls,cp.key)||{picks:[]}, picks=data.picks||[];
+  var ab=abilitiesAt(char.level), taken={}, spent=0, catCount={};
+  picks.forEach(function(p){
+    var f=pbFindItem(cp,p.name); if(!f) return;
+    spent+=f.item.cost; taken[p.name]=(taken[p.name]||0)+1;
+    catCount[f.cat.name]=(catCount[f.cat.name]||0)+1;
+  });
+  return {cp:cp, cl:cl, total:cl*(cp.pointsPerClassLevel||1), spent:spent, left:cl*(cp.pointsPerClassLevel||1)-spent,
+          ab:ab, taken:taken, catCount:catCount, picks:picks};
+}
+function ccPbElig(info,cat,item,isTaken){
+  var req=item.req||{}, ab=info.ab, km={str:'STR',dex:'DEX',con:'CON',wis:'WIS',int:'INT',cha:'CHA'};
+  for(var k in km){ if(req[k]!=null&&(ab[km[k]]||10)<req[k]) return {ok:false, reason:'Needs '+km[k]+' '+req[k]}; }
+  if(req.level!=null&&info.cl<req.level) return {ok:false, reason:'Requires '+ord(req.level)+' class level'};
+  if(req.needs&&!(info.taken[req.needs]>0)) return {ok:false, reason:'Requires '+req.needs};
+  var cap=Math.max(0,mod(ab[cat.ability]||10));
+  if(!isTaken&&(info.catCount[cat.name]||0)>=cap)
+    return {ok:false, reason:cat.name+' full ('+(info.catCount[cat.name]||0)+'/'+cap+' = '+cat.ability+' mod)'};
+  if(item.repeatLevels){
+    var elig=item.repeatLevels.filter(function(lv){ return lv<=info.cl; }).length;
+    if(!isTaken&&(info.taken[item.name]||0)>=elig)
+      return {ok:false, reason:'One taking per listed class level ('+item.repeatLevels.map(ord).join(', ')+')'};
+  }
+  if(!isTaken&&info.left<item.cost) return {ok:false, reason:'Needs '+item.cost+' pts ('+info.left+' left)'};
+  return {ok:true};
+}
+function ccPbPick(info,name,idx){
+  var n=0;
+  for(var i=0;i<info.picks.length;i++){ if(info.picks[i].name===name){ if(n===idx) return info.picks[i]; n++; } }
+  return null;
+}
+function ccPhysicalFeatOptions(selected){
+  var list=((window.GENERAL_FEATS||{}).physical)||[];
+  var html='<option value="">\u2014 choose a Physical feat \u2014</option>';
+  list.forEach(function(f){
+    html+='<option value="'+esc(f.name)+'"'+(selected===f.name?' selected':'')+
+      ' title="'+esc((f.prereq?f.prereq+'. ':'')+(f.text||''))+'">'+esc(f.name+(f.prereq?' ('+f.prereq+')':''))+'</option>';
+  });
+  return html;
+}
+function ccPbRowHTML(cls,cp,info,cat,item,takingIdx,isTaken){
+  var elig=ccPbElig(info,cat,item,isTaken);
+  var attr=esc(cls)+'|'+esc(cp.key)+'|'+esc(item.name)+'|'+takingIdx;
+  var label=esc(item.name)+' <span class="small">('+item.cost+' pt'+(item.cost>1?'s':'')+')</span>';
+  if(item.repeatLevels) label+=' <span class="small">taking '+(takingIdx+1)+'</span>';
+  var html='<p class="small" style="margin:5px 0 1px"><label style="display:block">'+
+    '<input type="checkbox" data-ccpb="'+attr+'"'+(isTaken?' checked':'')+((!elig.ok&&!isTaken)?' disabled':'')+'> <b>'+label+'</b>'+
+    ((!elig.ok&&!isTaken)?' <span style="color:#a33">\u2014 '+esc(elig.reason)+'</span>':'')+'</label>';
+  html+='<span class="small" style="color:#555">'+esc(item.text||'')+'</span></p>';
+  if(isTaken&&item.subChoice){
+    var pick=ccPbPick(info,item.name,takingIdx), sub=pick?pick.sub:'';
+    html+='<div class="field" style="margin:2px 0 2px 18px;max-width:230px"><label>'+esc(item.subChoice.prompt)+'</label>'+
+      '<select data-ccpbsub="'+attr+'"><option value="">\u2014 choose \u2014</option>'+
+      item.subChoice.options.map(function(op){ return '<option'+(sub===op?' selected':'')+'>'+esc(op)+'</option>'; }).join('')+
+      '</select></div>';
+  }
+  if(isTaken&&item.featGrant){
+    var pk2=ccPbPick(info,item.name,takingIdx), feat=pk2?pk2.feat:'';
+    html+='<div class="field" style="margin:2px 0 2px 18px;max-width:260px"><label>Physical feat <span class="small">(prerequisites apply)</span></label>'+
+      '<select data-ccpbfeat="'+attr+'">'+ccPhysicalFeatOptions(feat)+'</select></div>';
+  }
+  return html;
+}
+function ccPointbuyHTML(cls,cp){
+  var info=ccPbInfo(cls,cp);
+  var html='<div class="banner" style="margin:4px 0;min-width:250px;max-width:340px"><span class="bk">\u2756 '+esc(cp.name)+'</span>';
+  html+='<p class="small">'+esc(cp.blurb)+'</p>';
+  html+='<p class="small"><b>'+info.left+' of '+info.total+' body points left</b> <span class="small">(HR level '+info.cl+')</span></p>';
+  cp.categories.forEach(function(cat){
+    var cap=Math.max(0,mod(info.ab[cat.ability]||10));
+    html+='<p class="small" style="margin:8px 0 2px"><b>'+esc(cat.name)+'</b> <span class="small">'+(info.catCount[cat.name]||0)+'/'+cap+' ('+cat.ability+' mod)</span></p>';
+    cat.items.forEach(function(item){
+      if(item.repeatLevels){
+        var elig=item.repeatLevels.filter(function(lv){ return lv<=info.cl; }).length;
+        var have=info.taken[item.name]||0;
+        for(var t=0;t<elig;t++) html+=ccPbRowHTML(cls,cp,info,cat,item,t,t<have);
+      }else{
+        html+=ccPbRowHTML(cls,cp,info,cat,item,0,(info.taken[item.name]||0)>0);
+      }
+    });
+  });
+  html+='</div>';
+  return html;
+}
+function ccPbToggle(el){
+  var a=el.getAttribute('data-ccpb').split('|'), cls=a[0], key=a[1], name=a[2], idx=+a[3];
+  var o=ccGet(cls,key)||{picks:[]}; o.picks=o.picks||[];
+  if(el.checked){
+    var have=o.picks.filter(function(p){ return p.name===name; }).length;
+    if(have<=idx) o.picks.push({name:name});
+  }else{
+    var n=0;
+    for(var i=0;i<o.picks.length;i++){ if(o.picks[i].name===name){ if(n===idx){ o.picks.splice(i,1); break; } n++; } }
+  }
+  ccSet(cls,key,o);
+}
+function ccPbSubFeat(el,isSub){
+  var attr=isSub?'data-ccpbsub':'data-ccpbfeat';
+  var a=el.getAttribute(attr).split('|'), cls=a[0], key=a[1], name=a[2], idx=+a[3];
+  var cp=ccDefByKey(cls,key); if(!cp) return;
+  var info=ccPbInfo(cls,cp), p=ccPbPick(info,name,idx);
+  if(p){ if(isSub) p.sub=el.value; else p.feat=el.value; ccSet(cls,key,{picks:info.picks}); }
+}
+/* ── chosen-option lines for the final sheet ── */
+function classChoiceSheetFor(cls,cl,featureName){
+  var out='';
+  classChoiceDefs(cls).forEach(function(cp){
+    if(cp.feature!==featureName) return;
+    out+='<p class="small" style="margin:6px 0 0"><b>'+esc(cp.name)+' \u2014 chosen:</b> '+ccSheetBody(cls,cp,cl)+'</p>';
+  });
+  return out;
+}
+function ccSheetBody(cls,cp,cl){
+  var o=ccGet(cls,cp.key)||{};
+  if(cp.type==='slots'){
+    var parts=[];
+    Object.keys(cp.slots||{}).map(Number).sort(function(a,b){ return a-b; }).forEach(function(g){
+      if(g>cl) return;
+      var picks=(o[g]||[]).filter(Boolean);
+      parts.push(ord(g)+': '+(picks.length?esc(picks.join(', ')):'<span style="color:#a33">\u26a0 not chosen</span>'));
+    });
+    return parts.length?parts.join(' \u00b7 '):'<span class="small">no choices granted yet</span>';
+  }
+  if(cp.type==='freeform'){
+    var t=o[cp.level]||'';
+    return t?esc(t):'<span style="color:#a33">\u26a0 not chosen</span>';
+  }
+  if(cp.type==='allocate'){
+    var cur=o[cp.level]||{}, bits=[];
+    ABILITIES.forEach(function(a){ if(+cur[a]>0) bits.push(a+' +'+cur[a]); });
+    return bits.length?esc(bits.join(', ')):'<span style="color:#a33">\u26a0 not allocated</span>';
+  }
+  if(cp.type==='pointbuy'){
+    var info=ccPbInfo(cls,cp);
+    var bits=info.picks.map(function(p){
+      var f=pbFindItem(cp,p.name), extra=[];
+      if(p.sub) extra.push(p.sub);
+      if(p.feat) extra.push('feat: '+p.feat);
+      return esc(p.name)+(f?' ('+f.item.cost+' pt'+(f.item.cost>1?'s':'')+')':'')+(extra.length?' \u2014 '+esc(extra.join('; ')):'');
+    });
+    return '<b>'+info.spent+'/'+info.total+' spent.</b> '+
+      (bits.length?bits.join('; '):'<span style="color:#a33">\u26a0 none chosen</span>');
+  }
+  return '';
+}
 /* ═══════════ STEP 7 — LEVEL-UP ROLLS ═══════════ */
 function levelRows(){
   var ab=creationAbilityMods(Object.assign({},char.abilities));
@@ -2331,7 +2575,7 @@ function stepLevelUps(body){
     html+='<div class="banner"><span class="bk">❖ Level 1</span><p>Nothing to roll — your totals below are final. Continue when ready.</p></div>';
   }else{
     html+='<button class="btn btn-small btn-ghost" id="allFixed" type="button">Take fixed for unrolled levels</button> <span class="asi-note">or roll each die individually</span>';
-    html+='<table class="lvl-table"><tr><th>Level</th><th>Class</th><th>Ability score increase</th><th>HP gain</th><th>CE Reserve gain</th></tr><tbody id="lvlBody"></tbody></table>';
+    html+='<table class="lvl-table"><tr><th>Level</th><th>Class</th><th>Class choices</th><th>Ability score increase</th><th>HP gain</th><th>CE Reserve gain</th></tr><tbody id="lvlBody"></tbody></table>';
   }
   body.innerHTML=html;
   if(char.level>1){
@@ -2365,28 +2609,49 @@ function renderLvlRows(){
     }
     var asiCell='—';
     if(r.asi){
-      /* The selects below render STR/STR + "ASI +1/+1" as the apparent choice —
-         persist that default so the sheet matches what Step 7 shows. */
+      /* The selects below render the apparent default as the persisted choice so the
+         sheet matches what Step 7 shows. HR rows use the class's +3 / +1×3 math;
+         rows saved under the old +1/+1 default keep their picks untouched. */
       char.asiMode=char.asiMode||{};
-      if(!char.asiMode[r.l]) char.asiMode[r.l]='asi';
-      if(!char.asi[r.l]) char.asi[r.l]=(char.asiMode[r.l]==='greater'?['STR','STR','STR']:['STR','STR']);
+      var isHRRow=(r.cls==='Heavenly Restriction');
+      if(!char.asiMode[r.l]) char.asiMode[r.l]=isHRRow?'hr3':'asi';
+      /* class changed away from HR: HR-only modes collapse back to the standard ASI */
+      if(!isHRRow&&(char.asiMode[r.l]==='hr3'||char.asiMode[r.l]==='hr111')){
+        char.asiMode[r.l]='asi'; char.asi[r.l]=((char.asi[r.l]||['STR','STR']).slice(0,2));
+        if(char.asi[r.l].length<2) char.asi[r.l]=['STR','STR'];
+      }
+      if(!char.asi[r.l]) char.asi[r.l]=((char.asiMode[r.l]==='greater'||char.asiMode[r.l]==='hr111')?['STR','STR','STR']:['STR','STR']);
       var mode=char.asiMode[r.l];
       var greaterAvail=hrV()==='evo'&&(hrOpts()['evo']||{}).noASI&&r.l>=8;
-      asiCell='<select data-asimode="'+r.l+'">'+
-        '<option value="asi"'+(mode==='asi'?' selected':'')+'>ASI +1/+1</option>'+
-        (greaterAvail?'<option value="greater"'+(mode==='greater'?' selected':'')+'>Greater ASI (+1×3)</option>':'')+
-        '<option value="feat"'+(mode==='feat'?' selected':'')+'>Feat instead</option></select>';
+      if(isHRRow){
+        asiCell='<select data-asimode="'+r.l+'">'+
+          (mode==='asi'?'<option value="asi" selected>ASI +1/+1 (legacy)</option>':'')+
+          '<option value="hr3"'+(mode==='hr3'?' selected':'')+'>HR ASI: +3 to one</option>'+
+          '<option value="hr111"'+(mode==='hr111'?' selected':'')+'>HR ASI: +1 to three</option>'+
+          '<option value="feat"'+(mode==='feat'?' selected':'')+'>Feat instead</option></select>';
+      }else{
+        asiCell='<select data-asimode="'+r.l+'">'+
+          '<option value="asi"'+(mode==='asi'?' selected':'')+'>ASI +1/+1</option>'+
+          (greaterAvail?'<option value="greater"'+(mode==='greater'?' selected':'')+'>Greater ASI (+1×3)</option>':'')+
+          '<option value="feat"'+(mode==='feat'?' selected':'')+'>Feat instead</option></select>';
+      }
       if(mode==='feat'){
         var pf=((char.asiFeat||{})[r.l])||'';
         asiCell+='<div style="margin-top:4px"><select data-asifeatpreset="'+r.l+'">'+featSelectOptions(pf)+'</select>'+
           featInfoHTML(pf)+
           '<div class="asi-note">Replaces the ASI (D&D 5e rule). Technique feats list their prerequisite — you must meet it before selecting.</div></div>';
-      }else if(mode==='greater'){
+      }else if(mode==='hr3'){
+        var h3cur=(char.asi[r.l]||['STR','STR','STR'])[0]||'STR';
+        asiCell+='<div style="margin-top:4px"><select data-hr3="'+r.l+'">'+ABILITIES.map(function(a){return '<option'+(h3cur===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select>'+
+                '<div class="asi-note">HR: +3 to one ability score. Cannot exceed your ability score limit.</div></div>';
+      }else if(mode==='greater'||mode==='hr111'){
         var gcur=char.asi[r.l]||['STR','STR','STR'];
         asiCell+='<div style="margin-top:4px"><select data-asi="'+r.l+'|0">'+ABILITIES.map(function(a){return '<option'+(gcur[0]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select> '+
                 '<select data-asi="'+r.l+'|1">'+ABILITIES.map(function(a){return '<option'+(gcur[1]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select> '+
                 '<select data-asi="'+r.l+'|2">'+ABILITIES.map(function(a){return '<option'+(gcur[2]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select>'+
-                '<div class="asi-note">Greater ASI: +1 × 3 (repeat a score for +2 or +3). Replaces No ASI at 8th.</div></div>';
+                (mode==='hr111'
+                  ? '<div class="asi-note">HR: +1 to three ability scores (repeat a score for +2 or +3). Cannot exceed your ability score limit.</div></div>'
+                  : '<div class="asi-note">Greater ASI: +1 × 3 (repeat a score for +2 or +3). Replaces No ASI at 8th.</div></div>');
       }else{
         var cur=char.asi[r.l]||['STR','STR'];
         asiCell+='<div style="margin-top:4px"><select data-asi="'+r.l+'|0">'+ABILITIES.map(function(a){return '<option'+(cur[0]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select> '+
@@ -2407,7 +2672,8 @@ function renderLvlRows(){
         ? '<span class="roll-res">'+ld.ceDie+' <small>CE</small></span>'
         : '<span class="roll-res">'+C.fixed+' <small>CE</small></span>')+
       ' <span class="small" data-cedice="'+r.l+'"></span>';
-    return '<tr><td><span class="lvl-chip">Level '+r.l+'</span></td><td>'+clsCell+'</td><td>'+asiCell+'</td><td>'+hpCell+'</td><td>'+ceCell+'</td></tr>';
+    var choiceCell=choiceCellHTML(r.l);
+    return '<tr><td><span class="lvl-chip">Level '+r.l+'</span></td><td>'+clsCell+'</td><td>'+choiceCell+'</td><td>'+asiCell+'</td><td>'+hpCell+'</td><td>'+ceCell+'</td></tr>';
   }).join('');
   /* wire */
   tb.querySelectorAll('[data-lvlclass]').forEach(function(sel){ sel.addEventListener('change',function(){
@@ -2436,7 +2702,8 @@ function renderLvlRows(){
     char.asiMode=char.asiMode||{}; char.asiMode[l]=s.value;
     /* normalize ASI array length when switching between ASI patterns */
     char.asi[l]=char.asi[l]||[];
-    if(s.value==='greater'){ while(char.asi[l].length<3) char.asi[l].push(char.asi[l][0]||'STR'); }
+    if(s.value==='greater'||s.value==='hr111'){ while(char.asi[l].length<3) char.asi[l].push(char.asi[l][0]||'STR'); }
+    else if(s.value==='hr3'){ var _a=char.asi[l][0]||'STR'; char.asi[l]=[_a,_a,_a]; }
     else { char.asi[l]=char.asi[l].slice(0,2); if(char.asi[l].length<2) char.asi[l]=['STR','STR']; }
     renderLvlRows(); renderLvlTotals();
   }); });
@@ -2445,6 +2712,36 @@ function renderLvlRows(){
     char.asiFeat=char.asiFeat||{};
     if(s.value) char.asiFeat[l]=s.value; else delete char.asiFeat[l];
     renderLvlRows(); renderLvlTotals();
+  }); });
+  /* HR ASI: +3 to one ability */
+  tb.querySelectorAll('[data-hr3]').forEach(function(s){ s.addEventListener('change',function(){
+    var l=+s.getAttribute('data-hr3'), v=s.value;
+    char.asi[l]=[v,v,v]; renderLvlRows(); renderLvlTotals();
+  }); });
+  /* class level-up choices */
+  tb.querySelectorAll('[data-ccslot]').forEach(function(s){ s.addEventListener('change',function(){
+    var a=s.getAttribute('data-ccslot').split('|'), cls=a[0], key=a[1], g=+a[2], idx=+a[3];
+    var o=ccGet(cls,key)||{}; o[g]=o[g]||[]; o[g][idx]=s.value; ccSet(cls,key,o);
+    renderLvlRows();
+  }); });
+  tb.querySelectorAll('[data-ccfree]').forEach(function(inp){ inp.addEventListener('change',function(){
+    var a=inp.getAttribute('data-ccfree').split('|'), cls=a[0], key=a[1], g=+a[2];
+    var o=ccGet(cls,key)||{}; o[g]=inp.value.trim(); ccSet(cls,key,o);
+    renderLvlRows();
+  }); });
+  tb.querySelectorAll('[data-ccalloc]').forEach(function(inp){ inp.addEventListener('change',function(){
+    var a=inp.getAttribute('data-ccalloc').split('|'), cls=a[0], key=a[1], g=+a[2], ab=a[3];
+    var o=ccGet(cls,key)||{}; o[g]=o[g]||{}; o[g][ab]=Math.max(0,+inp.value||0); ccSet(cls,key,o);
+    renderLvlRows();
+  }); });
+  tb.querySelectorAll('[data-ccpb]').forEach(function(chk){ chk.addEventListener('change',function(){
+    ccPbToggle(chk); renderLvlRows();
+  }); });
+  tb.querySelectorAll('[data-ccpbsub]').forEach(function(s){ s.addEventListener('change',function(){
+    ccPbSubFeat(s,true); renderLvlRows();
+  }); });
+  tb.querySelectorAll('[data-ccpbfeat]').forEach(function(s){ s.addEventListener('change',function(){
+    ccPbSubFeat(s,false); renderLvlRows();
   }); });
 }
 function animateSingleDie(btn,spanAttr,sides,done){
@@ -2782,7 +3079,8 @@ function classFeaturesSheetHTML(){
     feats.forEach(function(f){ if((f.level||1)>cl){ (locked[f.level]=locked[f.level]||[]).push(f); } });
     if(active.length){
       html+='<span class="gate-label active">✓ Active</span>'+active.map(function(f){
-        return '<div class="feat"><h5>'+esc(f.name)+'</h5><div class="feat-text">'+esc(f.text)+'</div></div>';
+        return '<div class="feat"><h5>'+esc(f.name)+'</h5><div class="feat-text">'+esc(f.text)+'</div>'+
+          classChoiceSheetFor(c,cl,f.name||'')+'</div>';
       }).join('');
     }else{
       html+='<p class="small">No class features yet at '+esc(c)+' '+cl+'.</p>';
