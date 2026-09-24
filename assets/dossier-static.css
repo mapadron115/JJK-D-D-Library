@@ -35,6 +35,18 @@ details.level summary .lv-title b{color:#f1e5c7}
 .rule-list .rule{border-left:3px solid var(--accent);background:#101319;border-radius:0 9px 9px 0;padding:9px 14px;margin:9px 0;color:#d1cdc3}
 .callout{border:1px solid var(--accent);border-radius:14px;background:#14161d;padding:18px;margin:18px 0}
 .callout .callout-kicker{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:800}
+.callout-head{padding:2px 0 10px;border-bottom:1px solid #30343e}
+.callout h4{margin:.2rem 0 .4rem;font-size:1.25rem;color:#f2e6c7}
+.callout .cost,.card .cost{font-size:.76rem;letter-spacing:1px;text-transform:uppercase;color:#cbc7bd;border-top:1px solid #30343e;border-bottom:1px solid #30343e;padding:6px 2px;margin:8px 0 10px}
+.kind-tag{font-size:.62rem;letter-spacing:2px;color:#0b0c10;background:var(--accent);border-radius:2px;padding:2px 8px;text-transform:uppercase}
+.hero-art{margin:22px 0 0;max-width:520px}
+.hero-art img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid #30343e}
+.domain-data{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border-bottom:1px solid #30343e;margin:10px 0}
+.domain-data>div{padding:10px 16px;border-right:1px solid #30343e}
+.domain-data>div:last-child{border-right:none}
+.domain-data dt{font-size:.64rem;letter-spacing:2px;text-transform:uppercase;color:#9aa0ab;margin-bottom:2px}
+.domain-data dd{margin:0;font-weight:700;font-size:1rem;color:#fff}
+.prov-note{font-size:.78rem;color:#9aa0ab;font-style:italic;margin:8px 0 0}
 .callout h3.ctitle{margin:.3rem 0 .6rem;color:#f2e6c7}
 .callout-domain{border-color:#b276e8}
 .callout-maximum{border-color:#e06c4f}

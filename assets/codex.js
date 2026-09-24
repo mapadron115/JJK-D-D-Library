@@ -278,6 +278,12 @@ function renderDomain(d) {
 
 function renderBody(t) {
   var out = '';
+  /* Full-dossier access: every figure technique now has a fig-<id>.html dossier
+     page in the e509 skeleton. The inline expandable body stays for GMs. */
+  if (t.id) {
+    out += '<a class="dossier-cta fig-dossier-link" href="' + DOSSIER_BASE +
+      'fig-' + esc(t.id) + '.html">Open full dossier →</a>';
+  }
   var stats = [];
   if (t.ce_ability) stats.push('CE ability <b>' + esc(t.ce_ability) + '</b>');
   if (t.primary_verb) stats.push('Primary verb <b>' + esc(t.primary_verb) + '</b>');
