@@ -1,0 +1,234 @@
+Chaos Table
+Chaos Table
+
+ d100                                                      Effect
+
+  1     Roll on this table at the start of each of your turns for the next minute, ignoring this result on subsequent
+        rolls.
+
+  2     A pillar of flame erupts beneath a random creature within 60 ft, causing Xd12 fire damage.
+
+  3     Lightning arcs to up to 3 creatures within 30 ft, dealing Xd8 lightning each.
+
+  4     Thunder explodes in a 15-ft radius around you. Creatures within range take Xd6 thunder damage.
+
+  5     Burning cracks appear in a random 10-ft radius within 30 ft. A creature that starts their turn standing on these
+        cracks takes Xd4 fire damage. The cracks disappear after X rounds.
+
+  6     A 5 ft sphere of supercooled air forms in a random area within 15 ft, causing Xd8 cold damage, and a creature
+        is frozen by ice and restrained until the end of their next turn.
+
+  7     An electrical aura surrounds you until the end of your next turn. A creature that hits you with a melee attack
+        takes 1d8 lightning damage.
+
+  8     A thunderwave knocks creatures prone in a 15-ft radius around you.
+
+  9     Meteor sparks rain in a 10-ft radius around you, causing Xd6 fire damage.
+
+  10    You cast Chaos Bolt at 2nd level at a random creature in range.
+
+  11    Cold explosions burst forth, causing an 5 ft radius sphere in range to take Xd6 cold damage and the area
+        becomes difficult terrain for X rounds.
+
+  12    A 20 ft diameter sphere of swirling fire vortex appears at a random point within 60 ft causing Xd6 fire damage.
+
+  13    Lightning strikes a random creature within 30 ft that is under open sky, causing Xd6 lightning damage.
+
+  14    A 10 ft diameter sphere of thunder explodes at a random point within 40 ft, causing Xd6 Thunder and pushes
+        creatures 20 ft away.
+
+  15    Burning chains restrain the closest creature for X rounds. The target takes 2d6 fire damage at the start of their
+        turns. A creature can make a Strength (Athletics) check as an action to burst the chains.
+
+  16    One random creature within 60 ft is pulled 30 ft toward you.
+
+  17    One random creature within 60 ft is launched 30 ft away.
+
+  18    All creatures within 15 ft teleport 10 ft in random directions.
+
+  19    Gravity reverses until the end of your next turn. Creatures within 60 ft float upward 10 ft and cannot move
+        unless they have a fly speed. Once this ends, affected creatures harmlessly float down.
+
+  20    Gravity crushes a random creature within 30 ft causing Xd8 force damage.
+21   A gravity singularity forms at a random point within 60 ft and pulls creatures within 30 ft up to 15 ft toward its center.
+
+22   Gravity doubles in a 20ft radius around you. Creatures must make a Strength saving throw or become prone.
+
+23   Zero gravity boosts you until the end of your turn. Your movement speed is doubled.
+
+24   Spatial distortion gives disadvantage on ranged attacks in a 20 ft radius around you until the end of your next
+     turn.
+
+25   A rift teleports a random creature within 30 ft up to 60 ft away.
+
+26   A random creature within 30 ft must make a Wisdom save or be under the effects of Confusion for 1 round.
+
+27   Cosmic whispers impose disadvantage on the next attack made by a creature within 10 ft.
+
+28   Illusory duplicates appear around up to 3 random creatures within 10 ft for X rounds. All creatures are
+     under the effect of the Mirror Image spell.
+
+29   A random creature within 30 ft becomes frightened of you for X rounds.
+
+30   The minds of creatures within 60 ft briefly link, allowing creatures hear each other's thoughts.
+
+31   A random creature within 30 ft takes Xd6 psychic damage.
+
+32   A random creature within 30 ft is flooded with information from multiple timelines and is stunned until the
+     end of their turn.
+
+33   Creatures within 15 ft have a burning in their eyes and disadvantage on Perception checks for 1 minute.
+
+34   A random creature within 30 ft becomes charmed by you for X rounds.
+
+35   Up to X random creatures within 30 ft must succeed a Wisdom save or attack a random target next turn.
+
+36   The ground 20 ft around you becomes slick ice, causing difficult terrain for X rounds.
+
+37   Blinding sparks heavily obscure a random 15 ft radius area within 60 ft for X rounds.
+
+38   Random stone structures appear randomly and create half cover in a 15-ft radius around you.
+
+39   A violent gust pushes creatures within 5 ft of you up to 15 ft away from you.
+
+40   A dark storm cloud forms overhead for 1 minute. A random creature within 30 ft of you takes 2d6 lightning
+     damage at the start of your turn.
+
+41   A random non-magical object or structure within 30 ft explodes. Creatures within 5 ft of the object take
+     Xd6 fire damage.
+
+42   The ground trembles like a minor earthquake 60 ft around you. All creatures must make a Dexterity save or
+     fall prone.
+43   Shards of fragmented light rain down in a 15 ft radius around you, causing Xd6 radiant damage.
+
+44   The environment becomes warped and distorted until the start of your next turn. You have disadvantage on
+     attacks.
+
+45   You cast Chaos Bolt. On a hit, the bolt automatically ricochets to a second target.
+
+46   You cast Chaos Bolt, instead creating two bolts. Each bolt must target a different creature.
+
+47   You cast Chaos Bolt, which deals maximum damage on a hit.
+
+48   You cast Chaos Bolt, which teleports the target 20 ft in random direction on hit.
+
+49   You cast Chaos Bolt, which explodes in a 10 ft radius on impact, dealing damage to all creatures.
+
+50   You cast Chaos Bolt. On a hit, the bolt automatically ricochets 3 times.
+
+51   You cast Chaos Bolt, which deals half damage but stuns the target for 1 round.
+
+52   You are targeted by your own Chaos Bolt.
+
+53   Time slows down in a 10 ft radius around you, causing creatures to lose reactions for X rounds.
+
+54   Time speeds creatures within 10 ft, causing them to gain +20 ft movement for X rounds.
+
+55   A mirror duplicate of you appears in an unoccupied space within 5 ft of you for X rounds. It has 1 hit point,
+     acts at the end of your turn and can spend your Cursed Energy.
+
+56   A random creature within 30 ft becomes invisible for X rounds.
+
+57   A random creature within 30 ft gains advantage on attacks for 1 round.
+
+58   You gain temporary HP equal to your level.
+
+59   A random weapon within 30 ft becomes unstable, causing disadvantage on attacks for X rounds.
+
+60   A gravity well restrains a random creature within 30 ft for X rounds.
+
+61   Cosmic light cracks across the sky momentarily. A random creature within 30 ft is blinded for X rounds.
+
+62   The timeline splits. Reroll twice on this table.
+63   You release a psychic scream, causing Xd6 psychic damage to creatures within 20 ft.
+
+64   All creatures within 60 ft teleport randomly 60 ft in any direction.
+
+65   A 3rd level fireball erupts centered on you, but you are immune to the damage.
+
+66   A random creature within 30 ft is banished until the end of its next turn.
+
+67   A cosmic beam strikes down and causes 8d6 radiant or necrotic damage to a random creature within 60 ft.
+
+68   All creatures within 120 ft with cursed energy are affected by the Levitate spell, automatically failing their
+     save as zero-gravity affects everyone for X rounds.
+
+69   A random creature within 30 ft gains the benefits of the Haste spell for 1 round.
+
+70   A random creature within 30 ft is paralyzed for 1 round.
+
+71   A portal appears at a random point within 60 ft, releasing a 15 ft cone of negative energy in a random
+     direction, causing Xd12 necrotic damage.
+
+72   You gain resistance to all damage for 1 round.
+
+73   You emit an aura of reversal within 30 ft for X rounds. Damage types deal the opposite within this aura (Fire
+     damage becomes cold, necrotic becomes radiant, etc)
+
+74   Silence fills the area within 30 ft around you for X rounds. All creatures in this space are immune to thunder
+     damage and communicating verbally or chanting for techniques is impossible.
+
+75   You gain a 60 ft fly speed for 1 minute.
+
+76   You open a portal within 10 ft of you that teleports any creature that enters it 500 ft into the air above.
+
+77   A random creature within 30 ft is spaghettified, causing Xd12 force damage and gains a random damaged
+     limb on the Limb Damage Table.
+
+78   You form an Event Horizon 80 ft around you, creating difficult terrain. Creatures within range must make a
+     Strength saving throw or be pulled 15 ft closer, repeating this save at the start of their turn. A creature that
+     starts its turn within 5 ft of you takes Xd12 force damage.
+
+79   Luck inverts for X rounds. Natural 20s becomes Natural 1s and vice versa.
+
+80   A random creature within 30 ft must repeat the same action they took last turn.
+
+81   A random creature within 30 ft regains 50 hit points.
+
+82   A random creature within 30 ft regains 1d4 Cursed Energy.
+
+83   The next creature that takes damage before the start of your next turn reflects the damage onto the attacker.
+
+84   A burst of positive energy causes all creatures within 120 ft to lose concentration on any effects or techniques
+     they were concentrating on and deactivating any active cursed tool effects for X rounds.
+85    A random elemental dragon (CR = PB) appears in an unoccupied space within 30 ft for X rounds. The DM
+      determines the elemental statblock and the dragon attacks the nearest creature until the dragon disappears.
+
+86    Reality is in shambles and all creatures within 30 ft randomly swap places.
+
+87    Gravity changes in a random direction for X rounds. All creatures within 60 ft (other than you) must make a
+      Dexterity saving throw to grab onto a nearby object or structure to stabilize themselves. Otherwise, they fall
+      according to the new gravity.
+
+88    Folded space lets you teleport 60 ft as a bonus action for X rounds.
+
+89    Space bends for a random creature within 30 ft. For X rounds, they must spend twice as much movement
+      when moving and the range of their attacks and techniques is treated as being halved. The target appears
+      normal to other creatures, but strangely slow and inaccurate.
+
+90    Gravity changes in a random direction for X rounds, and changes again at every start of your turn. All
+      creatures within 60 ft (other than you) must make a Dexterity saving throw to grab onto a nearby object or
+      structure to stabilize themselves. Otherwise, they fall according to the new gravity.
+
+91    A random 10 ft diameter cube within 60 ft is completely frozen in time. It cannot be affected in any way.
+
+92    You form an orbital pull, causing all ranged attacks to automatically miss you and fall into your orbit.
+
+93    A critical flux causes the next saving throw made before the start of your next turn to be an automatic nat 20,
+      causing the target to be completely unaffected.
+
+94    All creatures within 10 ft of you roll at advantage for X rounds (including hostile creatures).
+
+95    Roll 3 times on this table.
+
+96    You regain all Cursed Energy spent.
+
+97    You choose any effect on this table that is less than 95.
+
+98    You choose any 2 effects on this table that is less than 95.
+
+99    You choose any 3 effects on this table that is less than 95.
+
+100   An act of god occurs. The DM decides a cosmic and potentially unexplainable benefit that causes the
+      situation to turn entirely in your favor.
+
