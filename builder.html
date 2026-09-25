@@ -119,6 +119,14 @@ h1 .amp{color:var(--red)}
 .lvl-table th,.lvl-table td{border:1px solid var(--line);padding:10px 12px;vertical-align:middle;font-size:.88rem}
 .lvl-table th{font-size:.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);background:var(--card2);text-align:left}
 .lvl-table .lvl-chip{font-family:var(--serif);font-weight:bold;background:var(--ink);color:var(--paper);padding:3px 12px;border-radius:2px;font-size:.85rem;white-space:nowrap}
+/* character sheet skills table: compact, two columns of nine */
+.skill-cols{display:flex;gap:18px;margin:10px 0 0}
+.skill-table{flex:1;width:100%;border-collapse:collapse}
+.skill-table th,.skill-table td{border:1px solid var(--line);padding:4px 10px;text-align:left;font-size:.85rem}
+.skill-table th{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);background:var(--card2)}
+.skill-table td:nth-child(2),.skill-table td:nth-child(3){text-align:center}
+.skill-table tr.is-prof td{background:var(--card2);font-weight:bold}
+@media(max-width:640px){.skill-cols{flex-direction:column;gap:8px}}
 .lvl-table select{font:inherit;font-size:.8rem;background:var(--paper);border:1px solid var(--line2);border-radius:3px;padding:5px 6px;margin:2px}
 .roll-res{font-family:var(--serif);font-weight:bold;font-size:1.05rem}
 .roll-res small{font-family:var(--sans);font-weight:normal;color:var(--ink3);font-size:.75rem}
@@ -496,13 +504,13 @@ var ABILITIES = ['STR','DEX','CON','INT','WIS','CHA'];
 var ABIL_NAMES = {STR:'Strength',DEX:'Dexterity',CON:'Constitution',INT:'Intelligence',WIS:'Wisdom',CHA:'Charisma'};
 
 var CLASSES = {
-  'Juggernaut':         {hd:12, armor:'Light, medium, shields', saves:'Strength, Constitution', reserve:4,  fixed:3, identity:'Durable brawler. Battle Focus — outlast and grind down.'},
-  'Scout':              {hd:8,  armor:'Light',                  saves:'Strength, Constitution', reserve:6,  fixed:4, identity:'Speed, perception, evasive pressure.'},
-  'Warrior':            {hd:10, armor:'All armor, shields',     saves:'Dexterity, Wisdom',       reserve:6,  fixed:4, identity:'Weapon pressure and the largest attack count.'},
-  'Shikigami User':     {hd:8,  armor:'None',                   saves:'Intelligence, Wisdom',   reserve:6,  fixed:4, identity:'Permanent companion and coordinated actions.'},
-  'Support Specialist': {hd:6,  armor:'None',                   saves:'Intelligence, Wisdom',   reserve:8,  fixed:5, identity:'Barriers, curtains, and RCT mastery.'},
-  'Strategist':         {hd:6,  armor:'None',                   saves:'Intelligence, Wisdom',   reserve:10, fixed:6, identity:'Largest CE reserve; technique modification.'},
-  'Heavenly Restriction':{hd:12,armor:'None',                   saves:'Strength, Constitution', reserve:0,  fixed:0, identity:'Extreme physical growth without CE — Pure Body.'}
+  'Juggernaut':         {hd:12, armor:'Light, medium, shields', saves:'Strength, Constitution', reserve:4,  fixed:3, skills:['Animal Handling','Athletics','Intimidation','Nature','Perception','Survival'], skillCount:2, identity:'Durable brawler. Battle Focus — outlast and grind down.'},
+  'Scout':              {hd:8,  armor:'Light',                  saves:'Strength, Constitution', reserve:6,  fixed:4, skills:['Acrobatics','Animal Handling','Athletics','History','Insight','Intimidation','Perception','Survival'], skillCount:2, identity:'Speed, perception, evasive pressure.'},
+  'Warrior':            {hd:10, armor:'All armor, shields',     saves:'Dexterity, Wisdom',       reserve:6,  fixed:4, skills:['Acrobatics','Animal Handling','Athletics','History','Insight','Intimidation','Perception','Survival'], skillCount:2, identity:'Weapon pressure and the largest attack count.'},
+  'Shikigami User':     {hd:8,  armor:'None',                   saves:'Intelligence, Wisdom',   reserve:6,  fixed:4, skills:['Arcana','History','Insight','Investigation','Medicine','Religion'], skillCount:2, identity:'Permanent companion and coordinated actions.'},
+  'Support Specialist': {hd:6,  armor:'None',                   saves:'Intelligence, Wisdom',   reserve:8,  fixed:5, skills:['Arcana','History','Insight','Investigation','Medicine','Religion'], skillCount:2, identity:'Barriers, curtains, and RCT mastery.'},
+  'Strategist':         {hd:6,  armor:'None',                   saves:'Intelligence, Wisdom',   reserve:10, fixed:6, skills:['Arcana','History','Insight','Investigation','Medicine','Religion'], skillCount:2, identity:'Largest CE reserve; technique modification.'},
+  'Heavenly Restriction':{hd:12,armor:'None',                   saves:'Strength, Constitution', reserve:0,  fixed:0, skills:['Acrobatics','Athletics','Insight','Intimidation','Perception','Stealth','Survival'], skillCount:2, identity:'Extreme physical growth without CE — Pure Body.'}
 };
 var CLASS_ORDER = ['Juggernaut','Scout','Warrior','Shikigami User','Support Specialist','Strategist','Heavenly Restriction'];
 /* ASI schedules per the player guide's normalized tables */
@@ -752,6 +760,92 @@ function featSelectOptions(selected){
   }
   return html;
 }
+/* Skill Expert / Skilled pickers, shown wherever the feat was selected.
+   key: 'bg' (background feat) or 'asi-<L>' (Step 7 feat at character level L).
+   Picks persist in char.featSkills[key] even if the feat changes away; only the
+   live feat's grants count (see skillProfs / expertiseSkills). */
+function featSkillPickersHTML(key){
+  var fname=featSkillLiveName(key);
+  if(fname!=='Skill Expert'&&fname!=='Skilled') return '';
+  var fs=(char.featSkills||{})[key]||{};
+  var html='<div class="banner" style="margin-top:8px"><span class="bk">\u2756 '+esc(fname)+' — skill choices</span>';
+  if(fname==='Skill Expert'){
+    var prof=fs.prof||'', expp=fs.expertise||'';
+    var profs=skillProfs(); /* the "new" proficiency must not duplicate an existing one */
+    html+='<div class="grid2">'+
+      '<div class="field"><label><b>New skill proficiency</b></label>'+
+      '<select data-featprof="'+esc(key)+'"><option value="">\u2014 choose \u2014</option>'+
+      SKILL_LIST.map(function(s){
+        var dup=(profs.indexOf(s)>=0&&s!==prof);
+        return '<option value="'+s+'"'+(prof===s?' selected':'')+(dup?' disabled':'')+'>'+s+(dup?' (already proficient)':'')+'</option>';
+      }).join('')+'</select></div>'+
+      '<div class="field"><label><b>Expertise</b> <span class="small">(must be a skill you have proficiency in)</span></label>'+
+      '<select data-featexpert="'+esc(key)+'"><option value="">\u2014 choose \u2014</option>'+
+      profs.map(function(s){
+        return '<option value="'+s+'"'+(expp===s?' selected':'')+'>'+s+'</option>';
+      }).join('')+'</select></div></div>'+
+      '<p class="small">Skill Expert also grants +1 to one ability score (maximum 20) \u2014 the builder does not apply it automatically; record it with your GM in Step 8 notes.</p>';
+  }else{ /* Skilled: any combination of three skills */
+    var picks=fs.prof||[];
+    html+='<p class="small">Gain proficiency in any three skills (tools from this feat are recorded with your GM).</p><div class="grid2">';
+    for(var i=0;i<3;i++){
+      var cur=picks[i]||'';
+      html+='<div class="field"><label><b>Skill</b> ('+(i+1)+' of 3)</label>'+
+        '<select data-featskilled="'+esc(key)+'|'+i+'"><option value="">\u2014 choose \u2014</option>'+
+        SKILL_LIST.map(function(s){
+          var dup=(picks.indexOf(s)>=0&&s!==cur);
+          return '<option value="'+s+'"'+(cur===s?' selected':'')+(dup?' disabled':'')+'>'+s+'</option>';
+        }).join('')+'</select></div>';
+    }
+    html+='</div>';
+  }
+  return html+'</div>';
+}
+function featSkillStore(key){
+  char.featSkills=char.featSkills||{};
+  var o=char.featSkills[key]||{};
+  o.feat=featSkillLiveName(key);
+  char.featSkills[key]=o;
+  return o;
+}
+function wireFeatSkillPickers(root,rerender){
+  root.querySelectorAll('[data-featprof]').forEach(function(s){
+    s.addEventListener('change',function(){
+      var key=s.getAttribute('data-featprof'), o=featSkillStore(key);
+      o.prof=s.value||''; char.featSkills[key]=o; rerender();
+    });
+  });
+  root.querySelectorAll('[data-featexpert]').forEach(function(s){
+    s.addEventListener('change',function(){
+      var key=s.getAttribute('data-featexpert'), o=featSkillStore(key);
+      o.expertise=s.value||'';
+      if(s.value) addExpertise(s.value);
+      char.featSkills[key]=o; rerender();
+    });
+  });
+  root.querySelectorAll('[data-featskilled]').forEach(function(s){
+    s.addEventListener('change',function(){
+      var a=s.getAttribute('data-featskilled').split('|'), key=a[0], i=+a[1];
+      var o=featSkillStore(key);
+      o.prof=o.prof||[]; o.prof[i]=s.value||''; char.featSkills[key]=o; rerender();
+    });
+  });
+}
+function featSkillValid(key){
+  var fname=featSkillLiveName(key);
+  if(fname!=='Skill Expert'&&fname!=='Skilled') return {ok:true};
+  var fs=(char.featSkills||{})[key]||{};
+  if(fname==='Skill Expert'){
+    if(!fs.prof) return {ok:false,msg:'Skill Expert: choose the skill you gain proficiency in.'};
+    if(!fs.expertise) return {ok:false,msg:'Skill Expert: choose a proficient skill to gain expertise in.'};
+    if(skillProfs().indexOf(fs.expertise)<0) return {ok:false,msg:'Skill Expert: expertise requires proficiency in that skill.'};
+  }else{
+    var picks=(fs.prof||[]).filter(Boolean);
+    if(picks.length<3||picks[0]===picks[1]||picks[0]===picks[2]||picks[1]===picks[2])
+      return {ok:false,msg:'Skilled: choose three different skills.'};
+  }
+  return {ok:true};
+}
 
 var STEP_NAMES = ['Concept','Ancestry','Class','Abilities','Technique','Background','Level-Up Rolls','Details','Sheet'];
 
@@ -836,6 +930,9 @@ function blankChar(){
     background:'', backgroundFeat:'', backgroundTool:'', backgroundEquipment:[],
     mindset:'',
     feats:[], tools:[], notes:'', ceBonus:0,
+    classSkills:{}, // class skill proficiencies: {ClassName:[skill, skill]} — picked in Step 7
+    expertise:[],   // skills with expertise (double PB): Tailored Appearance, Skill Expert
+    featSkills:{},  // per-feat skill picks: {key:{feat:'Skill Expert'|'Skilled', prof:..., expertise:...}}
     hrVariant:'',  // Heavenly Restriction package: '' = Pure Body default (set in step 3)
     hrOpts:{},     // per-variant options, keyed by variant id
     hrAsi:{},      // Limited-CE bonus ASI grants: {grantKey: ability} e.g. {row1:'STR'}
@@ -1104,6 +1201,8 @@ function hrCEMax(){
 /* ancestry-granted proficiencies for sheet display */
 var SKILL_LIST=['Acrobatics','Animal Handling','Arcana','Athletics','Deception','History','Insight','Intimidation','Investigation','Medicine','Nature','Perception','Performance','Persuasion','Religion','Sleight of Hand','Stealth','Survival'];
 var ARTISAN_TOOLS=["Alchemist's supplies","Brewer's supplies","Calligrapher's supplies","Carpenter's tools","Cartographer's tools","Cobbler's tools","Cook's utensils","Glassblower's tools","Jeweler's tools","Leatherworker's tools","Mason's tools","Painter's supplies","Potter's tools","Smith's tools","Tinker's tools","Weaver's tools","Woodcarver's tools"];
+/* standard 5e skill -> ability mapping */
+var SKILL_ABILITY={Athletics:'STR',Acrobatics:'DEX','Sleight of Hand':'DEX',Stealth:'DEX',Arcana:'INT',History:'INT',Investigation:'INT',Nature:'INT',Religion:'INT','Animal Handling':'WIS',Insight:'WIS',Medicine:'WIS',Perception:'WIS',Survival:'WIS',Deception:'CHA',Intimidation:'CHA',Performance:'CHA',Persuasion:'CHA'};
 function ancestrySkillProfs(){
   var out=[];
   if(char.ancestry==='sumerian'){
@@ -1111,7 +1210,67 @@ function ancestrySkillProfs(){
     var sk=((char.ancestryPicks||{}).shaamaSkills)||[];
     sk.forEach(function(s){ if(s&&out.indexOf(s)<0) out.push(s+' (Shaama)'); });
   }
+  if(char.ancestry==='cursed-vessel'&&char.heritage==='reincarnated'){
+    var rs=((char.ancestryPicks||{}).reincarnatedSkills)||[];
+    rs.forEach(function(s){ if(s&&out.indexOf(s)<0) out.push(s+' (Life Experience)'); });
+  }
+  if(char.ancestry==='cursed-corpse'&&char.heritage==='softbody'){
+    var ta=(char.ancestryPicks||{}).tailoredAppearance;
+    if(ta&&out.indexOf(ta)<0) out.push(ta+' (Tailored Appearance)');
+  }
   return out;
+}
+/* the feat currently selected for a featSkills key: 'bg' = background feat,
+   'asi-<L>' = the Step 7 feat at character level L */
+function featSkillLiveName(key){
+  if(key==='bg') return char.backgroundFeat||'';
+  if(key&&key.indexOf('asi-')===0) return (char.asiFeat||{})[key.slice(4)]||'';
+  return '';
+}
+/* union of every granted skill proficiency (plain names, no stacking) */
+function skillProfs(){
+  var out=[];
+  function add(s){ if(s&&out.indexOf(s)<0) out.push(s); }
+  var bg=bgById(char.background);
+  if(bg) (bg.skills||[]).forEach(add);
+  if(char.ancestry==='sumerian'){
+    add('Perception');
+    (((char.ancestryPicks||{}).shaamaSkills)||[]).forEach(add);
+  }
+  if(char.ancestry==='cursed-vessel'&&char.heritage==='reincarnated')
+    (((char.ancestryPicks||{}).reincarnatedSkills)||[]).forEach(add);
+  if(char.ancestry==='cursed-corpse'&&char.heritage==='softbody')
+    add((char.ancestryPicks||{}).tailoredAppearance);
+  var cs=char.classSkills||{};
+  Object.keys(cs).forEach(function(c){ ((cs[c]||[])).forEach(add); });
+  var fs=char.featSkills||{};
+  Object.keys(fs).forEach(function(k){
+    var f=fs[k]; if(!f) return;
+    if(featSkillLiveName(k)!==f.feat) return; /* stale pick — the feat changed away */
+    if(f.feat==='Skilled') (f.prof||[]).forEach(add);
+    else if(f.feat==='Skill Expert') add(f.prof);
+  });
+  return out;
+}
+/* expertise (double PB): char.expertise plus trait/feat grants; expertise implies proficiency */
+function expertiseSkills(){
+  var out=[];
+  function add(s){ if(s&&out.indexOf(s)<0) out.push(s); }
+  (char.expertise||[]).forEach(add);
+  if(char.ancestry==='cursed-corpse'&&char.heritage==='softbody')
+    add((char.ancestryPicks||{}).tailoredAppearance);
+  var fs=char.featSkills||{};
+  Object.keys(fs).forEach(function(k){
+    var f=fs[k]; if(!f) return;
+    if(featSkillLiveName(k)!==f.feat) return;
+    if(f.feat==='Skill Expert') add(f.expertise);
+  });
+  return out;
+}
+function addExpertise(s){
+  if(!s) return;
+  if(!Array.isArray(char.expertise)) char.expertise=[];
+  if(char.expertise.indexOf(s)<0) char.expertise.push(s);
 }
 function ancestryToolProfs(){
   var out=[], p=char.ancestryPicks||{};
@@ -1253,6 +1412,10 @@ function migrateChar(c){
   /* v4: class level-up choices (data/class_choices.js) */
   if(oldV<4 && !c.classChoices) c.classChoices={};
   if(!c.classChoices) c.classChoices={};
+  /* skill proficiencies: class picks (Step 7), expertise, per-feat picks */
+  if(!c.classSkills||typeof c.classSkills!=='object') c.classSkills={};
+  if(!Array.isArray(c.expertise)) c.expertise=[];
+  if(!c.featSkills||typeof c.featSkills!=='object') c.featSkills={};
   if(!('background' in c)) c.background='';
   if(!('backgroundFeat' in c)) c.backgroundFeat='';
   if(!('backgroundTool' in c)) c.backgroundTool='';
@@ -1559,6 +1722,44 @@ function renderHeritages(){
         b.addEventListener('click',function(){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaCast=b.getAttribute('data-ca'); renderStep(); });
       });
     }
+    /* Reincarnated (cursed vessel): Life Experience — two skills, or one skill and one tool */
+    if(char.ancestry==='cursed-vessel'&&char.heritage==='reincarnated'){
+      var _rp=char.ancestryPicks||{};
+      var _rsk=[_rp.reincarnatedSkills&&_rp.reincarnatedSkills[0]||'', _rp.reincarnatedSkills&&_rp.reincarnatedSkills[1]||''];
+      var _rtool=_rp.reincarnatedTool||'';
+      var rSkOpts=function(cur,other){
+        return '<option value="">\u2014 choose \u2014</option>'+SKILL_LIST.map(function(s){
+          var dis=(s===other);
+          return '<option value="'+s+'"'+(cur===s?' selected':'')+(dis?' disabled':'')+'>'+s+'</option>';
+        }).join('');
+      };
+      d.innerHTML+='<div class="banner" style="margin-top:10px"><span class="bk">\u2756 Life Experience</span>'+
+        '<p class="small">Gain proficiency in <b>two skills</b>, or <b>one skill and one tool</b>, of your choice.</p>'+
+        '<div class="grid2"><div class="field"><label for="reincSk0"><b>Skill proficiency</b> (1 of 2)</label><select id="reincSk0">'+rSkOpts(_rsk[0],_rsk[1])+'</select></div>'+
+        '<div class="field"><label for="reincSk1"><b>Skill proficiency</b> (2 of 2, or skip for a tool)</label><select id="reincSk1">'+rSkOpts(_rsk[1],_rsk[0])+'</select></div></div>'+
+        '<div class="field" style="max-width:320px"><label for="reincTool"><b>Artisan\u2019s tool proficiency</b> (instead of the second skill)</label><select id="reincTool"><option value="">\u2014 choose \u2014</option>'+
+        ARTISAN_TOOLS.map(function(t){ return '<option'+(_rtool===t?' selected':'')+'>'+t+'</option>'; }).join('')+'</select></div></div>';
+      var _rbind=function(id,fn){ var el=$(id); if(el) el.addEventListener('change',fn); };
+      var _rskFn=function(){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.reincarnatedSkills=[$('reincSk0').value,$('reincSk1').value]; renderStep(); };
+      _rbind('reincSk0',_rskFn); _rbind('reincSk1',_rskFn);
+      _rbind('reincTool',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.reincarnatedTool=e.target.value; });
+    }
+    /* Softbody cursed corpse: Tailored Appearance — one skill, proficiency + double PB */
+    if(char.ancestry==='cursed-corpse'&&char.heritage==='softbody'){
+      var _ta=((char.ancestryPicks||{}).tailoredAppearance)||'';
+      d.innerHTML+='<div class="banner" style="margin-top:10px"><span class="bk">\u2756 Tailored Appearance</span>'+
+        '<p class="small">Choose a skill — you gain proficiency in it and <b>double your proficiency bonus</b> for checks made with it.</p>'+
+        '<div class="field" style="max-width:320px"><label for="tailorSk"><b>Chosen skill</b></label>'+
+        '<select id="tailorSk"><option value="">\u2014 choose \u2014</option>'+
+        ['Intimidation','Persuasion','Performance'].map(function(s){
+          return '<option value="'+s+'"'+(_ta===s?' selected':'')+'>'+s+'</option>';
+        }).join('')+'</select></div></div>';
+      var _taEl=$('tailorSk');
+      if(_taEl) _taEl.addEventListener('change',function(e){
+        char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.tailoredAppearance=e.target.value;
+        /* proficiency + expertise derive live in skillProfs()/expertiseSkills() */
+      });
+    }
   }else d.innerHTML='';
 }
 STEP_VALID[2]=function(){
@@ -1576,6 +1777,20 @@ STEP_VALID[2]=function(){
       if(!p.shaamaTool) return {ok:false,msg:'Choose an artisan tool for Shaama.'};
       if(!p.shaamaCast) return {ok:false,msg:'Choose your Shaama spellcasting ability.'};
     }
+  }
+  /* Reincarnated: Life Experience — two skills, or one skill and one tool */
+  if(char.ancestry==='cursed-vessel'&&char.heritage==='reincarnated'){
+    var rp=char.ancestryPicks||{};
+    var rsk=(rp.reincarnatedSkills||[]).filter(function(s){ return !!s; });
+    var twoSkills=(rsk.length===2&&rsk[0]!==rsk[1]);
+    var skillAndTool=(rsk.length===1&&!!(rp.reincarnatedTool||''));
+    if(!(twoSkills||skillAndTool))
+      return {ok:false,msg:'Life Experience: choose two different skills, or one skill and one tool.'};
+  }
+  /* Softbody cursed corpse: Tailored Appearance */
+  if(char.ancestry==='cursed-corpse'&&char.heritage==='softbody'){
+    if(!(char.ancestryPicks||{}).tailoredAppearance)
+      return {ok:false,msg:'Tailored Appearance: choose Intimidation, Persuasion, or Performance.'};
   }
   return {ok:true};
 };
@@ -2281,13 +2496,15 @@ function renderBgDetail(){
   html+='<div class="field" style="max-width:420px"><label for="bgFeat">'+esc(bg.featLabel)+'</label>'+
     '<select id="bgFeat"'+(bgFeatIneligible(bg)?' disabled':'')+'>'+bgFeatOptions(bg,char.backgroundFeat)+'</select><div id="bgFeatNote"></div>'+
     (bgFeatIneligible(bg)?'<p class="small" style="margin:6px 0 0"><b>Reverse Cursed Energy Generation</b> makes you ineligible for this feat — you gain no background feat. Your auto-granted Reverse Cursed Technique feats appear on your sheet.</p>':'')+'</div>';
+  html+='<div id="bgFeatSkills">'+featSkillPickersHTML('bg')+'</div>';
   d.innerHTML=html;
   var showNote=function(){
     var n=$('bgFeatNote');
     if(n) n.innerHTML=featInfoHTML(char.backgroundFeat);
   };
   showNote();
-  $('bgFeat').addEventListener('change',function(e){ char.backgroundFeat=e.target.value; showNote(); refreshNav(); });
+  $('bgFeat').addEventListener('change',function(e){ char.backgroundFeat=e.target.value; renderBgDetail(); refreshNav(); });
+  wireFeatSkillPickers(d,function(){ renderBgDetail(); });
   var ts=$('bgTool');
   if(ts) ts.addEventListener('change',function(e){
     removeTool(char.backgroundTool);
@@ -2305,6 +2522,8 @@ STEP_VALID[6]=function(){
     return {ok:false,msg:'Choose your background tool proficiency.'};
   if(!char.backgroundFeat&&!bgFeatIneligible(bg)) return {ok:false,msg:'Choose your background feat — '+bg.featLabel+'.'};
   if(!char.mindset) return {ok:false,msg:'Choose a mindset to continue.'};
+  var _fsv=featSkillValid('bg');
+  if(!_fsv.ok) return _fsv;
   return {ok:true};
 };
 
@@ -2557,6 +2776,56 @@ function levelRows(){
   }
   return rows;
 }
+/* Class skill proficiencies (V6 class lists): one picker group per class taken,
+   each granting that class's picks once — including multiclassed classes.
+   Stored in char.classSkills[className]; keyed by class (not level), so picks
+   survive multiclass reordering and revive if the class returns. */
+function classSkillPickerHTML(c){
+  var C=CLASSES[c]; if(!C||!C.skills) return '';
+  var n=C.skillCount||2;
+  char.classSkills=char.classSkills||{};
+  var picks=char.classSkills[c]||[];
+  var html='<div class="banner" style="margin-top:10px"><span class="bk">\u2756 '+esc(c)+' — class skill proficiencies (choose '+n+')</span>'+
+    '<p class="small">Class list: '+esc(C.skills.join(', '))+'. Each class you take grants its own picks once.</p><div class="grid2">';
+  for(var i=0;i<n;i++){
+    var cur=picks[i]||'';
+    var sid='clsSk_'+c.replace(/[^a-z0-9]+/gi,'-')+'_'+i;
+    html+='<div class="field"><label for="'+sid+'"><b>Skill proficiency</b> ('+(i+1)+' of '+n+')</label>'+
+      '<select id="'+sid+'" data-clsskill="'+esc(c)+'|'+i+'"><option value="">\u2014 choose \u2014</option>'+
+      C.skills.map(function(s){
+        var dis=(picks.indexOf(s)>=0&&s!==cur);
+        return '<option value="'+s+'"'+(cur===s?' selected':'')+(dis?' disabled':'')+'>'+s+'</option>';
+      }).join('')+'</select></div>';
+  }
+  return html+'</div></div>';
+}
+function renderClassSkills(){
+  var el=$('classSkillSec'); if(!el) return;
+  var taken=classesTaken();
+  el.innerHTML=taken.length
+    ? '<h3>Class skill proficiencies</h3>'+taken.map(classSkillPickerHTML).join('')
+    : '';
+  el.querySelectorAll('[data-clsskill]').forEach(function(s){
+    s.addEventListener('change',function(){
+      var a=s.getAttribute('data-clsskill').split('|'), c=a[0], i=+a[1];
+      char.classSkills=char.classSkills||{};
+      var picks=char.classSkills[c]||[]; picks[i]=s.value||'';
+      char.classSkills[c]=picks;
+      renderClassSkills(); refreshNav();
+    });
+  });
+}
+function classSkillsValid(){
+  var bad=classesTaken().filter(function(c){
+    var C=CLASSES[c]; var n=(C&&C.skillCount)||0; if(!n) return false;
+    var picks=((char.classSkills||{})[c]||[]).filter(Boolean);
+    if(picks.length<n) return true;
+    for(var i=0;i<picks.length;i++) if(picks.indexOf(picks[i])!==i) return true;
+    return false;
+  });
+  if(bad.length) return {ok:false,msg:'Choose class skill proficiencies for: '+bad.join(', ')+'.'};
+  return {ok:true};
+}
 function stepLevelUps(body){
   var C=CLASSES[char.cls], hd=C.hd;
   var ceBit;
@@ -2577,7 +2846,9 @@ function stepLevelUps(body){
     html+='<button class="btn btn-small btn-ghost" id="allFixed" type="button">Take fixed for unrolled levels</button> <span class="asi-note">or roll each die individually</span>';
     html+='<table class="lvl-table"><tr><th>Level</th><th>Class</th><th>Class choices</th><th>Ability score increase</th><th>HP gain</th><th>CE Reserve gain</th></tr><tbody id="lvlBody"></tbody></table>';
   }
+  html+='<div id="classSkillSec"></div>';
   body.innerHTML=html;
+  renderClassSkills();
   if(char.level>1){
     renderLvlRows();
     $('allFixed').addEventListener('click',function(){
@@ -2638,7 +2909,7 @@ function renderLvlRows(){
       if(mode==='feat'){
         var pf=((char.asiFeat||{})[r.l])||'';
         asiCell+='<div style="margin-top:4px"><select data-asifeatpreset="'+r.l+'">'+featSelectOptions(pf)+'</select>'+
-          featInfoHTML(pf)+
+          featInfoHTML(pf)+featSkillPickersHTML('asi-'+r.l)+
           '<div class="asi-note">Replaces the ASI (D&D 5e rule). Technique feats list their prerequisite — you must meet it before selecting.</div></div>';
       }else if(mode==='hr3'){
         var h3cur=(char.asi[r.l]||['STR','STR','STR'])[0]||'STR';
@@ -2686,7 +2957,7 @@ function renderLvlRows(){
     if(ld.hpMode==='roll' && (!ld.hpDie || ld.hpDie>newC.hd)){ ld.hpMode='fixed'; ld.hpDie=null; }
     if(ld.ceMode==='roll' && (!ld.ceDie || ld.ceDie>newC.reserve)){ ld.ceMode='fixed'; ld.ceDie=null; }
     if(oldCls!==newCls && !ld.hpMode && !ld.ceMode) delete char.levelData[l];
-    renderLvlRows(); renderLvlTotals();
+    renderLvlRows(); renderClassSkills(); renderLvlTotals();
   }); });
   tb.querySelectorAll('[data-hpfixed]').forEach(function(b){ b.addEventListener('click',function(){ var l=+b.getAttribute('data-hpfixed'); char.levelData[l]=char.levelData[l]||{}; char.levelData[l].hpMode='fixed'; char.levelData[l].hpDie=null; renderLvlRows(); renderLvlTotals(); }); });
   tb.querySelectorAll('[data-cefixed]').forEach(function(b){ b.addEventListener('click',function(){ var l=+b.getAttribute('data-cefixed'); char.levelData[l]=char.levelData[l]||{}; char.levelData[l].ceMode='fixed'; char.levelData[l].ceDie=null; renderLvlRows(); renderLvlTotals(); }); });
@@ -2713,6 +2984,8 @@ function renderLvlRows(){
     if(s.value) char.asiFeat[l]=s.value; else delete char.asiFeat[l];
     renderLvlRows(); renderLvlTotals();
   }); });
+  /* Skill Expert / Skilled sub-picks on ASI feats */
+  wireFeatSkillPickers(tb,function(){ renderLvlRows(); renderLvlTotals(); });
   /* HR ASI: +3 to one ability */
   tb.querySelectorAll('[data-hr3]').forEach(function(s){ s.addEventListener('change',function(){
     var l=+s.getAttribute('data-hr3'), v=s.value;
@@ -2754,7 +3027,16 @@ function animateSingleDie(btn,spanAttr,sides,done){
     if(ticks>7){ clearInterval(iv); btn.disabled=false; span.innerHTML=''; done(rollDie(sides)); }
   },80);
 }
-STEP_VALID[7]=function(){ return {ok:true}; };
+STEP_VALID[7]=function(){
+  /* class skill picks for every class taken (incl. multiclassed classes) */
+  var csv=classSkillsValid();
+  if(!csv.ok) return csv;
+  /* Skill Expert / Skilled picks on feats taken instead of an ASI */
+  var badF=asiFeatEntries().map(function(e){ return {level:e.level, v:featSkillValid('asi-'+e.level)}; })
+    .filter(function(x){ return !x.v.ok; });
+  if(badF.length) return {ok:false,msg:'Level '+badF[0].level+' feat — '+badF[0].v.msg};
+  return {ok:true};
+};
 
 /* ═══════════ STEP 5 — TECHNIQUE ═══════════ */
 var techQ='', techGrade='', techGroup='', techRole='', techFranchise='', techOrigin='all';
@@ -3190,6 +3472,25 @@ function traitSheetExtraHTML(){
   }
   return html;
 }
+/* consolidated skills table for the sheet: all 18 skills with ability, total
+   modifier (ability mod + PB, double PB with expertise), proficient rows shaded */
+function skillsSheetHTML(ab,P){
+  var profs=skillProfs(), exp=expertiseSkills();
+  var half=function(list){
+    return '<table class="skill-table"><tr><th>Skill</th><th>Ability</th><th>Mod</th></tr>'+
+      list.map(function(s){
+        var a=SKILL_ABILITY[s]||'\u2014', m=mod((ab||{})[a]||10);
+        var isExp=exp.indexOf(s)>=0, isProf=isExp||profs.indexOf(s)>=0;
+        var total=m+(isExp?2*P:(isProf?P:0));
+        return '<tr'+(isProf?' class="is-prof"':'')+'><td>'+esc(s)+
+          (isExp?' <span class="chip plain">expertise</span>':'')+'</td><td>'+a+'</td>'+
+          '<td>'+(total>=0?'+':'')+total+'</td></tr>';
+      }).join('')+'</table>';
+  };
+  return '<div class="sheet-sec"><h3><span class="orn">\u2756</span> Skills</h3>'+
+    '<div class="skill-cols">'+half(SKILL_LIST.slice(0,9))+half(SKILL_LIST.slice(9))+'</div>'+
+    '<p class="small">Shaded rows are proficient (ability modifier + proficiency bonus); expertise doubles the bonus (PB +'+P+' \u2192 +'+(2*P)+').</p></div>';
+}
 function sheetHTML(){
   var A=ANCESTRIES[char.ancestry], H=A?A.heritages[char.heritage]:null;
   var ab=abilitiesAt(char.level);
@@ -3215,6 +3516,8 @@ function sheetHTML(){
     ABILITIES.map(function(a){ return '<div class="ab-box"><div class="ab-name">'+a+'</div><div class="ab-score">'+ab[a]+'</div><div class="ab-mod">'+modStr(ab[a])+'</div></div>'; }).join('')+'</div>'+
     '<p class="small">Final scores include ancestry increases'+(Object.keys(char.asi).length?' and level-up ASIs':'')+(asiFeatEntries().length?' (feats taken instead of an ASI grant no score increase)':'')+
     (hrV()&&hrV()!=='pure-body'?' and Heavenly Restriction adjustments':'')+(char.specialTrait?' and Special Trait adjustments':'')+(evoNoASI()?' — racial ASI suppressed (No ASI, returns at 8th)':'')+'.</p></div>';
+  /* skills */
+  html+=skillsSheetHTML(ab,P);
   /* ancestry */
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Ancestry</h3>'+
     '<p style="font-family:var(--serif);font-size:1.15rem;font-weight:bold;margin:0">'+esc(ancLine)+'</p>'+
