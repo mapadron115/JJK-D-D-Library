@@ -381,23 +381,43 @@ b.k{font-family:var(--serif)}
 <tr><th>Statistic</th><th>Value</th></tr>
 <tr><td><b class="k">Activation</b></td><td>Full-turn action (your action, bonus action, object interaction, and all movement for the turn) plus the required hands or signs.</td></tr>
 <tr><td><b class="k">Cost</b></td><td>20 CE.</td></tr>
-<tr><td><b class="k">Area</b></td><td>60-foot-radius enclosed space centered on you.</td></tr>
+<tr><td><b class="k">Area</b></td><td>90-foot-radius enclosed space centered on you.</td></tr>
 <tr><td><b class="k">Targets</b></td><td>Choose perceived creatures in the area when it opens. Every other creature is moved harmlessly to the nearest space outside.</td></tr>
 <tr><td><b class="k">Duration</b></td><td>1 minute base — see refinement, below.</td></tr>
 </table></div>
 <p>A technique-specific Domain may change its action, cost, shape, range, target rule, or duration — its explicit wording wins. Opening a Domain ends your current Technique Focus, and the Domain occupies that Focus slot.</p>
-<h3>Refinement — a milestone, not a currency</h3>
-<p>Refinement tiers are awarded by the GM after a meaningful breakthrough, a decisive clash, sustained narrative training, or technique evolution — never for defeating trivial creatures, dumping unused CE before bed, or staging friendly clashes. Each tier converts into <b>clash points</b>, and clash points set both duration and Burnout.</p>
+<h3>Technique amplification — the domain perfects you</h3>
+<p>Inside your own domain, your innate technique is amplified: it is the technique as it exists in your soul, unbound by the limits of the outside world. While inside your domain:</p>
+<ul>
+<li>Your technique's damage dice increase by <b>1</b>, plus 1 more for every 250 refinement points (2 dice at 250, 3 at 500, 4 at 750, 5 at 1,000).</li>
+<li>Your technique save DC increases by <b>1</b> at 500 refinement, <b>2</b> at 1,000.</li>
+<li>Durations of your technique's effects are <b>doubled</b>, and the areas and ranges of your technique features increase by <b>half</b>.</li>
+</ul>
+<h3>Refinement — earned, not given</h3>
+<p>Your domain starts with <b>1 refinement point</b> and can reach <b>1,000</b>. Refinement is earned through practice, victory, and survival — not awarded by milestone. The GM tracks your points.</p>
 <div class="table-wrap"><table class="rtable">
-<tr><th>Tier</th><th>Eligibility</th><th class="num">Clash pts</th><th>Benefit</th><th>Duration</th><th class="num">Burnout</th></tr>
-<tr><td><b class="k">0 · Incomplete</b></td><td>Feature or breakthrough</td><td class="num">—</td><td>Action, 10 CE, 30-foot radius, 3 rounds, no barrier or sure-hit. Once each turn: advantage on your first imbued attack, or disadvantage on the first save against it.</td><td>3 rounds</td><td class="num">—</td></tr>
-<tr><td><b class="k">1 · Complete</b></td><td>Normally level 11+ with a Domain feature</td><td class="num">1</td><td>The complete baseline above.</td><td>1 min</td><td class="num">10 rounds</td></tr>
-<tr><td><b class="k">2 · Refined</b></td><td>Normally level 13+ with a breakthrough</td><td class="num">200</td><td>Expansion becomes an action instead of a full-turn action.</td><td>1 min</td><td class="num">10 rounds</td></tr>
-<tr><td><b class="k">3 · Mastered</b></td><td>Normally level 15+ with a breakthrough</td><td class="num">500</td><td>Cost becomes 20 − CE modifier (minimum 15). Choose a standard or inverted barrier; +5 CE for a balanced barrier.</td><td>2 min</td><td class="num">10 rounds</td></tr>
-<tr><td><b class="k">4 · Supreme</b></td><td>Normally level 17+ with a major breakthrough</td><td class="num">800</td><td>Unlocks 0.2-second expansion and one Burnout Recovery attempt per long rest.</td><td>2 min</td><td class="num">5 rounds</td></tr>
-<tr><td><b class="k">5 · Calamity</b></td><td>Level 20 or campaign-defining breakthrough</td><td class="num">1000</td><td>Expansion becomes a bonus action. May create an open-barrier Domain. Repeatable Burnout Recovery, with rising danger.</td><td>3 min</td><td class="num">3 rounds</td></tr>
+<tr><th>Method</th><th>Reward</th></tr>
+<tr><td><b class="k">Training</b></td><td>Once per day, spend CE up to your CE modifier; gain that many refinement points. This CE only returns the next day.</td></tr>
+<tr><td><b class="k">Domain casualties</b></td><td>20 points per creature reduced to 0 HP inside your domain, if its CR was at least half your level (rounded up).</td></tr>
+<tr><td><b class="k">Domain superiority</b></td><td>100 points for winning a domain clash. Once per month, and never against the same creature twice.</td></tr>
 </table></div>
-<div class="canon-note"><div class="cn-head">❖ Canon note</div><div class="cn-body"><p>Domain duration now follows refinement points — <b>under 500: 1 minute; 500–999: 2 minutes; 1,000+: 3 minutes</b> — replacing the old table's flat 10-round durations for tiers 1–3. Open-barrier Domains default to 1 minute. Figure Domains in the codex are <b>Specific Domains</b>: their stated profile (full-turn + 20 CE baseline) wins over this table; Tier IV figures hold 2-minute Domains, Tier V figures 3-minute Domains, with three recorded exceptions — Tesla (action / 10 CE), Hotu Matu'a (action / 20 CE), Dzunuk'wa (action / 20 CE).</p></div></div>
+<h3>Refinement benefits</h3>
+<div class="table-wrap"><table class="rtable">
+<tr><th class="num">Points</th><th>Benefit</th></tr>
+<tr><td class="num"><b class="k">1+</b></td><td><b>Domain durability.</b> Your domain's hit points increase by 1 per refinement point.</td></tr>
+<tr><td class="num"><b class="k">100</b></td><td><b>Barrier resistance.</b> When you expand, choose: vulnerability inside / resistance outside, or the reverse. Spend +5 CE for a balanced barrier (neither).</td></tr>
+<tr><td class="num"><b class="k">200</b></td><td><b>Quicker expansion.</b> Your domain costs an action instead of a full-turn action.</td></tr>
+<tr><td class="num"><b class="k">300</b></td><td><b>Increased potency.</b> Your cursed techniques and domain damage inside the domain gain bonus dice equal to your CE modifier.</td></tr>
+<tr><td class="num"><b class="k">400</b></td><td><b>0.2-second expansion.</b> As part of opening, you may have it last only until the end of your turn; cost is halved, and it cannot be reacted to unless the creature's Dexterity exceeds your CE score. All creatures are targeted, too fast to choose.</td></tr>
+<tr><td class="num"><b class="k">500</b></td><td><b>Lasting domain.</b> Duration becomes 2 minutes. Burnout reduces to 5 rounds.</td></tr>
+<tr><td class="num"><b class="k">600</b></td><td><b>Domain amplification.</b> As an action for half the domain's CE cost, you may "wear" your domain for 1 minute: you automatically negate any technique or spell affecting you, bypass barriers like Infinity with melee attacks, and suppress sure-hits inside enemy domains. You cannot use your innate technique while worn (dismiss as a bonus action; reactivate as a bonus action without cost for the minute).</td></tr>
+<tr><td class="num"><b class="k">700</b></td><td><b>Efficient expansions.</b> Domain cost reduced by your CE modifier. Burnout exhaustion reduced to 1 level.</td></tr>
+<tr><td class="num"><b class="k">800</b></td><td><b>Durable barrier.</b> Immunity to non-magical damage from both sides; resistance inside, vulnerability outside. Refinement points count double for barrier HP.</td></tr>
+<tr><td class="num"><b class="k">900</b></td><td><b>Compression.</b> As a bonus action inside your domain, spend 5 CE to compress the outside to a 5-foot circle (inside unchanged). Attacks from outside have disadvantage; lasts until the domain ends.</td></tr>
+<tr><td class="num"><b class="k">1,000</b></td><td><b>Total mastery.</b> Expand as a bonus action. Cost reduced by your proficiency bonus. Inside the domain, your action-cost techniques become bonus actions, and bonus-action techniques become free actions. Duration becomes 3 minutes. Burnout reduces to 3 rounds.</td></tr>
+</table></div>
+<p>If you know Reverse Cursed Technique and have 750+ refinement, you gain <b>Burnout Recovery</b>: while suffering Technique Burnout, spend 4 CE as a reaction to regain your technique and remove the exhaustion (DC 5 Constitution save; on failure take 8d6 psychic damage and lose actions until your next turn; DC rises by 5 per success, falling 5 per minute, resetting on a long rest).</p>
+<div class="canon-note"><div class="cn-head">❖ Canon note</div><div class="cn-body"><p>Domain tiers (I–V, X) are <b>classification only</b> — a shorthand for the codex, not a progression track. Your domain improves through refinement points, earned in play. Figure Domains in the codex are <b>Specific Domains</b>: their stated profile wins over this section; Tier IV figures hold 2-minute Domains, Tier V figures 3-minute Domains, with three recorded exceptions — Tesla (action / 10 CE), Hotu Matu'a (action / 20 CE), Dzunuk'wa (action / 20 CE).</p></div></div>
 <h3>Sure-hits — two philosophies</h3>
 <div class="callout callout-red"><div class="callout-head"><span class="callout-kicker">Modern philosophy</span><h4>The sure-hit event — initiative count 20</h4></div>
 <div class="body">
@@ -419,18 +439,18 @@ b.k{font-family:var(--serif)}
 <p>A non-lethal Domain replaces sure-hit with a <b>specific rule, trigger, consequence, and completion condition</b>, disclosed to every trapped creature when the Domain opens. A creature that knowingly violates it makes the listed save; success avoids the consequence until the start of its next turn. The procedure must offer meaningful choices — without explicit text it cannot cause instant death, permanent resource loss, or unavoidable violence. It clashes and burns out normally.</p>
 <h3>Barriers, stability, and collapse</h3>
 <ul>
-<li><b>Barrier:</b> AC 12 + PB; HP = 10 × max(1, actual CE modifier) + clash points (doubled clash-point contribution at 800+ points). Immune to psychic and poison damage. By default resists damage from inside and is vulnerable from outside; automatically fails saves; immune to conditions. From inside, a creature must use an action and succeed on Wisdom (Perception) against your CE save DC to expose a weak point until the end of its next turn.</li>
-<li><b>Tier 3 barrier choice:</b> standard (resistance inside, vulnerability outside), inverted (vulnerability inside, resistance outside), or balanced (+5 CE: neither).</li>
+<li><b>Barrier:</b> AC 12 + PB; HP = 10 × max(1, actual CE modifier) + refinement points (doubled at 800+ points). Immune to psychic and poison damage. By default resists damage from inside and is vulnerable from outside; automatically fails saves; immune to conditions. From inside, a creature must use an action and succeed on Wisdom (Perception) against your CE save DC to expose a weak point until the end of its next turn.</li>
+<li><b>100-point barrier choice:</b> standard (resistance inside, vulnerability outside), inverted (vulnerability inside, resistance outside), or balanced (+5 CE: neither).</li>
 <li><b>Domain Stability:</b> if one damage source deals at least 20% of your hit point maximum, make a Constitution save (DC 10 or half the damage taken, whichever is higher). On a failure, the Domain collapses. It also collapses if you are incapacitated, die, dismiss it (no action on your turn), its barrier or anchor reaches 0 HP, or another rule breaks it.</li>
 <li><b>A closed barrier</b> blocks physical passage and teleportation across it unless an effect expressly crosses planar barriers. Destroying it collapses the Domain.</li>
 </ul>
-<h3>Open-barrier Domains — tier 5</h3>
+<h3>Open-barrier Domains — 1,000 refinement</h3>
 <p>A divine technique with an escape route. Omit the outer barrier and choose a visible point on the ground as the anchor: <b>120-foot radius, 1 minute</b>. Creatures can enter or leave normally, but eligible creatures inside remain subject to its effect. The anchor has AC equal to your CE save DC, HP equal to 5 × your character level, immunity to psychic and poison damage, and no vulnerability. Destroying it collapses the Domain.</p>
-<h3>0.2-second expansion — tier 4</h3>
-<p>As an action, spend 10 CE to expand until the end of the current turn and immediately resolve your Domain's Sure-Hit Event once against every eligible creature in its area, <b>including allies</b>. Reactions cannot be used after the expansion begins, though they may still be used against its announced activation if their trigger permits. When it ends, suffer your normal Tier 4 Burnout. It cannot be extended or made open-barrier.</p>
+<h3>0.2-second expansion — 400 refinement</h3>
+<p>As an action, spend 10 CE to expand until the end of the current turn and immediately resolve your Domain's Sure-Hit Event once against every eligible creature in its area, <b>including allies</b>. Reactions cannot be used after the expansion begins, though they may still be used against its announced activation if their trigger permits. When it ends, suffer your normal Burnout. It cannot be extended or made open-barrier.</p>
 <h3>Technique Burnout</h3>
 <p>A Domain ending <b>for any reason</b> causes Technique Burnout. During Burnout you cannot activate an Innate Technique feature, Cursed Technique Reversal, Maximum Output, Maximum Technique, or Domain Expansion. You can still move, attack with weapons, use class features independent of your Innate Technique, reinforce yourself with generic CE, use anti-domain techniques, and use generic RCT. Existing manifestations remain and take ordinary commands. Burnout is not exhaustion, cannot be removed by ordinary condition cleansing, and <b>Black Flash does not end it</b>.</p>
-<p><b>Burnout Recovery</b> (tier 4 with RCT): as an action, spend 8 CE and make a DC 15 Constitution save. Success ends Burnout; failure deals 6d6 irreducible psychic damage, leaves Burnout intact, and prevents actions and reactions until the start of your next turn. Tier 4 permits one attempt per long rest; tier 5 may retry until a failure, with each prior success since your long rest raising the DC by 5.</p>
+<p><b>Burnout Recovery</b> (750+ refinement with RCT): as a reaction, spend 4 CE and make a DC 5 Constitution save. Success ends Burnout and removes its exhaustion; failure deals 8d6 psychic damage, leaves Burnout intact, and prevents actions and bonus actions until the start of your next turn. Each success since your long rest raises the DC by 5.</p>
 </div>
 </section>
 
@@ -523,11 +543,11 @@ b.k{font-family:var(--serif)}
 </div>
 <div class="sec-body">
 <div class="callout callout-red"><div class="callout-head"><span class="callout-kicker">Table rule · deterministic clashes</span><h4>Points decide. Dice do not.</h4></div>
-<div class="body"><p>Every Domain converts its refinement tier into <b>clash points</b>: Tier 1 = <b>1</b>, Tier 2 = <b>200</b>, Tier 3 = <b>500</b>, Tier 4 = <b>800</b>, Tier 5 = <b>1,000</b>. Compare the points. A gap of <b>100 or more</b> collapses the weaker Domain <b>immediately</b> — before its sure-hit resolves. Equal points, or a gap under 100, means <b>neither collapses automatically</b>: there is no countdown and no clash roll. That is the entire decision procedure.</p></div></div>
+<div class="body"><p>Every Domain's <b>refinement points are its clash points</b>. Compare the points. A gap of <b>100 or more</b> collapses the weaker Domain <b>immediately</b> — before its sure-hit resolves. Equal points, or a gap under 100, means <b>neither collapses automatically</b>: there is no countdown and no clash roll. That is the entire decision procedure.</p></div></div>
 <h3>The clash procedure</h3>
 <ul>
 <li><b>Answer the expansion.</b> When a perceived Domain opens within 120 feet, an eligible creature may use its reaction and pay its own Domain cost to expand.</li>
-<li><b>Compare points.</b> Each Domain's clash points come from its refinement tier.</li>
+<li><b>Compare points.</b> Each Domain's clash points are its refinement points.</li>
 <li><b>Break on a 100-point gap.</b> Compare each pair of clashing Domains. If one leads by 100 or more, the weaker collapses immediately — before its periodic sure-hit. Guarantees stay suppressed in the contested space while the clash continues, and a clash does not extend either Domain's expiry.</li>
 <li><b>Equal refinement — no automatic winner.</b> Resolve the clash through barrier damage, Domain Stability failures, or expiry.</li>
 <li><b>Collapse deals no damage.</b> The collapse itself deals nothing. The defeated creator suffers Burnout: <b>10 rounds</b> below 700 points, <b>5 rounds</b> at 700–999, <b>3 rounds</b> at 1,000.</li>
