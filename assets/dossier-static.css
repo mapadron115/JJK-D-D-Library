@@ -65,3 +65,6 @@ details.alien summary{display:flex;align-items:center;gap:.65em;cursor:pointer}
 .redacted:hover{background:#141419}
 .redacted.revealed{background:transparent;color:inherit;cursor:default;user-select:text;box-shadow:none}
 .redact-note{font-size:.78em;color:var(--muted,#9aa0ab);font-style:italic}
+
+/* Domain visual cutscene: the "what it looks like" paragraph */
+.domain-visual{font-style:italic;color:#c9b896;border-left:3px solid #b276e8;padding:8px 14px;margin:12px 0;background:rgba(178,118,232,.06);border-radius:0 8px 8px 0}
