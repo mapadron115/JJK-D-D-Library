@@ -86,6 +86,7 @@ h1 .amp{color:var(--red)}
 .step-item.is-done{background:var(--card);color:var(--olive);border-color:var(--olive)}
 .step-item.is-done .n{color:var(--olive)}
 .wiz-nav{display:flex;justify-content:space-between;gap:12px;margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
+.nav-block-msg{font-size:13px;color:var(--red-deep);align-self:center;text-align:right;max-width:60%}
 /* ── buttons ─────────────────────────────── */
 .btn{font:inherit;font-size:.82rem;letter-spacing:1.5px;text-transform:uppercase;background:transparent;color:var(--ink);border:1px solid var(--ink2);border-radius:3px;padding:10px 20px;cursor:pointer}
 .btn:hover{background:var(--ink);color:var(--paper)}
@@ -1134,6 +1135,8 @@ function hpMax(){
   if(_bb2.hpPerLevel) total+=_bb2.hpPerLevel*char.level;
   /* Special Grade Boon: Unkillable */
   if(hasBoon('unkillable')) total+=50;
+  /* Tough feat: +2 hit points per character level */
+  if(hasFeatNamed('Tough')) total+=2*char.level;
   return total;
 }
 function ceReserveSum(){
@@ -1314,6 +1317,18 @@ var BOONS = {
 };
 var BOON_ORDER = ['ultimate-trait','shikigami-master','unkillable','unending-ce','curse-resistance','peerless-accuracy','swift-techniques','rct-master','survivor'];
 function hasBoon(id){ return (char.boons||[]).indexOf(id)>=0; }
+/* every feat name on the character: heritage + background + chosen + ASI feats */
+function allFeatNames(){
+  var out=[], seen={};
+  function push(n){ if(n && !seen[n]){ seen[n]=1; out.push(n); } }
+  var _sf=((char.ancestryPicks||{}).sorcererFeat)||'';
+  if(char.heritage==='sorcerer'&&!isHR()&&_sf) push(_sf);
+  push(char.backgroundFeat);
+  (char.feats||[]).forEach(push);
+  asiFeatEntries().forEach(function(e){ push(e.name); });
+  return out;
+}
+function hasFeatNamed(n){ return allFeatNames().indexOf(n)>=0; }
 function traitStageAt(level){
   if(!char.specialTrait) return null;
   return level>=14 ? 'awakened' : level>=6 ? 'stirring' : 'dormant';
@@ -1748,6 +1763,7 @@ function baseAC(){
     return {ac:10+Math.max(0,_con), note:'Soft Shell, unarmored (no Unarmored Defense)'};
   }
   if(classLevelCount('Juggernaut', char.level) >= 1) consider(10 + dex + con, 'Juggernaut Unarmored Defense');
+  if(classLevelCount('Warrior', char.level) >= 1) consider(10 + dex + con, 'Warrior Unarmored Defense');
   if(classLevelCount('Heavenly Restriction', char.level) >= 1) consider(10 + dex + con, 'HR Supernatural Resilience');
   if(char.ancestry==='cursed-spirit' && char.heritage==='womb') consider(14 + con, 'Hard Shell, unarmored');
   if(char.ancestry==='cursed-corpse' && char.heritage==='hard-shell'){ best.ac += 1; best.note += ' + Integrated Armor'; }
@@ -2073,6 +2089,11 @@ function renderNav(){
       if(!r.ok){ alert(r.msg||'Complete this step to continue.'); return; }
       currentStep++; renderStep();
     });
+    /* visible block reason — a silently disabled Next is indistinguishable from broken */
+    var blockMsg=document.createElement('span'); blockMsg.className='nav-block-msg'; blockMsg.id='navBlockMsg';
+    blockMsg.textContent=res.ok?'':(res.msg||'Complete this step to continue');
+    blockMsg.style.display=res.ok?'none':'';
+    nav.appendChild(blockMsg);
     nav.appendChild(next);
   }
 }
@@ -2087,6 +2108,8 @@ function refreshNav(){
   var res=v?v():{ok:true};
   next.disabled=!res.ok;
   next.title=res.ok?'':(res.msg||'Complete this step to continue');
+  var bm=$('navBlockMsg');
+  if(bm){ bm.textContent=res.ok?'':(res.msg||'Complete this step to continue'); bm.style.display=res.ok?'none':''; }
 }
 
 /* ═══════════ STEP 1 — CONCEPT ═══════════ */
@@ -3448,7 +3471,7 @@ function stepLevelUps(body){
     renderLvlRows();
     $('allFixed').addEventListener('click',function(){
       for(var l=2;l<=char.level;l++){ if(!char.levelData[l]) char.levelData[l]={hpMode:'fixed',hpDie:null,ceMode:'fixed',ceDie:null}; }
-      renderLvlRows();
+      renderLvlRows(); refreshNav();
     });
   }
   renderLvlTotals();
@@ -4429,7 +4452,8 @@ function qrOneLiner(text){
   var s=String(text||'')
     .replace(/\*/g,'')
     .replace(/\[([^\]]+)\]\([^)]+\)/g,'$1').replace(/_{1,2}([^_]+)_{1,2}/g,'$1');
-  s=s.split(/\n/)[0].trim();
+  /* join wrapped lines so the first *sentence* is extracted, not the first line */
+  s=s.replace(/\s*\n+\s*/g,' ').trim();
   var m=s.match(/^(.{12,170}?[.!?])(\s|$)/);
   var out=m?m[1]:s.slice(0,170);
   return out.length<s.length?out.replace(/[.,;:]\s*$/,'')+'…':out;
