@@ -2819,6 +2819,9 @@ function renderFinal(){
   var allSet=ABILITIES.every(function(a){ return char.abilities[a]>0; });
   if(allSet){
     var finAb=creationAbilityMods(Object.assign({},char.abilities));
+    /* clamp the preview to the same ceilings the sheet enforces (ancestry/trait
+       bonuses can't push a score past its maximum) */
+    ABILITIES.forEach(function(a){ finAb[a]=Math.min(finAb[a], abilityCeiling(a)); });
     html+='<h3>Final scores</h3><table class="assign-table"><tr><th>Ability</th><th>Score</th><th>Modifier</th></tr>'+
       ABILITIES.map(function(a){ return '<tr><td>'+ABIL_NAMES[a]+' ('+a+')</td><td class="roll-res">'+finAb[a]+'</td><td>'+modStr(finAb[a])+'</td></tr>'; }).join('')+'</table>';
     if(char.ceAbility&&hasCEPool()){
@@ -4334,10 +4337,11 @@ function bindTrackers(hpMaxV, ceMaxV){
       btn.setAttribute('data-armed','1');
       btn.textContent='⚠ Confirm Reset';
       toast('Click Reset Trackers again to confirm.');
-      setTimeout(function(){ var b=$('trkReset'); if(b){ b.removeAttribute('data-armed'); b.textContent='Reset Trackers'; } },4000);
+      var armToken=Date.now(); btn.setAttribute('data-armtok',String(armToken));
+      setTimeout(function(){ var b=$('trkReset'); if(b && b.getAttribute('data-armtok')===String(armToken)){ b.removeAttribute('data-armed'); b.removeAttribute('data-armtok'); b.textContent='Reset Trackers'; toast('Reset cancelled — click twice to confirm.'); } },4000);
       return;
     }
-    btn.removeAttribute('data-armed'); btn.textContent='Reset Trackers';
+    btn.removeAttribute('data-armed'); btn.removeAttribute('data-armtok'); btn.textContent='Reset Trackers';
     try{ localStorage.removeItem(trackerKey()); }catch(e){}
     st=trackerState(); st.hp=hpMaxV; if(ceMaxV!=null) st.ce=ceMaxV;
     $('trkHp').value=hpMaxV; $('trkTemp').value=0;
@@ -4422,6 +4426,8 @@ function sheetHTML(){
   /* vitals */
   var acInfo=baseAC(), spd=walkSpeed();
   var ceLbl=cePoolLabel(), ceEff=ceMod==null?null:ceMod+hrCEModBonus();
+  var _bb=hrBodyBonuses();
+  var _pPerc=10+mod(ab.WIS||10)+_bb.passivePerc+((char.skillExpertise&&char.skillExpertise.indexOf('Perception')>=0)?2*P:((char.skillProfs||[]).indexOf('Perception')>=0?P:0));
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Vitals</h3><div class="vitals">'+
     '<div><b>'+hp+'</b><span>Max HP ('+classesTaken().map(function(c){ return 'd'+CLASSES[c].hd; }).join(' / ')+')</span></div>'+
     '<div><b>'+acInfo.ac+'</b><span>AC ('+esc(acInfo.note)+')</span></div>'+
@@ -4432,6 +4438,7 @@ function sheetHTML(){
        '<div><b>'+((P+ceEff>=0?'+':'')+(P+ceEff))+'</b><span>'+ceLbl+' attack</span></div>'+
        '<div><b>'+(8+P+ceEff)+'</b><span>'+ceLbl+' save DC</span></div>')+
     '<div><b>+'+P+'</b><span>Proficiency</span></div>'+
+    '<div><b>'+_pPerc+'</b><span>Passive Perception</span></div>'+
     '</div>'+
     (hasCEPool()?'<p class="small">Max '+ceLbl+' = starting class max Reserve Die ('+esc(clsAt(1))+') + per-level gains + '+ceLbl+' modifier once + '+(char.ceBonus||0)+' bonus'+(hrV()==='limited-ce'||hrV()==='limited-physical'||hrV()==='evo'?' (variant-adjusted)':'')+(hrCEModBonus()?' · effective CE modifier +'+hrCEModBonus()+' (Limited Physical Potential)':'')+'.</p>':'')+
     '<p class="small">AC is your best unarmored formula — worn armor, shields, and technique features adjust it at the table.</p>'+
