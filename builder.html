@@ -4291,7 +4291,7 @@ function bindTrackers(hpMaxV, ceMaxV){
       btn.addEventListener('click',function(){
         var id=btn.getAttribute('data-trk-rm');
         char.trackers=(char.trackers||[]).filter(function(x){ return x.id!==id; });
-        delete st.uses[id]; save(); refreshUses(); persist();
+        delete st.uses[id]; save(); refreshUses(); upsertChar(char);
       });
     });
   }
@@ -4302,7 +4302,7 @@ function bindTrackers(hpMaxV, ceMaxV){
     var rest=$('trkUseRest').value;
     if(!char.trackers) char.trackers=[];
     char.trackers.push({id:'trk_'+Date.now().toString(36), name:name, max:max, rest:rest});
-    $('trkUseName').value=''; persist(); refreshUses(); toast('Added "'+name+'".');
+    $('trkUseName').value=''; upsertChar(char); refreshUses(); toast('Added "'+name+'".');
   });
   /* rests */
   $('trkShortRest').addEventListener('click',function(){
