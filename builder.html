@@ -4448,6 +4448,11 @@ function qrAttackStats(){
       if((f.level||1)<=cl && /^extra attack$/i.test(String(f.name||'').trim())){ extra++; extraSrc.push(c+' '+(f.level||5)); }
     });
   });
+  /* Zack's ruling: every Extra Attack source stacks (+1 attack each). e024 Projection Sorcery's
+     "the Attack action contains one additional attack" (while active) stacks with class sources. */
+  getTechniques().forEach(function(e){
+    if(e && e.id==='e024'){ extra++; extraSrc.push('Projection Sorcery (e024, while active)'); }
+  });
   var tier=ceManipTier(), cm=ceModNow();
   var strike=null;
   if(hasCEPool()&&tier>=1){
