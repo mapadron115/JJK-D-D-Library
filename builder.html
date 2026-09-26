@@ -3682,9 +3682,19 @@ function techMatches(e){
   }
   return true;
 }
+/* Techniques with selectable expressions/versions */
+var TECHNIQUE_VARIANTS = {
+  'e039': [
+    {id:'pride-incarnate', name:'Pride Incarnate', desc:'Escanor\u2019s expression — the body becomes an ever-growing monarch, reaching a fatal, unsurpassable noon. Melee, endurance, final vow.'},
+    {id:'solar-grace', name:'Solar Grace', desc:'Mael\u2019s expression — the same power circulated with angelic precision, multiplying suns without sacrificing control. Flight, precision, artillery, preservation.'}
+  ]
+};
+function techVariants(id){ return TECHNIQUE_VARIANTS[id]||null; }
 function techCard(e,catalog){
   var fig=tIsFigure(e);
-  var sel=(char.techniques||[]).some(function(t){ return t.catalog===catalog&&t.id===e.id; });
+  var selEntry=null;
+  (char.techniques||[]).forEach(function(t){ if(t.catalog===catalog&&t.id===e.id) selEntry=t; });
+  var sel=!!selEntry;
   var isNPC=e&&e.visibility==='npc'; /* U14: NPC-locked entries are viewable but not selectable */
   var chips='';
   var gchip=fig?(tTier(e)?('Tier '+tTier(e)):''):tGrade(e);
@@ -3692,6 +3702,17 @@ function techCard(e,catalog){
   if(tRole(e)) chips+='<span class="chip">'+esc(tRole(e))+'</span>';
   if(fig&&tCe(e)) chips+='<span class="chip plain">CE: '+esc(tCe(e))+'</span>';
   if(e.detail) chips+='<span class="chip plain">'+esc(e.detail)+' record</span>';
+  var variants=techVariants(e.id);
+  var variantHTML='';
+  if(sel&&variants){
+    variantHTML='<div class="tech-variants"><p class="small" style="margin:8px 0 4px"><b>Choose your expression</b> — the two vessels are incompatible.</p><div class="opt-grid">';
+    variants.forEach(function(v){
+      var vSel=selEntry.variant===v.id;
+      variantHTML+='<div class="opt-card'+(vSel?' is-selected':'')+'" data-variant="'+catalog+'|'+esc(e.id)+'|'+v.id+'" tabindex="0" role="button" aria-pressed="'+vSel+'">'+
+        '<span class="check">\u2726</span><h4>'+esc(v.name)+'</h4><p class="tagline">'+esc(v.desc)+'</p></div>';
+    });
+    variantHTML+='</div></div>';
+  }
   return '<div class="tech-card'+(sel?' is-selected':'')+'" data-card="'+catalog+'|'+esc(e.id)+'">'+
     '<div class="tech-head"><div>'+
     '<span class="t-figure">'+(fig?'❖ Historical Figure · '+esc(tSource(e)):'❖ Original Library · '+esc(tSource(e)))+'</span>'+
@@ -3700,6 +3721,7 @@ function techCard(e,catalog){
     '<div class="chips">'+chips+'</div>'+
     '<div class="tech-actions"><button class="btn btn-small btn-ghost" type="button" data-inspect>Inspect features</button>'+
     (isNPC?'<span class="npc-note">NPC technique — not player-selectable</span>':'<button class="btn btn-small'+(sel?'':' btn-primary')+'" type="button" data-choose>'+(sel?'✓ Selected — click to remove':'Choose this technique')+'</button>')+'</div>'+
+    variantHTML+
     '</div><div class="tech-side">' + techImg(e) + '</div></div>'+
     '<div class="tech-body">'+techInspectHTML(e,catalog)+'</div></div>';
 }
@@ -3797,15 +3819,36 @@ function renderTechResults(){
       var ix=char.techniques.findIndex(function(t){ return t.catalog===catalog&&t.id===id; });
       if(ix>=0) char.techniques.splice(ix,1);
       else if(char.techniques.length>=2) alert('Two techniques maximum — remove one before choosing another.');
-      else char.techniques.push({catalog:catalog,id:id});
+      else char.techniques.push({catalog:catalog,id:id,variant:null});
       renderTechResults(); renderStepBar(); renderNav();
     });
+  });
+  /* technique variant picks (e.g. Sunshine expressions) */
+  res.querySelectorAll('[data-variant]').forEach(function(el){
+    function pick(){
+      var parts=el.getAttribute('data-variant').split('|');
+      var catalog=parts[0], id=parts[1], vid=parts.slice(2).join('|');
+      (char.techniques||[]).forEach(function(t){
+        if(t.catalog===catalog&&t.id===id) t.variant=vid;
+      });
+      renderTechResults(); renderStepBar(); renderNav();
+    }
+    el.addEventListener('click',pick);
+    el.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
   });
 }
 STEP_VALID[5]=function(){
   if(!hasCEPool()) return {ok:true};
   if(!HAS_CODEX&&!HAS_LIB) return {ok:false,msg:'Technique data failed to load — check the data/ folder.'};
   if(!(char.techniques||[]).length) return {ok:false,msg:'Choose at least one technique — '+PICKABLE_TECH+' of the '+TOTAL_TECH+' entries are pickable at creation (Vlad III is GM-only).'+(hrV()==='rce'?' (You manifest its Reversal.)':'')};
+  /* techniques with expressions require a choice */
+  for(var i=0;i<char.techniques.length;i++){
+    var t=char.techniques[i], vs=techVariants(t.id);
+    if(vs&&!t.variant){
+      var e=techEntryFor(t);
+      return {ok:false,msg:'Choose an expression for '+(e?tName(e):t.id)+' — Pride Incarnate or Solar Grace.'};
+    }
+  }
   return {ok:true};
 };
 
@@ -3935,8 +3978,9 @@ function stepSheet(body){
     setTimeout(function(){ var bb=$('btnNew2'); if(bb){ bb.removeAttribute('data-armed'); bb.textContent='＋ New character'; } },5000);
   });
 }
-function techniqueSheetHTML(entry){
+function techniqueSheetHTML(entry, variantName){
   var html='';
+  if(variantName) html+='<p class="small" style="margin:0 0 4px"><b>Expression:</b> '+esc(variantName)+'</p>';
   if(tIsFigure(entry)){
     var parts=featLists(entry, char.level);
     html+='<p style="font-family:var(--serif);font-size:1.5rem;font-weight:bold;margin:0">'+esc(tName(entry))+'</p>'+
@@ -4371,7 +4415,14 @@ function sheetHTML(){
   else if(!techEntries.length) html+='<p class="small">No technique recorded.</p>';
   else techEntries.forEach(function(entry,i){
     if(i>0) html+='<div style="border-top:1px solid var(--line);margin:14px 0;"></div>';
-    html+=techniqueSheetHTML(entry);
+    var vName=null;
+    (char.techniques||[]).forEach(function(t){
+      if(t.id===entry.id&&t.variant){
+        var vs=techVariants(t.id)||[];
+        for(var k=0;k<vs.length;k++) if(vs[k].id===t.variant){ vName=vs[k].name; break; }
+      }
+    });
+    html+=techniqueSheetHTML(entry, vName);
   });
   html+='</div>';
   /* special trait */
