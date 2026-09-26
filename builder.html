@@ -299,6 +299,7 @@ h1 .amp{color:var(--red)}
 .qr-src{font-weight:normal;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--ink3)}
 .qr-cost{font-weight:normal;font-size:.72rem;color:var(--gold-deep,#8f6c1d);border:1px solid var(--gold-deep,#8f6c1d);border-radius:3px;padding:0 5px;margin-left:4px;white-space:nowrap}
 .qr-one{font-size:.82rem;color:var(--ink2);margin-top:2px}
+.qr-spend{margin:6px 0 2px 8px;padding:8px 12px;font-size:.7rem;min-height:44px;vertical-align:middle}
 .qr-plist{list-style:none;margin:0;padding:0}
 .qr-plist li{font-size:.82rem;margin-bottom:5px}
 .qr-passive{background:transparent}
@@ -4398,14 +4399,30 @@ function qrBucket(costLine){
   if(/\bfree\b/.test(s)) return 'free';
   return 'other';
 }
-/* Infer the economy bucket for class features & feats (prose text, no cost_line). */
+/* Infer the economy bucket for class features & feats (prose text, no cost_line).
+   Broad phrasing coverage: "use your reaction", "reaction when hit", "Bonus action, 3 CE", etc. */
 function qrInfer(name, text){
   var n=String(name||''), t=String(text||'');
-  if(/as a bonus action/i.test(t)) return 'bonus';
-  if(/as a reaction/i.test(t)) return 'reaction';
-  if(/as an action|use your action|takes? an action|using an action/i.test(t)) return 'action';
   if(/^extra attack$/i.test(n.trim())) return 'passive'; /* counted in the attack card */
+  if(/bonus action/i.test(t)) return 'bonus';
+  var negR=/no reaction|can't (take|use)[^.]*reactions?|cannot (take|use)[^.]*reactions?/i.test(t);
+  if(!negR && /as a reaction|use (?:your|a) reaction|spend (?:your|a) reaction|reaction when|and a reaction/i.test(t)) return 'reaction';
+  if(/as an action|use (?:your|an) action|takes? an action|using an action/i.test(t)) return 'action';
   return 'passive';
+}
+/* Parse a fixed, unambiguous CE cost from a codex cost_line ("Bonus action · 3 CE").
+   Returns null for variable costs ("up to X CE", "X CE per …", sustain, multipliers). */
+function qrFixedCE(costLine){
+  var s=String(costLine||'');
+  if(/up to|\bper\b|each|variable|sustain|\+|×/i.test(s)) return null;
+  var m=s.match(/(?:^|[·,])\s*(\d+)\s*CE\b/);
+  return m?parseInt(m[1],10):null;
+}
+/* Efficiency (Advanced/Mastered CE Manipulation) reduces technique CE costs, min 1. */
+function qrEffCE(e){
+  var base=e.ce||0, tier=ceManipTier();
+  if(e.tech && tier>=2) return Math.max(1, base-(tier-1));
+  return base;
 }
 /* First sentence of a feature text, markdown stripped, capped for quick scanning. */
 function qrOneLiner(text){
@@ -4447,9 +4464,11 @@ function qrAttackStats(){
 /* ── collect every usable option into economy buckets ── */
 function qrCollect(){
   var B={action:[],bonus:[],reaction:[],fullturn:[],movement:[],free:[],passive:[],other:[]};
-  function add(bucket,name,src,cost,one){
+  function add(bucket,name,src,cost,one,x){
     if(!B[bucket]) bucket='other';
-    B[bucket].push({name:name,src:src,cost:cost,one:one});
+    var e={name:name,src:src,cost:cost,one:one};
+    if(x) for(var k in x) e[k]=x[k];
+    B[bucket].push(e);
   }
   var atk=qrAttackStats();
 
@@ -4459,13 +4478,22 @@ function qrCollect(){
       if(!tIsFigure(entry)) return;
       var tn=tName(entry), parts=featLists(entry,char.level), locked=[];
       parts.active.forEach(function(f){
-        add(qrBucket(f.cost_line),f.name,tn,f.cost_line||'',qrOneLiner(f.text));
+        var fixed=qrFixedCE(f.cost_line);
+        add(qrBucket(f.cost_line),f.name,tn,f.cost_line||'',qrOneLiner(f.text),
+            fixed!=null?{ce:fixed,tech:1}:null);
       });
       Object.keys(parts.locked).forEach(function(lv){ locked.push('Lv '+lv+': '+parts.locked[lv].map(function(f){return f.name;}).join(', ')); });
       if(entry.maximum) locked.push('🔒 Maximum: '+(entry.maximum.name||'Maximum')+' — GM-granted');
       if(entry.domain) locked.push('🔒 Domain: '+(entry.domain.name||'Domain')+' — GM-granted');
       if(entry.l20&&char.level<20) locked.push('🔒 L20 capstone: '+(entry.l20.name||'Capstone'));
       if(locked.length) B.other.push({name:'Roadmap — '+tn,src:'Technique',cost:'',one:locked.join(' · ')});
+    });
+    /* Original Library techniques carry no machine-readable features — link the dossier so the
+       player knows exactly where their technique actions live during play. */
+    getTechniques().forEach(function(entry){
+      if(tIsFigure(entry)) return;
+      B.other.push({name:tName(entry)+' — technique actions',src:'Technique',cost:'',
+        one:'Full rules live in the dossier — open it during play.',href:tHref(entry)||null});
     });
   }
 
@@ -4504,8 +4532,8 @@ function qrCollect(){
     var t=atk.tier, P=atk.P, cm=atk.cm;
     if(t>=1){
       var reinf='Spend up to '+(t===1?cm:(cm+P))+' CE → 5 temp HP per CE'+(char.classUnderstanding==='Juggernaut'?' (10/CE, '+P+'×/day)':'')+'.';
-      if(t===1) add('action','Cursed Reinforcement','CE Manipulation','Action',reinf);
-      else{
+      add('action','Cursed Reinforcement','CE Manipulation','Action',reinf);
+      if(t>=2){
         add('bonus','Cursed Reinforcement','CE Manipulation','Bonus action',reinf);
         add('reaction','Cursed Reinforcement','CE Manipulation','Reaction',reinf);
       }
@@ -4536,9 +4564,17 @@ function qrCollect(){
 
 /* ── render ── */
 function qrEntryHTML(e){
-  return '<div class="qr-entry"><div class="qr-name">'+esc(e.name)+
+  var nm=e.href?'<a href="'+esc(e.href)+'">'+esc(e.name)+'</a>':esc(e.name);
+  var btn='';
+  if(e.ce!=null && typeof hasCEPool==='function' && hasCEPool()){
+    var eff=qrEffCE(e);
+    btn=' <button type="button" class="btn qr-spend no-print" data-qr-spend="'+eff+'" data-qr-name="'+esc(e.name)+'"'+
+      (eff!==e.ce?' title="Includes Efficiency discount (base '+e.ce+' CE)"':'')+
+      ' aria-label="Spend '+eff+' cursed energy: '+esc(e.name)+'">⚡ '+eff+' CE</button>';
+  }
+  return '<div class="qr-entry"><div class="qr-name">'+nm+
     (e.src?' <span class="qr-src">'+esc(e.src)+'</span>':'')+
-    (e.cost?' <span class="qr-cost">'+esc(e.cost)+'</span>':'')+'</div>'+
+    (e.cost?' <span class="qr-cost">'+esc(e.cost)+'</span>':'')+btn+'</div>'+
     (e.one?'<div class="qr-one">'+esc(e.one)+'</div>':'')+'</div>';
 }
 function qrBucketHTML(title, icon, list){
@@ -4770,6 +4806,21 @@ function trackerUsesHTML(st){
       '<button type="button" class="btn use-rm" data-trk-rm="'+t.id+'" style="padding:2px 8px;font-size:.75rem">✕</button></div>';
   }).join('');
 }
+/* Combat Quick Reference: fixed-cost CE spend buttons (screen only, hidden on print).
+   Top-level for testability; called from bindTrackers which owns st/spendCe/save/toast. */
+function bindQrSpendButtons(st, ceMaxV, spendCe, save, toast){
+  Array.prototype.forEach.call(document.querySelectorAll('#printSheet [data-qr-spend]'),function(btn){
+    btn.addEventListener('click',function(){
+      var amt=parseInt(btn.getAttribute('data-qr-spend'),10)||0;
+      var nm=btn.getAttribute('data-qr-name')||'Ability';
+      if(ceMaxV==null||amt<1) return;
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<amt){ toast('Not enough CE — '+cur+' left.'); return; }
+      spendCe(amt); save();
+      toast('⚡ '+nm+': spent '+amt+' CE ('+(st.ce==null?ceMaxV:st.ce)+' left).');
+    });
+  });
+}
 function bindTrackers(hpMaxV, ceMaxV){
   var sec=$('trackerSec'); if(!sec) return;
   var st=trackerState();
@@ -4809,6 +4860,8 @@ function bindTrackers(hpMaxV, ceMaxV){
       var amt=Math.max(1,parseInt($('trkCeAmt').value,10)||0), cur=st.ce==null?ceMaxV:st.ce;
       setCe(cur+amt); toast('Recovered '+amt+' CE.');
     });
+    /* Combat Quick Reference: fixed-cost CE spend buttons (screen only, hidden on print) */
+    bindQrSpendButtons(st, ceMaxV, spendCe, save, toast);
   }
   /* use-trackers */
   function bindUsePips(){
