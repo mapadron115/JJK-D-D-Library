@@ -411,7 +411,7 @@ b.k{font-family:var(--serif)}
 <tr><td class="num"><b class="k">400</b></td><td><b>0.2-second expansion.</b> As part of opening, you may have it last only until the end of your turn; cost is halved, and it cannot be reacted to unless the creature's Dexterity exceeds your CE score. All creatures are targeted, too fast to choose.</td></tr>
 <tr><td class="num"><b class="k">500</b></td><td><b>Lasting domain.</b> Duration becomes 2 minutes. Burnout reduces to 5 rounds.</td></tr>
 <tr><td class="num"><b class="k">600</b></td><td><b>Domain amplification.</b> As an action for half the domain's CE cost, you may "wear" your domain for 1 minute: you automatically negate any technique or spell affecting you, bypass barriers like Infinity with melee attacks, and suppress sure-hits inside enemy domains. You cannot use your innate technique while worn (dismiss as a bonus action; reactivate as a bonus action without cost for the minute).</td></tr>
-<tr><td class="num"><b class="k">700</b></td><td><b>Efficient expansions.</b> Domain cost reduced by your CE modifier. Burnout exhaustion reduced to 1 level.</td></tr>
+<tr><td class="num"><b class="k">700</b></td><td><b>Efficient expansions.</b> Domain cost reduced by your CE modifier.</td></tr>
 <tr><td class="num"><b class="k">800</b></td><td><b>Durable barrier.</b> Immunity to non-magical damage from both sides; resistance inside, vulnerability outside. Refinement points count double for barrier HP.</td></tr>
 <tr><td class="num"><b class="k">900</b></td><td><b>Compression.</b> As a bonus action inside your domain, spend 5 CE to compress the outside to a 5-foot circle (inside unchanged). Attacks from outside have disadvantage; lasts until the domain ends.</td></tr>
 <tr><td class="num"><b class="k">1,000</b></td><td><b>Total mastery.</b> Expand as a bonus action. Cost reduced by your proficiency bonus. Inside the domain, your action-cost techniques become bonus actions, and bonus-action techniques become free actions. Duration becomes 3 minutes. Burnout reduces to 3 rounds.</td></tr>
@@ -449,7 +449,7 @@ b.k{font-family:var(--serif)}
 <h3>0.2-second expansion — 400 refinement</h3>
 <p>As an action, spend 10 CE to expand until the end of the current turn and immediately resolve your Domain's Sure-Hit Event once against every eligible creature in its area, <b>including allies</b>. Reactions cannot be used after the expansion begins, though they may still be used against its announced activation if their trigger permits. When it ends, suffer your normal Burnout. It cannot be extended or made open-barrier.</p>
 <h3>Technique Burnout</h3>
-<p>A Domain ending <b>for any reason</b> causes Technique Burnout. During Burnout you cannot activate an Innate Technique feature, Cursed Technique Reversal, Maximum Output, Maximum Technique, or Domain Expansion. You can still move, attack with weapons, use class features independent of your Innate Technique, reinforce yourself with generic CE, use anti-domain techniques, and use generic RCT. Existing manifestations remain and take ordinary commands. Burnout is not exhaustion, cannot be removed by ordinary condition cleansing, and <b>Black Flash does not end it</b>.</p>
+<p>A Domain ending <b>for any reason</b> causes Technique Burnout for <b>10 rounds</b>. During Burnout you cannot activate an Innate Technique feature, Cursed Technique Reversal, Maximum Output, Maximum Technique, or Domain Expansion. You can still move, attack with weapons, use class features independent of your Innate Technique, reinforce yourself with generic CE, use anti-domain techniques, and use generic RCT. Existing manifestations remain and take ordinary commands. Burnout is not exhaustion, cannot be removed by ordinary condition cleansing, and <b>Black Flash does not end it</b> (entering the Zone does). Higher refinement reduces the duration: 5 rounds at 500+ points, 3 rounds at 1,000 points.</p>
 <p><b>Burnout Recovery</b> (750+ refinement with RCT): as a reaction, spend 4 CE and make a DC 5 Constitution save. Success ends Burnout and removes its exhaustion; failure deals 8d6 psychic damage, leaves Burnout intact, and prevents actions and bonus actions until the start of your next turn. Each success since your long rest raises the DC by 5.</p>
 </div>
 </section>
@@ -466,7 +466,7 @@ b.k{font-family:var(--serif)}
 <h3>Unlocking RCT</h3>
 <p>You gain RCT from a class or technique feature, a feat, or a GM-awarded breakthrough after a near-death experience or exceptional CE insight. Surviving danger can create the opportunity, but never guarantees the ability.</p>
 <h3>The Healing Reserve</h3>
-<p>Your <b>Healing Reserve maximum = 10 × total character level</b>. It is a separate pool from HP and CE, and it returns to maximum only on a <b>long rest</b> — not a short rest. There is no automatic healing pulse. Reserve spent on healing or repairs does not return until the long rest, even if CE is restored sooner. CE governs <b>burst speed</b>; the Reserve governs <b>rebuildable tissue</b>.</p>
+<p>Your <b>Healing Reserve maximum = 5 × total character level × your CE ability modifier</b>. It is a separate pool from HP and CE. Every 2 rounds, you recover <b>10 HP</b> from the reserve automatically. The reserve refills to maximum on a <b>long rest</b>.</p>
 <h3>Self-healing</h3>
 <p>Once per round while conscious, use a <b>bonus action</b> — or a <b>reaction immediately after taking damage</b> — to spend from 1 CE up to your CE ability modifier. Heal up to <b>10 HP per CE spent</b>, limited by your missing HP and your remaining Healing Reserve. Deduct only the HP actually restored from the reserve. If the triggering damage reduced you to 0 HP, you cannot use the reaction unless a feature expressly permits RCT while unconscious or at 0 HP. Unspent healing from an activation is lost; CE is not refunded.</p>
 <h3>Healing others — Positive Energy Output</h3>
@@ -502,7 +502,7 @@ b.k{font-family:var(--serif)}
 <li>There is <b>no universal once-per-turn or once-per-round limit</b> on attempts or successes. Every qualifying critical may attempt the confirmation roll.</li>
 <li>A saving throw, automatic hit, passive effect, initiative-20 Domain event, or manifestation attack does not qualify unless a specific feature explicitly creates a qualifying critical hit. Forced or expanded critical ranges qualify if the triggering feature permits Black Flash; an explicit restriction (such as Great Luck's non-qualifying critical) still wins.</li>
 <li>Choose and pay any damage rider that must be declared before damage is rolled, then resolve the complete critical hit. Effects that trigger only after damage is dealt remain separate and are not multiplied.</li>
-<li><b>Damage:</b> roll the qualifying critical normally — critical dice, flat modifiers, eligible declared riders — then <b>triple the completed critical-hit damage</b>. This is multiplication of the final number, not one extra set of dice.</li>
+<li><b>Damage:</b> roll the qualifying critical normally — critical dice, flat modifiers, eligible declared riders — then <b>triple the completed critical-hit damage</b>. This is multiplication of the final number, not one extra set of dice. <i>(Ritual Archive ruling: deliberately stronger than V6's 3×-dice formula.)</i></li>
 <li><b>Defense:</b> the complete Black Flash hit ignores resistance to its damage types. Immunity still applies unless another feature separately ignores immunity.</li>
 </ul>
 <h3>The Zone</h3>
@@ -513,7 +513,7 @@ b.k{font-family:var(--serif)}
 <tr><td><b class="k">Stage 2 · Awakened</b></td><td>18–20</td><td>Retains the Stage 1 d4 — no further numerical stacking. Another natural Black Flash resets the 1-minute duration. Stage 2 is the ceiling.</td></tr>
 </table></div>
 <p>Only genuine timing deepens the Zone: an automatic or forced Black Flash grants Stage 1 if you are outside the Zone and resets the current stage's duration if you are in it, but it never advances the Zone or restores CE. The feat <b>Blessed by Black Sparks</b> confirms on 18–20 after any qualifying critical; the Zone cannot improve it beyond 18–20.</p>
-<p><b>What the Zone never does:</b> it never restores Healing Reserve, never ends Technique Burnout, never removes exhaustion or injuries by itself, and never creates a second Technique Focus slot. A separate explicit feature may still create its own exception.</p>
+<p><b>What the Zone does:</b> entering the Zone recovers Technique Burnout and restores the Reverse Cursed Energy pool. It never removes exhaustion or injuries by itself, and never creates a second Technique Focus slot. A separate explicit feature may still create its own exception.</p>
 <h3>Maximum Output — overcharge one dimension</h3>
 <p>Maximum Output is the universal act of forcing an ordinary technique above its safe operating level. It is <b>not</b> a named Maximum Technique, and it no longer turns an attack bonus into an accuracy-breaking number.</p>
 <ul>
@@ -696,16 +696,15 @@ b.k{font-family:var(--serif)}
 <li>Winner's sure-hit resumes at the <b>next</b> initiative 20</li>
 </ul></div>
 <div class="cheat-card"><h4>RCT</h4><ul>
-<li>Healing Reserve = 10 × level; long rest only</li>
+<li>Healing Reserve = 5 × level × CE modifier; 10 HP every 2 rounds; refills on long rest</li>
 <li>Once/round while conscious: bonus action or reaction, 1–CE-mod CE → 10 HP per CE</li>
 <li>Repairs: 20/30/40/60/80 reserve — poison, exhaustion, limbs, organs</li>
-<li>Can't: restore CE, revive, regrow a brain, end Burnout, heal soul damage</li>
+<li>Can't: restore CE, revive, regrow a brain, heal soul damage</li>
 </ul></div>
 <div class="cheat-card"><h4>Black Flash</h4><ul>
-<li>Critical → second unmodified d20 → nat 20 = <b>triple the completed critical</b></li>
+<li>Critical → second unmodified d20 → nat 20 = <b>triple the completed critical</b> <i>(RA buff)</i></li>
 <li>Ignores resistance, not immunity; no per-round cap</li>
-<li>Zone: nat 20 → Stage 1 (19–20); → Stage 2 (18–20) · once/turn +1d4 to a CE roll</li>
-<li>Black Flash never restores Healing Reserve or ends Burnout</li>
+<li>Zone: nat 20 → Stage 1 (19–20); → Stage 2 (18–20) · once/turn +1d4 to a CE roll · Zone recovers Burnout and RCT pool</li>
 </ul></div>
 <div class="cheat-card"><h4>Maximum Output</h4><ul>
 <li>CE ability 20 + feature/breakthrough, L11+; bonus-action declare</li>

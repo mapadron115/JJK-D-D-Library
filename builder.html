@@ -688,12 +688,12 @@ var ANCESTRIES = {
                 'Life Experience. Gain proficiency in two skills, or one skill and one tool, of your choice.',
                 'Cling to Life. When reduced to 0 HP without dying outright, you may drop to 1 HP instead. Once used, this trait returns after a long rest.']},
       'death-painting':{ name:'Death Painting',
-        asi:'Charisma +3.',
+        asi:'Charisma +3 (maximum 20).',
         bonus:{CHA:3},
         hpPerLevel:2,
         traits:['This Body Is Mine. You have advantage on saving throws against effects that would unwillingly transform your body or replace your physical form. This does not grant general advantage against possession, charm, or soul damage unless the effect also transforms your body.',
                 'Incomplete and complete states are narrative states, not additional ancestry options \u2014 choose Reincarnated or Death Painting for statistics.',
-                'Ability Score Increase. Your Charisma increases by 3.',
+                'Ability Score Increase. Your Charisma increases by 3, to a maximum of 20.',
                 'Durable Body. Your HP maximum increases by 2 at level 1 and by 2 whenever your total character level increases (2 \u00d7 character level).',
                 'Poisonous Blood. When a creature within 5 feet deals piercing or slashing damage to you, use your reaction to splash it or another creature within 5 feet. The target takes poison damage equal to PB and makes a Constitution save against 8 + PB + Constitution modifier. On a failure, it is poisoned until the end of your next turn.']}
     }
@@ -702,17 +702,17 @@ var ANCESTRIES = {
     name:'Cursed Corpse', blurb:'An animated construct given a purpose. Construct; Common; 35-ft walking speed; no natural maximum lifespan while repaired; choose Small, Medium, or Large; choose a Softbody or Hard Shell frame.',
     heritages:{
       'softbody':{ name:'Softbody',
-        asi:'+4 to one ability score of your choice.',
+        asi:'+4 to one ability score of your choice (maximum 20).',
         pick:{counts:[4]},
-        traits:['Purpose-Built. One ability score of your choice increases by 4.',
+        traits:['Purpose-Built. One ability score of your choice increases by 4, to a maximum of 20.',
                 'Constructed Size. A Large corpse occupies a 10-foot space but gains no automatic reach or larger weapon dice. It squeezes through spaces normally and uses its actual size for grappling and carrying.',
                 'Unnatural Nature. You do not need to breathe, eat, drink, or sleep, and magic cannot put you to sleep. You must still complete rests normally. Hit Dice, ordinary healing, and RCT can restore your HP unless an effect expressly excludes Constructs; describe rest recovery as repair materials and maintenance.',
                 'Tailored Appearance. Choose Intimidation, Persuasion, or Performance. You gain proficiency in the chosen skill and double PB for checks made with it.',
                 'Surprise. After posing as a mundane object or nonsentient body, use an action to make Charisma (Performance) against a creature\u2019s passive Insight. On a success, reveal yourself and choose that creature within 30 feet if it can see you. It makes a Wisdom save against 10 + PB + Charisma modifier; on a failure it is stunned until the end of your next turn. Once used, finish a long rest before using it again.']},
       'hard-shell':{ name:'Hard Shell',
-        asi:'+4 to one ability score of your choice.',
+        asi:'+4 to one ability score of your choice (maximum 20).',
         pick:{counts:[4]},
-        traits:['Purpose-Built. One ability score of your choice increases by 4.',
+        traits:['Purpose-Built. One ability score of your choice increases by 4, to a maximum of 20.',
                 'Constructed Size. A Large corpse occupies a 10-foot space but gains no automatic reach or larger weapon dice. It squeezes through spaces normally and uses its actual size for grappling and carrying.',
                 'Unnatural Nature. You do not need to breathe, eat, drink, or sleep, and magic cannot put you to sleep. You must still complete rests normally. Hit Dice, ordinary healing, and RCT can restore your HP unless an effect expressly excludes Constructs; describe rest recovery as repair materials and maintenance.',
                 'Integrated Armor. You gain a +1 bonus to AC. You may wear only armor with which you are proficient. Incorporating or removing armor takes 1 hour in contact with it, and may occur during a rest. Integrated armor cannot be removed against your will while you live. The +1 is a flat bonus and applies after the chosen AC calculation, including worn armor and a shield.']}
@@ -1026,9 +1026,12 @@ function abilitiesAt(level){
   for(var L=2;L<=level;L++){
     if(hasASIAt(L) && char.asi[L] && (char.asiMode||{})[L]!=='feat') char.asi[L].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
   }
-  /* half-feat +1s (Crusher, Athlete, etc.) — apply at the level the feat was taken; no cap */
+  /* half-feat +1s (Crusher, Athlete, etc.) — apply at the level the feat was taken, capped at ability ceiling */
   var fb=featASIBonuses(level);
-  ABILITIES.forEach(function(a){ if(fb[a]) ab[a]=(ab[a]||10)+fb[a]; });
+  var ceil = abilityCeiling();
+  ABILITIES.forEach(function(a){ if(fb[a]) ab[a]=Math.min((ab[a]||10)+fb[a], ceil); });
+  /* enforce ceiling on all scores */
+  ABILITIES.forEach(function(a){ if(ab[a]>ceil) ab[a]=ceil; });
   return ab;
 }
 /* Feats taken in place of an ASI at milestone levels */
@@ -1217,7 +1220,11 @@ function traitMaxBonus(){
   if(t==='living-prison') return s==='stirring'||s==='awakened'?4:2;
   return 0;
 }
-function abilityCeiling(){ return Infinity; /* no cap — Heavenly Restriction breaks the 20 ceiling */ }
+function abilityCeiling(){
+  /* V6: 20 standard; Heavenly Restriction raises to 25 at 1st, +1 per level after, max 40 */
+  if(isHR()) return Math.min(25 + (char.level - 1), 40);
+  return 20;
+}
 /* level-1-effective ability adjustments: variant decreases, variant bonus ASI,
    trait increases. Applied before level-up ASIs in both abilitiesAt and hpMax. */
 function creationAbilityMods(ab){
@@ -2509,7 +2516,7 @@ STEP_VALID[3]=function(){
 /* ═══════════ STEP 4 — ABILITY SCORES ═══════════ */
 function stepAbilities(body){
   var html='<h2>Step 4 — Ability Scores</h2>'+
-    '<p class="sub">Three ways to forge your six scores. There is no ability score cap.'+
+    '<p class="sub">Three ways to forge your six scores. Ability scores cap at 20 (Heavenly Restriction: 25 at 1st level, +1 per level after, maximum 40).'+
     ' Your ancestry\'s increases apply after assignment.</p>';
   html+='<div class="seg" id="mSeg">'+
     '<button type="button" class="seg-btn'+(char.abilityMethod==='dice'?' is-active':'')+'" data-m="dice">🎲 Roll 4d6 drop lowest</button>'+
@@ -2585,7 +2592,7 @@ function paintDiceSet(setEl,vals,final,total){
 }
 function renderManualUI(){
   var el=$('mBody');
-  el.innerHTML='<p class="small">Enter each score directly (minimum 3, no maximum).</p>'+
+  el.innerHTML='<p class="small">Enter each score directly (minimum 3, maximum 20 — Heavenly Restriction: 25 at 1st, +1/level, max 40).</p>'+
     '<table class="assign-table"><tr><th>Ability</th><th>Score</th></tr>'+
     ABILITIES.map(function(a){
       return '<tr><td>'+ABIL_NAMES[a]+' ('+a+')</td><td><input type="number" min="3" id="man_'+a+'" value="'+(char.abilityBase[a]||'')+'" style="width:110px;font:inherit;background:var(--paper);border:1px solid var(--line2);border-radius:3px;padding:6px 8px"></td></tr>';
@@ -2595,7 +2602,7 @@ function renderManualUI(){
        fire 'change'; it stores without clobbering the field mid-typing. */
     $('man_'+a).addEventListener('input',function(e){
       var v=parseInt(e.target.value,10);
-      char.abilityBase[a]=isNaN(v)?undefined:Math.max(3,v);
+      char.abilityBase[a]=isNaN(v)?undefined:Math.max(3,Math.min(abilityCeiling(),v));
       applyAncestry(); renderFinal(); refreshNav();
     });
     $('man_'+a).addEventListener('change',function(e){
