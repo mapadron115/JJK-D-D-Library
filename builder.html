@@ -1048,10 +1048,9 @@ function abilitiesAt(level){
   }
   /* half-feat +1s (Crusher, Athlete, etc.) — apply at the level the feat was taken, capped at ability ceiling */
   var fb=featASIBonuses(level);
-  var ceil = abilityCeiling();
-  ABILITIES.forEach(function(a){ if(fb[a]) ab[a]=Math.min((ab[a]||10)+fb[a], ceil); });
+  ABILITIES.forEach(function(a){ if(fb[a]) ab[a]=Math.min((ab[a]||10)+fb[a], abilityCeiling(a)); });
   /* enforce ceiling on all scores */
-  ABILITIES.forEach(function(a){ if(ab[a]>ceil) ab[a]=ceil; });
+  ABILITIES.forEach(function(a){ var c=abilityCeiling(a); if(ab[a]>c) ab[a]=c; });
   return ab;
 }
 /* Feats taken in place of an ASI at milestone levels */
@@ -1109,14 +1108,17 @@ function ceReserveSum(){
   return {dieMax:dieMax, sum:sum};
 }
 function ceMax(){
-  if(clsAt(1)==='Heavenly Restriction') return hrCEMax();
-  var r = ceReserveSum();
-  var ab = abilitiesAt(char.level);
-  var ceMod = char.ceAbility ? mod(ab[char.ceAbility]||10) : 0;
-  var total = r.dieMax + r.sum + ceMod + (parseInt(char.ceBonus,10)||0);
-  /* Special Grade Boon: Unending Cursed Energy Reserves */
-  if(hasBoon('unending-ce')) total+=20;
-  return total;
+  var base;
+  if(clsAt(1)==='Heavenly Restriction') base=hrCEMax();
+  else{
+    var r = ceReserveSum();
+    var ab = abilitiesAt(char.level);
+    var ceMod = char.ceAbility ? mod(ab[char.ceAbility]||10) : 0;
+    base = r.dieMax + r.sum + ceMod + (parseInt(char.ceBonus,10)||0);
+  }
+  /* Special Grade Boon: Unending Cursed Energy Reserves — applies to all CE pools */
+  if(hasBoon('unending-ce') && base>0) base+=20;
+  return base;
 }
 function isHR(){ return clsAt(1)==='Heavenly Restriction'; }
 /* ── Heavenly Restriction variant packages (Creeps & Curses) ──
@@ -1127,7 +1129,7 @@ var HR_VARIANTS = {
   'pure-body':{ name:'Pure Body', short:'Pure Body',
     tag:'The classic Toji path \u2014 absolute physicality, zero cursed energy.',
     points:['No CE ability, CE Reserve, Innate Technique, Domain, RCT, Maximum Output, or Black Flash.',
-            'Ability ceiling 24 + class level. Class features grant automatic physical increases.'] },
+            'Ability ceiling 25 at 1st level, +1 per level after, maximum 40. Class features grant automatic physical increases.'] },
   'rce':{ name:'Reverse Cursed Energy Generation', short:'RCE Generation',
     tag:'Your body produces only positive energy \u2014 devastating to cursed spirits, unusable for normal CE features.',
     points:['Your CE pool becomes a Reverse Cursed Energy (RCE) pool of equal maximum.',
@@ -1279,10 +1281,26 @@ function traitMaxBonus(){
   if(t==='living-prison') return s==='stirring'||s==='awakened'?4:2;
   return 0;
 }
-function abilityCeiling(){
-  /* V6: 20 standard; Heavenly Restriction raises to 25 at 1st, +1 per level after, max 40 */
-  if(isHR()) return Math.min(25 + (char.level - 1), 40);
-  return 20;
+function abilityCeiling(ability){
+  /* V6: 20 standard; Heavenly Restriction raises to 25 at 1st, +1 per level after, max 40.
+     Class/trait features can raise specific maxima further (RA rulings supersede). */
+  var base = isHR() ? Math.min(25 + (char.level - 1), 40) : 20;
+  if(!ability) return base;
+  var a = ability.toUpperCase();
+  /* Juggernaut Unstoppable (20th): STR/CON maximum 24 (V6 3.1) */
+  if((a==='STR'||a==='CON') && classLevelCount('Juggernaut', char.level) >= 20)
+    base = Math.max(base, 24);
+  /* Special Trait raised maxima (Creeps & Curses) — additive to the character's ceiling */
+  var t = char.specialTrait, s = traitStage();
+  if(t==='perfect-form' && (a==='STR'||a==='DEX'||a==='CON')){
+    if(s==='awakened') base += 8;
+    else if(s==='stirring') base += 4;
+  }
+  if(t==='living-prison' && (a==='STR'||a==='DEX'||a==='CON')){
+    if(s==='dormant') base = Math.max(base, 22);
+    else if(s) base = Math.max(base, 24);
+  }
+  return base;
 }
 /* level-1-effective ability adjustments: variant decreases, variant bonus ASI,
    trait increases. Applied before level-up ASIs in both abilitiesAt and hpMax. */
@@ -2334,7 +2352,7 @@ function hrVariantPickerHTML(){
     html+='<div class="banner warn"><span class="bk">\u2756 Pure Body</span>'+
       '<p><b>Heavenly Restriction means no CE ability, no CE Reserve, no Innate Technique, no Domain, no RCT, no Maximum Output, no Black Flash.</b> '+
       'CE drain and recovery do nothing to you. Later steps will skip technique selection and CE rolls; the sheet will show your body, not a reserve.</p>'+
-      '<p class="small">Ability maximum: 24 + class level (25 at level 1, 44 at level 20). Class features grant automatic Strength/Dexterity/Constitution increases \u2014 those live in the class rules, not this builder.</p></div>';
+      '<p class="small">Ability maximum: 25 at 1st level, +1 per level after, maximum 40 (V6 3.8). Class features grant automatic Strength/Dexterity/Constitution increases \u2014 those live in the class rules, not this builder.</p></div>';
   }
   html+=hrVariantOptsHTML(v);
   return html;
@@ -2669,7 +2687,7 @@ function renderManualUI(){
        fire 'change'; it stores without clobbering the field mid-typing. */
     $('man_'+a).addEventListener('input',function(e){
       var v=parseInt(e.target.value,10);
-      char.abilityBase[a]=isNaN(v)?undefined:Math.max(3,Math.min(abilityCeiling(),v));
+      char.abilityBase[a]=isNaN(v)?undefined:Math.max(3,Math.min(abilityCeiling(a),v));
       applyAncestry(); renderFinal(); refreshNav();
     });
     $('man_'+a).addEventListener('change',function(e){
@@ -3226,7 +3244,7 @@ function hrBodyBonuses(){
   if(has('Minor Precognition')){ b.passivePerc+=5; b.percNotes.push('Minor Precognition +5'); b.extraNotes.push('Minor Precognition: unseen attacks are not rolled with advantage against you'); }
   if(has('Precognition')) b.extraNotes.push('Precognition: cannot be surprised while conscious; advantage on Dex saves vs visible effects');
   if(has('Major Precognition')) b.extraNotes.push('Major Precognition: 1/round reaction — attacks vs you at disadvantage; 1/round advantage on one save');
-  if(has('Minor Enhanced Senses')){ b.blindsight=10; b.senseNotes.push('Blindsight 10 ft'); }
+  if(has('Minor Enhanced Senses')){ b.blindsight=(b.blindsight||0)+10; b.senseNotes.push('Blindsight '+b.blindsight+' ft (Minor Enhanced Senses: 10 ft, or +10 ft if you already had blindsight)'); }
   if(has('Medium Enhanced Senses')){ b.blindsight=30; b.tremorsense=30; b.senseNotes.push('Blindsight 30 ft, tremorsense 30 ft'); }
   if(has('Major Enhanced Senses')){ b.blindsight=90; b.tremorsense=60; b.senseNotes.push('Blindsight 90 ft, tremorsense 60 ft'); b.extraNotes.push('Major Enhanced Senses: advantage on hearing-based Perception'); }
   return b;

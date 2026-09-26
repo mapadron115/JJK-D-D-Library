@@ -68,3 +68,7 @@ details.alien summary{display:flex;align-items:center;gap:.65em;cursor:pointer}
 
 /* Domain visual cutscene: the "what it looks like" paragraph */
 .domain-visual{font-style:italic;color:#c9b896;border-left:3px solid #b276e8;padding:8px 14px;margin:12px 0;background:rgba(178,118,232,.06);border-radius:0 8px 8px 0}
+
+/* Rules-first line: explicit mechanics summary at the top of each ability card */
+.rules-line{font-weight:600;color:#fff;background:rgba(255,196,77,.08);border-left:3px solid var(--accent,#ffc44d);padding:8px 12px;margin:0 0 10px;border-radius:0 6px 6px 0;font-size:.95rem;line-height:1.5}
+.rules-line::before{content:"❖ ";color:var(--accent,#ffc44d)}
