@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain Clash Resolver — Ritual Archive Tools</title>
+<link rel="stylesheet" href="../assets/tools.css">
+<style>
+  .pair { border:1px solid #6b5a2e; border-radius:.5rem; padding:.9rem 1rem; margin:.6rem 0; background:rgba(0,0,0,.25); }
+  .pair .verdict { font-size:1.35rem; font-weight:700; line-height:1.35; }
+  .pair .detail { font-size:1rem; margin-top:.35rem; opacity:.92; }
+  .collapse { color:#ffd75e; }
+  .no-collapse { color:#9fd6a4; }
+  .clash-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:.75rem; }
+  .out .sub { font-size:1.02rem; }
+  .notes-list { font-size:1.02rem; line-height:1.65; }
+  .notes-list li { margin-bottom:.55rem; }
+  #toggleThird { margin-top:.4rem; }
+  details.ref table { width:100%; border-collapse:collapse; margin:.6rem 0; font-size:1rem; }
+  details.ref th, details.ref td { border:1px solid #6b5a2e; padding:.35rem .6rem; text-align:left; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <nav class="nav">
+    <a class="brand" href="../index.html"><span class="brand-mark">呪</span> Ritual Archive</a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">&#x2630;</button>
+    <div class="navlinks">
+      <a href="../rules.html">Rules</a>
+      <a href="../builder.html">Builder</a>
+      <a href="../codex.html">Codex</a>
+      <a href="../lore.html">Lore</a>
+      <a href="index.html" class="is-current">Tools</a>
+    </div>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">GM Tool · Deterministic Clashes · REL003</p>
+    <h1>Domain Clash Resolver</h1>
+    <p class="lede">Refinement points decide everything. Compare every pair: a lead of 100 or more collapses the weaker Domain immediately — no countdown, no roll. Anything closer resolves through barrier damage, Domain Stability failures, or expiry.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Combatants</h2>
+    <div class="clash-grid">
+      <div class="field">
+        <label><span>Combatant 1 — name</span>
+          <input id="name1" type="text" placeholder="e.g. Gojo" maxlength="40">
+        </label>
+        <label><span>Refinement points (0–1000)</span>
+          <input id="pts1" type="number" min="0" max="1000" step="1" placeholder="800">
+        </label>
+      </div>
+      <div class="field">
+        <label><span>Combatant 2 — name</span>
+          <input id="name2" type="text" placeholder="e.g. Sukuna" maxlength="40">
+        </label>
+        <label><span>Refinement points (0–1000)</span>
+          <input id="pts2" type="number" min="0" max="1000" step="1" placeholder="900">
+        </label>
+      </div>
+      <div class="field" id="thirdField" hidden>
+        <label><span>Combatant 3 — name</span>
+          <input id="name3" type="text" placeholder="e.g. Kenjaku" maxlength="40">
+        </label>
+        <label><span>Refinement points (0–1000)</span>
+          <input id="pts3" type="number" min="0" max="1000" step="1" placeholder="650">
+        </label>
+      </div>
+    </div>
+    <label class="check" id="toggleThird"><input type="checkbox" id="useThird"> Add a third Domain (three-way clash: every pair is compared)</label>
+    <div class="btn-row">
+      <button class="btn btn-gold" id="resolveBtn" type="button" style="font-size:1.25rem; padding:.9rem 2rem;">Resolve Clash</button>
+      <button class="btn" id="clearBtn" type="button">Clear</button>
+    </div>
+  </section>
+
+  <section class="out" id="output" hidden aria-live="polite"></section>
+
+  <section class="panel">
+    <h2>Clash notes</h2>
+    <ul class="notes-list">
+      <li><strong>Open Domains in a clash:</strong> an open Domain makes a barrier attack at initiative 20 during the clash — <strong>4d10 + CE modifier</strong> force damage to the closed barrier. If both Domains are open, skip this.</li>
+      <li><strong>Open Domains collapse too:</strong> an open Domain trailing by 100 or more points collapses even if its anchor survives.</li>
+      <li><strong>Barrierless Domains:</strong> can only be destroyed by taking 1/3 of max HP in a single instance — the caster then makes a CON save (DC 15 + half the damage taken). In a clash, a barrierless Domain's effects can target the other Domain's outside barrier directly.</li>
+      <li>The collapse itself deals <strong>no damage</strong>. The defeated creator suffers <strong>Burnout</strong>: 10 rounds below 500 refinement points, 5 rounds at 500–999, 3 rounds at 1,000.</li>
+      <li>The winner's sure-hit resumes at the <strong>next initiative count 20</strong> — not the round the rival Domain broke.</li>
+    </ul>
+  </section>
+
+  <details class="ref">
+    <summary>Superseded V6 table (reference only)</summary>
+    <p class="note">This is V6 §7.3's <strong>original</strong> clash table. It is <strong>superseded</strong> by the Ritual Archive deterministic-clash ruling (REL003): clashes no longer use a round countdown or a clash roll — a lead of 100+ points collapses the weaker Domain immediately.</p>
+    <table>
+      <thead><tr><th>Refinement lead</th><th>Rounds until the weaker Domain collapses</th></tr></thead>
+      <tbody>
+        <tr><td>10 pts above</td><td>9 rounds</td></tr>
+        <tr><td>20 pts above</td><td>8 rounds</td></tr>
+        <tr><td>30 pts above</td><td>7 rounds</td></tr>
+        <tr><td>40 pts above</td><td>6 rounds</td></tr>
+        <tr><td>50 pts above</td><td>5 rounds</td></tr>
+        <tr><td>60 pts above</td><td>4 rounds</td></tr>
+        <tr><td>70 pts above</td><td>3 rounds</td></tr>
+        <tr><td>80 pts above</td><td>2 rounds</td></tr>
+        <tr><td>90 pts above</td><td>1 round</td></tr>
+        <tr><td>100+ pts above</td><td>0 rounds</td></tr>
+      </tbody>
+    </table>
+    <p class="src">V6 equal-refinement rule (also superseded): at 1/3 max HP rounded down, the caster makes a DC 15 flat roll with no modifiers to maintain the Domain — on a failure the Domain breaks and the caster suffers burnout.</p>
+  </details>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  function toast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function () { t.classList.remove('show'); }, 2400);
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]);
+    });
+  }
+
+  var thirdBox = document.getElementById('useThird');
+  var thirdField = document.getElementById('thirdField');
+  thirdBox.addEventListener('change', function () {
+    thirdField.hidden = !thirdBox.checked;
+    if (!thirdBox.checked) { document.getElementById('name3').value = ''; document.getElementById('pts3').value = ''; }
+  });
+
+  function burnoutRounds(pts) {
+    if (pts >= 1000) return 3;
+    if (pts >= 500) return 5;
+    return 10;
+  }
+
+  function readCombatant(n) {
+    var name = document.getElementById('name' + n).value.trim() || ('Combatant ' + n);
+    var raw = document.getElementById('pts' + n).value.trim();
+    if (raw === '' || isNaN(Number(raw))) return { error: 'Enter refinement points (0–1000) for ' + name + '.' };
+    var pts = Math.round(Number(raw));
+    if (pts < 0 || pts > 1000) return { error: name + ': refinement points must be between 0 and 1000.' };
+    return { name: name, pts: pts };
+  }
+
+  function pairVerdict(a, b) {
+    var html = '';
+    var gap = Math.abs(a.pts - b.pts);
+    var head = '<strong>' + esc(a.name) + '</strong> (' + a.pts + ') vs <strong>' + esc(b.name) + '</strong> (' + b.pts + ') — gap ' + gap;
+    if (gap >= 100) {
+      var winner = a.pts > b.pts ? a : b;
+      var loser = a.pts > b.pts ? b : a;
+      html += '<div class="pair"><div class="verdict collapse">' + head + '</div>'
+        + '<div class="detail"><strong>' + esc(loser.name) + '</strong>\'s Domain <strong>collapses immediately</strong> — before its sure-hit resolves. '
+        + 'The collapse deals no damage. <strong>' + esc(loser.name) + '</strong> suffers <strong>Burnout: ' + burnoutRounds(loser.pts) + ' rounds</strong>. '
+        + '<strong>' + esc(winner.name) + '</strong>\'s sure-hit resumes at the <strong>next initiative count 20</strong>.</div></div>';
+    } else {
+      html += '<div class="pair"><div class="verdict no-collapse">' + head + '</div>'
+        + '<div class="detail"><strong>Neither Domain collapses.</strong> No countdown, no clash roll. '
+        + 'Resolve through barrier damage, Domain Stability failures, or expiry.</div></div>';
+    }
+    return html;
+  }
+
+  document.getElementById('resolveBtn').addEventListener('click', function () {
+    var fighters = [];
+    for (var n = 1; n <= (thirdBox.checked ? 3 : 2); n++) {
+      var c = readCombatant(n);
+      if (c.error) { toast(c.error); return; }
+      fighters.push(c);
+    }
+    if (fighters.length < 2) { toast('Need at least two combatants.'); return; }
+
+    var pairs = [[0, 1]];
+    if (fighters.length === 3) pairs.push([0, 2], [1, 2]);
+
+    var out = '<div class="big">Clash results</div><div class="sub">Deterministic clash (REL003) — refinement points decide every pair.</div>';
+    pairs.forEach(function (p) { out += pairVerdict(fighters[p[0]], fighters[p[1]]); });
+
+    var el = document.getElementById('output');
+    el.innerHTML = out;
+    el.hidden = false;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', function () {
+    ['name1','pts1','name2','pts2','name3','pts3'].forEach(function (id) { document.getElementById(id).value = ''; });
+    document.getElementById('output').hidden = true;
+  });
+})();
+</script>
+<script>(function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(o){t.classList.toggle('nav-open',o);b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});})();</script>
+
+</body>
+</html>

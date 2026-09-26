@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Grade &amp; Mission Tracker — per-character sorcerer grade promotion checklist, mission log with payouts, and a cursed-spirit-finding d100 roller. Ritual Archive JJK 5e field tools.">
+<title>Grade &amp; Mission Tracker — Ritual Archive Field Tools</title>
+<link rel="stylesheet" href="../assets/tools.css">
+</head>
+<body>
+<header class="topbar"><div class="nav"><a class="brand" href="../index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a><nav class="navlinks"><a href="../rules.html">Field Guide</a><a href="../builder.html">Character Builder</a><a href="../codex.html">Technique Codex</a><a href="../lore.html">Story So Far</a><a href="index.html" class="is-current">Tools</a></nav><button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button><span class="doc-tag">Grade &amp; mission tracker</span></div></header>
+
+<main class="wrap">
+<section class="hero">
+  <p class="eyebrow">Field tools · per character</p>
+  <h1>Grade &amp; Mission Tracker</h1>
+  <p class="lede">Sorcerer grade, promotion eligibility, and a running mission ledger with payouts — stored per character, on this device. Bookkeeping only: mission content itself stays with the GM.</p>
+</section>
+
+<div class="charbar">
+  <div class="field"><span>Character</span><select id="charSel" aria-label="Choose character"></select></div>
+</div>
+<p class="note" id="noChars" style="display:none">No characters found on this device yet — <a href="../builder.html">build a character first</a>, then return here.</p>
+
+<section class="panel" id="gradePanel">
+  <h3>Current Grade</h3>
+  <div class="field"><span>Sorcerer grade</span>
+    <select id="gradeSel">
+      <option>Grade 4</option>
+      <option>Grade 3</option>
+      <option>Grade 2</option>
+      <option>Grade 1</option>
+      <option>Special Grade</option>
+    </select>
+  </div>
+
+  <div id="promoWrap" style="display:none">
+    <h4>Promotion Checklist</h4>
+    <label class="check"><input type="checkbox" id="rec1"><span>Recommended by a First Grade (1)</span></label>
+    <label class="check"><input type="checkbox" id="rec2"><span>Recommended by a First Grade (2)</span></label>
+    <p class="note">Teachers cannot recommend their students.</p>
+    <label class="check"><input type="checkbox" id="trioBox"><span>Completed 3 missions alongside a First Grade Sorcerer</span></label>
+    <div class="btn-row" style="align-items:center">
+      <button class="btn btn-small" id="trioPlus" type="button">+1 mission alongside a First Grade</button>
+      <span class="note">Accompanied missions: <b id="trioCount">0</b> / 3</span>
+    </div>
+    <div id="eligible" style="display:none"><span class="tag on" style="font-size:.95rem">Eligible for promotion</span></div>
+  </div>
+  <p class="src">V6 Rules of Thumb, "Sorcerer Grades &amp; Promotion".</p>
+</section>
+
+<section class="panel">
+  <h3>Mission Log</h3>
+  <div class="table-scroll"><table class="t" id="logTable">
+    <thead><tr><th>Date</th><th>Grade</th><th>Objective</th><th>Payout</th></tr></thead>
+    <tbody><tr><td colspan="4" class="note">No missions logged yet.</td></tr></tbody>
+  </table></div>
+  <p class="note">Running total of earnings: <b id="earnTotal">$0</b></p>
+
+  <h4>Add Mission</h4>
+  <div class="grid2">
+    <div class="field"><span>Date</span><input type="date" id="mDate"></div>
+    <div class="field"><span>Mission grade</span>
+      <select id="mGrade">
+        <option>Grade 4</option><option>Grade 3</option><option>Grade 2</option><option>Semi-Grade 2</option>
+        <option>Grade 1</option><option>Semi-Grade 1</option><option>Special Grade</option>
+      </select>
+    </div>
+  </div>
+  <div class="field"><span>Objective</span><input type="text" id="mObjective" placeholder="e.g. Exorcise the curse haunting the subway depot"></div>
+  <div class="field"><span>Payout ($)</span><input type="number" id="mPayout" min="0" step="1" placeholder="0"></div>
+  <div class="btn-row">
+    <button class="btn btn-small" type="button" data-pay="4">Grade 4 payout</button>
+    <button class="btn btn-small" type="button" data-pay="3">Grade 3 payout</button>
+    <button class="btn btn-small" type="button" data-pay="2">Grade 2 payout</button>
+    <button class="btn btn-small" type="button" data-pay="1">Grade 1 payout</button>
+    <button class="btn btn-small" type="button" data-pay="S">Special payout</button>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-gold" type="button" id="addMission">Log mission</button>
+  </div>
+
+  <h4>Payout Reference</h4>
+  <div class="table-scroll"><table class="t">
+    <thead><tr><th>Grade</th><th>Payout (V6)</th></tr></thead>
+    <tbody>
+      <tr><td>Grade 4</td><td>$500 – $2,000</td></tr>
+      <tr><td>Grade 3</td><td>$3,000 – $10,000</td></tr>
+      <tr><td>Grade 2</td><td>$10,000 – $25,000</td></tr>
+      <tr><td>Grade 1</td><td>$100,000 – $500,000</td></tr>
+      <tr><td>Special Grade</td><td>$1,000,000+</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Quick-set buttons above roll a random payout inside the grade's V6 range into the field; edit it before logging if the GM sets a different figure.</p>
+</section>
+
+<section class="panel">
+  <h3>Finding a Cursed Spirit</h3>
+  <p class="note">Spend 1–2 hours searching; DC 20 Perception or Investigation — on success, roll below.</p>
+  <div class="btn-row"><button class="btn btn-gold" type="button" id="rollCurse">Roll d100</button></div>
+  <div class="out" id="curseOut" style="display:none">
+    <div class="sub">Cursed spirit grade</div>
+    <div class="big" id="curseGrade">—</div>
+    <div class="sub" id="curseRoll"></div>
+  </div>
+  <p class="src">V6 Rules of Thumb, "Finding a Cursed Spirit".</p>
+</section>
+
+<section class="panel">
+  <p class="note"><b>Bookkeeping only.</b> This tracker records grades, recommendations, and payouts. Mission content — the curse, the location, the stakes — stays with the GM.</p>
+</section>
+</main>
+
+<footer class="site"><div class="wrap">
+  <a class="brand" href="../index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
+  <span>Field Tools · fan-made JJK 5e homebrew reference</span>
+</div></footer>
+
+<script>
+(function(){
+"use strict";
+var CHAR_KEY='ritual-archive-characters';
+var PAYOUTS={'4':[500,2000],'3':[3000,10000],'2':[10000,25000],'1':[100000,500000],'S':[1000000,2500000]};
+function toast(m){var e=document.getElementById('toast');if(!e){e=document.createElement('div');e.className='toast';e.id='toast';document.body.appendChild(e);}e.textContent=m;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('show');},2400);}
+function readJSON(k){try{var v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
+function writeJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){toast('Could not save — browser storage unavailable.');return false;}}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function money(n){return '$'+Number(n||0).toLocaleString('en-US');}
+
+var chars=readJSON(CHAR_KEY)||[];
+if(!Array.isArray(chars))chars=[];
+chars=chars.filter(function(c){return c&&c.id&&c.name;});
+var sel=document.getElementById('charSel');
+var noChars=document.getElementById('noChars');
+if(!chars.length){noChars.style.display='';}
+chars.forEach(function(c){var o=document.createElement('option');o.value=c.id;o.textContent=c.name;sel.appendChild(o);});
+
+var curId=null;
+var S=null;
+function stateKey(id){return 'ra_missions_'+id;}
+function defaults(){return {grade:'Grade 4',rec1:false,rec2:false,missionCount:0,log:[]};}
+function loadState(id){
+  var s=readJSON(stateKey(id));
+  if(!s||typeof s!=='object')s={};
+  var d=defaults();
+  S={grade:s.grade||d.grade,rec1:!!s.rec1,rec2:!!s.rec2,
+     missionCount:Math.max(0,Math.min(3,Number(s.missionCount)||0)),
+     log:Array.isArray(s.log)?s.log:[]};
+}
+function saveState(){if(curId)writeJSON(stateKey(curId),S);}
+function syncPromo(){
+  var g=S.grade==='Grade 2'||S.grade==='Grade 1';
+  document.getElementById('promoWrap').style.display=g?'':'none';
+  if(g){
+    document.getElementById('rec1').checked=S.rec1;
+    document.getElementById('rec2').checked=S.rec2;
+    document.getElementById('trioBox').checked=S.missionCount>=3;
+    document.getElementById('trioCount').textContent=S.missionCount;
+    var ok=S.rec1&&S.rec2&&S.missionCount>=3;
+    document.getElementById('eligible').style.display=ok?'':'none';
+  }else{
+    document.getElementById('eligible').style.display='none';
+  }
+}
+function syncLog(){
+  var tb=document.querySelector('#logTable tbody');
+  var total=0;
+  if(!S.log.length){tb.innerHTML='<tr><td colspan="4" class="note">No missions logged yet.</td></tr>';}
+  else{
+    tb.innerHTML=S.log.map(function(m){
+      total+=Number(m.payout)||0;
+      return '<tr><td>'+esc(m.date)+'</td><td>'+esc(m.grade)+'</td><td>'+esc(m.objective)+'</td><td>'+money(m.payout)+'</td></tr>';
+    }).join('');
+  }
+  document.getElementById('earnTotal').textContent=money(total);
+}
+function render(){document.getElementById('gradeSel').value=S.grade;syncPromo();syncLog();}
+
+if(chars.length){
+  curId=chars[0].id;
+  loadState(curId);render();
+  sel.addEventListener('change',function(){curId=sel.value;loadState(curId);render();toast('Switched character.');});
+}else{loadState('none');render();}
+
+document.getElementById('gradeSel').addEventListener('change',function(e){S.grade=e.target.value;saveState();syncPromo();});
+document.getElementById('rec1').addEventListener('change',function(e){S.rec1=e.target.checked;saveState();syncPromo();});
+document.getElementById('rec2').addEventListener('change',function(e){S.rec2=e.target.checked;saveState();syncPromo();});
+document.getElementById('trioBox').addEventListener('change',function(e){S.missionCount=e.target.checked?3:0;saveState();syncPromo();});
+document.getElementById('trioPlus').addEventListener('click',function(){
+  if(S.missionCount>=3){toast('Already at 3 of 3.');return;}
+  S.missionCount+=1;saveState();syncPromo();
+  toast('Accompanied missions: '+S.missionCount+' / 3');
+});
+
+document.getElementById('mDate').value=new Date().toISOString().slice(0,10);
+var payBtns=document.querySelectorAll('button[data-pay]');
+payBtns.forEach(function(b){
+  b.addEventListener('click',function(){
+    var r=PAYOUTS[b.getAttribute('data-pay')];
+    var v=r[0]+Math.floor(Math.random()*(r[1]-r[0]+1));
+    document.getElementById('mPayout').value=v;
+    toast('Payout set: '+money(v));
+  });
+});
+document.getElementById('addMission').addEventListener('click',function(){
+  var objective=document.getElementById('mObjective').value.trim();
+  if(!objective){toast('Enter an objective first.');document.getElementById('mObjective').focus();return;}
+  S.log.push({date:document.getElementById('mDate').value||new Date().toISOString().slice(0,10),
+    grade:document.getElementById('mGrade').value,
+    objective:objective,
+    payout:Math.max(0,Math.floor(Number(document.getElementById('mPayout').value)||0))});
+  document.getElementById('mObjective').value='';
+  document.getElementById('mPayout').value='';
+  saveState();syncLog();toast('Mission logged.');
+});
+
+document.getElementById('rollCurse').addEventListener('click',function(){
+  var r=1+Math.floor(Math.random()*100),grade;
+  if(r<=50)grade='Grade 4';
+  else if(r<=75)grade='Grade 3';
+  else if(r<=90)grade='Semi-Grade 2';
+  else if(r<=99)grade='Grade 2';
+  else grade='Semi-Grade 1';
+  document.getElementById('curseOut').style.display='';
+  document.getElementById('curseGrade').textContent=grade;
+  document.getElementById('curseRoll').textContent='Rolled '+r+' on the d100.';
+});
+})();
+</script>
+<script>
+(function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(o){t.classList.toggle('nav-open',o);b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});})();
+</script>
+</body>
+</html>

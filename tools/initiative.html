@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Initiative Tracker — Ritual Archive Tools</title>
+<link rel="stylesheet" href="../assets/tools.css">
+<style>
+  #roundBanner { font-size:2.6rem; font-weight:800; letter-spacing:.02em; margin:.2rem 0 .6rem; }
+  #roundBanner .round-num { color:#ffd75e; }
+  #activeBanner { font-size:1.5rem; font-weight:800; line-height:1.3; padding:.7rem 1rem; border-radius:.5rem;
+    background:rgba(0,0,0,.35); border:1px solid #6b5a2e; margin-bottom:.8rem; }
+  #activeBanner .gold { color:#ffd75e; }
+  .combatant { display:flex; align-items:center; gap:.6rem; padding:.55rem .8rem; margin:.4rem 0;
+    background:rgba(0,0,0,.25); border:1px solid #3a3a3a; border-radius:.4rem; min-height:44px; }
+  .combatant.active { border-left:6px solid #ffd75e; background:rgba(255,215,94,.07); }
+  .combatant .c-name { font-size:1.25rem; font-weight:700; flex:1 1 auto; min-width:6rem; overflow-wrap:anywhere; }
+  .combatant .c-total { font-size:1.5rem; font-weight:800; color:#ffd75e; min-width:3.2rem; text-align:center; }
+  .combatant .c-mod { font-size:1rem; opacity:.85; white-space:nowrap; }
+  .combatant input.c-manual { width:4.5rem; font-size:1.1rem; text-align:center; }
+  .combatant input.c-hp { width:4.5rem; font-size:1.1rem; text-align:center; }
+  .combatant .c-hp-label { font-size:.95rem; opacity:.85; }
+  .combatant .btn { min-height:44px; }
+  .combatant .remove-btn { font-size:1.3rem; line-height:1; padding:.4rem .8rem; }
+  .add-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:.6rem; }
+  @media (max-width:640px){ .add-grid { grid-template-columns:1fr; } }
+  .tiebreak-note { font-size:.95rem; opacity:.8; margin-top:.3rem; }
+  .empty-note { font-size:1.15rem; opacity:.85; padding:1rem 0; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <nav class="nav">
+    <a class="brand" href="../index.html"><span class="brand-mark">呪</span> Ritual Archive</a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">&#x2630;</button>
+    <div class="navlinks">
+      <a href="../rules.html">Rules</a>
+      <a href="../builder.html">Builder</a>
+      <a href="../codex.html">Codex</a>
+      <a href="../lore.html">Lore</a>
+      <a href="index.html" class="is-current">Tools</a>
+    </div>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">GM Tool · Combat</p>
+    <h1>Initiative Tracker</h1>
+    <p class="lede">Add combatants, roll initiative, and run the turn order at the table. The session is saved on this device — a reload will not lose the fight.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Add Combatant</h2>
+    <div class="add-grid">
+      <div class="field">
+        <label><span>Name</span>
+          <input id="newName" type="text" placeholder="e.g. Itadori" maxlength="40" autocomplete="off">
+        </label>
+      </div>
+      <div class="field">
+        <label><span>Initiative modifier</span>
+          <input id="newMod" type="number" step="1" value="0">
+        </label>
+      </div>
+      <div class="field">
+        <label><span>HP (optional — blank = untracked)</span>
+          <input id="newHp" type="number" min="0" step="1" placeholder="—">
+        </label>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button id="addBtn" class="btn btn-gold">Add combatant</button>
+      <button id="rollAllBtn" class="btn">Roll all initiative</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Turn Order</h2>
+    <p class="tiebreak-note">Sort: highest initiative first. Ties break on the higher modifier, then alphabetically — a table convention, not a rules ruling.</p>
+    <div id="roundBanner">Round <span class="round-num" id="roundNum">1</span></div>
+    <div id="activeBanner">ACTIVE: <span class="gold" id="activeName">—</span></div>
+    <div id="orderList"></div>
+    <div class="btn-row">
+      <button id="prevBtn" class="btn">Previous turn</button>
+      <button id="nextBtn" class="btn btn-gold">Next turn</button>
+    </div>
+    <div class="btn-row">
+      <button id="newEncBtn" class="btn">New encounter</button>
+      <button id="clearAllBtn" class="btn btn-danger">Clear all</button>
+    </div>
+    <p class="note">The round counter doubles as the table's countdown for 1-minute effects: 10 rounds = 1 minute.</p>
+  </section>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var LS_KEY = 'ra_initiative_session';
+  var uidCounter = 0;
+  function newId(){ uidCounter += 1; return 'c' + Date.now().toString(36) + '_' + uidCounter; }
+
+  var state = { combatants: [], currentIndex: 0, round: 1 };
+
+  function save(){
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify({
+        combatants: state.combatants,
+        currentIndex: state.currentIndex,
+        round: state.round
+      }));
+    } catch (e) { /* storage unavailable: session just won't persist */ }
+  }
+
+  function load(){
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      if (!raw) return;
+      var data = JSON.parse(raw);
+      if (Array.isArray(data.combatants)) state.combatants = data.combatants;
+      if (typeof data.currentIndex === 'number') state.currentIndex = data.currentIndex;
+      if (typeof data.round === 'number' && data.round >= 1) state.round = data.round;
+      state.combatants.forEach(function(c){ if (!c.id) c.id = newId(); });
+    } catch (e) { /* corrupt or unavailable storage: start fresh */ }
+  }
+
+  function clampIndex(){
+    if (state.combatants.length === 0) { state.currentIndex = 0; return; }
+    if (state.currentIndex < 0) state.currentIndex = 0;
+    if (state.currentIndex >= state.combatants.length) state.currentIndex = state.combatants.length - 1;
+  }
+
+  // Combatant shape: { id, name, mod, hp (number|null), manual (number|null), rolled (number|null) }
+  function totalOf(c){
+    if (c.manual !== null && c.manual !== undefined && !isNaN(c.manual)) return Number(c.manual);
+    if (c.rolled !== null && c.rolled !== undefined && !isNaN(c.rolled)) return Number(c.rolled);
+    return null;
+  }
+
+  function sorted(){
+    return state.combatants.slice().sort(function(a, b){
+      var ta = totalOf(a), tb = totalOf(b);
+      if (ta === null && tb === null) return a.name.localeCompare(b.name);
+      if (ta === null) return 1;
+      if (tb === null) return -1;
+      if (tb !== ta) return tb - ta;
+      if (b.mod !== a.mod) return b.mod - a.mod;
+      return a.name.localeCompare(b.name);
+    });
+  }
+
+  var listEl = document.getElementById('orderList');
+  var roundNumEl = document.getElementById('roundNum');
+  var activeNameEl = document.getElementById('activeName');
+
+  function render(){
+    clampIndex();
+    var order = sorted();
+    roundNumEl.textContent = state.round;
+    listEl.innerHTML = '';
+    if (order.length === 0){
+      activeNameEl.textContent = '—';
+      var p = document.createElement('p');
+      p.className = 'empty-note';
+      p.textContent = 'No combatants yet. Add the party and their enemies above.';
+      listEl.appendChild(p);
+      return;
+    }
+    activeNameEl.textContent = order[state.currentIndex].name;
+    order.forEach(function(c, i){
+      var t = totalOf(c);
+      var row = document.createElement('div');
+      row.className = 'combatant' + (i === state.currentIndex ? ' active' : '');
+      row.dataset.id = c.id;
+
+      var totalSpan = document.createElement('span');
+      totalSpan.className = 'c-total';
+      totalSpan.textContent = (t === null ? '—' : t);
+      row.appendChild(totalSpan);
+
+      var nameSpan = document.createElement('span');
+      nameSpan.className = 'c-name';
+      nameSpan.textContent = c.name;
+      row.appendChild(nameSpan);
+
+      var modSpan = document.createElement('span');
+      modSpan.className = 'c-mod';
+      modSpan.textContent = 'mod ' + (c.mod >= 0 ? '+' : '') + c.mod;
+      row.appendChild(modSpan);
+
+      var manual = document.createElement('input');
+      manual.type = 'number';
+      manual.step = '1';
+      manual.className = 'c-manual';
+      manual.placeholder = 'init';
+      manual.title = 'Manual initiative total (overrides roll)';
+      manual.setAttribute('aria-label', 'Manual initiative total for ' + c.name);
+      if (c.manual !== null && c.manual !== undefined && !isNaN(c.manual)) manual.value = c.manual;
+      manual.addEventListener('change', function(){
+        var v = manual.value.trim();
+        c.manual = (v === '') ? null : Number(v);
+        state.currentIndex = indexOfId(c.id);
+        save(); render();
+      });
+      row.appendChild(manual);
+
+      if (c.hp !== null && c.hp !== undefined && !isNaN(c.hp)){
+        var hpLabel = document.createElement('span');
+        hpLabel.className = 'c-hp-label';
+        hpLabel.textContent = 'HP';
+        row.appendChild(hpLabel);
+        var hpInput = document.createElement('input');
+        hpInput.type = 'number';
+        hpInput.min = '0';
+        hpInput.step = '1';
+        hpInput.className = 'c-hp';
+        hpInput.value = c.hp;
+        hpInput.setAttribute('aria-label', 'Hit points for ' + c.name);
+        hpInput.addEventListener('change', function(){
+          var v = Number(hpInput.value);
+          if (!isNaN(v)) c.hp = Math.max(0, Math.floor(v));
+          save(); render();
+        });
+        row.appendChild(hpInput);
+      }
+
+      var removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'btn btn-danger btn-small remove-btn';
+      removeBtn.textContent = '\u2715';
+      removeBtn.setAttribute('aria-label', 'Remove ' + c.name);
+      removeBtn.addEventListener('click', function(){
+        state.combatants = state.combatants.filter(function(x){ return x.id !== c.id; });
+        clampIndex();
+        save(); render();
+      });
+      row.appendChild(removeBtn);
+
+      listEl.appendChild(row);
+    });
+  }
+
+  function indexOfId(id){
+    var order = sorted();
+    for (var i = 0; i < order.length; i++){ if (order[i].id === id) return i; }
+    return 0;
+  }
+
+  function addCombatant(){
+    var nameInput = document.getElementById('newName');
+    var modInput = document.getElementById('newMod');
+    var hpInput = document.getElementById('newHp');
+    var name = nameInput.value.trim();
+    if (!name){
+      nameInput.focus();
+      return;
+    }
+    var mod = Number(modInput.value);
+    if (isNaN(mod)) mod = 0;
+    var hpRaw = hpInput.value.trim();
+    var hp = (hpRaw === '') ? null : Math.max(0, Math.floor(Number(hpRaw)));
+    if (hpRaw !== '' && isNaN(hp)) hp = null;
+    state.combatants.push({ id: newId(), name: name, mod: mod, hp: hp, manual: null, rolled: null });
+    nameInput.value = '';
+    modInput.value = '0';
+    hpInput.value = '';
+    nameInput.focus();
+    save(); render();
+  }
+
+  function rollAll(){
+    var d;
+    state.combatants.forEach(function(c){
+      if (c.manual === null || c.manual === undefined || isNaN(c.manual)){
+        d = Math.floor(Math.random() * 20) + 1;
+        c.rolled = d + c.mod;
+      }
+    });
+    clampIndex();
+    save(); render();
+  }
+
+  function nextTurn(){
+    var n = state.combatants.length;
+    if (n === 0) return;
+    state.currentIndex += 1;
+    if (state.currentIndex >= n){
+      state.currentIndex = 0;
+      state.round += 1;
+    }
+    save(); render();
+  }
+
+  function prevTurn(){
+    var n = state.combatants.length;
+    if (n === 0) return;
+    state.currentIndex -= 1;
+    if (state.currentIndex < 0){
+      state.currentIndex = n - 1;
+      if (state.round > 1) state.round -= 1;
+    }
+    save(); render();
+  }
+
+  function newEncounter(){
+    state = { combatants: [], currentIndex: 0, round: 1 };
+    try { localStorage.removeItem(LS_KEY); } catch (e) {}
+    disarmClear();
+    save(); render();
+  }
+
+  var clearBtn = document.getElementById('clearAllBtn');
+  var CLEAR_LABEL = 'Clear all';
+  var ARM_LABEL = 'Click again to confirm';
+  var clearArmed = false;
+  var clearTimer = null;
+  function disarmClear(){
+    clearArmed = false;
+    clearBtn.textContent = CLEAR_LABEL;
+    if (clearTimer){ clearTimeout(clearTimer); clearTimer = null; }
+  }
+  clearBtn.addEventListener('click', function(){
+    if (!clearArmed){
+      clearArmed = true;
+      clearBtn.textContent = ARM_LABEL;
+      clearTimer = setTimeout(disarmClear, 4000);
+      return;
+    }
+    disarmClear();
+    state.combatants = [];
+    state.currentIndex = 0;
+    state.round = 1;
+    save(); render();
+  });
+
+  document.getElementById('addBtn').addEventListener('click', addCombatant);
+  document.getElementById('rollAllBtn').addEventListener('click', rollAll);
+  document.getElementById('nextBtn').addEventListener('click', nextTurn);
+  document.getElementById('prevBtn').addEventListener('click', prevTurn);
+  document.getElementById('newEncBtn').addEventListener('click', newEncounter);
+  document.getElementById('newName').addEventListener('keydown', function(e){
+    if (e.key === 'Enter'){ e.preventDefault(); addCombatant(); }
+  });
+
+  // Nav toggle
+  (function(){
+    var t = document.querySelector('.topbar');
+    var b = document.querySelector('.nav-toggle');
+    if (!t || !b) return;
+    function set(o){ t.classList.toggle('nav-open', o); b.setAttribute('aria-expanded', o ? 'true' : 'false'); b.textContent = o ? '\u2715' : '\u2630'; }
+    b.addEventListener('click', function(){ set(!t.classList.contains('nav-open')); });
+  })();
+
+  load();
+  render();
+})();
+</script>
+</body>
+</html>

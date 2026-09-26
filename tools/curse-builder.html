@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curse Stat-Block Builder · Ritual Archive Tools</title>
+<meta name="description" content="Guided curse stat-block builder from Creeps and Curses Chapter 2 — classifications, grades, class features, and CR scaling.">
+<link rel="stylesheet" href="../assets/tools.css">
+<style>
+/* curse-builder additions (kept in-page; palette matches tools.css) */
+.radio-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:14px 0}
+.radio-card{position:relative;border:1px solid #3a3e48;border-radius:12px;background:#0d0f14;padding:14px 16px 14px 46px;cursor:pointer;display:block;transition:border-color .15s,background .15s}
+.radio-card:hover{border-color:var(--gold)}
+.radio-card input{position:absolute;left:14px;top:16px;width:22px;height:22px;accent-color:var(--gold)}
+.radio-card .rc-t{font-family:var(--serif);color:#f2e6c7;font-size:1.08rem;display:block;margin-bottom:6px}
+.radio-card .rc-d{color:var(--muted);font-size:.92rem;display:block}
+.radio-card.sel{border-color:var(--gold);background:#14161d;box-shadow:0 0 0 1px var(--gold)}
+.stepnum{display:inline-grid;place-items:center;width:30px;height:30px;border:1px solid var(--gold);border-radius:50%;color:var(--gold-pale);font-family:var(--serif);margin-right:8px}
+.feat{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0;background:#0d0f14}
+.feat.off{opacity:.45}
+.feat .sub{margin:10px 0 2px 32px;max-width:520px}
+.feat .sub>span{margin-bottom:6px}
+.gmr{display:inline-block;border:1px dashed var(--gold);border-radius:6px;color:var(--gold-pale);font-size:.76rem;font-weight:700;letter-spacing:.04em;padding:1px 8px;margin:2px 0 2px 6px;white-space:nowrap;vertical-align:middle}
+.sb-name{font-family:var(--serif);font-size:1.9rem;color:#fff;border-bottom:2px solid var(--gold);padding-bottom:6px;margin-bottom:8px}
+.sb-line{color:#cfc2a4;font-size:1.02rem;margin:.3rem 0}
+.sb-sec{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:800;margin:16px 0 6px}
+.sb p{margin:.45rem 0;color:#d1cdc3}
+.sb-t b{color:#fff}
+.sb-cr{font-family:var(--serif);font-size:1.35rem;font-weight:700;color:#fff;margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+.sb-cr .note{font-family:system-ui,sans-serif;font-size:.9rem;font-weight:400}
+@media print{
+  .out{background:#fff;color:#111;border:1px solid #111;border-left:4px solid #111}
+  .out .big,.sb-name,.sb-cr{color:#111}
+  .out .sub,.out ul,.sb p,.sb-line{color:#222}
+  .sb-t b{color:#111}
+  .sb-sec{color:#6b5518}
+  .gmr{color:#6b5518;border-color:#6b5518}
+  .panel{background:#fff;border:1px solid #999}
+  .panel h3{color:#111}
+}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="nav">
+  <a class="brand" href="../index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
+  <nav class="navlinks">
+    <a href="../rules.html">Field Guide</a>
+    <a href="../builder.html">Character Builder</a>
+    <a href="../codex.html">Technique Codex</a>
+    <a href="../lore.html">Story So Far</a>
+    <a href="index.html" class="is-current">Tools</a>
+  </nav>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  <span class="doc-tag">Field Manual · CB-01</span>
+</div></header>
+
+<main class="wrap">
+<section class="hero">
+  <div class="eyebrow">Creeps &amp; Curses · Chapter 2</div>
+  <h1>Curse Stat-Block Builder</h1>
+  <p class="lede">A guided foe builder from <b>Creeps and Curses</b> Chapter 2 §§2.1–2.2 (Classifications; Features and Scaling). Pick a classification and grade, tick class features, set a base CR — the sheet applies the universal traits for you, adds technique CR adjustments, and renders a printable stat block. Only the <b>published</b> features are implemented; anything the text leaves open is flagged <b>GM ruling</b>.</p>
+</section>
+
+<div class="no-print">
+<section class="panel" aria-labelledby="h-name">
+  <h3 id="h-name"><span class="stepnum">0</span>Name</h3>
+  <div class="field"><span>Curse name</span>
+    <input type="text" id="cname" placeholder="e.g. River-Weeping Yōkai" autocomplete="off">
+  </div>
+</section>
+
+<section class="panel" aria-labelledby="h-cls">
+  <h3 id="h-cls"><span class="stepnum">1</span>Classification</h3>
+  <p class="note">Per C&amp;C §2.1. Class-specific features in Step 3 unlock only for their matching classification.</p>
+  <div class="radio-cards" role="radiogroup" aria-label="Classification">
+    <label class="radio-card">
+      <input type="radio" name="classif" value="imaginary">
+      <span class="rc-t">Imaginary Cursed Spirit</span>
+      <span class="rc-d">Manifested from the cumulative fear of the masses (famous yokai, ghost stories).</span>
+    </label>
+    <label class="radio-card">
+      <input type="radio" name="classif" value="vengeful">
+      <span class="rc-t">Vengeful Cursed Spirit</span>
+      <span class="rc-d">Created when a human becomes a curse after death; a cursed death can corrupt the spirit.</span>
+    </label>
+    <label class="radio-card">
+      <input type="radio" name="classif" value="disease">
+      <span class="rc-t">Disease Cursed Spirit</span>
+      <span class="rc-d">Born of humanity's constant cursing of plague and sickness; high-level ones infect humans with diseases.</span>
+    </label>
+    <label class="radio-card">
+      <input type="radio" name="classif" value="womb">
+      <span class="rc-t">Cursed Womb</span>
+      <span class="rc-d">An immature curse in a uterus-like evolutionary stage; metamorphoses into a fully-fledged curse.</span>
+    </label>
+    <label class="radio-card">
+      <input type="radio" name="classif" value="corpse">
+      <span class="rc-t">Cursed Corpse</span>
+      <span class="rc-d">A nonliving object endowed with a curse, gaining self-control; often dolls/puppets for sorcerers. (Not a cursed spirit, but included as a foe.)</span>
+    </label>
+  </div>
+</section>
+
+<section class="panel" aria-labelledby="h-grade">
+  <h3 id="h-grade"><span class="stepnum">2</span>Grade</h3>
+  <div class="field"><span>Curse grade</span>
+    <select id="grade">
+      <option value="" selected disabled>Choose a grade…</option>
+      <option value="4">Grade 4</option>
+      <option value="3">Grade 3</option>
+      <option value="2">Grade 2</option>
+      <option value="1">Grade 1</option>
+      <option value="0">Special Grade</option>
+    </select>
+  </div>
+</section>
+
+<section class="panel" aria-labelledby="h-auto">
+  <h3 id="h-auto">Auto-applied universal traits</h3>
+  <p class="note">Applied by the text — not optional, not checkboxes. The source also excludes <b>shikigami</b> from Incorporeal (not a classification this builder covers).</p>
+  <div id="traitlist"></div>
+</section>
+
+<section class="panel" aria-labelledby="h-feats">
+  <h3 id="h-feats"><span class="stepnum">3</span>Features</h3>
+  <p class="note">Per C&amp;C §2.2 "Features and Scaling" and "Class-Specific Features". Class-locked features are disabled until their classification is chosen.</p>
+
+  <div class="feat" id="wrap_famous">
+    <label class="check"><input type="checkbox" id="f_famous"><span><b>Famous Name.</b> At the beginning of initiative, enemies that can see the curse must make a DC <b>??</b> Wisdom saving throw or gain the frightened condition for 1 minute. A creature can repeat the save at the end of their turn, ending the effect on a success. <span class="gmr">GM ruling</span></span></label>
+    <div class="field sub"><span>Save DC — GM ruling: source gives no DC ("DC ??")</span>
+      <input type="number" id="famous_dc" min="1" max="30" placeholder="e.g. 15" disabled>
+    </div>
+  </div>
+
+  <div class="feat" id="wrap_fearmonger">
+    <label class="check"><input type="checkbox" id="f_fearmonger"><span><b>Fearmonger.</b> The curse has advantage on attack rolls against creatures with the frightened condition. <span class="tag">Imaginary only</span></span></label>
+  </div>
+
+  <div class="feat" id="wrap_grudge">
+    <label class="check"><input type="checkbox" id="f_grudge"><span><b>Grudge.</b> The curse may have a bonus to attack and/or damage rolls against certain creature types depending on how it died. <span class="tag">Vengeful only</span> <span class="gmr">GM ruling</span></span></label>
+    <div class="field sub"><span>Creature types — tied to how it died (GM ruling)</span>
+      <input type="text" id="grudge_text" placeholder="e.g. humanoids wearing uniforms" disabled autocomplete="off">
+    </div>
+  </div>
+
+  <div class="feat" id="wrap_plague">
+    <label class="check"><input type="checkbox" id="f_plague"><span><b>Plague.</b> The curse deals additional poison damage or may force saving throws on a hit that cause a creature to gain the poisoned condition. <span class="tag">Disease only</span> <span class="gmr">GM ruling</span></span></label>
+    <div class="field sub"><span>Damage / save details — GM ruling on amounts</span>
+      <input type="text" id="plague_text" placeholder="e.g. +2d6 poison; DC 14 Con or poisoned 1 min" disabled autocomplete="off">
+    </div>
+  </div>
+
+  <div class="feat" id="wrap_awakening">
+    <label class="check"><input type="checkbox" id="f_awakening"><span><b>Awakening.</b> When the curse is reduced to 0 hit points, it ceases being a cursed womb and awakens into its true form. <span class="tag">Cursed Womb only</span></span></label>
+    <div class="field sub"><span>True form notes — GM ruling</span>
+      <textarea id="awakening_text" placeholder="Describe the awakened true form: traits, new attacks, changed grade…" disabled></textarea>
+    </div>
+  </div>
+
+  <div class="feat" id="wrap_cursedtech">
+    <label class="check"><input type="checkbox" id="f_cursedtech"><span><b>Cursed Technique.</b> <i>"Depending on the technique, this can increase a creature's CR by 1-2."</i> <span class="gmr">GM ruling</span></span></label>
+    <div class="grid2 sub">
+      <div class="field"><span>Technique — GM defines</span>
+        <input type="text" id="ct_name" placeholder="e.g. Blood-Slick Grasp" disabled autocomplete="off">
+      </div>
+      <div class="field"><span>CR adjustment</span>
+        <select id="ct_adj" disabled>
+          <option value="1">+1 CR</option>
+          <option value="2">+2 CR</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="feat" id="wrap_innatetech">
+    <label class="check"><input type="checkbox" id="f_innatetech"><span><b>Innate Technique.</b> <i>"Depending on the technique, this can increase a creature's CR by 2-5."</i> <span class="gmr">GM ruling</span></span></label>
+    <div class="grid2 sub">
+      <div class="field"><span>Technique — GM defines</span>
+        <input type="text" id="it_name" placeholder="e.g. Ashen Bloom" disabled autocomplete="off">
+      </div>
+      <div class="field"><span>CR adjustment</span>
+        <select id="it_adj" disabled>
+          <option value="2">+2 CR</option>
+          <option value="3">+3 CR</option>
+          <option value="4">+4 CR</option>
+          <option value="5">+5 CR</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="feat" id="wrap_phases">
+    <label class="check"><input type="checkbox" id="f_phases"><span><b>Multiple Phases.</b> Adding phases can make for more challenging and interesting fights — curses fuse, a womb awakens, a curse devours others to grow stronger. <span class="gmr">GM ruling — no CR number in source</span></span></label>
+  </div>
+
+  <div class="feat" id="wrap_legact">
+    <label class="check"><input type="checkbox" id="f_legact"><span><b>Legendary Actions.</b> Allows an enemy to take a special action at the end of an enemy's turn. <span class="gmr">GM ruling</span></span></label>
+  </div>
+
+  <div class="feat" id="wrap_legres">
+    <label class="check"><input type="checkbox" id="f_legres"><span><b>Legendary Resistances.</b> A limited resource that allows a creature to auto-succeed a number of saves. <span class="gmr">GM ruling</span></span></label>
+  </div>
+</section>
+
+<section class="panel" aria-labelledby="h-cr">
+  <h3 id="h-cr">Challenge Rating</h3>
+  <div class="grid2">
+    <div class="field"><span>Base CR — GM sets</span>
+      <input type="number" id="basecr" min="0" max="30" step="1" placeholder="e.g. 3">
+    </div>
+    <div class="field"><span>Total CR (live)</span>
+      <div class="out" style="margin:0;padding:12px 16px"><div class="big" id="crtotal">—</div><div class="sub" id="crbreak">Set a base CR above.</div></div>
+    </div>
+  </div>
+  <p class="note">Total CR = base CR + technique adjustments. Only Cursed Technique and Innate Technique carry source-given CR adjustments (+1–2 and +2–5); Multiple Phases and Legendary Actions/Resistances have <b>no CR number in the source</b> and are GM ruling.</p>
+</section>
+</div><!-- /no-print -->
+
+<section class="panel" aria-labelledby="h-out">
+  <h3 id="h-out">Stat block</h3>
+  <div class="out"><div class="sb" id="statblock"></div></div>
+  <div class="btn-row">
+    <button class="btn btn-gold" id="printbtn" type="button">Print stat block</button>
+  </div>
+</section>
+
+<p class="note"><b>Footnote:</b> C&amp;C §2.8 "Make Your Own" is marked <b>UNDER CONSTRUCTION</b> in the source ("V.4 CONTENT COMING SOON") — this builder implements only the published features above.</p>
+
+<details class="ref">
+  <summary>Source reference</summary>
+  <p>Creeps and Curses 5e Expansion (V.3.1), Chapter 2 — §2.1 "Classifications" and §2.2 "Features and Scaling" (including "Class-Specific Features" and "Legendary Actions/Resistances"). The <b>"DC ??"</b> in Famous Name is verbatim from the source. Anything tagged <b>GM ruling</b> is left open by the text or resolved by interpretation. §2.8 "Make Your Own" is marked UNDER CONSTRUCTION in the source and is not implemented here.</p>
+</details>
+</main>
+
+<footer class="site no-print"><div class="wrap" style="padding-top:0;padding-bottom:0">Ritual Archive · Field Manual tools — Curse Stat-Block Builder (CB-01). Built from the published Creeps and Curses Chapter 2 text; GM rulings flagged, not invented.</div></footer>
+
+<script>
+(function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(o){t.classList.toggle('nav-open',o);b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});})();
+
+(function(){
+"use strict";
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+
+var CLS={imaginary:"Imaginary Cursed Spirit",vengeful:"Vengeful Cursed Spirit",disease:"Disease Cursed Spirit",womb:"Cursed Womb",corpse:"Cursed Corpse"};
+var GRD={"4":"Grade 4","3":"Grade 3","2":"Grade 2","1":"Grade 1","0":"Special Grade"};
+var GMR='<span class="gmr">GM ruling</span>';
+
+function classif(){var r=document.querySelector('input[name="classif"]:checked');return r?r.value:null;}
+function rank(){var v=$("grade").value;return v===""?null:parseInt(v,10);}
+
+var FEATS=[
+  {box:"f_famous", wrap:"wrap_famous"},
+  {box:"f_fearmonger", wrap:"wrap_fearmonger", prereq:"imaginary", tag:"Imaginary only"},
+  {box:"f_grudge", wrap:"wrap_grudge", prereq:"vengeful", tag:"Vengeful only"},
+  {box:"f_plague", wrap:"wrap_plague", prereq:"disease", tag:"Disease only"},
+  {box:"f_awakening", wrap:"wrap_awakening", prereq:"womb", tag:"Cursed Womb only"},
+  {box:"f_cursedtech", wrap:"wrap_cursedtech"},
+  {box:"f_innatetech", wrap:"wrap_innatetech"},
+  {box:"f_phases", wrap:"wrap_phases"},
+  {box:"f_legact", wrap:"wrap_legact"},
+  {box:"f_legres", wrap:"wrap_legres"}
+];
+
+function update(){
+  var c=classif(), r=rank();
+
+  /* radio card highlight */
+  document.querySelectorAll(".radio-card").forEach(function(card){
+    var inp=card.querySelector('input[name="classif"]');
+    card.classList.toggle("sel", !!(inp&&inp.checked));
+  });
+
+  /* prerequisite enforcement */
+  FEATS.forEach(function(f){
+    var box=$(f.box), wrap=$(f.wrap);
+    var ok=!f.prereq||c===f.prereq;
+    box.disabled=!ok;
+    if(!ok){box.checked=false;}
+    wrap.classList.toggle("off",!ok);
+  });
+
+  /* sub-field enabling */
+  $("famous_dc").disabled=!$("f_famous").checked;
+  $("grudge_text").disabled=!$("f_grudge").checked;
+  $("plague_text").disabled=!$("f_plague").checked;
+  $("awakening_text").disabled=!$("f_awakening").checked;
+  $("ct_name").disabled=$("ct_adj").disabled=!$("f_cursedtech").checked;
+  $("it_name").disabled=$("it_adj").disabled=!$("f_innatetech").checked;
+
+  /* auto-applied universal traits */
+  var th='<p class="sb-t"><b>Invisibility.</b> The curse is invisible to all creatures without cursed energy. '+GMR.replace("GM ruling","Auto — ALL curses, regardless of grade")+'</p>';
+  if(r!==null&&c){
+    if(r>=3&&c!=="corpse"){
+      th+='<p class="sb-t"><b>Incorporeal.</b> The curse can move through other creatures and objects without cursed energy as if they were difficult terrain. It takes 1d10 force damage if it ends its turn inside an object. '+GMR.replace("GM ruling","Auto — Grade 3 and below")+'</p>';
+      th+='<p class="sb-t"><b>Vulnerability to Radiant Damage.</b> Weak cursed energy leaves the curse vulnerable to radiant damage. '+GMR.replace("GM ruling","Auto — Grade 3 and below")+'</p>';
+    }else{
+      th+='<p class="note">No further auto traits at this grade/classification — Incorporeal and radiant vulnerability apply only at Grade 3 and below, excluding Cursed Corpses.</p>';
+    }
+  }else{
+    th+='<p class="note">Choose a classification and grade to resolve the remaining auto traits.</p>';
+  }
+  $("traitlist").innerHTML=th;
+
+  /* CR */
+  var baseRaw=$("basecr").value;
+  var base=baseRaw===""?null:parseInt(baseRaw,10);
+  var adj=0, parts=[];
+  if($("f_cursedtech").checked){var ca=parseInt($("ct_adj").value,10)||0;adj+=ca;parts.push("Cursed Technique +"+ca);}
+  if($("f_innatetech").checked){var ia=parseInt($("it_adj").value,10)||0;adj+=ia;parts.push("Innate Technique +"+ia);}
+  var total=base===null?null:base+adj;
+  $("crtotal").textContent=total===null?"—":"CR "+total;
+  $("crbreak").textContent=total===null?"Set a base CR above.":"Base "+base+(adj>0?" + "+adj+" ("+parts.join(", ")+")":" — no technique adjustments")+".";
+
+  /* stat block */
+  var F=[];
+  if($("f_famous").checked){
+    var dc=$("famous_dc").value;
+    F.push('<p><b>Famous Name.</b> At the beginning of initiative, enemies that can see the curse must make a DC '+(dc?esc(dc):"<b>??</b> "+GMR.replace("GM ruling","GM ruling — the source gives no DC"))+' Wisdom saving throw or gain the frightened condition for 1 minute. A creature can repeat the save at the end of their turn, ending the effect on a success.</p>');
+  }
+  if($("f_fearmonger").checked){
+    F.push('<p><b>Fearmonger.</b> The curse has advantage on attack rolls against creatures with the frightened condition. <span class="tag">Imaginary only</span></p>');
+  }
+  if($("f_grudge").checked){
+    var g=$("grudge_text").value.trim();
+    F.push('<p><b>Grudge.</b> The curse has a bonus to attack and/or damage rolls against '+(g?esc(g):GMR.replace("GM ruling","GM ruling — tied to how it died")+": certain creature types")+'. <span class="tag">Vengeful only</span></p>');
+  }
+  if($("f_plague").checked){
+    var p=$("plague_text").value.trim();
+    F.push('<p><b>Plague.</b> The curse deals additional poison damage or forces saving throws on a hit that cause a creature to gain the poisoned condition.'+(p?" "+esc(p)+".":"")+' <span class="tag">Disease only</span> '+GMR.replace("GM ruling","GM ruling on amounts")+'</p>');
+  }
+  if($("f_awakening").checked){
+    var a=$("awakening_text").value.trim();
+    F.push('<p><b>Awakening.</b> When the curse is reduced to 0 hit points, it ceases being a cursed womb and awakens into its true form.'+(a?" "+esc(a).replace(/\n/g,"<br>"):" "+GMR.replace("GM ruling","GM ruling — describe the true form"))+'</p>');
+  }
+  if($("f_cursedtech").checked){
+    var cn=$("ct_name").value.trim(), cta=parseInt($("ct_adj").value,10)||0;
+    F.push('<p><b>Cursed Technique'+(cn?": "+esc(cn):"")+'.</b> '+GMR.replace("GM ruling","CR +"+cta+" — source: cursed techniques raise CR by 1–2")+'</p>');
+  }
+  if($("f_innatetech").checked){
+    var in_=$("it_name").value.trim(), ita=parseInt($("it_adj").value,10)||0;
+    F.push('<p><b>Innate Technique'+(in_?": "+esc(in_):"")+'.</b> '+GMR.replace("GM ruling","CR +"+ita+" — source: innate techniques raise CR by 2–5")+'</p>');
+  }
+  if($("f_phases").checked){
+    F.push('<p><b>Multiple Phases.</b> The fight unfolds across multiple phases — curses fuse, a womb awakens, a curse devours others to grow stronger. '+GMR.replace("GM ruling","GM ruling — no CR number in source")+'</p>');
+  }
+  if($("f_legact").checked){
+    F.push('<p><b>Legendary Actions.</b> The curse can take a special action at the end of an enemy\'s turn. '+GMR+'</p>');
+  }
+  if($("f_legres").checked){
+    F.push('<p><b>Legendary Resistances.</b> A limited resource that allows the curse to auto-succeed a number of saves. '+GMR+'</p>');
+  }
+
+  var nm=$("cname").value.trim()||"Unnamed Curse";
+  var html='<div class="sb-name">'+esc(nm)+'</div>';
+  html+='<p class="sb-line"><b>'+(c?esc(CLS[c]):"No classification chosen")+'</b> &middot; '+(r!==null?esc(GRD[String(r)]):"No grade chosen")+'</p>';
+  html+='<div class="sb-sec">Universal traits</div>'+th;
+  html+='<div class="sb-sec">Features</div>'+(F.length?F.join(""):'<p class="note">None selected.</p>');
+  html+='<div class="sb-cr">Challenge Rating '+(total===null?"—":esc(String(total)))+(total===null?'<span class="note"> — GM sets the base CR</span>':'<span class="note"> (base '+esc(String(base))+(adj>0?" + "+adj+" adjustments":"")+')</span>')+'</div>';
+  $("statblock").innerHTML=html;
+}
+
+document.querySelectorAll("input,select,textarea").forEach(function(el){
+  el.addEventListener("input",update);
+  el.addEventListener("change",update);
+});
+$("printbtn").addEventListener("click",function(){window.print();});
+update();
+})();
+</script>
+</body>
+</html>

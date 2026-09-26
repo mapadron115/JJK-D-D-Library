@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maximum Output Calculator — Ritual Archive Tools</title>
+<link rel="stylesheet" href="../assets/tools.css">
+</head>
+<body>
+
+<header class="topbar">
+  <nav class="nav">
+    <a class="brand" href="index.html"><span class="brand-mark">&#21596;</span> Ritual Archive <span class="doc-tag">Tools</span></a>
+    <div class="navlinks">
+      <a href="../rules.html">Rules</a>
+      <a href="../builder.html">Builder</a>
+      <a href="../codex.html">Codex</a>
+      <a href="../lore.html">Lore</a>
+      <a href="index.html" class="is-current">Tools</a>
+    </div>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-label="Toggle navigation">&#9776;</button>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">Tools &middot; Technique Math</p>
+    <h1>Maximum Output Calculator</h1>
+    <p class="lede">Spend more of yourself than your technique was ever meant to hold — and choose exactly how the excess takes shape.</p>
+  </section>
+
+  <!-- STEP 1 — prerequisite gate -->
+  <section class="panel" id="prereq-panel">
+    <h3>Step 1 &mdash; Prerequisite</h3>
+    <p class="note">Rule: <b>&ldquo;After reaching 20 Cursed Energy score, you have learned to use Maximum Output.&rdquo;</b></p>
+    <div class="field">
+      <span><label for="ce-score">Your Cursed Energy score</label></span>
+      <input type="number" id="ce-score" min="1" max="40" value="20" inputmode="numeric">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-gold" id="gate-btn" type="button">Check Eligibility</button>
+    </div>
+    <div class="out" id="gate-out" hidden>
+      <div class="big" id="gate-msg"></div>
+      <p class="sub" id="gate-sub"></p>
+    </div>
+  </section>
+
+  <!-- calculator (revealed after gate) -->
+  <div id="calc" hidden>
+
+    <section class="panel">
+      <h3>Cursed Energy Cost</h3>
+      <div class="grid2">
+        <div class="field">
+          <span><label for="base-cost">Technique CE cost (before any reductions)</label></span>
+          <input type="number" id="base-cost" min="1" value="5" inputmode="numeric">
+        </div>
+        <div class="field">
+          <span><label class="check"><input type="checkbox" id="shiki-toggle"> Shikigami summoning technique</label></span>
+          <p class="note" style="margin-top:6px">If using Maximum Output on a shikigami summoning technique (minimum 3 CE before any reductions), you instead choose one of the shikigami benefits below.</p>
+        </div>
+      </div>
+      <p class="note" id="min-note"></p>
+    </section>
+
+    <!-- standard amplifications -->
+    <section class="panel" id="standard-panel">
+      <h3>Step 2 &mdash; Choose One Amplification</h3>
+      <p class="note">Mechanic: <b>&ldquo;When spending the most possible CE (minimum 5 before any reductions), you can spend half the cursed energy cost an additional time to amplify&rdquo;</b> — pick <b>one</b> benefit (rounded up):</p>
+
+      <div class="field">
+        <span><label class="check"><input type="radio" name="benefit" value="range" checked> 1. Range — +half the original range, rounded up to the highest 5</label></span>
+        <div class="grid2" id="range-inputs">
+          <div class="field"><span><label for="range-ft">Original range (ft)</label></span><input type="number" id="range-ft" min="0" value="10" inputmode="numeric"></div>
+          <div class="field"><span><label class="check"><input type="checkbox" id="touch-box"> Touch-based technique (Range amplification unavailable)</label></span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <span><label class="check"><input type="radio" name="benefit" value="damage"> 2. Damage — one damage roll&rsquo;s dice increased by half its original dice</label></span>
+        <div class="grid2" id="damage-inputs">
+          <div class="field"><span><label for="dmg-count">Damage dice count</label></span><input type="number" id="dmg-count" min="1" value="10" inputmode="numeric"></div>
+          <div class="field"><span><label for="dmg-size">Die size (e.g. 10 for d10)</label></span><input type="number" id="dmg-size" min="2" value="10" inputmode="numeric"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <span><label class="check"><input type="radio" name="benefit" value="atkdc"> 3. Attack bonus <em>or</em> save DC</label></span>
+        <div class="grid2" id="atkdc-inputs">
+          <div class="field">
+            <span>Amplify:</span>
+            <label class="check"><input type="radio" name="atkdc-mode" value="atk" checked> Attack bonus (+half original, rounded up)</label>
+            <label class="check"><input type="radio" name="atkdc-mode" value="dc"> Save DCs (+half your proficiency bonus, rounded up)</label>
+          </div>
+          <div class="field"><span><label for="atk-val">Current attack bonus</label></span><input type="number" id="atk-val" value="7" inputmode="numeric"></div>
+          <div class="field"><span><label for="pb-val">Proficiency bonus</label></span><input type="number" id="pb-val" min="2" max="9" value="4" inputmode="numeric"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <span><label class="check"><input type="radio" name="benefit" value="duration"> 4. Duration — +half the original duration</label></span>
+        <div class="grid2" id="duration-inputs">
+          <div class="field"><span><label for="dur-val">Duration value</label></span><input type="number" id="dur-val" min="1" value="1" inputmode="numeric"></div>
+          <div class="field"><span><label for="dur-unit">Unit</label></span>
+            <select id="dur-unit"><option value="rounds">Rounds</option><option value="minutes">Minutes</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <span><label class="check"><input type="radio" name="benefit" value="other"> 5. Another value of your technique — GM ruling</label></span>
+        <div class="field" id="gm-inputs">
+          <span><label for="gm-text">GM ruling — describe the amplified value</label></span>
+          <textarea id="gm-text" placeholder="e.g. Number of targets affected: doubled from 2 to 4."></textarea>
+          <p class="note">This field is never auto-computed. Record what the GM allows here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- shikigami amplifications -->
+    <section class="panel" id="shiki-panel" hidden>
+      <h3>Step 2 &mdash; Shikigami Amplification</h3>
+      <p class="note">Rule: <b>&ldquo;If using Maximum Output on a shikigami summoning technique (minimum 3 before any reductions), you instead choose one of the following:&rdquo;</b></p>
+      <div class="field">
+        <span><label class="check"><input type="radio" name="shiki" value="a" checked> Size category +1, and the shikigami deals an additional damage die in necrotic on a hit</label></span>
+      </div>
+      <div class="field">
+        <span><label class="check"><input type="radio" name="shiki" value="b"> Shikigami&rsquo;s HP +half original</label></span>
+        <div class="field" id="shiki-hp-inputs"><span><label for="shiki-hp">Shikigami&rsquo;s original HP</label></span><input type="number" id="shiki-hp" min="1" value="30" inputmode="numeric"></div>
+      </div>
+      <div class="field">
+        <span><label class="check"><input type="radio" name="shiki" value="c"> Shikigami&rsquo;s attack bonus +half your proficiency bonus (rounded up)</label></span>
+        <div class="field" id="shiki-pb-inputs"><span><label for="shiki-pb">Your proficiency bonus</label></span><input type="number" id="shiki-pb" min="2" max="9" value="4" inputmode="numeric"></div>
+      </div>
+    </section>
+
+    <div class="btn-row">
+      <button class="btn btn-gold" id="calc-btn" type="button">Calculate Maximum Output</button>
+    </div>
+
+    <section class="out" id="result-out" hidden>
+      <div class="big" id="result-total"></div>
+      <ul id="result-lines"></ul>
+      <p class="sub" id="result-note"></p>
+    </section>
+
+  </div><!-- /#calc -->
+
+  <p class="src">Source: V6 &sect;7.5 Maximum Output. Rounding: all &ldquo;rounded up&rdquo; per the section header. Touch-based techniques cannot amplify Range. The fifth amplification is a GM ruling, never computed by this tool.</p>
+
+</main>
+
+<script>
+(function(){
+  var gateBtn = document.getElementById('gate-btn'),
+      gateOut = document.getElementById('gate-out'),
+      gateMsg = document.getElementById('gate-msg'),
+      gateSub = document.getElementById('gate-sub'),
+      calc = document.getElementById('calc');
+
+  gateBtn.addEventListener('click', function(){
+    var score = parseInt(document.getElementById('ce-score').value, 10);
+    gateOut.hidden = false;
+    if (isNaN(score) || score < 20) {
+      gateMsg.textContent = '\u274C Maximum Output unavailable';
+      gateSub.textContent = 'Your Cursed Energy score is ' + (isNaN(score) ? '\u2014' : score) + '. Maximum Output requires a Cursed Energy score of 20 or higher. The calculator stays locked until you reach it.';
+      calc.hidden = true;
+    } else {
+      gateMsg.textContent = '\u2705 Maximum Output unlocked';
+      gateSub.textContent = 'Cursed Energy score ' + score + ' — you have learned to use Maximum Output. The calculator is ready below.';
+      calc.hidden = false;
+    }
+  });
+
+  var shikiToggle = document.getElementById('shiki-toggle'),
+      standardPanel = document.getElementById('standard-panel'),
+      shikiPanel = document.getElementById('shiki-panel'),
+      minNote = document.getElementById('min-note'),
+      baseCostEl = document.getElementById('base-cost'),
+      touchBox = document.getElementById('touch-box'),
+      rangeRadio = document.querySelector('input[name="benefit"][value="range"]'),
+      rangeFt = document.getElementById('range-ft');
+
+  function refreshMode(){
+    var shiki = shikiToggle.checked;
+    standardPanel.hidden = shiki;
+    shikiPanel.hidden = !shiki;
+    var min = shiki ? 3 : 5;
+    minNote.innerHTML = 'Minimum CE before any reductions: <b>' + min + '</b>. Additional CE cost is always half the base cost, rounded up.';
+  }
+  shikiToggle.addEventListener('change', refreshMode);
+  refreshMode();
+
+  touchBox.addEventListener('change', function(){
+    rangeRadio.disabled = touchBox.checked;
+    rangeFt.disabled = touchBox.checked;
+    if (touchBox.checked && rangeRadio.checked) {
+      var dmg = document.querySelector('input[name="benefit"][value="damage"]');
+      dmg.checked = true;
+    }
+  });
+
+  function ceil(x){ return Math.ceil(x); }
+
+  document.getElementById('calc-btn').addEventListener('click', function(){
+    var base = parseInt(baseCostEl.value, 10);
+    var shiki = shikiToggle.checked;
+    var min = shiki ? 3 : 5;
+    var out = document.getElementById('result-out'),
+        total = document.getElementById('result-total'),
+        lines = document.getElementById('result-lines'),
+        note = document.getElementById('result-note');
+    lines.innerHTML = '';
+    out.hidden = false;
+
+    if (isNaN(base) || base < 1) {
+      total.textContent = 'Enter a valid CE cost first.';
+      note.textContent = '';
+      return;
+    }
+    if (base < min) {
+      total.textContent = 'Below the minimum: base cost ' + base + ' is under the ' + min + ' CE minimum before any reductions.';
+      note.textContent = 'Maximum Output cannot be applied to this technique.';
+      return;
+    }
+
+    var additional = ceil(base / 2);
+    var spent = base + additional;
+    total.textContent = 'Total CE spent: ' + spent + ' (' + base + ' base + ' + additional + ' Maximum Output)';
+
+    function li(t){
+      var e = document.createElement('li');
+      e.textContent = t;
+      lines.appendChild(e);
+    }
+
+    if (shiki) {
+      var smode = document.querySelector('input[name="shiki"]:checked').value;
+      if (smode === 'a') {
+        li('Amplification: size category +1; the shikigami deals an additional damage die in necrotic on a hit.');
+      } else if (smode === 'b') {
+        var hp = parseInt(document.getElementById('shiki-hp').value, 10) || 0;
+        li('Amplification: shikigami HP ' + hp + ' \u2192 ' + (hp + ceil(hp / 2)) + ' (+' + ceil(hp / 2) + ').');
+      } else {
+        var pb = parseInt(document.getElementById('shiki-pb').value, 10) || 0;
+        li('Amplification: shikigami attack bonus +' + ceil(pb / 2) + ' (half your proficiency bonus ' + pb + ', rounded up).');
+      }
+      note.textContent = 'Additional CE cost: ' + additional + ' (half of ' + base + ', rounded up). Shikigami mode replaces the five standard amplifications.';
+      return;
+    }
+
+    var benefit = document.querySelector('input[name="benefit"]:checked').value;
+    if (benefit === 'range') {
+      var r = parseInt(rangeFt.value, 10) || 0;
+      var add = ceil(r / 2 / 5) * 5; // round UP to the highest 5
+      li('Range: ' + r + ' ft \u2192 ' + (r + add) + ' ft (+' + add + ' ft, half rounded up to the highest 5).');
+    } else if (benefit === 'damage') {
+      var c = parseInt(document.getElementById('dmg-count').value, 10) || 0;
+      var s = parseInt(document.getElementById('dmg-size').value, 10) || 6;
+      li('Damage: add ' + ceil(c / 2) + 'd' + s + ' to one damage roll (half of ' + c + 'd' + s + ', rounded up).');
+    } else if (benefit === 'atkdc') {
+      var mode = document.querySelector('input[name="atkdc-mode"]:checked').value;
+      if (mode === 'atk') {
+        var a = parseInt(document.getElementById('atk-val').value, 10) || 0;
+        li('Attack bonus: +' + a + ' \u2192 +' + (a + ceil(a / 2)) + ' (+' + ceil(a / 2) + ', half rounded up).');
+      } else {
+        var p = parseInt(document.getElementById('pb-val').value, 10) || 0;
+        li('Save DCs: increase by ' + ceil(p / 2) + ' (half your proficiency bonus ' + p + ', rounded up).');
+      }
+    } else if (benefit === 'duration') {
+      var d = parseInt(document.getElementById('dur-val').value, 10) || 0;
+      var unit = document.getElementById('dur-unit').value;
+      if (unit === 'minutes') {
+        var rounds = ceil(d * 10 / 2); // half a minute = 5 rounds, rounded up
+        li('Duration: ' + d + ' minute' + (d === 1 ? '' : 's') + ' \u2192 ' + d + ' minute' + (d === 1 ? '' : 's') + ' + ' + rounds + ' rounds (+half, expressed in rounds).');
+      } else {
+        li('Duration: ' + d + ' rounds \u2192 ' + (d + ceil(d / 2)) + ' rounds (+' + ceil(d / 2) + ').');
+      }
+    } else if (benefit === 'other') {
+      var gm = document.getElementById('gm-text').value.trim();
+      li('GM ruling: ' + (gm ? gm : '(describe the amplified value in the field above)'));
+    }
+    note.textContent = 'Additional CE cost: ' + additional + ' (half of base cost ' + base + ', rounded up). Only one amplification applies per Maximum Output use.';
+  });
+})();
+</script>
+<script>(function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(o){t.classList.toggle('nav-open',o);b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});})();</script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Binding Vow Cards — Ritual Archive Tools</title>
+<link rel="stylesheet" href="../assets/tools.css">
+<style>
+  .vow-card{border:1px solid #30343e;border-radius:14px;background:var(--panel);padding:18px;margin:14px 0}
+  .vow-card.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+  .vow-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .vow-name{font-family:var(--serif);font-size:1.25rem;color:#f2e6c7}
+  .vow-terms{color:#d1cdc3;margin:.4rem 0 1rem}
+  .unapproved{display:inline-block;border:1px solid var(--red);color:#f0a3a8;border-radius:999px;padding:3px 12px;font-size:.78rem;font-weight:800;letter-spacing:.08em}
+  .approved{display:inline-block;border:1px solid var(--gold);color:var(--gold-pale);border-radius:999px;padding:3px 12px;font-size:.78rem;font-weight:800;letter-spacing:.08em}
+  .misfortune td:first-child{font-weight:800;color:var(--gold)}
+  #misResult{font-size:1.2rem}
+  .add-row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+  .add-row .field{margin:0;flex:1;min-width:220px}
+</style>
+</head>
+<body>
+
+<header class="topbar"><div class="nav"><a class="brand" href="../index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a><nav class="navlinks"><a href="../rules.html">Field Guide</a><a href="../builder.html">Character Builder</a><a href="../codex.html">Technique Codex</a><a href="../lore.html">Story So Far</a><a href="index.html" class="is-current">Tools</a></nav><button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">&#x2630;</button><span class="doc-tag">GM &amp; table tools</span></div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Field Tool · V6 §7.1</p>
+    <h1>Binding Vow Cards</h1>
+    <p class="lede">Track active and inactive binding vows at the table — the five canonical vows, multi-party vows, and breaking consequences, straight from V6 §7.1.</p>
+  </section>
+
+  <div class="charbar">
+    <div class="field"><span>Character</span><select id="charSel" aria-label="Character"></select></div>
+  </div>
+  <p class="note" id="charEmpty" hidden>Your character list is empty. <a href="../builder.html">Create a character in the builder</a>, then return here to record their vows.</p>
+
+  <section id="app" hidden>
+    <section class="panel">
+      <h3>Add a vow</h3>
+      <div class="add-row">
+        <div class="field"><span>Template</span><select id="tplSel"></select></div>
+        <button class="btn btn-gold" id="addTplBtn" type="button">Add vow</button>
+      </div>
+    </section>
+
+    <section id="vowList"></section>
+
+    <details class="ref">
+      <summary>Multi-party vows (reference)</summary>
+      <h4>Master and Servant</h4>
+      <p>Two or more sorcerers. The servant takes a restraint decided by the master — CE maximum reduction, range reduction (minimum 5 ft), damage dice reduction (minimum 1 die), or no simple domains/barriers — then unleashes for a number of rounds equal to the master's proficiency bonus: CE maximum doubles and lost CE is regained, or range doubles, or damage dice double. Once per long rest.</p>
+      <h4>Taming</h4>
+      <p>Sorcerer and cursed spirit. The spirit's CR must be no greater than the sorcerer's proficiency bonus. Training takes 8 hours per CR, worked in 8-hour periods; each period requires an Animal Handling check of DC 10 + 2× the spirit's CR, repeated on failure. The spirit is commanded as a bonus action. Attacking the spirit breaks the vow.</p>
+    </details>
+
+    <section class="panel" id="breakingPanel">
+      <h3>Breaking a binding vow</h3>
+      <p>After breaking a <b>multi binding vow</b>, lose all benefits and either gain <b>5 levels of exhaustion for 10 days</b>, or roll d6 misfortune:</p>
+      <div class="table-scroll"><table class="t misfortune">
+        <thead><tr><th>d6</th><th>Misfortune</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Death</td></tr>
+          <tr><td>2</td><td>Lose a limb</td></tr>
+          <tr><td>3</td><td>Lose a sense (d4: 1 Touch, 2 Taste, 3 Smell, 4 Sight)</td></tr>
+          <tr><td>4</td><td>Stats reduced by 2</td></tr>
+          <tr><td>5</td><td>Cannot use CE for 8d4 days</td></tr>
+          <tr><td>6</td><td>Innate technique confiscated for 6d4 days</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">Avoidable if both parties agree to end the vow.</p>
+      <div class="btn-row">
+        <button class="btn" id="rollMisBtn" type="button">Roll d6 misfortune</button>
+      </div>
+      <p id="misResult" class="note" hidden></p>
+    </section>
+
+    <section class="panel">
+      <h3>Propose a custom vow</h3>
+      <p class="note">V6's custom vows are GM-adjudicated — this tool is a proposal form, not a buff generator.</p>
+      <div class="field"><span>Vow name</span><input type="text" id="cvName" maxlength="80" placeholder="e.g. The Silent Road"></div>
+      <div class="grid2">
+        <div class="field"><span>What you give up</span><textarea id="cvGive" placeholder="The restraint…"></textarea></div>
+        <div class="field"><span>What you gain</span><textarea id="cvGain" placeholder="The benefit…"></textarea></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-gold" id="saveCustomBtn" type="button">Save proposal</button>
+      </div>
+      <details class="ref">
+        <summary>V6 anti-abuse patterns (reference)</summary>
+        <ol>
+          <li><b>Togglable vows</b> — a vow that can be switched on and off at will is not a binding vow.</li>
+          <li><b>Not actually giving up anything</b> — if the sacrifice costs you nothing in practice, the GM denies it.</li>
+          <li><b>More CE cost for DC</b> — paying extra CE for a higher save DC is not a vow trade.</li>
+          <li><b>Reaction negation</b> — vows that negate a reaction for free are auto-rejected.</li>
+          <li><b>Mimicry</b> — copying another vow's effect to stack benefits is denied.</li>
+          <li><b>Death-saving vows</b> — vows that only trigger to avoid death are not binding trades.</li>
+          <li><b>Rule-breaking vows</b> — a vow cannot be used to break or bypass core rules.</li>
+          <li><b>Refinement-increasing vows</b> — no vow can grant domain refinement points, never allowed.</li>
+          <li><b>Metagaming vows</b> — vows trading on out-of-character knowledge are denied.</li>
+        </ol>
+      </details>
+    </section>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  function toast(m){var e=document.getElementById('toast');if(!e){e=document.createElement('div');e.className='toast';e.id='toast';document.body.appendChild(e);}e.textContent=m;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('show');},2400);}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);});}
+  function store(k,v){try{if(v===undefined){return JSON.parse(localStorage.getItem(k));}localStorage.setItem(k,JSON.stringify(v));}catch(e){}return null;}
+  function storeRaw(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  function readRaw(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function uid(){return 'v'+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36);}
+
+  var CHARS_KEY='ritual-archive-characters';
+  var ACTIVE_KEY='ra_vows_char';
+  var charId=null;
+
+  var TEMPLATES=[
+    {name:'Overtime',terms:'CE maximum reduced by your CE modifier and technique damage die decreases one tier, 9 AM\u20135 PM. After: temporary CE equal to twice your CE modifier, damage die +2 tiers, lasting PB hours. Cannot change until 1 workweek passes.'},
+    {name:'Revealing One\'s Hand',terms:'Reveal your technique to a creature that understands you: +3 attack and damage with the revealed technique, plus a GM-set bonus. Ends when combat ends. Never twice to the same creature, never to one that already knows it.'},
+    {name:'Mind Over Matter',terms:'+5 CE maximum per limb you give up the use of (no prosthetics).'},
+    {name:'Immediate Activation',terms:'Use a known technique as a reaction/free action, ignoring all requirements but CE cost. Permanent cost: action cost rises one step and the technique gains a new requirement (e.g. Chanting).'},
+    {name:'Favorite Enemy',terms:'1 hour prep on a known creature; choose: advantage on attacks vs it, OR its saves vs your techniques reduced by your PB. Drawback: all other creatures add their PB to saves vs your techniques and your attacks vs them are at disadvantage. Never the same creature twice.'}
+  ];
+
+  function loadChars(){
+    var arr=[];
+    try{arr=JSON.parse(localStorage.getItem(CHARS_KEY))||[];}catch(e){arr=[];}
+    return Array.isArray(arr)?arr:[];
+  }
+  function lsKey(){return 'ra_vows_'+charId;}
+  function loadVows(){
+    var d=store(lsKey());
+    if(!d||!Array.isArray(d.vows)){d={vows:[]};}
+    return d;
+  }
+  function saveVows(d){store(lsKey(),d);}
+
+  function render(){
+    if(!charId)return;
+    var d=loadVows();
+    var list=document.getElementById('vowList');
+    if(!d.vows.length){
+      list.innerHTML='<p class="note">No vows yet. Add one of the five canonical vows above, or propose a custom vow below.</p>';
+      return;
+    }
+    list.innerHTML='';
+    d.vows.forEach(function(v){
+      var card=document.createElement('section');
+      card.className='vow-card'+(v.active?' active':'');
+      var status=v.custom
+        ? (v.approved?'<span class="approved">APPROVED BY GM</span>':'<span class="unapproved">UNAPPROVED \u2014 REQUIRES GM APPROVAL</span>')
+        : '';
+      card.innerHTML=
+        '<div class="vow-head"><div><div class="vow-name">'+esc(v.name)+'</div>'
+        +(status?('<div style="margin-top:6px">'+status+'</div>'):'')+'</div>'
+        +'<span class="tag'+(v.active?' on':'')+'">'+(v.active?'ACTIVE':'INACTIVE')+'</span></div>'
+        +'<p class="vow-terms">'+esc(v.terms)+'</p>';
+      var row=document.createElement('div');
+      row.className='btn-row';
+      var tog=document.createElement('button');
+      tog.className='btn btn-small'; tog.type='button';
+      tog.textContent=v.active?'Deactivate':'Activate';
+      tog.addEventListener('click',function(){
+        var dd=loadVows();
+        dd.vows.forEach(function(x){if(x.id===v.id)x.active=!x.active;});
+        saveVows(dd); render();
+      });
+      row.appendChild(tog);
+      if(v.custom){
+        var lab=document.createElement('label');
+        lab.className='check';
+        var cb=document.createElement('input');
+        cb.type='checkbox'; cb.checked=!!v.approved;
+        cb.addEventListener('change',function(){
+          var dd=loadVows();
+          dd.vows.forEach(function(x){if(x.id===v.id)x.approved=cb.checked;});
+          saveVows(dd); render();
+          toast(cb.checked?'Custom vow approved by GM.':'Approval revoked.');
+        });
+        lab.appendChild(cb);
+        var sp=document.createElement('span');
+        sp.textContent='GM approval (GM control — grants nothing until ticked)';
+        lab.appendChild(sp);
+        row.appendChild(lab);
+      }
+      var del=document.createElement('button');
+      del.className='btn btn-small'; del.type='button'; del.textContent='Delete';
+      del.addEventListener('click',function(){
+        if(!confirm('Delete this vow card?'))return;
+        var dd=loadVows();
+        dd.vows=dd.vows.filter(function(x){return x.id!==v.id;});
+        saveVows(dd); render(); toast('Vow deleted.');
+      });
+      row.appendChild(del);
+      card.appendChild(row);
+      list.appendChild(card);
+    });
+  }
+
+  function initChars(){
+    var sel=document.getElementById('charSel');
+    var chars=loadChars();
+    sel.innerHTML='';
+    chars.forEach(function(c){
+      var o=document.createElement('option');
+      o.value=c.id; o.textContent=c.name||'(unnamed)';
+      sel.appendChild(o);
+    });
+    var saved=readRaw(ACTIVE_KEY);
+    var found=chars.some(function(c){return c.id===saved;});
+    if(found)sel.value=saved;
+    else if(chars.length)sel.selectedIndex=0;
+    charId=chars.length?(sel.value||chars[0].id):null;
+    document.getElementById('charEmpty').hidden=chars.length>0;
+    document.getElementById('app').hidden=chars.length===0;
+    sel.disabled=chars.length===0;
+
+    var tpl=document.getElementById('tplSel');
+    tpl.innerHTML='';
+    TEMPLATES.forEach(function(t,i){
+      var o=document.createElement('option');
+      o.value=i; o.textContent=t.name;
+      tpl.appendChild(o);
+    });
+    render();
+  }
+
+  document.getElementById('charSel').addEventListener('change',function(){
+    charId=this.value||null;
+    storeRaw(ACTIVE_KEY,charId||'');
+    render();
+  });
+
+  document.getElementById('addTplBtn').addEventListener('click',function(){
+    var t=TEMPLATES[Number(document.getElementById('tplSel').value)]||TEMPLATES[0];
+    var d=loadVows();
+    d.vows.push({id:uid(),name:t.name,terms:t.terms,active:true,custom:false,approved:true});
+    saveVows(d); render();
+    toast('Vow added: '+t.name);
+  });
+
+  document.getElementById('saveCustomBtn').addEventListener('click',function(){
+    var name=document.getElementById('cvName').value.trim();
+    var give=document.getElementById('cvGive').value.trim();
+    var gain=document.getElementById('cvGain').value.trim();
+    if(!name){toast('Give the vow a name.');return;}
+    if(!give){toast('Describe what you give up.');return;}
+    if(!gain){toast('Describe what you gain.');return;}
+    var d=loadVows();
+    d.vows.push({id:uid(),name:name,terms:'GIVES UP: '+give+' — GAINS: '+gain,active:false,custom:true,approved:false});
+    saveVows(d);
+    document.getElementById('cvName').value='';
+    document.getElementById('cvGive').value='';
+    document.getElementById('cvGain').value='';
+    render();
+    toast('Proposal saved — unapproved until your GM approves it.');
+  });
+
+  var MIS=['','Death','Lose a limb','Lose a sense (d4: 1 Touch, 2 Taste, 3 Smell, 4 Sight)','Stats reduced by 2','Cannot use CE for 8d4 days','Innate technique confiscated for 6d4 days'];
+  document.getElementById('rollMisBtn').addEventListener('click',function(){
+    var r=1+Math.floor(Math.random()*6);
+    var el=document.getElementById('misResult');
+    el.hidden=false;
+    el.innerHTML='Rolled <b>'+r+'</b>: '+esc(MIS[r]);
+    el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  });
+
+  initChars();
+})();
+</script>
+<script>(function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(o){t.classList.toggle('nav-open',o?'true':'false');b.textContent=o?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});})();</script>
+
+</body>
+</html>

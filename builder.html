@@ -247,6 +247,19 @@ h1 .amp{color:var(--red)}
 .use-pip.is-used{background:var(--ink);border-color:var(--ink)}
 .trk-toast{margin-top:8px;min-height:1.4em;font-size:.85rem;opacity:0;transition:opacity .3s}
 .trk-toast.show{opacity:1}
+.cond-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.cond-chip{border:1px solid var(--line2);border-radius:20px;padding:6px 12px;font-size:.8rem;background:transparent;color:var(--ink);cursor:pointer;min-height:44px}
+.cond-chip.is-on{background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:bold}
+.exh-row{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.exh-pips{display:flex;gap:4px;flex-wrap:wrap}
+.exh-pip{min-width:44px;min-height:44px;border-radius:6px;border:2px solid var(--line2);background:transparent;color:var(--ink);cursor:pointer;font-size:.85rem}
+.exh-pip.is-on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.inj-card{border:1px solid var(--line2);border-radius:6px;padding:8px 10px;margin-top:8px}
+.bt-tier{border:1px solid var(--line2);border-radius:6px;padding:8px 10px;margin-top:8px}
+.zone-banner{background:#f3e6c8;border:2px solid #b98a2f;border-radius:6px;padding:8px 10px;margin-top:8px}
+.jrnl-entry{border-left:3px solid #b98a2f;padding:6px 10px;margin:8px 0;background:rgba(185,138,47,.07)}
+.shik-card{border:1px solid var(--line2);border-radius:8px;padding:10px 12px;margin-top:8px}
+.sus-row{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
 .sheet-sec>h3{font-family:var(--serif);font-size:1.25rem;margin:0 0 14px;letter-spacing:1px;text-transform:uppercase;font-size:1.05rem}
 .sheet-sec>h3 .orn{color:var(--red);letter-spacing:0}
 .ab-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
@@ -1790,6 +1803,14 @@ function migrateChar(c){
   if(!Array.isArray(c.equipment)) c.equipment=[];
   if(!Array.isArray(c.cursedTools)) c.cursedTools=[];
   if(!Array.isArray(c.trackers)) c.trackers=[];
+  if(!c.breakthroughs||typeof c.breakthroughs!=='object') c.breakthroughs={};
+    if(typeof c.breakthroughs.flashes!=='number') c.breakthroughs.flashes=0;
+    if(typeof c.breakthroughs.awakenings!=='number') c.breakthroughs.awakenings=0;
+    if(!Array.isArray(c.breakthroughs.log)) c.breakthroughs.log=[];
+  if(!Array.isArray(c.journal)) c.journal=[];
+  if(!('classUnderstanding' in c)) c.classUnderstanding='';
+  if(!('rctOptIn' in c)) c.rctOptIn=false;
+  if(!('shikigami' in c)) c.shikigami=null;
   if(!('mindset' in c)) c.mindset='';
   if(!c.classLevels||!Object.keys(c.classLevels).length){
     c.classLevels={}; for(var l=1;l<=(c.level||1);l++) c.classLevels[l]=c.cls;
@@ -3987,6 +4008,48 @@ function cursedToolListHTML(){
 STEP_VALID[8]=function(){ return {ok:true}; };
 
 /* ═══════════ STEP 9 — SHEET ═══════════ */
+function bindSheetExtras(){ bindJournal(); bindShikigami(); }
+function bindJournal(){
+  function once(el,fn){ if(el&&!el._b){ el._b=true; el.addEventListener('click',fn); } }
+  once($('jrnlAdd'),function(){
+    var t=$('jrnlText').value.trim(); if(!t) return;
+    if(!Array.isArray(char.journal)) char.journal=[];
+    char.journal.push({date:new Date().toLocaleDateString(), text:t});
+    upsertChar(char);
+    var sec=$('jrnlSec'); if(sec) sec.outerHTML=journalSheetHTML();
+    bindJournal();
+  });
+  document.querySelectorAll('[data-jrnl-rm]').forEach(function(x){
+    if(x._b) return; x._b=true;
+    x.addEventListener('click',function(){
+      char.journal.splice(parseInt(x.getAttribute('data-jrnl-rm'),10),1); upsertChar(char);
+      var sec=$('jrnlSec'); if(sec) sec.outerHTML=journalSheetHTML();
+      bindJournal();
+    });
+  });
+}
+function bindShikigami(){
+  function once(el,fn){ if(el&&!el._b){ el._b=true; el.addEventListener('click',fn); } }
+  function refresh(){ var sec=$('shikSec'); if(sec) sec.outerHTML=shikigamiSheetHTML(); bindShikigami(); }
+  once($('shikNew'),function(){
+    char.shikigami={name:'',hpMax:10,ac:12,attacks:''}; upsertChar(char); refresh();
+  });
+  once($('shikSave'),function(){
+    char.shikigami={name:$('shikName').value.trim(), hpMax:Math.max(1,parseInt($('shikHpMax').value,10)||10), ac:Math.max(0,parseInt($('shikAc').value,10)||0), attacks:$('shikAtk').value.trim()};
+    upsertChar(char); refresh();
+  });
+  once($('shikDel'),function(){ char.shikigami=null; upsertChar(char); refresh(); });
+  var sh=$('shikHp');
+  if(sh&&char.shikigami&&!sh._b){
+    sh._b=true;
+    var st2=trackerState();
+    function setSh(v){ st2.shikHp=Math.max(0,Math.min(char.shikigami.hpMax,v)); sh.value=st2.shikHp; try{ localStorage.setItem(trackerKey(),JSON.stringify(st2)); }catch(e){} }
+    sh.addEventListener('change',function(e){ setSh(parseInt(e.target.value,10)||0); });
+    var sm=$('shikDmg'), sl=$('shikHeal');
+    if(sm&&!sm._b){ sm._b=true; sm.addEventListener('click',function(){ var a=Math.max(1,parseInt($('shikAmt').value,10)||0); setSh((st2.shikHp==null?char.shikigami.hpMax:st2.shikHp)-a); }); }
+    if(sl&&!sl._b){ sl._b=true; sl.addEventListener('click',function(){ var a=Math.max(1,parseInt($('shikAmt').value,10)||0); setSh((st2.shikHp==null?char.shikigami.hpMax:st2.shikHp)+a); }); }
+  }
+}
 function stepSheet(body){
   body.innerHTML='<h2 class="no-print">Step 9 — Character Sheet</h2><p class="sub no-print">Review the finished sheet. <b>Save</b> stores it on this device; <b>Print</b> renders a clean paper sheet.</p><div id="sheetWrap">'+sheetHTML()+'</div>'+
   '<div class="wiz-nav no-print" style="border-top:none;margin-top:8px;padding-top:0">'+
@@ -3995,6 +4058,7 @@ function stepSheet(body){
   '<button class="btn btn-ghost" id="btnNew2" type="button">＋ New character</button></div>'+
   '<p class="store-note no-print">Stored on this device only.</p>';
   bindTrackers(hpMax(), hasCEPool()?ceMax():null);
+  bindSheetExtras();
   $('btnSave').addEventListener('click',function(){
     var c=deep(char);
     if(upsertChar(c)){ alert('Saved "'+(c.name||'Unnamed')+'" to this device.'); renderManager(); }
@@ -4185,12 +4249,111 @@ function skillsSheetHTML(ab,P){
     '<div class="skill-cols">'+half(SKILL_LIST.slice(0,9))+half(SKILL_LIST.slice(9))+'</div>'+
     '<p class="small">Shaded rows are proficient (ability modifier + proficiency bonus); expertise doubles the bonus (PB +'+P+' \u2192 +'+(2*P)+').</p></div>';
 }
+/* ═══════════ BREAKTHROUGHS · CE MANIPULATION · RCT · CONDITIONS ═══════════
+   V6 §7.2 (Breakthroughs), §7.4 (Limb Damage), §7.6 (The Zone). */
+function ceScoreNow(){ try{ return (abilitiesAt(char.level)[char.ceAbility]||0); }catch(e){ return 0; } }
+function ceModNow(){ if(!hasCEPool()||!char.ceAbility) return 0; try{ return mod(abilitiesAt(char.level)[char.ceAbility]||10); }catch(e){ return 0; } }
+function btData(){
+  var b=char.breakthroughs;
+  if(!b||typeof b!=='object'){ b={}; char.breakthroughs=b; }
+  if(typeof b.flashes!=='number') b.flashes=0;
+  if(typeof b.awakenings!=='number') b.awakenings=0;
+  if(!Array.isArray(b.log)) b.log=[];
+  return b;
+}
+function btTotal(){ var b=btData(); return (b.flashes||0)+(b.awakenings||0); }
+/* 0 none · 1 skilled (1 breakthrough, 16+ CE) · 2 advanced (4) · 3 mastered (8) */
+function ceManipTier(){ if(!hasCEPool()) return 0; var t=btTotal(), s=ceScoreNow(); if(t>=8&&s>=16) return 3; if(t>=4&&s>=16) return 2; if(t>=1&&s>=16) return 1; return 0; }
+var CE_MANIP_NAMES=['No Awakened Understanding','Skilled Cursed Energy Manipulation','Advanced Cursed Energy Manipulation','Mastered Cursed Energy Manipulation'];
+var CLASS_UNDERSTANDINGS={
+ 'Juggernaut':{name:'Skilled Cursed Reinforcement',text:'When you use Cursed Reinforcement, you can instead gain 10 temporary hit points per CE spent. You can do this a number of times equal to your proficiency bonus each day.'},
+ 'Scout':{name:'Reliable Skill',text:'When you make a skill check that you are proficient with, you can treat any roll of a 9 or lower as a 10.'},
+ 'Strategist':{name:'Enhanced Creativity',text:'You gain an additional two Technique Creativity options. You can reduce a technique\u2019s cost by 1 (min cost of 1) a number of times each day equal to your proficiency bonus.'},
+ 'Shikigami User':{name:'Cursed Bond',text:'Your Shikigami Companion (or one shikigami, cursed corpse, or tamed cursed spirit) can use Cursed Strike a number of times equal to your proficiency bonus each day, benefiting from your Awakened Understanding.'},
+ 'Support Specialist':{name:'Positive Energy Master',text:'You gain a pool of healing separate from your RCT pool containing hit points equal to twice your level. Draw any amount as a bonus action to heal yourself (another creature you touch at 5th level).'},
+ 'Warrior':{name:'Destructive Cursed Strike',text:'When you use Cursed Strike, you deal additional necrotic damage equal to your CE modifier a number of times equal to twice your proficiency bonus each day.'}
+};
+function smallRoll(expr){ var m=/^(\d+)d(\d+)([+-]\d+)?$/.exec(String(expr).replace(/\s+/g,'')); if(!m) return null; var n=+m[1],d=+m[2],md=+(m[3]||0),t=md,i; for(i=0;i<n;i++) t+=1+Math.floor(Math.random()*d); return t; }
+function rctGrantedByClass(){
+  try{ var CF=window.CLASS_FEATURES||{}, hit=false;
+    classesTaken().forEach(function(c){ var cl=classLevelCount(c,char.level);
+      (CF[c]||[]).forEach(function(f){ if((f.level||1)<=cl && /reverse cursed technique/i.test(f.name||'')) hit=true; }); });
+    return hit; }catch(e){ return false; }
+}
+function grantsRCT(){
+  if(!hasCEPool()) return false;
+  if((char.boons||[]).indexOf('rct-master')>=0) return true;
+  if(btData().awakenings>0) return true;
+  if(char.rctOptIn) return true;
+  return rctGrantedByClass();
+}
+function rctMax(){ if(!hasCEPool()) return null; var cm=ceModNow(); if(cm<=0) return 0; var m=5*char.level*cm; if((char.boons||[]).indexOf('rct-master')>=0) m*=2; return m; }
+function rctPerCE(){ var v=10; if((char.boons||[]).indexOf('rct-master')>=0) v*=2; if(rctGrantedByClass()) v=20; return v; }
+var EXHAUSTION_FX=['No exhaustion','Disadvantage on ability checks','Speed halved','Disadvantage on attack rolls and saving throws','Hit point maximum halved','Speed reduced to 0','Death'];
+var CONDITIONS=['blinded','charmed','deafened','frightened','grappled','incapacitated','invisible','paralyzed','petrified','poisoned','prone','restrained','stunned','unconscious'];
+var LIMB_TABLE=[
+ {n:'Right Leg',req:'Con mod \u00d7 level',broken:'Movement halved; can\u2019t jump.',lost:'You lose your right leg.'},
+ {n:'Left Leg',req:'Con mod \u00d7 level',broken:'Movement halved; can\u2019t jump.',lost:'You lose your left leg.'},
+ {n:'Right Arm',req:'Con mod \u00d7 level',broken:'Skill checks and attack rolls with this arm have disadvantage.',lost:'Skill checks and attack rolls with this arm are impossible.'},
+ {n:'Left Arm',req:'Con mod \u00d7 level',broken:'Skill checks and attack rolls with this arm have disadvantage.',lost:'Skill checks and attack rolls with this arm are impossible.'},
+ {n:'Torso',req:'Con mod \u00d7 (level \u00d7 2)',broken:'Hit point maximum halved.',lost:'Death, unless you can live without a torso.'},
+ {n:'Head',req:'Con mod \u00d7 (level \u00d7 2)',broken:'Unconscious.',lost:'Death, unless you can live without a head.'}
+];
+/* ── sheet-body display: auto-updating CE Manipulation block ── */
+function ceManipSheetHTML(){
+  var html='<div class="sheet-sec"><h3><span class="orn">\u2756</span> Cursed Energy Manipulation</h3>';
+  if(!hasCEPool()){ html+='<p class="small">None — no CE pool (Heavenly Restriction).</p></div>'; return html; }
+  var b=btData(), t=b.flashes+b.awakenings, tier=ceManipTier(), P=pb(char.level), cm=ceModNow();
+  html+='<p><b>Breakthroughs:</b> '+t+' ('+(b.flashes||0)+' black flashes \u00b7 '+(b.awakenings||0)+' RCT awakenings)</p>';
+  html+='<p><b>Awakened Understanding:</b> '+esc(CE_MANIP_NAMES[tier])+(tier===0?'<br><span class="small">Next: '+(t<1?'land a black flash or awaken RCT':'reach 16+ CE score (now '+ceScoreNow()+')')+' to unlock Skilled.</span>':'')+'</p>';
+  if(tier>=1){
+    html+='<ul style="margin:6px 0 0;padding-left:1.3em">';
+    html+='<li class="small"><b>Cursed Strike.</b> On a hit, spend up to '+(tier===1?P:(cm+P))+' CE: +'+(tier===1?'1d10':tier===2?'2d6':'2d8')+' necrotic damage per CE.'+(tier===3?' May also spend up to '+P+' CE to add to an attack roll.':'')+(char.classUnderstanding==='Warrior'?' <b>Warrior:</b> +'+cm+' necrotic, up to '+(2*P)+'\u00d7/day.':'')+'</li>';
+    html+='<li class="small"><b>Cursed Reinforcement.</b> As '+(tier===1?'an action':'an action, bonus action, or reaction')+', spend up to '+(tier===1?cm:(cm+P))+' CE: gain 5 temporary HP per CE'+(char.classUnderstanding==='Juggernaut'?' (10 per CE with Juggernaut understanding, '+P+'\u00d7/day)':'')+'.</li>';
+    if(tier>=2) html+='<li class="small"><b>Efficiency.</b> Technique base CE costs reduced by '+(tier-1)+' (minimum 1).</li>';
+    html+='</ul>';
+  }
+  if(t>=2){ var u=char.classUnderstanding, uo=u?CLASS_UNDERSTANDINGS[u]:null;
+    html+='<p class="small" style="margin-top:8px"><b>Class-Specific Understanding:</b> '+(uo?esc(uo.name)+' — '+esc(uo.text):'eligible — choose one on the Trackers tab.')+'</p>'; }
+  var log=(b.log||[]).slice(-5);
+  if(log.length) html+='<p class="small" style="margin-top:8px"><b>Recent:</b> '+log.map(esc).join(' \u00b7 ')+'</p>';
+  html+='</div>';
+  return html;
+}
+function isShikigamiUser(){ try{ return classesTaken().indexOf('Shikigami User')>=0; }catch(e){ return false; } }
+function shikigamiSheetHTML(){
+  if(!isShikigamiUser()&&!char.shikigami) return '';
+  var html='<div class="sheet-sec" id="shikSec"><h3><span class="orn">\u2756</span> Shikigami Companion</h3>';
+  var s=char.shikigami;
+  if(!s){ html+='<p class="small">No companion recorded.</p><button type="button" class="btn no-print" id="shikNew">\uFF0B New companion</button></div>'; return html; }
+  var st=trackerState(), hp=st.shikHp==null?s.hpMax:Math.min(st.shikHp,s.hpMax);
+  html+='<div class="shik-card"><p style="font-family:var(--serif);font-weight:bold;font-size:1.1rem;margin:0">'+esc(s.name||'Unnamed companion')+'</p>'+
+   '<p class="small">HP <input id="shikHp" type="number" min="0" max="'+s.hpMax+'" value="'+hp+'" style="width:64px" aria-label="Companion HP"> / '+s.hpMax+' \u00b7 AC '+s.ac+'</p>'+
+   '<div class="tracker-controls no-print"><input id="shikAmt" type="number" min="1" value="5" style="width:56px" aria-label="Amount"><button type="button" class="btn" id="shikDmg">Damage</button><button type="button" class="btn" id="shikHeal">Heal</button></div>'+
+   (s.attacks?'<p class="small" style="white-space:pre-wrap;margin-top:6px">'+esc(s.attacks)+'</p>':'')+
+   '<details class="no-print" style="margin-top:6px"><summary class="small">Edit companion</summary>'+
+   '<div class="tracker-controls" style="margin-top:6px"><input id="shikName" value="'+esc(s.name||'')+'" placeholder="Name" style="flex:1" aria-label="Companion name">'+
+   '<input id="shikHpMax" type="number" min="1" value="'+s.hpMax+'" style="width:70px" aria-label="Max HP">'+
+   '<input id="shikAc" type="number" min="0" value="'+s.ac+'" style="width:60px" aria-label="AC"></div>'+
+   '<textarea id="shikAtk" rows="2" style="width:100%;margin-top:6px" placeholder="Attacks / traits">'+esc(s.attacks||'')+'</textarea>'+
+   '<div class="tracker-controls" style="margin-top:6px"><button type="button" class="btn" id="shikSave">Save companion</button>'+
+   '<button type="button" class="btn btn-ghost" id="shikDel">Remove</button></div></details></div></div>';
+  return html;
+}
+function journalSheetHTML(){
+  var j=char.journal||[];
+  var html='<div class="sheet-sec" id="jrnlSec"><h3><span class="orn">\u2756</span> Session Journal</h3>';
+  html+= j.length? j.map(function(e,i){ return '<div class="jrnl-entry"><div class="small" style="opacity:.7">'+esc(e.date)+'</div><div style="white-space:pre-wrap">'+esc(e.text)+'</div><button type="button" class="btn no-print" data-jrnl-rm="'+i+'" style="padding:2px 8px;font-size:.75rem;margin-top:4px">Delete</button></div>'; }).join('')
+    : '<p class="small" style="opacity:.6">No entries yet.</p>';
+  html+='<div class="no-print" style="margin-top:8px"><textarea id="jrnlText" rows="2" style="width:100%" placeholder="What happened this session?"></textarea><button type="button" class="btn" id="jrnlAdd" style="margin-top:6px">Add entry</button></div></div>';
+  return html;
+}
 /* ═══════════ SHEET TRACKERS ═══════════
    Interactive HP/CE/use trackers on the generated sheet.
    Persisted per character in localStorage; hidden on print. */
 function trackerKey(){ return 'ra_trackers_'+(char.id||'noid'); }
 function trackerState(){
-  var d={ hp:null, tempHp:0, ce:null, uses:{} }; /* uses: {trackerId: usedCount} */
+  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null };
   try{
     var raw=localStorage.getItem(trackerKey());
     if(raw) d=Object.assign(d, JSON.parse(raw));
@@ -4199,6 +4362,94 @@ function trackerState(){
   return d;
 }
 function trackerSave(st){ try{ localStorage.setItem(trackerKey(), JSON.stringify(st)); }catch(e){} }
+/* ── new tracker card bodies ── */
+function rctCardHTML(st){
+  var m=rctMax(), cur=st.rct==null?m:Math.min(st.rct,m);
+  var h='<div class="tracker-title"><span>Reverse Cursed Technique</span><span>Pool '+cur+' / '+m+'</span></div>';
+  if(!grantsRCT()){
+    h+='<p class="small">No RCT source detected (class feature, boon, or breakthrough awakening).</p><button type="button" class="btn" id="trkRctEnable">My character has RCT</button>';
+    return h;
+  }
+  var per=rctPerCE(), cm=ceModNow();
+  h+='<div class="tracker-num"><input id="trkRct" type="number" min="0" max="'+m+'" value="'+cur+'" aria-label="RCT pool"><span>/ '+m+'</span></div>'+
+   '<p class="small">Bonus action or reaction (1/round): spend up to '+cm+' CE &rarr; '+per+' HP per CE from the pool. Pool recovers 10 HP every 2 rounds; empty = burnout. Full refill on long rest.</p>'+
+   '<div class="tracker-controls"><input id="trkRctCe" type="number" min="1" value="1" style="width:56px" aria-label="CE to spend">'+
+   '<button type="button" class="btn" id="trkRctHeal">Heal ('+per+'&times;CE)</button>'+
+   '<button type="button" class="btn" id="trkRctTick">+10 pool (2 rds)</button></div>';
+  return h;
+}
+function btCardHTML(st){
+  var b=btData(), t=(b.flashes||0)+(b.awakenings||0), tier=ceManipTier(), P=pb(char.level), cm=ceModNow();
+  var h='<div class="tracker-title"><span>Breakthroughs</span><span>'+t+' total</span></div>';
+  h+='<div class="tracker-controls"><button type="button" class="btn" id="trkBtFlash">\u26a1 Black Flash</button><button type="button" class="btn" id="trkBtAwake">\u271a RCT Awakening</button></div>';
+  var next = tier>=3?'':tier===2?'Mastered at 8 breakthroughs':tier===1?'Advanced at 4 breakthroughs':(t<1?'Skilled at 1 breakthrough + 16 CE score':'Skilled needs 16+ CE score (now '+ceScoreNow()+')');
+  h+='<p class="small" style="margin:6px 0"><b>'+esc(CE_MANIP_NAMES[tier])+'</b>'+(next?' <span style="opacity:.7">\u2014 next: '+esc(next)+'</span>':'')+'</p>';
+  if(tier>=1){
+    var dice=tier===1?'1d10':tier===2?'2d6':'2d8', cap=tier===1?P:cm+P, rcap=tier===1?cm:cm+P;
+    h+='<div class="bt-tier"><b>Cursed Strike</b><p class="small">On a hit, spend CE &rarr; +'+dice+' necrotic per CE (max '+cap+' CE).</p>'+
+     '<div class="tracker-controls"><input id="trkStrikeCe" type="number" min="1" value="1" style="width:56px" aria-label="CE for Cursed Strike">'+
+     (char.classUnderstanding==='Warrior'?'<label class="small"><input type="checkbox" id="trkWarChk" checked> Warrior +'+cm+'</label>':'')+
+     '<button type="button" class="btn" id="trkStrikeBtn">Strike</button></div><p class="small" id="trkStrikeOut"></p>'+
+     '<b>Cursed Reinforcement</b><p class="small">As '+(tier===1?'an action':'an action, bonus action, or reaction')+', spend CE &rarr; '+(char.classUnderstanding==='Juggernaut'?'10':'5')+' temp HP per CE (max '+rcap+' CE).'+(char.classUnderstanding==='Juggernaut'?' Juggernaut '+P+'\u00d7/day: '+(st.jugReinf||0)+'/'+P+' used.':'')+'</p>'+
+     '<div class="tracker-controls"><input id="trkReinfCe" type="number" min="1" value="1" style="width:56px" aria-label="CE for reinforcement"><button type="button" class="btn" id="trkReinfBtn">Reinforce</button></div></div>';
+    if(tier>=2) h+='<p class="small" style="margin-top:6px"><b>Efficiency:</b> technique CE costs \u2212'+(tier-1)+' (min 1) \u2014 apply when spending.</p>';
+  }
+  if(t>=2){
+    var opts=classesTaken().filter(function(c){ return CLASS_UNDERSTANDINGS[c]; });
+    if(opts.length){
+      h+='<div style="margin-top:8px"><b class="small">Class-Specific Understanding</b> <span class="small" style="opacity:.7">(one only, V6 optional rule)</span><div class="tracker-controls"><select id="trkUndSel" aria-label="Class understanding"><option value="">\u2014 choose \u2014</option>'+
+       opts.map(function(c){ return '<option value="'+esc(c)+'"'+(char.classUnderstanding===c?' selected':'')+'>'+esc(c)+' \u2014 '+esc(CLASS_UNDERSTANDINGS[c].name)+'</option>'; }).join('')+'</select></div>'+
+       (char.classUnderstanding&&CLASS_UNDERSTANDINGS[char.classUnderstanding]?'<p class="small">'+esc(CLASS_UNDERSTANDINGS[char.classUnderstanding].text)+'</p>':'')+'</div>';
+    if(char.classUnderstanding==='Support Specialist'){
+      var pm=2*char.level, pc=st.posPool==null?pm:Math.min(st.posPool,pm);
+      h+='<div class="bt-tier"><b>Positive Energy Pool</b> <span class="small">'+pc+' / '+pm+' HP (separate from RCT)</span>'+
+       '<div class="tracker-controls"><input id="trkPosAmt" type="number" min="1" value="5" style="width:56px" aria-label="HP to draw">'+
+       '<button type="button" class="btn" id="trkPosDraw">Draw (bonus action)</button>'+
+       '<button type="button" class="btn" id="trkPosReset">Refill</button></div>'+
+       '<p class="small" style="opacity:.7">Heal yourself; at 5th level, another creature you touch.</p></div>';
+    }
+    }
+  }
+  if(st.zoneRounds>0){
+    var zs=st.zoneStacks||1;
+    h+='<div class="zone-banner"><b>\u{1F525} THE ZONE \u2014 '+st.zoneRounds+' rounds left \u00b7 \u00d7'+zs+' stacked</b><p class="small">Advantage on attacks \u00b7 +'+zs+' crit range \u00b7 +'+zs+' black flash range \u00b7 burnout recovered \u00b7 RCT pool recovered.</p>'+
+     '<div class="tracker-controls"><button type="button" class="btn" id="trkZoneMinus">\u22121 round</button><button type="button" class="btn" id="trkZoneEnd">End Zone</button></div></div>';
+  }
+  return h;
+}
+function exhCardHTML(st){
+  var ex=st.exhaustion||0, h='<div class="tracker-title"><span>Exhaustion &amp; Conditions</span></div>';
+  h+='<div class="exh-row"><span class="small"><b>Exhaustion</b></span><span class="exh-pips">';
+  for(var i=0;i<=6;i++) h+='<button type="button" class="exh-pip'+(ex>=i&&i>0?' is-on':'')+'" data-exh="'+i+'" aria-label="Exhaustion '+i+'">'+i+'</button>';
+  h+='</span></div><p class="small">'+esc(EXHAUSTION_FX[ex]||'')+'</p>';
+  h+='<div class="small" style="margin-top:4px"><b>Conditions</b></div><div class="cond-chips">';
+  CONDITIONS.forEach(function(c){ h+='<button type="button" class="cond-chip'+((st.conditions||[]).indexOf(c)>=0?' is-on':'')+'" data-cond="'+c+'">'+c+'</button>'; });
+  h+='</div><p class="small" style="margin-top:4px;opacity:.7">V6: domain burnout inflicts 2 levels; breaking a binding vow inflicts 5 levels for 10 days; long rest removes 1 level.</p>';
+  return h;
+}
+function injCardHTML(st){
+  var h='<div class="tracker-title"><span>Injuries</span><span>'+(st.injuries||[]).length+'</span></div>';
+  (st.injuries||[]).forEach(function(inj,idx){
+    var L=LIMB_TABLE[inj.limb]||LIMB_TABLE[0];
+    h+='<div class="inj-card"><b>'+esc(L.n)+' \u2014 '+(inj.sev==='lost'?'Lost':'Broken')+'</b><p class="small">'+esc(inj.sev==='lost'?L.lost:L.broken)+'</p>'+
+     '<div class="tracker-controls"><button type="button" class="btn" data-inj-regen="'+idx+'">Regenerate (20 RCT)</button><button type="button" class="btn btn-ghost" data-inj-rm="'+idx+'">Remove</button></div></div>';
+  });
+  if(!(st.injuries||[]).length) h+='<p class="small" style="opacity:.6">No injuries recorded.</p>';
+  h+='<div class="tracker-controls" style="margin-top:8px"><select id="trkInjLimb" aria-label="Limb">'+LIMB_TABLE.map(function(L,i){ return '<option value="'+i+'">'+esc(L.n)+'</option>'; }).join('')+'</select>'+
+   '<select id="trkInjSev" aria-label="Severity"><option value="broken">Broken</option><option value="lost">Lost</option></select>'+
+   '<button type="button" class="btn" id="trkInjRoll">\u{1F3B2} d6</button><button type="button" class="btn" id="trkInjAdd">Add</button></div>'+
+   '<p class="small" style="margin-top:4px;opacity:.7">V6 \u00a77.4 \u2014 only features with limb-removing effects use this table. Removing a limb requires double the listed damage Con mod \u00d7 level (torso/head: Con mod \u00d7 level \u00d7 2).</p>';
+  return h;
+}
+function susCardHTML(st){
+  var h='<div class="tracker-title"><span>Sustained Effects</span></div>';
+  (st.sustained||[]).forEach(function(s){
+    h+='<div class="sus-row"><span><b>'+esc(s.name)+'</b> \u2014 '+s.rounds+' rounds left</span><button type="button" class="btn" data-sus-minus="'+s.id+'">\u22121 rd</button><button type="button" class="btn btn-ghost" data-sus-rm="'+s.id+'">\u2715</button></div>';
+  });
+  if(!(st.sustained||[]).length) h+='<p class="small" style="opacity:.6">None active.</p>';
+  h+='<div class="tracker-controls" style="margin-top:8px"><input id="trkSusName" type="text" placeholder="e.g. Domain Expansion" style="flex:1" aria-label="Effect name"><input id="trkSusRds" type="number" min="1" value="10" style="width:60px" aria-label="Rounds"><button type="button" class="btn" id="trkSusAdd">Sustain</button></div>';
+  return h;
+}
 function trackerHTML(hpMaxV, ceMaxV){
   var st=trackerState();
   var hpCur = st.hp==null?hpMaxV:Math.min(st.hp, hpMaxV);
@@ -4216,7 +4467,8 @@ function trackerHTML(hpMaxV, ceMaxV){
     '<button type="button" class="btn" id="trkTempSet">Set</button><button type="button" class="btn" id="trkTempClear">Clear</button></div></div>';
   /* CE */
   if(ceMaxV!=null){
-    html+='<div class="tracker-card"><div class="tracker-title"><span>Cursed Energy</span><span>Max '+ceMaxV+'</span></div>'+
+    var _eff=ceManipTier();
+  html+='<div class="tracker-card"><div class="tracker-title"><span>Cursed Energy'+(_eff>=2?' <span class="small" style="opacity:.7">(Efficiency −'+(_eff-1)+')</span>':'')+'</span><span>Max '+ceMaxV+'</span></div>'+
       '<div class="tracker-num"><input id="trkCe" type="number" min="0" max="'+ceMaxV+'" value="'+ceCur+'" aria-label="Current cursed energy"><span>/ '+ceMaxV+'</span></div>'+
       '<div class="tracker-controls"><input id="trkCeAmt" type="number" min="1" value="1" aria-label="Cursed energy amount" style="width:64px">'+
       '<button type="button" class="btn" id="trkCeSpend">Spend</button><button type="button" class="btn" id="trkCeRecover">Recover</button></div></div>';
@@ -4228,6 +4480,13 @@ function trackerHTML(hpMaxV, ceMaxV){
     '<input id="trkUseMax" type="number" min="1" value="1" style="width:56px" aria-label="Total uses">'+
     '<select id="trkUseRest" aria-label="Resets on"><option value="long">Long rest</option><option value="short">Short rest</option><option value="manual">Manual</option></select>'+
     '<button type="button" class="btn" id="trkUseAdd">Add</button></div></div>';
+  if(hasCEPool()){
+    html+='<div class="tracker-card"><div id="trkRctBody">'+rctCardHTML(st)+'</div></div>';
+    html+='<div class="tracker-card"><div id="trkBtBody">'+btCardHTML(st)+'</div></div>';
+  }
+  html+='<div class="tracker-card"><div id="trkExhBody">'+exhCardHTML(st)+'</div></div>';
+  html+='<div class="tracker-card"><div id="trkInjBody">'+injCardHTML(st)+'</div></div>';
+  html+='<div class="tracker-card"><div id="trkSusBody">'+susCardHTML(st)+'</div></div>';
   html+='</div>'; /* tracker-grid */
   /* rest + reset */
   html+='<div class="tracker-controls" style="margin-top:10px">'+
@@ -4327,7 +4586,12 @@ function bindTrackers(hpMaxV, ceMaxV){
     st.hp=hpMaxV; $('trkHp').value=hpMaxV;
     st.tempHp=0; $('trkTemp').value=0;
     if(ceMaxV!=null){ st.ce=ceMaxV; $('trkCe').value=ceMaxV; }
-    save(); refreshUses(); toast('Long rest — HP, CE, and uses restored.');
+    var _rm=rctMax(); if(_rm!=null){ st.rct=_rm; }
+    st.exhaustion=Math.max(0,(st.exhaustion||0)-1);
+    st.zoneRounds=0; st.zoneStacks=0; st.jugReinf=0; st.warStrike=0; st.posPool=null;
+    save(); refreshUses(); renderRct(); renderBt(); renderExh();
+    var _ri=$('trkRct'); if(_ri&&_rm!=null) _ri.value=_rm;
+    toast('Long rest — HP, CE, RCT pool, and uses restored; \u22121 exhaustion.');
   });
   $('trkReset').addEventListener('click',function(){
     /* two-click arm instead of a native confirm() — native dialogs are jarring
@@ -4346,8 +4610,175 @@ function bindTrackers(hpMaxV, ceMaxV){
     st=trackerState(); st.hp=hpMaxV; if(ceMaxV!=null) st.ce=ceMaxV;
     $('trkHp').value=hpMaxV; $('trkTemp').value=0;
     if(ceMaxV!=null) $('trkCe').value=ceMaxV;
-    save(); refreshUses(); toast('Trackers reset.');
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); toast('Trackers reset.');
   });
+
+  /* ── shared mini-helpers for the new cards ── */
+  function spendCe(amt){ if(ceMaxV==null) return; var cur=st.ce==null?ceMaxV:st.ce; st.ce=Math.max(0,Math.min(ceMaxV,cur-amt)); var i=$('trkCe'); if(i) i.value=st.ce; }
+  /* ── RCT pool ── */
+  function renderRct(){ var b=$('trkRctBody'); if(!b) return; b.innerHTML=rctCardHTML(st); bindRct(); }
+  function bindRct(){
+    var en=$('trkRctEnable');
+    if(en){ en.addEventListener('click',function(){ char.rctOptIn=true; upsertChar(char); renderRct(); toast('RCT pool enabled.'); }); return; }
+    var m=rctMax(); if(m==null||!$('trkRct')) return;
+    function setRct(v){ st.rct=Math.max(0,Math.min(m,v)); var i=$('trkRct'); if(i) i.value=st.rct; save(); }
+    $('trkRct').addEventListener('change',function(e){ setRct(parseInt(e.target.value,10)||0); });
+    $('trkRctTick').addEventListener('click',function(){ setRct((st.rct==null?m:st.rct)+10); toast('RCT pool recovered 10 HP.'); });
+    $('trkRctHeal').addEventListener('click',function(){
+      var ceAmt=Math.max(1,parseInt($('trkRctCe').value,10)||0), cm=ceModNow(), per=rctPerCE();
+      if(ceAmt>cm){ toast('RCT healing is limited to '+cm+' CE per use (your CE modifier).'); return; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<ceAmt){ toast('Not enough CE.'); return; }
+      var pool=st.rct==null?m:st.rct;
+      if(pool<=0){ toast('RCT pool is empty \u2014 burnout. Recover 10 HP per 2 rounds.'); return; }
+      var healed=Math.min(ceAmt*per,pool);
+      spendCe(ceAmt); setRct(pool-healed);
+      setHp((st.hp==null?hpMaxV:st.hp)+healed);
+      save(); toast('RCT: spent '+ceAmt+' CE, healed '+healed+' HP.');
+    });
+  }
+  bindRct();
+  /* ── breakthroughs / CE manipulation / Zone ── */
+  function renderBt(){ var b=$('trkBtBody'); if(!b) return; b.innerHTML=btCardHTML(st); bindBt(); }
+  function bindBt(){
+    var fl=$('trkBtFlash');
+    if(fl) fl.addEventListener('click',function(){
+      var before=ceManipTier(), b=btData();
+      b.flashes=(b.flashes||0)+1;
+      b.log.push('Black flash \u00b7 '+new Date().toLocaleDateString()); if(b.log.length>20) b.log.shift();
+      upsertChar(char);
+      st.zoneRounds=10; st.zoneStacks=(st.zoneStacks||0)+1;
+      var m=rctMax(); if(m!=null) st.rct=m;
+      save(); renderBt(); renderRct();
+      var after=ceManipTier();
+      toast('\u26a1 Black flash! Entered the Zone (10 rounds, \u00d7'+st.zoneStacks+') \u2014 burnout recovered, RCT pool refilled.'+(after>before?' New understanding: '+CE_MANIP_NAMES[after]+'.':''));
+    });
+    var aw=$('trkBtAwake');
+    if(aw) aw.addEventListener('click',function(){
+      var before=ceManipTier(), b=btData();
+      b.awakenings=(b.awakenings||0)+1;
+      b.log.push('RCT awakening \u00b7 '+new Date().toLocaleDateString()); if(b.log.length>20) b.log.shift();
+      upsertChar(char);
+      st.zoneRounds=10;
+      var _m2=rctMax(); if(_m2!=null) st.rct=_m2;
+      save(); renderBt(); renderRct();
+      var after=ceManipTier();
+      toast('RCT awakened \u2014 entered the Zone (10 rounds); this breakthrough counts toward CE Manipulation.'+(after>before?' New understanding: '+CE_MANIP_NAMES[after]+'.':''));
+    });
+    var sb=$('trkStrikeBtn');
+    if(sb) sb.addEventListener('click',function(){
+      var tier=ceManipTier(); if(tier<1) return;
+      var P=pb(char.level), cm=ceModNow(), cap=tier===1?P:cm+P;
+      var amt=Math.max(1,parseInt($('trkStrikeCe').value,10)||0);
+      if(amt>cap){ toast('Cursed Strike cap is '+cap+' CE.'); return; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<amt){ toast('Not enough CE.'); return; }
+      var dice=tier===1?'1d10':tier===2?'2d6':'2d8';
+      var roll=smallRoll(amt+dice), extra='';
+      var wchk=$('trkWarChk');
+      if(wchk&&wchk.checked){
+        var wcap=2*P;
+        if((st.warStrike||0)>=wcap){ toast('Warrior Destructive Strike uses exhausted ('+wcap+'/day).'); return; }
+        st.warStrike=(st.warStrike||0)+1; extra=' +'+cm+' (Warrior '+st.warStrike+'/'+wcap+')'; roll+=cm;
+      }
+      spendCe(amt); save();
+      var out=$('trkStrikeOut'); if(out) out.textContent='Last strike: +'+amt+dice+' necrotic = '+roll+extra+'.';
+      toast('Cursed Strike: +'+amt+dice+' necrotic ('+roll+').');
+    });
+    var rb=$('trkReinfBtn');
+    if(rb) rb.addEventListener('click',function(){
+      var tier=ceManipTier(); if(tier<1) return;
+      var P=pb(char.level), cm=ceModNow(), cap=tier===1?cm:cm+P;
+      var amt=Math.max(1,parseInt($('trkReinfCe').value,10)||0);
+      if(amt>cap){ toast('Cursed Reinforcement cap is '+cap+' CE.'); return; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<amt){ toast('Not enough CE.'); return; }
+      var perHp=5, note='';
+      if(char.classUnderstanding==='Juggernaut'){
+        if((st.jugReinf||0)>=P){ toast('Juggernaut reinforcement uses exhausted ('+P+'/day).'); return; }
+        perHp=10; st.jugReinf=(st.jugReinf||0)+1; note=' (Juggernaut '+st.jugReinf+'/'+P+')';
+      }
+      spendCe(amt);
+      st.tempHp=(st.tempHp||0)+amt*perHp; var ti=$('trkTemp'); if(ti) ti.value=st.tempHp;
+      save(); renderBt();
+      toast('Cursed Reinforcement: +'+(amt*perHp)+' temp HP'+note+'.');
+    });
+    var us=$('trkUndSel');
+    if(us) us.addEventListener('change',function(){
+      char.classUnderstanding=us.value; upsertChar(char); save(); renderBt();
+      toast(us.value?'Understanding chosen: '+CLASS_UNDERSTANDINGS[us.value].name+'.':'Understanding cleared.');
+    });
+    var pd=$('trkPosDraw');
+    if(pd) pd.addEventListener('click',function(){
+      var pm=2*char.level, cur=st.posPool==null?pm:st.posPool;
+      var amt=Math.max(1,parseInt($('trkPosAmt').value,10)||0);
+      if(amt>cur){ toast('Only '+cur+' HP left in the pool.'); return; }
+      st.posPool=cur-amt; setHp((st.hp==null?hpMaxV:st.hp)+amt);
+      save(); renderBt(); toast('Positive Energy: drew '+amt+' HP ('+st.posPool+' left).');
+    });
+    var pr=$('trkPosReset');
+    if(pr) pr.addEventListener('click',function(){ st.posPool=2*char.level; save(); renderBt(); toast('Positive Energy pool refilled.'); });
+    var zm=$('trkZoneMinus');
+    if(zm) zm.addEventListener('click',function(){ st.zoneRounds=Math.max(0,(st.zoneRounds||0)-1); if(!st.zoneRounds) st.zoneStacks=0; save(); renderBt(); if(!st.zoneRounds) toast('The Zone fades.'); });
+    var ze=$('trkZoneEnd');
+    if(ze) ze.addEventListener('click',function(){ st.zoneRounds=0; st.zoneStacks=0; save(); renderBt(); toast('The Zone fades.'); });
+  }
+  bindBt();
+  /* ── exhaustion & conditions ── */
+  function renderExh(){ var b=$('trkExhBody'); if(!b) return; b.innerHTML=exhCardHTML(st); bindExh(); }
+  function bindExh(){
+    var b=$('trkExhBody'); if(!b) return;
+    b.querySelectorAll('[data-exh]').forEach(function(p){ p.addEventListener('click',function(){ st.exhaustion=parseInt(p.getAttribute('data-exh'),10); save(); renderExh(); }); });
+    b.querySelectorAll('[data-cond]').forEach(function(p){ p.addEventListener('click',function(){
+      var c=p.getAttribute('data-cond'); if(!Array.isArray(st.conditions)) st.conditions=[];
+      var i=st.conditions.indexOf(c); if(i>=0) st.conditions.splice(i,1); else st.conditions.push(c);
+      save(); renderExh();
+    }); });
+  }
+  bindExh();
+  /* ── injuries ── */
+  function renderInj(){ var b=$('trkInjBody'); if(!b) return; b.innerHTML=injCardHTML(st); bindInj(); }
+  function bindInj(){
+    var b=$('trkInjBody'); if(!b) return;
+    var add=$('trkInjAdd');
+    if(add) add.addEventListener('click',function(){
+      if(!Array.isArray(st.injuries)) st.injuries=[];
+      st.injuries.push({limb:parseInt($('trkInjLimb').value,10)||0, sev:$('trkInjSev').value});
+      save(); renderInj(); toast('Injury recorded.');
+    });
+    var roll=$('trkInjRoll');
+    if(roll) roll.addEventListener('click',function(){ $('trkInjLimb').value=Math.floor(Math.random()*6); });
+    b.querySelectorAll('[data-inj-rm]').forEach(function(x){ x.addEventListener('click',function(){ st.injuries.splice(parseInt(x.getAttribute('data-inj-rm'),10),1); save(); renderInj(); }); });
+    b.querySelectorAll('[data-inj-regen]').forEach(function(x){ x.addEventListener('click',function(){
+      var m=rctMax(); if(m==null||!grantsRCT()){ toast('No RCT pool to draw from.'); return; }
+      var pool=st.rct==null?m:st.rct;
+      if(pool<20){ toast('Regenerating a limb costs 20 RCT pool HP (pool: '+pool+').'); return; }
+      st.rct=pool-20; st.injuries.splice(parseInt(x.getAttribute('data-inj-regen'),10),1);
+      save(); renderInj(); renderRct(); toast('Limb regenerated (\u221220 RCT pool).');
+    }); });
+  }
+  bindInj();
+  /* ── sustained effects ── */
+  function renderSus(){ var b=$('trkSusBody'); if(!b) return; b.innerHTML=susCardHTML(st); bindSus(); }
+  function bindSus(){
+    var b=$('trkSusBody'); if(!b) return;
+    var add=$('trkSusAdd');
+    if(add) add.addEventListener('click',function(){
+      var n=$('trkSusName').value.trim(); if(!n) return;
+      if(!Array.isArray(st.sustained)) st.sustained=[];
+      st.sustained.push({id:'sus_'+Date.now().toString(36), name:n, rounds:Math.max(1,parseInt($('trkSusRds').value,10)||1)});
+      $('trkSusName').value=''; save(); renderSus(); toast('Sustaining "'+n+'".');
+    });
+    b.querySelectorAll('[data-sus-minus]').forEach(function(x){ x.addEventListener('click',function(){
+      var id=x.getAttribute('data-sus-minus'), s=(st.sustained||[]).filter(function(y){ return y.id===id; })[0]; if(!s) return;
+      s.rounds--; if(s.rounds<=0){ st.sustained=(st.sustained||[]).filter(function(y){ return y.id!==id; }); toast('"'+s.name+'" expires.'); }
+      save(); renderSus();
+    }); });
+    b.querySelectorAll('[data-sus-rm]').forEach(function(x){ x.addEventListener('click',function(){
+      st.sustained=(st.sustained||[]).filter(function(y){ return y.id!==x.getAttribute('data-sus-rm'); }); save(); renderSus();
+    }); });
+  }
+  bindSus();
 }
 
 function sheetHTML(){
@@ -4445,6 +4876,9 @@ function sheetHTML(){
     '<p class="small">Speed includes class bonuses per the V6 class tables (Scout Unparalleled Movement, HR Unarmored Movement).</p></div>';
   /* class features */
   html+=classFeaturesSheetHTML();
+  html+=ceManipSheetHTML();
+  html+=shikigamiSheetHTML();
+  html+=journalSheetHTML();
   /* technique */
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Cursed Technique'+(getTechniques().length>1?'s':'')+'</h3>';
   var techEntries=getTechniques();

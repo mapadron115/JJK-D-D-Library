@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain Refinement Ledger — Ritual Archive Tools</title>
+<link rel="stylesheet" href="../assets/tools.css">
+<style>
+  .tier .fx{color:var(--muted);font-size:.9rem;flex:1}
+  .tier.lit .fx{color:#d1cdc3}
+  .rct-row{display:flex;gap:10px;align-items:center}
+  .rct-row label.check{flex:none}
+  .pts-out .big{font-size:2.6rem}
+</style>
+</head>
+<body>
+
+<header class="topbar"><div class="nav"><a class="brand" href="../index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a><nav class="navlinks"><a href="../rules.html">Field Guide</a><a href="../builder.html">Character Builder</a><a href="../codex.html">Technique Codex</a><a href="../lore.html">Story So Far</a><a href="index.html" class="is-current">Tools</a></nav><button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">&#x2630;</button><span class="doc-tag">GM &amp; table tools</span></div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Field Tool · Refinement Points 1–1,000</p>
+    <h1>Domain Refinement Ledger</h1>
+    <p class="lede">Track the long grind of Domain refinement — training days, Domain casualties, and clashes won — from the V6 §7.3 methods, resolved under Ritual Archive's <a href="../rules.html#domains">Field Guide §IV</a> authority.</p>
+  </section>
+
+  <div class="charbar">
+    <div class="field"><span>Character</span><select id="charSel" aria-label="Character"></select></div>
+  </div>
+  <p class="note" id="charEmpty" hidden>Your character list is empty. <a href="../builder.html">Create a character in the builder</a>, then return here to track their refinement.</p>
+
+  <section id="app" hidden>
+    <section class="out pts-out" aria-live="polite">
+      <div class="sub" id="ptsFor">Refinement points</div>
+      <div class="big" id="ptsTotal">1</div>
+      <div class="sub">Your domain starts with 1 refinement point · hard cap 1,000</div>
+    </section>
+
+    <section class="panel">
+      <h3>Benefit tiers</h3>
+      <div id="tiers"></div>
+      <div class="tier rct-row" id="rctRow" hidden>
+        <span class="pts">750+</span>
+        <span class="fx"><b>Burnout Recovery (requires RCT):</b> reaction, 4 CE, DC 5 CON save — full text in Field Guide §IV.</span>
+        <label class="check"><input type="checkbox" id="rctKnown"> I know RCT</label>
+      </div>
+      <p class="note" style="margin-top:12px">V6: experiencing a breakthrough after reaching 1,000 refinement points can make the domain barrierless. <span class="src">— V6 §7.3</span></p>
+    </section>
+
+    <section class="panel">
+      <h3>Log an earning event</h3>
+      <div class="grid3">
+        <div class="field"><span>Date</span><input type="date" id="logDate"></div>
+        <div class="field"><span>Method</span>
+          <select id="methodSel">
+            <option value="training">Training — once per day</option>
+            <option value="casualties">Domain casualties — 20 pts each</option>
+            <option value="superiority">Domain superiority — 100 pts</option>
+          </select>
+        </div>
+        <div></div>
+      </div>
+
+      <div id="form-training">
+        <div class="field"><span>CE spent (up to your CE modifier)</span><input type="number" id="tCE" min="1" placeholder="e.g. 4"></div>
+        <p class="note">"Once per day, spend CE up to your CE modifier; gain that many refinement points. This CE only returns the next day."</p>
+      </div>
+
+      <div id="form-casualties" hidden>
+        <div class="grid3">
+          <div class="field"><span>Creature CR</span><input type="number" id="cCR" min="0" step="0.5" placeholder="e.g. 3"></div>
+          <div class="field"><span>Your level</span><input type="number" id="cLvl" min="1" max="20" placeholder="e.g. 8"></div>
+          <div class="field"><span>Count</span><input type="number" id="cCount" min="1" value="1"></div>
+        </div>
+        <p class="note">"20 points per creature reduced to 0 HP inside your domain, if its CR was at least half your level (rounded up)."</p>
+      </div>
+
+      <div id="form-superiority" hidden>
+        <div class="field"><span>Creature defeated (name)</span><input type="text" id="sName" maxlength="60" placeholder="e.g. the Dagon embryo"></div>
+        <p class="note">"100 points for winning a domain clash. Once per month, and never against the same creature twice."</p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-gold" id="addBtn" type="button">Log event</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h3>Ledger</h3>
+      <div class="table-scroll"><table class="t">
+        <thead><tr><th>Date</th><th>Method</th><th>Detail</th><th>Pts</th><th></th></tr></thead>
+        <tbody id="logBody"></tbody>
+      </table></div>
+      <div class="btn-row">
+        <button class="btn btn-small" id="resetBtn" type="button">Reset ledger to 1</button>
+      </div>
+    </section>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  function toast(m){var e=document.getElementById('toast');if(!e){e=document.createElement('div');e.className='toast';e.id='toast';document.body.appendChild(e);}e.textContent=m;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('show');},2400);}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);});}
+  function store(k,v){try{if(v===undefined){return JSON.parse(localStorage.getItem(k));}localStorage.setItem(k,JSON.stringify(v));}catch(e){}return null;}
+  function storeRaw(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  function readRaw(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+
+  var CHARS_KEY='ritual-archive-characters';
+  var ACTIVE_KEY='ra_refinement_char';
+  var charId=null;
+
+  function loadChars(){
+    var arr=[];
+    try{arr=JSON.parse(localStorage.getItem(CHARS_KEY))||[];}catch(e){arr=[];}
+    return Array.isArray(arr)?arr:[];
+  }
+
+  function lsKey(){return 'ra_refinement_'+charId;}
+
+  function loadLedger(){
+    var d=store(lsKey());
+    if(!d||typeof d.points!=='number'||!Array.isArray(d.log)){d={points:1,log:[]};}
+    if(d.points<1)d.points=1; if(d.points>1000)d.points=1000;
+    return d;
+  }
+  function saveLedger(d){store(lsKey(),d);}
+
+  var TIERS=[
+    {at:1,    name:'Domain durability', fx:'HP +1 per refinement point'},
+    {at:100,  name:'Barrier resistance', fx:'Barrier resists outside attacks and barrier-breaking effects'},
+    {at:200,  name:'Quicker expansion', fx:'Deploy as an action instead of a full-turn'},
+    {at:300,  name:'Increased potency', fx:'+CE mod bonus damage dice inside the domain'},
+    {at:400,  name:'0.2-second expansion', fx:'Deploy in 0.2 seconds — faster than almost anything can answer'},
+    {at:500,  name:'Lasting domain', fx:'Duration 2 minutes; burnout 5 rounds'},
+    {at:600,  name:'Domain amplification', fx:'Techniques cast inside are amplified'},
+    {at:700,  name:'Efficient expansions', fx:'Each deployment costs less CE'},
+    {at:800,  name:'Durable barrier', fx:'Barrier markedly harder to break or invade'},
+    {at:900,  name:'Compression', fx:'Compress the domain to a small, lethal area'},
+    {at:1000, name:'Total mastery', fx:'The pinnacle of refinement'}
+  ];
+
+  var tiersEl=document.getElementById('tiers');
+  TIERS.forEach(function(t){
+    var div=document.createElement('div');
+    div.className='tier'; div.dataset.at=t.at;
+    div.innerHTML='<span class="pts">'+t.at+'+</span><span class="tn">'+esc(t.name)+'</span><span class="fx">'+esc(t.fx)+' — <a href="../rules.html#domains">full text in §IV</a></span>';
+    tiersEl.appendChild(div);
+  });
+
+  var METHOD_LABEL={training:'Training',casualties:'Domain casualties',superiority:'Domain superiority'};
+
+  function render(){
+    if(!charId)return;
+    var d=loadLedger();
+    var name=currentName();
+    document.getElementById('ptsFor').textContent=name?('Refinement points — '+name):'Refinement points';
+    document.getElementById('ptsTotal').textContent=d.points;
+    Array.prototype.forEach.call(tiersEl.children,function(row){
+      row.classList.toggle('lit',d.points>=Number(row.dataset.at));
+    });
+    document.getElementById('rctRow').hidden=d.points<750;
+    if(d.points<750)document.getElementById('rctKnown').checked=false;
+    var tb=document.getElementById('logBody');
+    var rows=d.log.slice().reverse();
+    tb.innerHTML=rows.map(function(e,ri){
+      var idx=d.log.length-1-ri;
+      return '<tr><td>'+esc(e.date)+'</td><td>'+esc(METHOD_LABEL[e.method]||e.method)+'</td><td>'+esc(e.detail)+'</td><td>+'+e.pts+'</td><td><button class="btn btn-small" data-del="'+idx+'" type="button">Remove</button></td></tr>';
+    }).join('')||'<tr><td colspan="5"><span class="note">No entries yet. Your domain starts at 1 — log training days to begin.</span></td></tr>';
+    Array.prototype.forEach.call(tb.querySelectorAll('[data-del]'),function(b){
+      b.addEventListener('click',function(){
+        var d2=loadLedger();
+        d2.log.splice(Number(b.getAttribute('data-del')),1);
+        d2.points=Math.max(1,d2.log.reduce(function(a,e){return a+e.pts;},1));
+        saveLedger(d2); render(); toast('Entry removed.');
+      });
+    });
+  }
+
+  function currentName(){
+    var sel=document.getElementById('charSel');
+    var o=sel.options[sel.selectedIndex];
+    return o?o.text:'';
+  }
+
+  function addPoints(pts,method,detail,date){
+    var d=loadLedger();
+    var room=1000-d.points;
+    if(room<=0){toast('Already at the 1,000-point cap.');return;}
+    var gain=Math.min(pts,room);
+    d.points+=gain;
+    d.log.push({date:date,method:method,detail:detail,pts:gain});
+    saveLedger(d); render();
+    toast(gain<pts?('Logged +'+gain+' (capped at 1,000).'):('Logged +'+gain+' refinement points.'));
+  }
+
+  function todayStr(){return document.getElementById('logDate').value||new Date().toISOString().slice(0,10);}
+
+  document.getElementById('methodSel').addEventListener('change',function(){
+    var m=this.value;
+    document.getElementById('form-training').hidden=m!=='training';
+    document.getElementById('form-casualties').hidden=m!=='casualties';
+    document.getElementById('form-superiority').hidden=m!=='superiority';
+  });
+
+  document.getElementById('addBtn').addEventListener('click',function(){
+    var m=document.getElementById('methodSel').value;
+    var date=todayStr();
+    var d=loadLedger();
+
+    if(m==='training'){
+      var ce=parseInt(document.getElementById('tCE').value,10);
+      if(!ce||ce<1){toast('Enter the CE you spent training (up to your CE modifier).');return;}
+      var dup=d.log.some(function(e){return e.method==='training'&&e.date===date;});
+      if(dup&&!confirm('You already logged training on '+date+'. Log it again anyway?'))return;
+      addPoints(ce,'training','Training — spent '+ce+' CE (returns next day)',date);
+      document.getElementById('tCE').value='';
+    }else if(m==='casualties'){
+      var cr=parseFloat(document.getElementById('cCR').value);
+      var lvl=parseInt(document.getElementById('cLvl').value,10);
+      var count=parseInt(document.getElementById('cCount').value,10)||1;
+      if(isNaN(cr)||cr<0){toast('Enter the creature\'s CR.');return;}
+      if(!lvl||lvl<1){toast('Enter your character level.');return;}
+      if(Math.ceil(lvl/2)>cr){
+        toast('Blocked: CR '+cr+' is below half your level (rounded up: '+Math.ceil(lvl/2)+').');
+        return;
+      }
+      addPoints(20*count,'casualties',count+' creature(s) at CR '+cr+' reduced to 0 HP inside the domain',date);
+    }else{
+      var nm=document.getElementById('sName').value.trim();
+      if(!nm){toast('Enter the creature\'s name.');return;}
+      var nmLower=nm.toLowerCase();
+      var dupName=d.log.some(function(e){return e.method==='superiority'&&String(e.detail).toLowerCase().indexOf('vs. '+nmLower)!==-1;});
+      if(dupName){toast('Blocked: you have already claimed superiority against '+nm+'.');return;}
+      var t=new Date(date).getTime();
+      var tooSoon=d.log.some(function(e){
+        if(e.method!=='superiority')return false;
+        var gap=Math.abs(t-new Date(e.date).getTime());
+        return gap<30*86400000;
+      });
+      if(tooSoon){toast('Blocked: a superiority claim exists within the last 30 days.');return;}
+      addPoints(100,'superiority','Won a domain clash vs. '+nm,date);
+      document.getElementById('sName').value='';
+    }
+  });
+
+  document.getElementById('resetBtn').addEventListener('click',function(){
+    if(!confirm('Reset this character\'s ledger to 1 point and clear the log?'))return;
+    saveLedger({points:1,log:[]}); render(); toast('Ledger reset to 1.');
+  });
+
+  document.getElementById('rctKnown').addEventListener('change',function(){
+    document.getElementById('rctRow').classList.toggle('lit',this.checked);
+  });
+
+  function initChars(){
+    var sel=document.getElementById('charSel');
+    var chars=loadChars();
+    sel.innerHTML='';
+    chars.forEach(function(c){
+      var o=document.createElement('option');
+      o.value=c.id; o.textContent=c.name||'(unnamed)';
+      sel.appendChild(o);
+    });
+    var saved=readRaw(ACTIVE_KEY);
+    var found=chars.some(function(c){return c.id===saved;});
+    if(found)sel.value=saved;
+    else if(chars.length)sel.selectedIndex=0;
+    charId=chars.length?(sel.value||chars[0].id):null;
+    document.getElementById('charEmpty').hidden=chars.length>0;
+    document.getElementById('app').hidden=chars.length===0;
+    sel.disabled=chars.length===0;
+    render();
+  }
+
+  document.getElementById('charSel').addEventListener('change',function(){
+    charId=this.value||null;
+    storeRaw(ACTIVE_KEY,charId||'');
+    render();
+  });
+
+  var dateInput=document.getElementById('logDate');
+  try{dateInput.valueAsDate=new Date();}catch(e){}
+  initChars();
+})();
+</script>
+<script>(function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(o){t.classList.toggle('nav-open',o);b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});})();</script>
+
+</body>
+</html>

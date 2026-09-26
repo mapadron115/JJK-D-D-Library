@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Cursed Tool Crafting — Tool Maker project hours, maker-level grades, workday logging, and crafting cooldowns. Ritual Archive JJK 5e field tools.">
+<title>Cursed Tool Crafting — Ritual Archive Field Tools</title>
+<link rel="stylesheet" href="../assets/tools.css">
+<style>
+  .progress{height:14px;background:#0d0f14;border:1px solid #3a3e48;border-radius:999px;overflow:hidden;margin:10px 0}
+  .progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-pale));width:0;transition:width .3s}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="nav"><a class="brand" href="../index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a><nav class="navlinks"><a href="../rules.html">Field Guide</a><a href="../builder.html">Character Builder</a><a href="../codex.html">Technique Codex</a><a href="../lore.html">Story So Far</a><a href="index.html" class="is-current">Tools</a></nav><button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button><span class="doc-tag">Cursed tool crafting</span></div></header>
+
+<main class="wrap">
+<section class="hero">
+  <p class="eyebrow">Field tools · per character</p>
+  <h1>Cursed Tool Crafting</h1>
+  <p class="lede">Tool Maker project hours, workday logging, and crafting cooldowns — tracked per character, on this device.</p>
+</section>
+
+<div class="charbar">
+  <div class="field"><span>Character</span><select id="charSel" aria-label="Choose character"></select></div>
+</div>
+<p class="note" id="noChars" style="display:none">No characters found on this device yet — <a href="../builder.html">build a character first</a>, then return here.</p>
+
+<p class="note"><b>Prerequisite:</b> the Tool Maker feat requires a <b>16+ CE score</b> and <b>Arcana proficiency</b>.</p>
+
+<section class="panel">
+  <h3>New Project</h3>
+  <div id="coolBlock" class="out" style="display:none">
+    <div class="sub">Crafting cooldown</div>
+    <div class="big" id="coolText">—</div>
+    <div class="sub">After creating a cursed tool, you must wait an amount of time equal to its crafting time before working on another. New projects unlock after this date.</div>
+    <div class="sub" style="font-style:italic">GM ruling — V6 gives the wait in crafting time; expressed here as calendar days at 8 hours per workday.</div>
+  </div>
+  <div class="grid2">
+    <div class="field"><span>Project name</span><input type="text" id="pName" placeholder="e.g. Serrated binding chain"></div>
+    <div class="field"><span>Target grade</span>
+      <select id="pGrade">
+        <option value="4">Grade 4 (Common) — 72 hours</option>
+        <option value="3">Grade 3 (Uncommon) — 216 hours</option>
+        <option value="2">Grade 2 (Rare) — 648 hours</option>
+        <option value="1">Grade 1 (Very Rare) — 1,944 hours</option>
+      </select>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="field"><span>Target hours (auto-filled)</span><input type="number" id="pTarget" min="1" step="1" value="72"></div>
+    <div class="field"><span>Material cost (GM-set)</span><input type="text" id="pCost" placeholder="e.g. $4,000 in raw materials"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-gold" type="button" id="startProject">Start project</button>
+  </div>
+  <h4>Maker-Level Reference</h4>
+  <div class="table-scroll"><table class="t">
+    <thead><tr><th>Maker level</th><th>Tool grade</th><th>Rarity</th><th>Crafting time</th></tr></thead>
+    <tbody>
+      <tr><td>1–4</td><td>Grade 4</td><td>Common</td><td>72 hours</td></tr>
+      <tr><td>5–8</td><td>Grade 3</td><td>Uncommon</td><td>216 hours</td></tr>
+      <tr><td>9–12</td><td>Grade 2</td><td>Rare</td><td>648 hours</td></tr>
+      <tr><td>13–16</td><td>Grade 1</td><td>Very Rare</td><td>1,944 hours</td></tr>
+    </tbody>
+  </table></div>
+  <h4>Sale-Price Reference</h4>
+  <p class="note">V6 Cursed Tool Creation — multiply the base weapon/armor value:</p>
+  <div class="table-scroll"><table class="t">
+    <thead><tr><th>Tool grade</th><th>Sale price</th></tr></thead>
+    <tbody>
+      <tr><td>Grade 4</td><td>weapon/armor value ×1</td></tr>
+      <tr><td>Grade 3</td><td>weapon/armor value ×10</td></tr>
+      <tr><td>Grade 2</td><td>weapon/armor value ×25</td></tr>
+      <tr><td>Grade 1</td><td>weapon/armor value ×50</td></tr>
+    </tbody>
+  </table></div>
+  <p class="src">V6 §6.2 Tool Maker; Cursed Tool Creation.</p>
+</section>
+
+<section class="panel" id="activePanel" style="display:none">
+  <h3>Active Project</h3>
+  <p class="note" style="font-size:1rem"><b id="aName">—</b> · Grade <b id="aGrade">—</b> · <span id="aCost"></span></p>
+  <div class="progress" role="progressbar" aria-label="Crafting progress"><i id="bar"></i></div>
+  <p class="note"><b id="hourText">0 / 0 hours</b></p>
+  <div class="btn-row">
+    <button class="btn" type="button" id="log8">+8 hours (one workday)</button>
+    <button class="btn" type="button" id="log4">+4 hours</button>
+    <button class="btn btn-gold" type="button" id="complete">Mark complete</button>
+    <button class="btn btn-danger" type="button" id="abandon">Abandon</button>
+  </div>
+  <p class="note">V6: 8 hours of crafting per day.</p>
+</section>
+</main>
+
+<footer class="site"><div class="wrap">
+  <a class="brand" href="../index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
+  <span>Field Tools · fan-made JJK 5e homebrew reference</span>
+</div></footer>
+
+<script>
+(function(){
+"use strict";
+var CHAR_KEY='ritual-archive-characters';
+var HOURS={'4':72,'3':216,'2':648,'1':1944};
+function toast(m){var e=document.getElementById('toast');if(!e){e=document.createElement('div');e.className='toast';e.id='toast';document.body.appendChild(e);}e.textContent=m;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('show');},2400);}
+function readJSON(k){try{var v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
+function writeJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){toast('Could not save — browser storage unavailable.');return false;}}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+var chars=readJSON(CHAR_KEY)||[];
+if(!Array.isArray(chars))chars=[];
+chars=chars.filter(function(c){return c&&c.id&&c.name;});
+var sel=document.getElementById('charSel');
+var noChars=document.getElementById('noChars');
+if(!chars.length){noChars.style.display='';}
+chars.forEach(function(c){var o=document.createElement('option');o.value=c.id;o.textContent=c.name;sel.appendChild(o);});
+
+var curId=null,S=null;
+function stateKey(id){return 'ra_crafting_'+id;}
+function defaults(){return {project:'',grade:'4',hours:0,target:0,cost:'',done:false,cooldownUntil:''};}
+function loadState(id){
+  var s=readJSON(stateKey(id)),d=defaults();
+  if(!s||typeof s!=='object')s={};
+  S={project:String(s.project||''),grade:String(s.grade||'4'),hours:Math.max(0,Number(s.hours)||0),
+     target:Math.max(0,Number(s.target)||0),cost:String(s.cost||''),done:!!s.done,
+     cooldownUntil:String(s.cooldownUntil||'')};
+}
+function saveState(){if(curId)writeJSON(stateKey(curId),S);}
+
+function todayISO(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function addDaysISO(days){var d=new Date();d.setDate(d.getDate()+days);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function cooldownActive(){return !!(S.cooldownUntil&&S.cooldownUntil>=todayISO());}
+
+function render(){
+  var hasProject=!!(S.project&&S.target>0&&!S.done);
+  document.getElementById('activePanel').style.display=hasProject?'':'none';
+  var cool=cooldownActive();
+  document.getElementById('coolBlock').style.display=cool?'':'none';
+  document.getElementById('startProject').disabled=cool||hasProject;
+  if(cool){
+    var until=S.cooldownUntil;
+    document.getElementById('coolText').textContent='New projects blocked until '+until;
+  }
+  if(hasProject){
+    document.getElementById('aName').textContent=S.project;
+    document.getElementById('aGrade').textContent=S.grade;
+    document.getElementById('aCost').textContent=S.cost?('Cost: '+S.cost):'';
+    var h=Math.min(S.hours,S.target);
+    document.getElementById('bar').style.width=Math.floor(100*h/S.target)+'%';
+    document.getElementById('hourText').textContent=h+' / '+S.target+' hours';
+  }
+}
+
+if(chars.length){
+  curId=chars[0].id;
+  loadState(curId);render();
+  sel.addEventListener('change',function(){curId=sel.value;loadState(curId);render();toast('Switched character.');});
+}else{loadState('none');render();}
+
+document.getElementById('pGrade').addEventListener('change',function(e){
+  document.getElementById('pTarget').value=HOURS[e.target.value]||72;
+});
+document.getElementById('startProject').addEventListener('click',function(){
+  if(cooldownActive()){toast('Cooldown active — new projects blocked until '+S.cooldownUntil+'.');return;}
+  if(S.project&&S.target>0&&!S.done){toast('Finish or abandon the active project first.');return;}
+  var name=document.getElementById('pName').value.trim();
+  if(!name){toast('Name the project first.');document.getElementById('pName').focus();return;}
+  var g=document.getElementById('pGrade').value;
+  var t=Math.max(1,Math.floor(Number(document.getElementById('pTarget').value)||HOURS[g]||72));
+  S={project:name,grade:g,hours:0,target:t,cost:document.getElementById('pCost').value.trim(),done:false,cooldownUntil:S.cooldownUntil};
+  saveState();render();
+  toast('Project started: '+t+' hours of work ahead.');
+});
+function logHours(n){
+  S.hours+=n;
+  if(S.hours>=S.target){S.hours=S.target;saveState();render();toast('Target hours reached — mark it complete when the GM confirms the tool.');return;}
+  saveState();render();toast('+'+n+' hours logged.');
+}
+document.getElementById('log8').addEventListener('click',function(){logHours(8);});
+document.getElementById('log4').addEventListener('click',function(){logHours(4);});
+document.getElementById('complete').addEventListener('click',function(){
+  if(S.hours<S.target){toast('Project is not finished yet ('+S.hours+' / '+S.target+' hours).');return;}
+  // GM ruling — V6 gives the wait in crafting time (i.e. the target hours).
+  var days=Math.ceil(S.target/8);
+  S.cooldownUntil=addDaysISO(days);
+  S.done=true;S.project='';S.hours=0;S.target=0;
+  saveState();render();
+  toast('Tool complete. Cooldown: no new projects until '+S.cooldownUntil+'.');
+});
+document.getElementById('abandon').addEventListener('click',function(){
+  S.project='';S.hours=0;S.target=0;S.done=false;
+  saveState();render();toast('Project abandoned.');
+});
+})();
+</script>
+<script>
+(function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(o){t.classList.toggle('nav-open',o);b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});})();
+</script>
+</body>
+</html>
