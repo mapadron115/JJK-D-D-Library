@@ -820,7 +820,7 @@ function featSkillPickersHTML(key){
       profs.map(function(s){
         return '<option value="'+s+'"'+(expp===s?' selected':'')+'>'+s+'</option>';
       }).join('')+'</select></div></div>'+
-      '<p class="small">Skill Expert also grants +1 to one ability score (maximum 20) \u2014 the builder does not apply it automatically; record it with your GM in Step 8 notes.</p>';
+      '<p class="small">Skill Expert also grants +1 to one ability score (maximum 20) \u2014 choose it in the ability increase picker below.</p>';
   }else{ /* Skilled: any combination of three skills */
     var picks=fs.prof||[];
     html+='<p class="small">Gain proficiency in any three skills (tools from this feat are recorded with your GM).</p><div class="grid2">';
@@ -1008,6 +1008,9 @@ function abilitiesAt(level){
   for(var L=2;L<=level;L++){
     if(hasASIAt(L) && char.asi[L] && (char.asiMode||{})[L]!=='feat') char.asi[L].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
   }
+  /* half-feat +1s (Crusher, Athlete, etc.) — apply at the level the feat was taken */
+  var fb=featASIBonuses(level);
+  ABILITIES.forEach(function(a){ if(fb[a]) ab[a]=Math.min(20,(ab[a]||10)+fb[a]); });
   return ab;
 }
 /* Feats taken in place of an ASI at milestone levels */
@@ -1265,6 +1268,148 @@ function featSkillLiveName(key){
   if(key==='bg') return char.backgroundFeat||'';
   if(key&&key.indexOf('asi-')===0) return (char.asiFeat||{})[key.slice(4)]||'';
   return '';
+}
+/* ── half-feat ability increases: feats that grant +1 to an ability ──
+   Maps feat name → array of ability choices. Follows the featSkills pattern:
+   char.featASI[key] = {feat:'Crusher', ability:'STR'}. */
+var FEAT_ASI = {
+  'Athlete':['STR','DEX'], 'Durable':['CON'], 'Crusher':['STR','CON'],
+  'Heavy Armor Master':['STR'], 'Lightly Armored':['STR','DEX'],
+  'Piercer':['STR','DEX'], 'Slasher':['STR','DEX'],
+  'Tavern Brawler':['STR','CON'], 'Actor':['CHA'],
+  'Chef':['CON','WIS'], 'Gunner':['DEX'], 'Keen Mind':['INT'],
+  'Linguist':['INT'], 'Observer':['INT','WIS'],
+  'Weapon Expert':['STR','DEX'], 'Skill Expert':['STR','DEX','CON','INT','WIS','CHA'],
+  'Resilient':['STR','DEX','CON','INT','WIS','CHA']
+};
+function featASILiveName(key){
+  if(key==='bg') return char.backgroundFeat||'';
+  if(key&&key.indexOf('asi-')===0) return (char.asiFeat||{})[key.slice(4)]||'';
+  return '';
+}
+function featASIOptions(featName){
+  return FEAT_ASI[featName]||null;
+}
+function featASIHTML(key){
+  var fname=featASILiveName(key);
+  var opts=featASIOptions(fname);
+  if(!opts) return '';
+  var fs=(char.featASI||{})[key]||{};
+  /* stale pick — the feat changed away */
+  var cur=(fs.feat===fname)?(fs.ability||''):'';
+  var html='<div class="banner" style="margin-top:8px"><span class="bk">❖ '+esc(fname)+' — ability increase</span>'+
+    '<p class="small" style="margin:4px 0">This feat grants +1 to '+(opts.length>1?'one ability of your choice':'your '+opts[0])+' (maximum 20).</p>'+
+    '<div class="field" style="max-width:200px"><label><b>+1 to</b></label><select data-featasi="'+esc(key)+'">';
+  if(opts.length>1) html+='<option value="">— choose —</option>';
+  opts.forEach(function(a){
+    html+='<option value="'+a+'"'+(cur===a?' selected':'')+'>'+a+'</option>';
+  });
+  html+='</select></div></div>';
+  return html;
+}
+function featASIHookup(root){
+  (root.querySelectorAll?Array.prototype.slice.call(root.querySelectorAll('[data-featasi]')):[]).forEach(function(sel){
+    sel.addEventListener('change', function(){
+      var key=sel.getAttribute('data-featasi'), fname=featASILiveName(key);
+      char.featASI=char.featASI||{};
+      if(sel.value) char.featASI[key]={feat:fname, ability:sel.value};
+      else delete char.featASI[key];
+      renderStep();
+    });
+  });
+}
+/* ── choice feats: feats that grant selectable options (maneuvers, styles, etc.)
+   char.featChoices[key] = {feat:'Martial Adept', picks:[...]}. Shown on the sheet. */
+var FEAT_CHOICES = {
+  'Martial Adept':{ prompt:'Choose two maneuvers', max:2, options:[
+    'Brace','Bait and Switch','Commander\'s Strike','Commanding Presence','Disarming Attack','Distracting Strike',
+    'Evasive Footwork','Feinting Attack','Goading Attack','Lunging Attack','Maneuvering Attack','Menacing Attack',
+    'Parry','Precision Attack','Pushing Attack','Quick Toss','Rally','Riposte','Sweeping Attack','Tactical Assessment','Trip Attack']},
+  'Fighting Initiate':{ prompt:'Choose a fighting style', max:1, options:[
+    'Archery','Blind Fighting','Defense','Dueling','Great Weapon Fighting','Interception',
+    'Protection','Superior Technique','Thrown Weapon Fighting','Two-Weapon Fighting','Unarmed Fighting']},
+  'Elemental Adept':{ prompt:'Choose a damage type', max:1, options:[
+    'Acid','Cold','Fire','Lightning','Thunder']}
+};
+function featChoiceDef(featName){ return FEAT_CHOICES[featName]||null; }
+function featChoiceHTML(key){
+  var fname=featASILiveName(key);
+  var def=featChoiceDef(fname);
+  if(!def) return '';
+  var fc=(char.featChoices||{})[key]||{};
+  var picks=(fc.feat===fname)?(fc.picks||[]):[];
+  var html='<div class="banner" style="margin-top:8px"><span class="bk">❖ '+esc(fname)+' — '+esc(def.prompt.toLowerCase())+'</span>'+
+    '<div class="grid2" style="margin-top:6px">';
+  for(var i=0;i<def.max;i++){
+    html+='<div class="field"><label><b>'+(def.max>1?'Choice '+(i+1):'Choice')+'</b></label>'+
+      '<select data-featchoice="'+esc(key)+'|'+i+'"><option value="">— choose —</option>'+
+      def.options.map(function(o){
+        var dup=picks.indexOf(o)>=0&&picks[i]!==o;
+        return '<option value="'+esc(o)+'"'+(picks[i]===o?' selected':'')+(dup?' disabled':'')+'>'+esc(o)+(dup?' (already chosen)':'')+'</option>';
+      }).join('')+'</select></div>';
+  }
+  html+='</div></div>';
+  return html;
+}
+function featChoiceHookup(root){
+  (root.querySelectorAll?Array.prototype.slice.call(root.querySelectorAll('[data-featchoice]')):[]).forEach(function(sel){
+    sel.addEventListener('change', function(){
+      var a=sel.getAttribute('data-featchoice').split('|'), key=a[0], i=+a[1];
+      var fname=featASILiveName(key);
+      char.featChoices=char.featChoices||{};
+      var fc=char.featChoices[key]||{feat:fname, picks:[]};
+      fc.feat=fname; fc.picks=fc.picks||[];
+      if(sel.value) fc.picks[i]=sel.value; else fc.picks.splice(i,1);
+      fc.picks=fc.picks.filter(Boolean);
+      char.featChoices[key]=fc;
+      renderStep();
+    });
+  });
+}
+/* readable summary of a feat's choices for the character sheet */
+function featChoiceSummary(key){
+  var fc=(char.featChoices||{})[key];
+  if(!fc||!fc.picks||!fc.picks.length) return '';
+  if(featASILiveName(key)!==fc.feat) return '';
+  return fc.picks.join(', ');
+}
+function featASISheetNote(key){
+  var fs=(char.featASI||{})[key];
+  if(!fs||!fs.ability) return '';
+  if(featASILiveName(key)!==fs.feat) return '';
+  return ' <span class="small">(+1 '+fs.ability+')</span>';
+}
+function featChoiceSheetNote(key){
+  var s=featChoiceSummary(key);
+  return s?' <span class="small">('+esc(s)+')</span>':'';
+}
+function featASIBonuses(level){
+  level=level||char.level;
+  var b={}, fs=char.featASI||{};
+  Object.keys(fs).forEach(function(k){
+    var f=fs[k]; if(!f||!f.ability) return;
+    if(featASILiveName(k)!==f.feat) return; /* stale */
+    if((FEAT_ASI[f.feat]||[]).indexOf(f.ability)<0) return;
+    /* ASI feats only count once the character reaches that level */
+    if(k.indexOf('asi-')===0 && parseInt(k.slice(4),10)>level) return;
+    b[f.ability]=(b[f.ability]||0)+1;
+  });
+  /* body-point feat grants (Heavenly Restriction Strength Technique) */
+  if(classLevelCount('Heavenly Restriction', level)>=1){
+    var cp=null;
+    (classChoiceDefs('Heavenly Restriction')||[]).forEach(function(d){ if(d.key==='body') cp=d; });
+    if(cp){
+      var data=ccGet('Heavenly Restriction','body')||{picks:[]};
+      (data.picks||[]).forEach(function(p, i){
+        if(!p||!p.feat) return;
+        var bk='hr-body-'+i, bf=(char.featASI||{})[bk];
+        if(bf&&bf.feat===p.feat&&bf.ability&&(FEAT_ASI[p.feat]||[]).indexOf(bf.ability)>=0){
+          b[bf.ability]=(b[bf.ability]||0)+1;
+        }
+      });
+    }
+  }
+  return b;
 }
 /* union of every granted skill proficiency (plain names, no stacking) */
 function skillProfs(){
@@ -2636,6 +2781,8 @@ function renderBgDetail(){
     '<select id="bgFeat"'+(bgFeatIneligible(bg)?' disabled':'')+'>'+bgFeatOptions(bg,char.backgroundFeat)+'</select><div id="bgFeatNote"></div>'+
     (bgFeatIneligible(bg)?'<p class="small" style="margin:6px 0 0"><b>Reverse Cursed Energy Generation</b> makes you ineligible for this feat — you gain no background feat. Your auto-granted Reverse Cursed Technique feats appear on your sheet.</p>':'')+'</div>';
   html+='<div id="bgFeatSkills">'+featSkillPickersHTML('bg')+'</div>';
+  html+='<div id="bgFeatASI">'+featASIHTML('bg')+'</div>';
+  html+='<div id="bgFeatChoice">'+featChoiceHTML('bg')+'</div>';
   d.innerHTML=html;
   var showNote=function(){
     var n=$('bgFeatNote');
@@ -2644,6 +2791,7 @@ function renderBgDetail(){
   showNote();
   $('bgFeat').addEventListener('change',function(e){ char.backgroundFeat=e.target.value; renderBgDetail(); refreshNav(); });
   wireFeatSkillPickers(d,function(){ renderBgDetail(); });
+  featASIHookup(d); featChoiceHookup(d);
   var ts=$('bgTool');
   if(ts) ts.addEventListener('change',function(e){
     removeTool(char.backgroundTool);
@@ -2785,6 +2933,12 @@ function ccPbPick(info,name,idx){
   for(var i=0;i<info.picks.length;i++){ if(info.picks[i].name===name){ if(n===idx) return info.picks[i]; n++; } }
   return null;
 }
+/* absolute index of the idx-th pick of `name` in info.picks — keys featASI entries */
+function ccPbPickIndex(info,name,idx){
+  var n=0;
+  for(var i=0;i<info.picks.length;i++){ if(info.picks[i].name===name){ if(n===idx) return i; n++; } }
+  return -1;
+}
 function ccPhysicalFeatOptions(selected){
   var list=((window.GENERAL_FEATS||{}).physical)||[];
   var html='<option value="">\u2014 choose a Physical feat \u2014</option>';
@@ -2814,6 +2968,20 @@ function ccPbRowHTML(cls,cp,info,cat,item,takingIdx,isTaken){
     var pk2=ccPbPick(info,item.name,takingIdx), feat=pk2?pk2.feat:'';
     html+='<div class="field" style="margin:2px 0 2px 18px;max-width:260px"><label>Physical feat <span class="small">(prerequisites apply)</span></label>'+
       '<select data-ccpbfeat="'+attr+'">'+ccPhysicalFeatOptions(feat)+'</select></div>';
+    /* half-feat +1 picker for the granted feat */
+    if(feat){
+      var bk='hr-body-'+ccPbPickIndex(info,item.name,takingIdx);
+      var bf=(char.featASI||{})[bk]||{};
+      var bopts=FEAT_ASI[feat]||null;
+      if(bopts){
+        var bcur=(bf.feat===feat)?(bf.ability||''):'';
+        html+='<div class="field" style="margin:2px 0 2px 18px;max-width:200px"><label><b>'+esc(feat)+' +1</b></label>'+
+          '<select data-ccpbfeatasi="'+esc(bk)+'">';
+        if(bopts.length>1) html+='<option value="">— choose —</option>';
+        bopts.forEach(function(a){ html+='<option value="'+a+'"'+(bcur===a?' selected':'')+'>'+a+'</option>'; });
+        html+='</select></div>';
+      }
+    }
   }
   return html;
 }
@@ -3103,7 +3271,7 @@ function renderLvlRows(){
       if(mode==='feat'){
         var pf=((char.asiFeat||{})[r.l])||'';
         asiCell+='<div style="margin-top:4px"><select data-asifeatpreset="'+r.l+'">'+featSelectOptions(pf)+'</select>'+
-          featInfoHTML(pf)+featSkillPickersHTML('asi-'+r.l)+
+          featInfoHTML(pf)+featSkillPickersHTML('asi-'+r.l)+featASIHTML('asi-'+r.l)+featChoiceHTML('asi-'+r.l)+
           '<div class="asi-note">Replaces the ASI (D&D 5e rule). Technique feats list their prerequisite — you must meet it before selecting.</div></div>';
       }else if(mode==='hr3'){
         var h3cur=(char.asi[r.l]||['STR','STR','STR'])[0]||'STR';
@@ -3180,6 +3348,7 @@ function renderLvlRows(){
   }); });
   /* Skill Expert / Skilled sub-picks on ASI feats */
   wireFeatSkillPickers(tb,function(){ renderLvlRows(); renderLvlTotals(); });
+  featASIHookup(tb); featChoiceHookup(tb);
   /* HR ASI: +3 to one ability */
   tb.querySelectorAll('[data-hr3]').forEach(function(s){ s.addEventListener('change',function(){
     var l=+s.getAttribute('data-hr3'), v=s.value;
@@ -3209,6 +3378,20 @@ function renderLvlRows(){
   }); });
   tb.querySelectorAll('[data-ccpbfeat]').forEach(function(s){ s.addEventListener('change',function(){
     ccPbSubFeat(s,false); renderLvlRows(); renderStatsSidebar();
+  }); });
+  tb.querySelectorAll('[data-ccpbfeatasi]').forEach(function(s){ s.addEventListener('change',function(){
+    var bk=s.getAttribute('data-ccpbfeatasi');
+    /* find the feat name for this pick to validate the ability */
+    var feat='';
+    if(classLevelCount('Heavenly Restriction', char.level)>=1){
+      var data=ccGet('Heavenly Restriction','body')||{picks:[]};
+      var p=(data.picks||[])[parseInt(bk.replace('hr-body-',''),10)];
+      if(p) feat=p.feat||'';
+    }
+    char.featASI=char.featASI||{};
+    if(s.value&&feat) char.featASI[bk]={feat:feat, ability:s.value};
+    else delete char.featASI[bk];
+    renderLvlRows(); renderStatsSidebar();
   }); });
 }
 function animateSingleDie(btn,spanAttr,sides,done){
@@ -3708,7 +3891,7 @@ function sheetHTML(){
   /* abilities */
   html+='<div class="sheet-sec"><h3><span class="orn">❖</span> Ability Scores</h3><div class="ab-grid">'+
     ABILITIES.map(function(a){ return '<div class="ab-box"><div class="ab-name">'+a+'</div><div class="ab-score">'+ab[a]+'</div><div class="ab-mod">'+modStr(ab[a])+'</div></div>'; }).join('')+'</div>'+
-    '<p class="small">Final scores include ancestry increases'+(Object.keys(char.asi).length?' and level-up ASIs':'')+(asiFeatEntries().length?' (feats taken instead of an ASI grant no score increase)':'')+
+    '<p class="small">Final scores include ancestry increases'+(Object.keys(char.asi).length?' and level-up ASIs':'')+(asiFeatEntries().length?' (half-feats like Crusher grant their +1 automatically — pick the ability where the feat was taken)':'')+
     (hrV()&&hrV()!=='pure-body'?' and Heavenly Restriction adjustments':'')+(char.specialTrait?' and Special Trait adjustments':'')+(evoNoASI()?' — racial ASI suppressed (No ASI, returns at 8th)':'')+'.</p></div>';
   /* skills */
   html+=skillsSheetHTML(ab,P);
@@ -3800,9 +3983,9 @@ function sheetHTML(){
         var tag=f.indexOf('(variant auto-grant)')>=0?' <span class="small">(variant)</span>':' <span class="small">(heritage)</span>';
         return '<li>'+esc(f)+tag+featNote(f)+'</li>';
       })
-        .concat(char.backgroundFeat?['<li>'+esc(char.backgroundFeat)+' <span class="small">(background)</span>'+featNote(char.backgroundFeat)+'</li>']:[])
+        .concat(char.backgroundFeat?['<li>'+esc(char.backgroundFeat)+' <span class="small">(background)</span>'+featNote(char.backgroundFeat)+featASISheetNote('bg')+featChoiceSheetNote('bg')+'</li>']:[])
         .concat(char.feats.map(function(f){return '<li>'+esc(f)+featNote(f)+'</li>';}))
-        .concat(asiFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat)</span>'+featNote(e.name)+'</li>';}));
+        .concat(asiFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat)</span>'+featNote(e.name)+featASISheetNote('asi-'+e.level)+featChoiceSheetNote('asi-'+e.level)+'</li>';}));
       /* dedupe: identical feat names collapse, heritage entry (listed first) wins */
       var seenDup={};
       items=items.filter(function(li){
