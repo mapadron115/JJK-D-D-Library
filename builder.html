@@ -990,7 +990,7 @@ function blankChar(){
     hrVariant:'',  // Heavenly Restriction package: '' = Pure Body default (set in step 3)
     hrOpts:{},     // per-variant options, keyed by variant id
     hrAsi:{},      // Limited-CE bonus ASI grants: {grantKey: ability} e.g. {row1:'STR'}
-    specialTrait:'', // '' | 'perfect-form' | 'cursed-lover' | 'living-prison'
+    specialTrait:'', // '' | 'perfect-form' | 'cursed-lover' | 'living-prison' | 'six-eyes'
     lover:{},      // Cursed Lover companion: {name, technique, restsLeft}
     carvedTechnique:'', // Living Prison: GM-tracked carved feature record
     v: SCHEMA_VERSION
@@ -1200,9 +1200,19 @@ var SPECIAL_TRAITS = {
                'Powerful Body: STR, DEX, CON +2 again (maximum 24); poison resistance and immunity to the poisoned condition.',
                'Ultimate Prison: +PB+CON to checks/saves against being taken over; raise take-over DCs against you by PB+CON (all possession methods).'],
       awakened:['Strangely Sturdy (replaces Bizarrely Sturdy): +6 max HP per level; speed 50 ft unless higher; Dash as a bonus action.',
-               'Carved Technique: after 6 months as a reincarnated sorcerer\u2019s vessel (incarnating at least once per month), one of their Innate Technique features is carved into you (GM-tracked campaign procedure).'] } }
+               'Carved Technique: after 6 months as a reincarnated sorcerer\u2019s vessel (incarnating at least once per month), one of their Innate Technique features is carved into you (GM-tracked campaign procedure).'] } },
+  'six-eyes':{ name:'Six Eyes', tag:'The gift granted only to the Gojo Clan. High-power games only \u2014 requires GM approval. Human only.',
+    stages:{
+      dormant:['Illuminated Vision: 120 ft truesight. You can see through thin objects such as a blindfold, which protects you from the information overload.',
+               'Information Overload: without eye protection in combat, gain 1 level of exhaustion per minute (max 3); each such level reduces your technique damage die tier and save DC by 1. Resets after 1 minute with eyes covered (10 minutes outside combat, where you gain 1 level per hour). RCT removes these levels for 20 HP each.',
+               'Perfect Cursed Energy Manipulation: PB times per long rest, reduce CE you spend by 10\u00D7, even into decimals (3 CE becomes 0.3 CE).'],
+      stirring:['Perfect Cursed Energy Manipulation: a number of times equal to your level per long rest, reduce CE you spend by 10\u00D7, even into decimals.',
+               'Technique Analyzer: as a reaction to seeing an Extension, Reversal, or Maximum used (eyes uncovered), or as a bonus action within 1 minute, make an Intelligence (Arcana) check vs. their CE DC. On success, learn the feature and its capabilities (domains: sure-hit effect and refinement).',
+               'Perceptive Eyes: expertise in Perception, advantage on all Perception checks, add your CE modifier to Perception checks. Gain the Cursed Energy Perception feat; detect CE remains in a 300 ft radius. No advantage while wearing eye protection.'],
+      awakened:['Perfect Cursed Energy Manipulation: ALL cursed energy you spend is reduced by 10\u00D7, even into decimals.',
+               'Infinity Optimization: if you have RCT, once per month during a long rest make a DC 20 Arcana check to gain 1 success toward optimizing Infinity. At 12 successes, you no longer spend reactions or CE to nullify attacks with Infinity.'] } }
 };
-var TRAIT_ORDER = ['perfect-form','cursed-lover','living-prison'];
+var TRAIT_ORDER = ['perfect-form','cursed-lover','living-prison','six-eyes'];
 function traitStage(){
   if(!char.specialTrait) return null;
   return char.level>=14 ? 'awakened' : char.level>=6 ? 'stirring' : 'dormant';
@@ -1984,6 +1994,7 @@ function sanitizeAfterAncestryChange(){
     char.hrVariant='pure-body'; char.hrOpts={}; char.hrAsi={};
   }
   if(char.specialTrait==='perfect-form'&&char.ancestry==='cursed-corpse') char.specialTrait='';
+  if(char.specialTrait==='six-eyes'&&char.ancestry!=='human') char.specialTrait='';
 }
 function stepAncestry(body){
   var html='<h2>Step 2 — Ancestry</h2><p class="sub">Every sorcerer is born of something. Humans choose a heritage; Sumerians choose a tribe; cursed spirits choose what kind of curse they are; vessels choose an incarnation; corpses choose a frame.</p>';
@@ -2457,9 +2468,12 @@ function specialTraitPickerHTML(){
   TRAIT_ORDER.forEach(function(k){
     var d=SPECIAL_TRAITS[k];
     var gated=k==='perfect-form'&&char.ancestry==='cursed-corpse';
-    html+='<div class="opt-card'+(t===k?' is-selected':'')+(gated?' is-disabled':'')+'" data-trait="'+k+'" tabindex="0" role="button" aria-pressed="'+(t===k)+'">'+
+    var gatedHuman=k==='six-eyes'&&char.ancestry!=='human';
+    var isGated=gated||gatedHuman;
+    html+='<div class="opt-card'+(t===k?' is-selected':'')+(isGated?' is-disabled':'')+'" data-trait="'+k+'" tabindex="0" role="button" aria-pressed="'+(t===k)+'">'+
       '<span class="check">\u2726</span><h4>'+esc(d.name)+'</h4><p class="tagline">'+esc(d.tag)+'</p>'+
-      (gated?'<p class="small"><b>Unavailable to Cursed Corpses.</b></p>':'')+'</div>';
+      (gated?'<p class="small"><b>Unavailable to Cursed Corpses.</b></p>':'')+
+      (gatedHuman?'<p class="small"><b>Human only.</b></p>':'')+'</div>';
   });
   html+='</div>';
   if(t&&SPECIAL_TRAITS[t]){
