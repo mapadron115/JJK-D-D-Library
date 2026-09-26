@@ -231,6 +231,22 @@ h1 .amp{color:var(--red)}
 .sheet-head .s-sub{color:var(--ink2);font-size:.95rem}
 .sheet-sec{padding:22px 30px;border-bottom:1px solid var(--line)}
 .sheet-sec:last-child{border-bottom:none}
+/* sheet trackers */
+.tracker-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.tracker-card{background:var(--card);border:1px solid var(--line2);border-radius:8px;padding:12px 14px}
+.tracker-title{display:flex;justify-content:space-between;align-items:baseline;font-weight:bold;margin-bottom:6px}
+.tracker-title span:last-child{font-weight:normal;font-size:.8rem;opacity:.7}
+.tracker-num{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.tracker-num input{width:76px;font-size:1.3rem;font-weight:bold;text-align:center;background:var(--paper);border:1px solid var(--line2);border-radius:4px;padding:4px}
+.tracker-controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tracker-controls input,.tracker-controls select{background:var(--paper);border:1px solid var(--line2);border-radius:4px;padding:6px;font:inherit;font-size:.85rem}
+.use-row{display:flex;align-items:center;gap:8px;margin:6px 0}
+.use-name{flex:1;font-size:.9rem}
+.use-pips{display:flex;gap:4px}
+.use-pip{width:22px;height:22px;border-radius:50%;border:2px solid var(--line2);background:transparent;cursor:pointer;padding:0}
+.use-pip.is-used{background:var(--ink);border-color:var(--ink)}
+.trk-toast{margin-top:8px;min-height:1.4em;font-size:.85rem;opacity:0;transition:opacity .3s}
+.trk-toast.show{opacity:1}
 .sheet-sec>h3{font-family:var(--serif);font-size:1.25rem;margin:0 0 14px;letter-spacing:1px;text-transform:uppercase;font-size:1.05rem}
 .sheet-sec>h3 .orn{color:var(--red);letter-spacing:0}
 .ab-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
@@ -996,6 +1012,7 @@ function blankChar(){
     boons:[],     // Special Grade Boons (C&C, level 20, GM-granted): ['unkillable', ...]
     equipment:[], // Step 8: additional equipment beyond background
     cursedTools:[], // Step 8: [{name, grade, notes}] — GM-granted cursed tools
+    trackers:[],  // Sheet use-trackers: [{id, name, max, rest:'long'|'short'|'manual'}]
     v: SCHEMA_VERSION
   };
 }
@@ -1745,6 +1762,7 @@ function migrateChar(c){
   if(!Array.isArray(c.boons)) c.boons=[];
   if(!Array.isArray(c.equipment)) c.equipment=[];
   if(!Array.isArray(c.cursedTools)) c.cursedTools=[];
+  if(!Array.isArray(c.trackers)) c.trackers=[];
   if(!('mindset' in c)) c.mindset='';
   if(!c.classLevels||!Object.keys(c.classLevels).length){
     c.classLevels={}; for(var l=1;l<=(c.level||1);l++) c.classLevels[l]=c.cls;
@@ -3902,6 +3920,7 @@ function stepSheet(body){
   '<button class="btn" id="btnPrint" type="button">🖨 Print sheet</button>'+
   '<button class="btn btn-ghost" id="btnNew2" type="button">＋ New character</button></div>'+
   '<p class="store-note no-print">Stored on this device only.</p>';
+  bindTrackers(hpMax(), hasCEPool()?ceMax():null);
   $('btnSave').addEventListener('click',function(){
     var c=deep(char);
     if(upsertChar(c)){ alert('Saved "'+(c.name||'Unnamed')+'" to this device.'); renderManager(); }
@@ -4091,6 +4110,160 @@ function skillsSheetHTML(ab,P){
     '<div class="skill-cols">'+half(SKILL_LIST.slice(0,9))+half(SKILL_LIST.slice(9))+'</div>'+
     '<p class="small">Shaded rows are proficient (ability modifier + proficiency bonus); expertise doubles the bonus (PB +'+P+' \u2192 +'+(2*P)+').</p></div>';
 }
+/* ═══════════ SHEET TRACKERS ═══════════
+   Interactive HP/CE/use trackers on the generated sheet.
+   Persisted per character in localStorage; hidden on print. */
+function trackerKey(){ return 'ra_trackers_'+(char.id||'noid'); }
+function trackerState(){
+  var d={ hp:null, tempHp:0, ce:null, uses:{} }; /* uses: {trackerId: usedCount} */
+  try{
+    var raw=localStorage.getItem(trackerKey());
+    if(raw) d=Object.assign(d, JSON.parse(raw));
+  }catch(e){}
+  if(!Array.isArray(char.trackers)) char.trackers=[];
+  return d;
+}
+function trackerSave(st){ try{ localStorage.setItem(trackerKey(), JSON.stringify(st)); }catch(e){} }
+function trackerHTML(hpMaxV, ceMaxV){
+  var st=trackerState();
+  var hpCur = st.hp==null?hpMaxV:Math.min(st.hp, hpMaxV);
+  var ceCur = ceMaxV==null?null:(st.ce==null?ceMaxV:Math.min(st.ce, ceMaxV));
+  var html='<div class="sheet-sec no-print" id="trackerSec"><h3><span class="orn">❖</span> Trackers</h3>'+
+    '<p class="small">Live at the table — values save in this browser. Damage spends temporary HP first.</p>'+
+    '<div class="tracker-grid">';
+  /* HP */
+  html+='<div class="tracker-card"><div class="tracker-title"><span>Hit Points</span><span>Max '+hpMaxV+'</span></div>'+
+    '<div class="tracker-num"><input id="trkHp" type="number" min="0" max="'+hpMaxV+'" value="'+hpCur+'" aria-label="Current hit points"><span>/ '+hpMaxV+'</span></div>'+
+    '<div class="tracker-controls"><input id="trkHpAmt" type="number" min="1" value="5" aria-label="Hit point amount" style="width:64px">'+
+    '<button type="button" class="btn" id="trkDmg">Damage</button><button type="button" class="btn" id="trkHeal">Heal</button></div>'+
+    '<div class="tracker-title" style="margin-top:8px"><span>Temporary HP</span></div>'+
+    '<div class="tracker-controls"><input id="trkTemp" type="number" min="0" value="'+(st.tempHp||0)+'" aria-label="Temporary hit points" style="width:64px">'+
+    '<button type="button" class="btn" id="trkTempSet">Set</button><button type="button" class="btn" id="trkTempClear">Clear</button></div></div>';
+  /* CE */
+  if(ceMaxV!=null){
+    html+='<div class="tracker-card"><div class="tracker-title"><span>Cursed Energy</span><span>Max '+ceMaxV+'</span></div>'+
+      '<div class="tracker-num"><input id="trkCe" type="number" min="0" max="'+ceMaxV+'" value="'+ceCur+'" aria-label="Current cursed energy"><span>/ '+ceMaxV+'</span></div>'+
+      '<div class="tracker-controls"><input id="trkCeAmt" type="number" min="1" value="1" aria-label="Cursed energy amount" style="width:64px">'+
+      '<button type="button" class="btn" id="trkCeSpend">Spend</button><button type="button" class="btn" id="trkCeRecover">Recover</button></div></div>';
+  }
+  /* custom use-trackers */
+  html+='<div class="tracker-card"><div class="tracker-title"><span>Limited Uses</span><span>Mark when expended</span></div>'+
+    '<div id="trkUses">'+trackerUsesHTML(st)+'</div>'+
+    '<div class="tracker-controls" style="margin-top:8px"><input id="trkUseName" type="text" placeholder="e.g. Focus" style="flex:1" aria-label="Tracker name">'+
+    '<input id="trkUseMax" type="number" min="1" value="1" style="width:56px" aria-label="Total uses">'+
+    '<select id="trkUseRest" aria-label="Resets on"><option value="long">Long rest</option><option value="short">Short rest</option><option value="manual">Manual</option></select>'+
+    '<button type="button" class="btn" id="trkUseAdd">Add</button></div></div>';
+  html+='</div>'; /* tracker-grid */
+  /* rest + reset */
+  html+='<div class="tracker-controls" style="margin-top:10px">'+
+    '<button type="button" class="btn" id="trkShortRest">Short Rest</button>'+
+    '<button type="button" class="btn" id="trkLongRest">Long Rest</button>'+
+    '<button type="button" class="btn" id="trkReset" style="margin-left:auto">Reset Trackers</button></div>'+
+    '<div id="trkToast" class="trk-toast" role="status" aria-live="polite"></div></div>';
+  return html;
+}
+function trackerUsesHTML(st){
+  var list=char.trackers||[];
+  if(!list.length) return '<p class="small" style="opacity:.6;margin:4px 0">No use-trackers yet — add your limited features above.</p>';
+  return list.map(function(t){
+    var used=Math.min(st.uses[t.id]||0, t.max);
+    var boxes='';
+    for(var i=0;i<t.max;i++) boxes+='<button type="button" class="use-pip'+(i<used?' is-used':'')+'" data-trk-use="'+t.id+'" data-trk-idx="'+i+'" aria-label="'+esc(t.name)+' use '+(i+1)+'" aria-pressed="'+(i<used)+'"></button>';
+    return '<div class="use-row"><span class="use-name">'+esc(t.name)+' <span class="small" style="opacity:.6">('+t.rest+' rest)</span></span>'+
+      '<span class="use-pips">'+boxes+'</span>'+
+      '<button type="button" class="btn use-rm" data-trk-rm="'+t.id+'" style="padding:2px 8px;font-size:.75rem">✕</button></div>';
+  }).join('');
+}
+function bindTrackers(hpMaxV, ceMaxV){
+  var sec=$('trackerSec'); if(!sec) return;
+  var st=trackerState();
+  function save(){ trackerSave(st); }
+  function toast(msg){
+    var el=$('trkToast'); if(!el) return;
+    el.textContent=msg; el.classList.add('show');
+    clearTimeout(el._t); el._t=setTimeout(function(){ el.classList.remove('show'); }, 2200);
+  }
+  function refreshUses(){ $('trkUses').innerHTML=trackerUsesHTML(st); bindUsePips(); }
+  /* HP */
+  function setHp(v){ st.hp=Math.max(0,Math.min(hpMaxV,v)); $('trkHp').value=st.hp; save(); }
+  $('trkHp').addEventListener('change',function(e){ setHp(parseInt(e.target.value,10)||0); });
+  $('trkDmg').addEventListener('click',function(){
+    var amt=Math.max(1,parseInt($('trkHpAmt').value,10)||0);
+    var t=st.tempHp||0, remaining=amt;
+    if(t>0){ var absorbed=Math.min(t,remaining); st.tempHp=t-absorbed; remaining-=absorbed; $('trkTemp').value=st.tempHp; }
+    setHp((st.hp==null?hpMaxV:st.hp)-remaining);
+    toast('Took '+amt+' damage'+(t>0?' ('+Math.min(t,amt)+' absorbed by temp HP)':'')+'.');
+  });
+  $('trkHeal').addEventListener('click',function(){
+    var amt=Math.max(1,parseInt($('trkHpAmt').value,10)||0);
+    setHp((st.hp==null?hpMaxV:st.hp)+amt); toast('Healed '+amt+' HP.');
+  });
+  $('trkTempSet').addEventListener('click',function(){ st.tempHp=Math.max(0,parseInt($('trkTemp').value,10)||0); save(); toast('Temp HP set to '+st.tempHp+'.'); });
+  $('trkTempClear').addEventListener('click',function(){ st.tempHp=0; $('trkTemp').value=0; save(); });
+  /* CE */
+  if(ceMaxV!=null){
+    function setCe(v){ st.ce=Math.max(0,Math.min(ceMaxV,v)); $('trkCe').value=st.ce; save(); }
+    $('trkCe').addEventListener('change',function(e){ setCe(parseInt(e.target.value,10)||0); });
+    $('trkCeSpend').addEventListener('click',function(){
+      var amt=Math.max(1,parseInt($('trkCeAmt').value,10)||0), cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<amt){ toast('Not enough CE.'); return; }
+      setCe(cur-amt); toast('Spent '+amt+' CE.');
+    });
+    $('trkCeRecover').addEventListener('click',function(){
+      var amt=Math.max(1,parseInt($('trkCeAmt').value,10)||0), cur=st.ce==null?ceMaxV:st.ce;
+      setCe(cur+amt); toast('Recovered '+amt+' CE.');
+    });
+  }
+  /* use-trackers */
+  function bindUsePips(){
+    sec.querySelectorAll('[data-trk-use]').forEach(function(pip){
+      pip.addEventListener('click',function(){
+        var id=pip.getAttribute('data-trk-use'), idx=parseInt(pip.getAttribute('data-trk-idx'),10);
+        var t=(char.trackers||[]).filter(function(x){ return x.id===id; })[0]; if(!t) return;
+        var cur=st.uses[id]||0;
+        st.uses[id] = (idx<cur)? idx : idx+1; /* click a lit pip to unmark back to it */
+        save(); refreshUses();
+      });
+    });
+    sec.querySelectorAll('[data-trk-rm]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var id=btn.getAttribute('data-trk-rm');
+        char.trackers=(char.trackers||[]).filter(function(x){ return x.id!==id; });
+        delete st.uses[id]; save(); refreshUses(); persist();
+      });
+    });
+  }
+  bindUsePips();
+  $('trkUseAdd').addEventListener('click',function(){
+    var name=$('trkUseName').value.trim(); if(!name) return;
+    var max=Math.max(1,parseInt($('trkUseMax').value,10)||1);
+    var rest=$('trkUseRest').value;
+    if(!char.trackers) char.trackers=[];
+    char.trackers.push({id:'trk_'+Date.now().toString(36), name:name, max:max, rest:rest});
+    $('trkUseName').value=''; persist(); refreshUses(); toast('Added "'+name+'".');
+  });
+  /* rests */
+  $('trkShortRest').addEventListener('click',function(){
+    (char.trackers||[]).forEach(function(t){ if(t.rest==='short') st.uses[t.id]=0; });
+    save(); refreshUses(); toast('Short rest — short-rest uses restored.');
+  });
+  $('trkLongRest').addEventListener('click',function(){
+    (char.trackers||[]).forEach(function(t){ if(t.rest!=='manual') st.uses[t.id]=0; });
+    st.hp=hpMaxV; $('trkHp').value=hpMaxV;
+    st.tempHp=0; $('trkTemp').value=0;
+    if(ceMaxV!=null){ st.ce=ceMaxV; $('trkCe').value=ceMaxV; }
+    save(); refreshUses(); toast('Long rest — HP, CE, and uses restored.');
+  });
+  $('trkReset').addEventListener('click',function(){
+    if(!confirm('Reset every tracker on this sheet?')) return;
+    try{ localStorage.removeItem(trackerKey()); }catch(e){}
+    st=trackerState(); st.hp=hpMaxV; if(ceMaxV!=null) st.ce=ceMaxV;
+    $('trkHp').value=hpMaxV; $('trkTemp').value=0;
+    if(ceMaxV!=null) $('trkCe').value=ceMaxV;
+    save(); refreshUses(); toast('Trackers reset.');
+  });
+}
+
 function sheetHTML(){
   var A=ANCESTRIES[char.ancestry], H=A?A.heritages[char.heritage]:null;
   var ab=abilitiesAt(char.level);
@@ -4102,6 +4275,8 @@ function sheetHTML(){
     '<div class="s-eyebrow">❖ Ritual Archive · Illustrated · Character Record ❖</div>'+
     '<h2>'+esc(char.name||'Unnamed')+'</h2>'+
     '<div class="s-sub">Level '+char.level+' '+esc(classBreakdown()||'—')+' · '+esc(ancLine)+' · Player: '+esc(char.player||'—')+'</div></div>';
+  /* ── interactive trackers (screen only, persisted per character) ── */
+  html+=trackerHTML(hp, ce);
   if(isHR()){
     var _hv=hrV(), _hd=hrVariantDef(_hv);
     if(_hv==='pure-body'){
