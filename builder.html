@@ -790,7 +790,26 @@ function featSelectOptions(selected){
     PRESET_FEATS.map(function(f){
       return '<option value="'+esc(f)+'"'+(selected===f?' selected':'')+'>'+esc(f)+'</option>';
     }).join('') + '</optgroup>';
+  /* general feats from V.6 (Martial Adept, Crusher, Athlete, etc.) */
+  if(window.GENERAL_FEATS){
+    var gcats=Object.keys(window.GENERAL_FEATS);
+    gcats.forEach(function(cat){
+      var arr=window.GENERAL_FEATS[cat]||[];
+      if(!arr.length) return;
+      html += '<optgroup label="General feats — '+esc(cat)+'">' +
+        arr.map(function(f){
+          var label=f.name+(f.prereq?' ('+f.prereq+')':'');
+          return '<option value="'+esc(f.name)+'"'+(selected===f.name?' selected':'')+
+            ' title="'+esc((f.prereq?f.prereq+'. ':'')+f.text)+'">'+esc(label)+'</option>';
+        }).join('') + '</optgroup>';
+    });
+  }
   var known = tfeats.map(function(f){ return f.name; }).concat(PRESET_FEATS);
+  if(window.GENERAL_FEATS){
+    Object.keys(window.GENERAL_FEATS).forEach(function(cat){
+      (window.GENERAL_FEATS[cat]||[]).forEach(function(f){ known.push(f.name); });
+    });
+  }
   if(selected && known.indexOf(selected) < 0){
     html += '<optgroup label="Previously chosen"><option value="'+esc(selected)+'" selected>'+esc(selected)+' (kept from earlier)</option></optgroup>';
   }
@@ -1340,7 +1359,22 @@ var FEAT_CHOICES = {
     'Archery','Blind Fighting','Defense','Dueling','Great Weapon Fighting','Interception',
     'Protection','Superior Technique','Thrown Weapon Fighting','Two-Weapon Fighting','Unarmed Fighting']},
   'Elemental Adept':{ prompt:'Choose a damage type', max:1, options:[
-    'Acid','Cold','Fire','Lightning','Thunder']}
+    'Acid','Cold','Fire','Lightning','Thunder']},
+  'Cursed Energy Trait':{ prompt:'Choose your cursed energy trait', max:2,
+    options:['Rough','Smooth','Elemental'],
+    options2:['Acid','Cold','Fire','Force','Lightning','Poison','Psychic','Thunder'],
+    labels:['Trait','Damage type (Elemental only)']},
+  'Refined Domain':{ prompt:'Choose a domain refinement', max:1, options:[
+    'Severe Danification','Non-Lethality','Cost Reduction','Lightning Speed Release','Multiplication','Improved Technique']},
+  'Shikigami Specialist':{ prompt:'Choose your specialized shikigami', max:1, options:[
+    'Divine Dogs','Nue','Toad','Rabbit Escape','Great Serpent','Maximum Elephant','Round Deer','Piercing Bull','Tiger Funeral','Mahoraga']},
+  'Linguist':{ prompt:'Choose three languages', max:3, options:[
+    'Common','Elvish','Dwarvish','Halfling','Gnomish','Orc','Draconic','Infernal','Celestial','Abyssal','Deep Speech','Sylvan','Undercommon','Primordial','Giant']},
+  'Weapon Expert':{ prompt:'Choose four weapons', max:4, options:[
+    'Club','Dagger','Greatclub','Handaxe','Javelin','Light Hammer','Mace','Quarterstaff','Sickle','Spear',
+    'Light Crossbow','Dart','Shortbow','Sling',
+    'Battleaxe','Flail','Glaive','Greataxe','Greatsword','Halberd','Lance','Longsword','Maul','Morningstar','Pike','Rapier','Scimitar','Shortsword','Trident','War Pick','Warhammer','Whip',
+    'Blowgun','Hand Crossbow','Heavy Crossbow','Longbow','Net']}
 };
 function featChoiceDef(featName){ return FEAT_CHOICES[featName]||null; }
 function featChoiceHTML(key){
@@ -1352,9 +1386,11 @@ function featChoiceHTML(key){
   var html='<div class="banner" style="margin-top:8px"><span class="bk">❖ '+esc(fname)+' — '+esc(def.prompt.toLowerCase())+'</span>'+
     '<div class="grid2" style="margin-top:6px">';
   for(var i=0;i<def.max;i++){
-    html+='<div class="field"><label><b>'+(def.max>1?'Choice '+(i+1):'Choice')+'</b></label>'+
+    var opts=(i===1&&def.options2)?def.options2:def.options;
+    var label=def.labels?def.labels[i]:(def.max>1?'Choice '+(i+1):'Choice');
+    html+='<div class="field"><label><b>'+esc(label)+'</b></label>'+
       '<select data-featchoice="'+esc(key)+'|'+i+'"><option value="">— choose —</option>'+
-      def.options.map(function(o){
+      opts.map(function(o){
         var dup=picks.indexOf(o)>=0&&picks[i]!==o;
         return '<option value="'+esc(o)+'"'+(picks[i]===o?' selected':'')+(dup?' disabled':'')+'>'+esc(o)+(dup?' (already chosen)':'')+'</option>';
       }).join('')+'</select></div>';
