@@ -1758,6 +1758,7 @@ function renderHeritages(){
       if(_taEl) _taEl.addEventListener('change',function(e){
         char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.tailoredAppearance=e.target.value;
         /* proficiency + expertise derive live in skillProfs()/expertiseSkills() */
+        renderStep();
       });
     }
   }else d.innerHTML='';
