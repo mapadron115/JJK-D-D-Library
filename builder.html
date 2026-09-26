@@ -541,9 +541,9 @@ var ABIL_NAMES = {STR:'Strength',DEX:'Dexterity',CON:'Constitution',INT:'Intelli
 
 var CLASSES = {
   'Juggernaut':         {hd:12, armor:'Light, medium, shields', saves:'Strength, Constitution', reserve:4,  fixed:3, skills:['Animal Handling','Athletics','Intimidation','Nature','Perception','Survival'], skillCount:2, identity:'Durable brawler. Battle Focus — outlast and grind down.'},
-  'Scout':              {hd:8,  armor:'Light',                  saves:'Strength, Constitution', reserve:6,  fixed:4, skills:['Acrobatics','Animal Handling','Athletics','History','Insight','Intimidation','Perception','Survival'], skillCount:2, identity:'Speed, perception, evasive pressure.'},
-  'Warrior':            {hd:10, armor:'All armor, shields',     saves:'Dexterity, Wisdom',       reserve:6,  fixed:4, skills:['Acrobatics','Animal Handling','Athletics','History','Insight','Intimidation','Perception','Survival'], skillCount:2, identity:'Weapon pressure and the largest attack count.'},
-  'Shikigami User':     {hd:8,  armor:'None',                   saves:'Intelligence, Wisdom',   reserve:6,  fixed:4, skills:['Arcana','History','Insight','Investigation','Medicine','Religion'], skillCount:2, identity:'Permanent companion and coordinated actions.'},
+  'Scout':              {hd:8,  armor:'Light',                  saves:'Dexterity, Wisdom',      reserve:6,  fixed:4, skills:['Acrobatics','Animal Handling','Athletics','History','Insight','Intimidation','Perception','Survival'], skillCount:2, identity:'Speed, perception, evasive pressure.'},
+  'Warrior':            {hd:10, armor:'All armor, shields',     saves:'Strength, Dexterity',     reserve:6,  fixed:4, skills:['Acrobatics','Animal Handling','Athletics','History','Insight','Intimidation','Perception','Survival'], skillCount:2, identity:'Weapon pressure and the largest attack count.'},
+  'Shikigami User':     {hd:8,  armor:'Light',                  saves:'Wisdom, Charisma',        reserve:6,  fixed:4, skills:['Arcana','History','Insight','Investigation','Medicine','Religion'], skillCount:2, identity:'Permanent companion and coordinated actions.'},
   'Support Specialist': {hd:6,  armor:'None',                   saves:'Intelligence, Wisdom',   reserve:8,  fixed:5, skills:['Arcana','History','Insight','Investigation','Medicine','Religion'], skillCount:2, identity:'Barriers, curtains, and RCT mastery.'},
   'Strategist':         {hd:6,  armor:'None',                   saves:'Intelligence, Wisdom',   reserve:10, fixed:6, skills:['Arcana','History','Insight','Investigation','Medicine','Religion'], skillCount:2, identity:'Largest CE reserve; technique modification.'},
   'Heavenly Restriction':{hd:12,armor:'None',                   saves:'Strength, Constitution', reserve:0,  fixed:0, skills:['Acrobatics','Athletics','Insight','Intimidation','Perception','Stealth','Survival'], skillCount:2, identity:'Extreme physical growth without CE — Pure Body.'}
@@ -562,9 +562,9 @@ var ANCESTRIES = {
     name:'Human', blurb:'The baseline of the jujutsu world. Humanoid; Medium; 30-ft walk; Common plus one other language.',
     heritages:{
       'ordinary':{ name:'Ordinary Human',
-        asi:'+1 to each of your six ability scores.',
-        bonus:{STR:1,DEX:1,CON:1,INT:1,WIS:1,CHA:1},
-        traits:['Ability Score Increase. Each of your six ability scores increases by 1.']},
+        asi:'+2 to one ability score and +1 to each of the other five.',
+        pick:{counts:[2,1,1,1,1,1]},
+        traits:['Ability Score Increase. One ability score of your choice increases by 2 and the other five each increase by 1.']},
       'sorcerer':{ name:'Jujutsu Sorcerer',
         asi:'+2 to one ability score and +1 to a different score (your choice).',
         pick:{counts:[2,1]},
@@ -572,9 +572,9 @@ var ANCESTRIES = {
                 'Martial Training. You gain proficiency with martial weapons.',
                 'Beginner Cursed Energy. Gain one Cursed Energy feat for which you meet the prerequisites. (Becomes unusable under Pure Body — no replacement.)']},
       'superhuman':{ name:'Superhuman',
-        asi:'+2 Strength, +2 Constitution; speed becomes 35 ft.',
-        bonus:{STR:2,CON:2},
-        traits:['Ability Score Increase. Strength and Constitution each increase by 2; your speed becomes 35 feet.',
+        asi:'+2 to one of Strength, Dexterity, or Constitution and +1 to the other two; speed becomes 35 ft.',
+        pick:{counts:[2,1,1], abilities:['STR','DEX','CON']},
+        traits:['Ability Score Increase. Increase either your Strength, Dexterity, or Constitution score by 2 and the other two by 1; your speed becomes 35 feet.',
                 'Athletics proficiency; double your jumping distance; count as one size larger for carrying, pushing, dragging, and lifting.',
                 'Uncanny Endurance. When you take damage, use your reaction to reduce it by 1d12 + your Constitution modifier.']}
     }
@@ -680,21 +680,20 @@ var ANCESTRIES = {
     name:'Cursed Vessel', blurb:'A sorcerer reborn in a stolen or painted body. Humanoid; Small or Medium, matching the host body; 30-ft walking speed; the host body\u2019s remaining natural lifespan; Common and one other language. Choose one incarnation.',
     heritages:{
       'reincarnated':{ name:'Reincarnated',
-        asi:'+2 to one ability score and +1 to each of your other five ability scores.',
-        bonus:{STR:1,DEX:1,CON:1,INT:1,WIS:1,CHA:1},
-        pick:{counts:[1]},
+        asi:'+2 to one ability score and +2 to a different ability score.',
+        pick:{counts:[2,2]},
         traits:['This Body Is Mine. You have advantage on saving throws against effects that would unwillingly transform your body or replace your physical form. This does not grant general advantage against possession, charm, or soul damage unless the effect also transforms your body.',
                 'Incomplete and complete states are narrative states, not additional ancestry options \u2014 choose Reincarnated or Death Painting for statistics.',
-                'Ability Score Increase. Increase one ability score by 2 and each of your other five ability scores by 1.',
+                'Ability Score Increase. Choose one ability score to increase by 2 and a different ability score to increase by 2.',
                 'Life Experience. Gain proficiency in two skills, or one skill and one tool, of your choice.',
                 'Cling to Life. When reduced to 0 HP without dying outright, you may drop to 1 HP instead. Once used, this trait returns after a long rest.']},
       'death-painting':{ name:'Death Painting',
-        asi:'Charisma +3 (maximum 20).',
+        asi:'Charisma +3.',
         bonus:{CHA:3},
         hpPerLevel:2,
         traits:['This Body Is Mine. You have advantage on saving throws against effects that would unwillingly transform your body or replace your physical form. This does not grant general advantage against possession, charm, or soul damage unless the effect also transforms your body.',
                 'Incomplete and complete states are narrative states, not additional ancestry options \u2014 choose Reincarnated or Death Painting for statistics.',
-                'Ability Score Increase. Your Charisma increases by 3, to a maximum of 20.',
+                'Ability Score Increase. Your Charisma increases by 3.',
                 'Durable Body. Your HP maximum increases by 2 at level 1 and by 2 whenever your total character level increases (2 \u00d7 character level).',
                 'Poisonous Blood. When a creature within 5 feet deals piercing or slashing damage to you, use your reaction to splash it or another creature within 5 feet. The target takes poison damage equal to PB and makes a Constitution save against 8 + PB + Constitution modifier. On a failure, it is poisoned until the end of your next turn.']}
     }
@@ -703,17 +702,17 @@ var ANCESTRIES = {
     name:'Cursed Corpse', blurb:'An animated construct given a purpose. Construct; Common; 35-ft walking speed; no natural maximum lifespan while repaired; choose Small, Medium, or Large; choose a Softbody or Hard Shell frame.',
     heritages:{
       'softbody':{ name:'Softbody',
-        asi:'+4 to one ability score of your choice (maximum 20).',
+        asi:'+4 to one ability score of your choice.',
         pick:{counts:[4]},
-        traits:['Purpose-Built. One ability score of your choice increases by 4, to a maximum of 20.',
+        traits:['Purpose-Built. One ability score of your choice increases by 4.',
                 'Constructed Size. A Large corpse occupies a 10-foot space but gains no automatic reach or larger weapon dice. It squeezes through spaces normally and uses its actual size for grappling and carrying.',
                 'Unnatural Nature. You do not need to breathe, eat, drink, or sleep, and magic cannot put you to sleep. You must still complete rests normally. Hit Dice, ordinary healing, and RCT can restore your HP unless an effect expressly excludes Constructs; describe rest recovery as repair materials and maintenance.',
                 'Tailored Appearance. Choose Intimidation, Persuasion, or Performance. You gain proficiency in the chosen skill and double PB for checks made with it.',
                 'Surprise. After posing as a mundane object or nonsentient body, use an action to make Charisma (Performance) against a creature\u2019s passive Insight. On a success, reveal yourself and choose that creature within 30 feet if it can see you. It makes a Wisdom save against 10 + PB + Charisma modifier; on a failure it is stunned until the end of your next turn. Once used, finish a long rest before using it again.']},
       'hard-shell':{ name:'Hard Shell',
-        asi:'+4 to one ability score of your choice (maximum 20).',
+        asi:'+4 to one ability score of your choice.',
         pick:{counts:[4]},
-        traits:['Purpose-Built. One ability score of your choice increases by 4, to a maximum of 20.',
+        traits:['Purpose-Built. One ability score of your choice increases by 4.',
                 'Constructed Size. A Large corpse occupies a 10-foot space but gains no automatic reach or larger weapon dice. It squeezes through spaces normally and uses its actual size for grappling and carrying.',
                 'Unnatural Nature. You do not need to breathe, eat, drink, or sleep, and magic cannot put you to sleep. You must still complete rests normally. Hit Dice, ordinary healing, and RCT can restore your HP unless an effect expressly excludes Constructs; describe rest recovery as repair materials and maintenance.',
                 'Integrated Armor. You gain a +1 bonus to AC. You may wear only armor with which you are proficient. Incorporating or removing armor takes 1 hour in contact with it, and may occur during a rest. Integrated armor cannot be removed against your will while you live. The +1 is a flat bonus and applies after the chosen AC calculation, including worn armor and a shield.']}
@@ -1066,11 +1065,21 @@ function hpMax(){
 function ceReserveSum(){
   if(hrV()==='pure-body') return {dieMax:0,sum:0}; /* Pure Body: no reserve at all */
   var sum = 0, dieMax = 0;
+  var classLevels = {};
+  for(var l=1;l<=char.level;l++){
+    var cname = clsAt(l);
+    if(cname) classLevels[cname]=(classLevels[cname]||0)+1;
+  }
+  /* V6: use the Reserve Die of the highest-level class */
+  var bestCls=null, bestLv=0;
+  Object.keys(classLevels).forEach(function(cn){
+    if(classLevels[cn]>bestLv){ bestLv=classLevels[cn]; bestCls=cn; }
+  });
+  if(bestCls && CLASSES[bestCls] && CLASSES[bestCls].reserve) dieMax = CLASSES[bestCls].reserve;
   for(var l=1;l<=char.level;l++){
     var C = CLASSES[clsAt(l)]; if(!C||!C.reserve) continue; /* HR levels add no CE */
     var ld = char.levelData[l]||{};
-    if(l===1) dieMax = C.reserve; /* max Reserve Die of the starting class */
-    else sum += ceGainAtLevel(l,C,ld);
+    if(l>1) sum += ceGainAtLevel(l,C,ld);
   }
   return {dieMax:dieMax, sum:sum};
 }
@@ -2686,11 +2695,12 @@ function renderFinal(){
   var html='';
   if(h&&h.pick&&!evoNoASI()){
     html+='<h3>Ancestry increase — your choice</h3><p class="small">'+esc(h.asi)+'</p><div class="grid2">';
+    var pickAbs=h.pick.abilities||ABILITIES;
     h.pick.counts.forEach(function(n,i){
       var cur=(char.ancestryPicks||{})['p'+i]||'';
       var others=Object.keys(char.ancestryPicks||{}).filter(function(k){return k!=='p'+i;}).map(function(k){return char.ancestryPicks[k];});
       html+='<div class="field"><label>+'+n+' to…</label><select id="apick_'+i+'"><option value="">— choose —</option>'+
-        ABILITIES.map(function(a){ return '<option value="'+a+'"'+(cur===a?' selected':'')+(others.indexOf(a)>=0?' disabled':'')+'>'+ABIL_NAMES[a]+'</option>'; }).join('')+'</select></div>';
+        pickAbs.map(function(a){ return '<option value="'+a+'"'+(cur===a?' selected':'')+(others.indexOf(a)>=0?' disabled':'')+'>'+ABIL_NAMES[a]+'</option>'; }).join('')+'</select></div>';
     });
     html+='</div>';
   }
@@ -3144,7 +3154,7 @@ function hrBodyBonuses(){
   if(has('Major Precognition')) b.extraNotes.push('Major Precognition: 1/round reaction — attacks vs you at disadvantage; 1/round advantage on one save');
   if(has('Minor Enhanced Senses')){ b.blindsight=10; b.senseNotes.push('Blindsight 10 ft'); }
   if(has('Medium Enhanced Senses')){ b.blindsight=30; b.tremorsense=30; b.senseNotes.push('Blindsight 30 ft, tremorsense 30 ft'); }
-  if(has('Major Enhanced Senses')){ b.blindsight=60; b.tremorsense=60; b.senseNotes.push('Blindsight 60 ft, tremorsense 60 ft'); b.extraNotes.push('Major Enhanced Senses: advantage on hearing-based Perception'); }
+  if(has('Major Enhanced Senses')){ b.blindsight=90; b.tremorsense=60; b.senseNotes.push('Blindsight 90 ft, tremorsense 60 ft'); b.extraNotes.push('Major Enhanced Senses: advantage on hearing-based Perception'); }
   return b;
 }
 /* ── chosen-option lines for the final sheet ── */

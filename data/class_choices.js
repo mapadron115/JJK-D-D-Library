@@ -134,7 +134,7 @@ window.CLASS_CHOICES = {
     feature:'Advanced Shikigami',
     points:4, cap:20,
     prompt:'Spread 4 points among its ability scores (max 20 each)',
-    blurb:'Your shikigami\u2019s ability scores \u2014 4 points to distribute, no score above 20.' }
+    blurb:'Your shikigami\u2019s ability scores \u2014 4 points to distribute, 4 points to distribute freely.' }
 ],
 'Scout': [
   { key:'evasion', level:15, type:'slots', name:'Evasion \u2014 second saving throw',

@@ -239,7 +239,7 @@ window.CLASS_FEATURES = {
   {
     "level": 4,
     "name": "Ability Score Improvement",
-    "text": "When you reach 4th level, and again at 8th, 12th, 16th, and 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1 for both you and your shikigami companion (max of 20) or instead gain a feat."
+    "text": "When you reach 4th level, and again at 8th, 12th, 16th, and 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1 for both you and your shikigami companion or instead gain a feat."
   },
   {
     "level": 5,
@@ -259,7 +259,7 @@ window.CLASS_FEATURES = {
   {
     "level": 13,
     "name": "Advanced Shikigami",
-    "text": "Beginning at 13th level, your shikigami grows stronger. Your companion gains the following benefits:\n\n• You can spread out 4 points among its ability scores (max of 20).\n\n• Its strike attacks deal 1d6 extra necrotic damage(total of 2d6).\n\n• You can either choose for your shikigami to become large, or gain the ability to become any weapon, dealing an additional 2d6 necrotic damage."
+    "text": "Beginning at 13th level, your shikigami grows stronger. Your companion gains the following benefits:\n\n• You can spread out 4 points among its ability scores.\n\n• Its strike attacks deal 1d6 extra necrotic damage(total of 2d6).\n\n• You can either choose for your shikigami to become large, or gain the ability to become any weapon, dealing an additional 2d6 necrotic damage."
   },
   {
     "level": 15,
