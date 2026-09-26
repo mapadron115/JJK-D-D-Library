@@ -1072,7 +1072,13 @@ function hpMax(){
   for(var l=1;l<=char.level;l++){
     var C = CLASSES[clsAt(l)]; if(!C) continue;
     if(hasASIAt(l) && char.asi[l] && (char.asiMode||{})[l]!=='feat') char.asi[l].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
-    var cm = noConHP?0:mod(ab.CON||10), ld = char.levelData[l]||{};
+    /* HP uses the CON effectively in force at this level: cumulative gains
+       (manual entry can exceed the ceiling) clamped to the ceiling at that
+       level — e.g. a Juggernaut's CON counts as 20 until Unstoppable raises
+       the cap to 24 at Juggernaut 20 */
+    var conEff=ab.CON||10, conCeil=abilityCeilingAt('CON',l);
+    if(conEff>conCeil) conEff=conCeil;
+    var cm = noConHP?0:mod(conEff), ld = char.levelData[l]||{};
     var die = (l===1) ? C.hd : ((ld.hpMode==='roll') ? (ld.hpDie||0) : avgDie(C.hd));
     total += die + cm;
   }
@@ -1264,10 +1270,11 @@ var BOONS = {
 };
 var BOON_ORDER = ['ultimate-trait','shikigami-master','unkillable','unending-ce','curse-resistance','peerless-accuracy','swift-techniques','rct-master','survivor'];
 function hasBoon(id){ return (char.boons||[]).indexOf(id)>=0; }
-function traitStage(){
+function traitStageAt(level){
   if(!char.specialTrait) return null;
-  return char.level>=14 ? 'awakened' : char.level>=6 ? 'stirring' : 'dormant';
+  return level>=14 ? 'awakened' : level>=6 ? 'stirring' : 'dormant';
 }
+function traitStage(){ return traitStageAt(char.level); }
 function traitStageName(){ var s=traitStage(); return s==='awakened'?'Awakened (14+)':s==='stirring'?'Stirring (6\u201313)':'Dormant (1\u20135)'; }
 function traitFlatHP(){
   var t=char.specialTrait, s=traitStage(), n=0, L=char.level;
@@ -1281,17 +1288,18 @@ function traitMaxBonus(){
   if(t==='living-prison') return s==='stirring'||s==='awakened'?4:2;
   return 0;
 }
-function abilityCeiling(ability){
+function abilityCeilingAt(ability, level){
   /* V6: 20 standard; Heavenly Restriction raises to 25 at 1st, +1 per level after, max 40.
-     Class/trait features can raise specific maxima further (RA rulings supersede). */
-  var base = isHR() ? Math.min(25 + (char.level - 1), 40) : 20;
+     Class/trait features can raise specific maxima further (RA rulings supersede).
+     Level-aware so per-level math (e.g. Max HP) clamps with the ceiling in force at that level. */
+  var base = isHR() ? Math.min(25 + (level - 1), 40) : 20;
   if(!ability) return base;
   var a = ability.toUpperCase();
   /* Juggernaut Unstoppable (20th): STR/CON maximum 24 (V6 3.1) */
-  if((a==='STR'||a==='CON') && classLevelCount('Juggernaut', char.level) >= 20)
+  if((a==='STR'||a==='CON') && classLevelCount('Juggernaut', level) >= 20)
     base = Math.max(base, 24);
   /* Special Trait raised maxima (Creeps & Curses) — additive to the character's ceiling */
-  var t = char.specialTrait, s = traitStage();
+  var t = char.specialTrait, s = traitStageAt(level);
   if(t==='perfect-form' && (a==='STR'||a==='DEX'||a==='CON')){
     if(s==='awakened') base += 8;
     else if(s==='stirring') base += 4;
@@ -1302,6 +1310,7 @@ function abilityCeiling(ability){
   }
   return base;
 }
+function abilityCeiling(ability){ return abilityCeilingAt(ability, char.level); }
 /* level-1-effective ability adjustments: variant decreases, variant bonus ASI,
    trait increases. Applied before level-up ASIs in both abilitiesAt and hpMax. */
 function creationAbilityMods(ab){
@@ -1876,7 +1885,7 @@ function renderManager(){
         var copy = deep(found); copy.id = uid(); copy.name = (copy.name||'Unnamed')+' (copy)';
         migrateChar(copy); arr2.push(copy); saveAll(arr2); renderManager();
       }else if(act==='load' && found){
-        char = migrateChar(deep(found)); startWizard(8);
+        char = migrateChar(deep(found)); startWizard(9); /* load = view the finished sheet */
       }else if(act==='edit' && found){
         char = migrateChar(deep(found)); startWizard(1); /* same ID — saving later updates this character */
       }
@@ -2692,7 +2701,7 @@ function renderManualUI(){
     });
     $('man_'+a).addEventListener('change',function(e){
       var v=parseInt(e.target.value,10);
-      if(isNaN(v)) v=3; v=Math.max(3,v);
+      if(isNaN(v)) v=3; v=Math.max(3,Math.min(abilityCeiling(a),v));
       e.target.value=v; char.abilityBase[a]=v; applyAncestry(); renderFinal(); refreshNav();
     });
   });
@@ -3881,9 +3890,10 @@ function stepDetails(body){
       '<p class="small">Rewards for sorcerers capable of battling Special Grades. Your GM chooses which boons you receive.</p><div class="opt-grid">';
     BOON_ORDER.forEach(function(k){
       var b=BOONS[k], sel=hasBoon(k);
+      var warn=(k==='unending-ce'&&!hasCEPool())?'<p class="small" style="color:var(--gold,#c9a227);margin-top:4px">\u26a0 No effect: this character has no CE pool (Pure Body).</p>':'';
       html+='<div class="opt-card'+(sel?' is-selected':'')+'" data-boon="'+k+'" tabindex="0" role="button" aria-pressed="'+sel+'">'+
         '<span class="check">\u2726</span><h4>'+esc(b.name)+'</h4><p class="tagline">'+esc(b.prereq)+'</p>'+
-        '<p class="small">'+esc(b.desc)+'</p></div>';
+        '<p class="small">'+esc(b.desc)+'</p>'+warn+'</div>';
     });
     html+='</div>';
   }
@@ -4317,7 +4327,17 @@ function bindTrackers(hpMaxV, ceMaxV){
     save(); refreshUses(); toast('Long rest — HP, CE, and uses restored.');
   });
   $('trkReset').addEventListener('click',function(){
-    if(!confirm('Reset every tracker on this sheet?')) return;
+    /* two-click arm instead of a native confirm() — native dialogs are jarring
+       and auto-dismiss under automation, silently swallowing the reset */
+    var btn=$('trkReset');
+    if(btn.getAttribute('data-armed')!=='1'){
+      btn.setAttribute('data-armed','1');
+      btn.textContent='⚠ Confirm Reset';
+      toast('Click Reset Trackers again to confirm.');
+      setTimeout(function(){ var b=$('trkReset'); if(b){ b.removeAttribute('data-armed'); b.textContent='Reset Trackers'; } },4000);
+      return;
+    }
+    btn.removeAttribute('data-armed'); btn.textContent='Reset Trackers';
     try{ localStorage.removeItem(trackerKey()); }catch(e){}
     st=trackerState(); st.hp=hpMaxV; if(ceMaxV!=null) st.ce=ceMaxV;
     $('trkHp').value=hpMaxV; $('trkTemp').value=0;
