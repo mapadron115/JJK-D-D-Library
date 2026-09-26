@@ -87,6 +87,11 @@ h1 .amp{color:var(--red)}
 .step-item.is-done .n{color:var(--olive)}
 .wiz-nav{display:flex;justify-content:space-between;gap:12px;margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
 .nav-block-msg{font-size:13px;color:var(--red-deep);align-self:center;text-align:right;max-width:60%}
+.ce-reasons{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.ce-reasons li{font-size:.86rem;color:var(--ink2);border-left:3px solid var(--line2);padding:2px 0 2px 10px}
+.ce-reasons li b{color:var(--ink);font-family:var(--serif)}
+.grant-toggle{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:.82rem;color:var(--ink2);cursor:pointer}
+.grant-toggle input{width:16px;height:16px;accent-color:var(--red-deep)}
 /* ── buttons ─────────────────────────────── */
 .btn{font:inherit;font-size:.82rem;letter-spacing:1.5px;text-transform:uppercase;background:transparent;color:var(--ink);border:1px solid var(--ink2);border-radius:3px;padding:10px 20px;cursor:pointer}
 .btn:hover{background:var(--ink);color:var(--paper)}
@@ -997,7 +1002,6 @@ function tSource(e){ return e ? (e.figure || e.collection || e.source || '') : '
 function tTier(e){ return e ? (e.tier || '') : ''; }
 function tGrade(e){ return e ? (e.grade || '') : ''; }
 function tRole(e){ return e ? (e.role || e.kind || '') : ''; }
-function tCe(e){ return e ? (e.ce_ability || '') : ''; }
 function tConcept(e){ return e ? (e.concept || e.summary || '') : ''; }
 /* Edition-aware dossier base: dossiers/ lives at the site root beside data/.
    Derived from a script URL under data/ or assets/ (mirrors assets/codex.js
@@ -1055,6 +1059,7 @@ function blankChar(){
     lover:{},      // Cursed Lover companion: {name, technique, restsLeft}
     carvedTechnique:'', // Living Prison: GM-tracked carved feature record
     boons:[],     // Special Grade Boons (C&C, level 20, GM-granted): ['unkillable', ...]
+    grants:{},     // GM-granted technique features: {techId: {maximum:1, domain:1, l20:1}}
     equipment:[], // Step 8: additional equipment beyond background
     cursedTools:[], // Step 8: [{name, grade, notes}] — GM-granted cursed tools
     trackers:[],  // Sheet use-trackers: [{id, name, max, rest:'long'|'short'|'manual'}]
@@ -1329,6 +1334,39 @@ function allFeatNames(){
   return out;
 }
 function hasFeatNamed(n){ return allFeatNames().indexOf(n)>=0; }
+/* GM-granted technique features (Maximum / Domain / early L20 capstone) */
+function techGrant(id, kind){ var g=char.grants||{}; return !!((g[id]||{})[kind]); }
+function grantToggleHTML(id, kind){
+  var on=techGrant(id, kind);
+  return '<label class="grant-toggle no-print"><input type="checkbox" data-grant="'+esc(id)+'|'+kind+'"'+(on?' checked':'')+'> '+(on?'✓ Granted by GM':'GM grants')+'</label>';
+}
+function findTechEntry(id){
+  var pools=[['figures',FIGURES],['originals',ORIGINALS]];
+  for(var p=0;p<pools.length;p++){ var arr=pools[p][1]||[]; for(var i=0;i<arr.length;i++) if(arr[i].id===id) return {e:arr[i],catalog:pools[p][0]}; }
+  return null;
+}
+/* GM-grant toggles live in roadmapHTML callouts on two surfaces (wizard technique
+   inspector + character sheet). One delegated listener survives re-renders on both. */
+document.addEventListener('change', function(ev){
+  var t=ev.target;
+  if(!t||!t.getAttribute) return;
+  var g=t.getAttribute('data-grant');
+  if(!g) return;
+  var ix=g.lastIndexOf('|'), id=g.slice(0,ix), kind=g.slice(ix+1);
+  char.grants=char.grants||{};
+  var rec=char.grants[id]=char.grants[id]||{};
+  if(t.checked) rec[kind]=true; else delete rec[kind];
+  var card=t.closest?t.closest('.tech-card'):null;
+  if(card){
+    var info=findTechEntry(id), bodyEl=card.querySelector('.tech-body');
+    if(info&&bodyEl) bodyEl.innerHTML=techInspectHTML(info.e, info.catalog);
+  }else if($('sheetWrap')){
+    upsertChar(char);
+    $('sheetWrap').innerHTML=sheetHTML();
+    bindTrackers(hpMax(), hasCEPool()?ceMax():null);
+    bindSheetExtras();
+  }
+});
 function traitStageAt(level){
   if(!char.specialTrait) return null;
   return level>=14 ? 'awakened' : level>=6 ? 'stirring' : 'dormant';
@@ -1847,6 +1885,7 @@ function migrateChar(c){
   if(!('backgroundTool' in c)) c.backgroundTool='';
   if(!Array.isArray(c.backgroundEquipment)) c.backgroundEquipment=[];
   if(!Array.isArray(c.boons)) c.boons=[];
+  if(!c.grants||typeof c.grants!=='object') c.grants={};
   if(!Array.isArray(c.equipment)) c.equipment=[];
   if(!Array.isArray(c.cursedTools)) c.cursedTools=[];
   if(!Array.isArray(c.trackers)) c.trackers=[];
@@ -2397,10 +2436,14 @@ function stepClass(body){
 }
 /* Cursed Energy ability picker (shared by normal classes and HR variants with a CE pool) */
 function ceAbilitySegHTML(){
-  return '<div class="field" style="max-width:420px"><label>Cursed Energy ability</label>'+
+  return '<div class="field" style="max-width:520px"><label>Cursed Energy ability</label>'+
     '<div class="seg" id="ceSeg">'+
     '<button type="button" class="seg-btn'+(char.ceAbility==='WIS'?' is-active':'')+'" data-ce="WIS">Wisdom</button>'+
     '<button type="button" class="seg-btn'+(char.ceAbility==='CHA'?' is-active':'')+'" data-ce="CHA">Charisma</button></div>'+
+    '<ul class="ce-reasons">'+
+    '<li><b>Wisdom</b> — your attunement to the world: your reading of the universe around you, its currents and its hidden order, is what gives your cursed energy its shape.</li>'+
+    '<li><b>Charisma</b> — your understanding of yourself: your inner world, your will, the truth you carry and refuse to surrender, is what gives your cursed energy its shape.</li>'+
+    '</ul>'+
     '<p class="small">Per the Field Guide: choose Wisdom or Charisma when you first gain CE. CE attack = proficiency + CE modifier; CE save DC = 8 + proficiency + CE modifier.</p></div>';
 }
 function wireCeSeg(ex){
@@ -3805,7 +3848,6 @@ function techCard(e,catalog){
   var gchip=fig?(tTier(e)?('Tier '+tTier(e)):''):tGrade(e);
   if(gchip) chips+='<span class="chip solid">'+esc(gchip)+'</span>';
   if(tRole(e)) chips+='<span class="chip">'+esc(tRole(e))+'</span>';
-  if(fig&&tCe(e)) chips+='<span class="chip plain">CE: '+esc(tCe(e))+'</span>';
   if(e.detail) chips+='<span class="chip plain">'+esc(e.detail)+' record</span>';
   var variants=techVariants(e.id);
   var variantHTML='';
@@ -3835,9 +3877,6 @@ function techInspectHTML(e,catalog){
   var html='';
   if(fig){
     if(e.visibility==='npc') html+='<div class="banner"><span class="bk">❖ NPC</span><p>This is an NPC technique — viewable here but not player-selectable.</p></div>';
-    var ceSug=tCe(e);
-    if(ceSug&&char.ceAbility&&ceSug!==char.ceAbility)
-      html+='<div class="banner"><span class="bk">❖ Note</span><p>This technique suggests <b>'+esc(ceSug)+'</b> as its CE ability; yours is <b>'+esc(char.ceAbility)+'</b>. CE attack and save DC always use <b>your</b> CE ability.</p></div>';
     if(e.detail==='summary'&&e.summary_text){
       html+='<span class="gate-label active">Active now — dossier record</span><div class="feat-text">'+md(e.summary_text)+'</div>';
     }else{
@@ -3867,11 +3906,12 @@ function roadmapHTML(entry, level){
     });
     html+='</ul>';
   }
-  if(entry.maximum) html+='<div class="callout callout-maximum locked-co"><div class="callout-head"><span class="callout-kicker">🔒 Maximum Technique — unlocks with CE ability 20 + a Maximum Output breakthrough (confirm with GM)</span><h4>'+esc(entry.maximum.name||'Maximum')+'</h4></div>'+(entry.maximum.cost_line?'<div class="cost">'+esc(entry.maximum.cost_line)+'</div>':'')+'</div>';
-  if(entry.domain) html+='<div class="callout callout-domain locked-co"><div class="callout-head"><span class="callout-kicker">🔒 Domain — unlocks when your GM grants Domain access · Specific Domain profile</span><h4>'+esc(entry.domain.name||'Domain')+'</h4></div>'+(entry.domain.activation?'<div class="cost">'+esc(entry.domain.activation)+(entry.domain.ce_cost!=null?' · '+entry.domain.ce_cost+' CE':'')+'</div>':'')+'</div>';
+  var tid=entry.id||'';
+  var maxOpen=techGrant(tid,'maximum'), domOpen=techGrant(tid,'domain'), l20Open=lvl>=20||techGrant(tid,'l20');
+  if(entry.maximum) html+='<div class="callout callout-maximum'+(maxOpen?'':' locked-co')+'"><div class="callout-head"><span class="callout-kicker">'+(maxOpen?'✓ Maximum Technique — granted by your GM':'🔒 Maximum Technique — unlocks with CE ability 20 + a Maximum Output breakthrough (confirm with GM)')+'</span><h4>'+esc(entry.maximum.name||'Maximum')+'</h4></div>'+(entry.maximum.cost_line?'<div class="cost">'+esc(entry.maximum.cost_line)+'</div>':'')+(maxOpen&&entry.maximum.text?'<div class="body"><div class="feat-text">'+md(entry.maximum.text)+'</div></div>':'')+grantToggleHTML(tid,'maximum')+'</div>';
+  if(entry.domain) html+='<div class="callout callout-domain'+(domOpen?'':' locked-co')+'"><div class="callout-head"><span class="callout-kicker">'+(domOpen?'✓ Domain — granted by your GM · Specific Domain profile':'🔒 Domain — unlocks when your GM grants Domain access · Specific Domain profile')+'</span><h4>'+esc(entry.domain.name||'Domain')+'</h4></div>'+(entry.domain.activation?'<div class="cost">'+esc(entry.domain.activation)+(entry.domain.ce_cost!=null?' · '+entry.domain.ce_cost+' CE':'')+'</div>':'')+(domOpen&&entry.domain.text?'<div class="body"><div class="feat-text">'+md(entry.domain.text)+'</div></div>':'')+grantToggleHTML(tid,'domain')+'</div>';
   if(entry.l20){
-    var unlocked=lvl>=20;
-    html+='<div class="callout'+(unlocked?'':' locked-co')+'"><div class="callout-head"><span class="callout-kicker">'+(unlocked?'✓ Level 20 capstone — unlocked':'🔒 Level 20 capstone')+'</span><h4>'+esc(entry.l20.name||'L20 Capstone')+'</h4></div>'+(entry.l20.cost_line?'<div class="cost">'+esc(entry.l20.cost_line)+'</div>':'')+(unlocked&&entry.l20.text?'<div class="body"><div class="feat-text">'+md(entry.l20.text)+'</div></div>':'')+'</div>';
+    html+='<div class="callout'+(l20Open?'':' locked-co')+'"><div class="callout-head"><span class="callout-kicker">'+(l20Open?(lvl>=20?'✓ Level 20 capstone — unlocked':'✓ Level 20 capstone — granted early by your GM'):'🔒 Level 20 capstone')+'</span><h4>'+esc(entry.l20.name||'L20 Capstone')+'</h4></div>'+(entry.l20.cost_line?'<div class="cost">'+esc(entry.l20.cost_line)+'</div>':'')+(l20Open&&entry.l20.text?'<div class="body"><div class="feat-text">'+md(entry.l20.text)+'</div></div>':'')+grantToggleHTML(tid,'l20')+'</div>';
   }
   return html;
 }
@@ -4133,7 +4173,7 @@ function techniqueSheetHTML(entry, variantName){
   if(tIsFigure(entry)){
     var parts=featLists(entry, char.level);
     html+='<p style="font-family:var(--serif);font-size:1.5rem;font-weight:bold;margin:0">'+esc(tName(entry))+'</p>'+
-      '<p class="small" style="margin-top:2px">'+esc(entry.figure||'')+(entry.tier?' · Tier '+esc(entry.tier):'')+(entry.role?' · '+esc(entry.role):'')+(entry.ce_ability?' · suggested CE '+esc(entry.ce_ability):'')+'</p>'+
+      '<p class="small" style="margin-top:2px">'+esc(entry.figure||'')+(entry.tier?' · Tier '+esc(entry.tier):'')+(entry.role?' · '+esc(entry.role):'')+'</p>'+
       (entry.concept?'<p style="font-style:italic;color:var(--ink2)">“'+esc(entry.concept)+'”</p>':'');
     if(entry.detail==='summary'&&entry.summary_text){
       html+='<div class="feat-text">'+md(entry.summary_text)+'</div>';
@@ -4436,7 +4476,7 @@ function qrInfer(name, text){
 /* Parse a fixed, unambiguous CE cost from a codex cost_line ("Bonus action · 3 CE").
    Returns null for variable costs ("up to X CE", "X CE per …", sustain, multipliers). */
 function qrFixedCE(costLine){
-  var s=String(costLine||'');
+  var s=String(costLine||'').replace(/requires?[^·,]*/ig,''); /* prerequisites aren't variable costs */
   if(/up to|\bper\b|each|variable|sustain|\+|×/i.test(s)) return null;
   var m=s.match(/(?:^|[·,])\s*(\d+)\s*CE\b/);
   return m?parseInt(m[1],10):null;
@@ -4512,9 +4552,26 @@ function qrCollect(){
             fixed!=null?{ce:fixed,tech:1}:null);
       });
       Object.keys(parts.locked).forEach(function(lv){ locked.push('Lv '+lv+': '+parts.locked[lv].map(function(f){return f.name;}).join(', ')); });
-      if(entry.maximum) locked.push('🔒 Maximum: '+(entry.maximum.name||'Maximum')+' — GM-granted');
-      if(entry.domain) locked.push('🔒 Domain: '+(entry.domain.name||'Domain')+' — GM-granted');
-      if(entry.l20&&char.level<20) locked.push('🔒 L20 capstone: '+(entry.l20.name||'Capstone'));
+      var gtid=entry.id||'';
+      if(entry.maximum){
+        if(techGrant(gtid,'maximum')){
+          var mf=qrFixedCE(entry.maximum.cost_line);
+          add(qrBucket(entry.maximum.cost_line),entry.maximum.name||'Maximum',tn+' · Maximum',entry.maximum.cost_line||'',qrOneLiner(entry.maximum.text),mf!=null?{ce:mf,tech:1}:null);
+        }else locked.push('🔒 Maximum: '+(entry.maximum.name||'Maximum')+' — GM-granted');
+      }
+      if(entry.domain){
+        if(techGrant(gtid,'domain')){
+          var dc=(entry.domain.activation||'')+(entry.domain.ce_cost!=null?' · '+entry.domain.ce_cost+' CE':'');
+          var df=qrFixedCE(dc);
+          add(qrBucket(dc),entry.domain.name||'Domain',tn+' · Domain',dc,qrOneLiner(entry.domain.text),df!=null?{ce:df,tech:1}:null);
+        }else locked.push('🔒 Domain: '+(entry.domain.name||'Domain')+' — GM-granted');
+      }
+      if(entry.l20){
+        if(char.level>=20||techGrant(gtid,'l20')){
+          var lf=qrFixedCE(entry.l20.cost_line);
+          add(qrBucket(entry.l20.cost_line),entry.l20.name||'L20 Capstone',tn+' · Capstone',entry.l20.cost_line||'',qrOneLiner(entry.l20.text),lf!=null?{ce:lf,tech:1}:null);
+        }else locked.push('🔒 L20 capstone: '+(entry.l20.name||'Capstone'));
+      }
       if(locked.length) B.other.push({name:'Roadmap — '+tn,src:'Technique',cost:'',one:locked.join(' · ')});
     });
     /* Original Library techniques carry no machine-readable features — link the dossier so the
