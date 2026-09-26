@@ -347,8 +347,9 @@ function renderBody(t) {
   /* Full dossier record sits after the inline progression — the dropdown is the
      primary presentation, the standalone page is the complete record. */
   if (t.id) {
+    var dossierFile = t.dossier ? t.dossier : 'fig-' + esc(t.id) + '.html';
     out += '<a class="dossier-cta fig-dossier-link" href="' + DOSSIER_BASE +
-      'fig-' + esc(t.id) + '.html">Full dossier record →</a>';
+      dossierFile + '">Full dossier record →</a>';
   }
   return out;
 }

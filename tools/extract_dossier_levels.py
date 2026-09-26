@@ -100,12 +100,14 @@ def main():
         if err:
             problems.append((did, err))
         else:
-            # de-dupe + sort by level
+            # de-dupe by (level, title) + sort by level — multiple features can
+            # share a level (e.g. unleveled card grids where everything is L0)
             seen = set()
             uniq = []
             for l in sorted(levels, key=lambda x: x['level']):
-                if l['level'] not in seen:
-                    seen.add(l['level'])
+                key = (l['level'], l['title'])
+                if key not in seen:
+                    seen.add(key)
                     uniq.append(l)
             out[did] = uniq
     if problems:
