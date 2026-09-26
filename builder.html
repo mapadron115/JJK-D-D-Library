@@ -820,7 +820,7 @@ function featSkillPickersHTML(key){
       profs.map(function(s){
         return '<option value="'+s+'"'+(expp===s?' selected':'')+'>'+s+'</option>';
       }).join('')+'</select></div></div>'+
-      '<p class="small">Skill Expert also grants +1 to one ability score (maximum 20) \u2014 choose it in the ability increase picker below.</p>';
+      '<p class="small">Skill Expert also grants +1 to one ability score \u2014 choose it in the ability increase picker below.</p>';
   }else{ /* Skilled: any combination of three skills */
     var picks=fs.prof||[];
     html+='<p class="small">Gain proficiency in any three skills (tools from this feat are recorded with your GM).</p><div class="grid2">';
@@ -1008,9 +1008,9 @@ function abilitiesAt(level){
   for(var L=2;L<=level;L++){
     if(hasASIAt(L) && char.asi[L] && (char.asiMode||{})[L]!=='feat') char.asi[L].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
   }
-  /* half-feat +1s (Crusher, Athlete, etc.) — apply at the level the feat was taken */
+  /* half-feat +1s (Crusher, Athlete, etc.) — apply at the level the feat was taken; no cap */
   var fb=featASIBonuses(level);
-  ABILITIES.forEach(function(a){ if(fb[a]) ab[a]=Math.min(20,(ab[a]||10)+fb[a]); });
+  ABILITIES.forEach(function(a){ if(fb[a]) ab[a]=(ab[a]||10)+fb[a]; });
   return ab;
 }
 /* Feats taken in place of an ASI at milestone levels */
@@ -1189,7 +1189,7 @@ function traitMaxBonus(){
   if(t==='living-prison') return s==='stirring'||s==='awakened'?4:2;
   return 0;
 }
-function abilityCeiling(){ return (isHR()?24+char.level:20)+traitMaxBonus(); }
+function abilityCeiling(){ return Infinity; /* no cap — Heavenly Restriction breaks the 20 ceiling */ }
 /* level-1-effective ability adjustments: variant decreases, variant bonus ASI,
    trait increases. Applied before level-up ASIs in both abilitiesAt and hpMax. */
 function creationAbilityMods(ab){
@@ -1282,6 +1282,11 @@ var FEAT_ASI = {
   'Weapon Expert':['STR','DEX'], 'Skill Expert':['STR','DEX','CON','INT','WIS','CHA'],
   'Resilient':['STR','DEX','CON','INT','WIS','CHA']
 };
+/* fixed-amount feat bonuses: {ability, amount, scale:{level:amount}}.
+   Hyper-Intellect: +3 INT on taking, +1 INT at character levels 6/11/18. */
+var FEAT_ASI_FIXED = {
+  'Hyper-Intellect':{ability:'INT', amount:3, scale:{6:1, 11:1, 18:1}}
+};
 function featASILiveName(key){
   if(key==='bg') return char.backgroundFeat||'';
   if(key&&key.indexOf('asi-')===0) return (char.asiFeat||{})[key.slice(4)]||'';
@@ -1292,13 +1297,19 @@ function featASIOptions(featName){
 }
 function featASIHTML(key){
   var fname=featASILiveName(key);
+  var fx=FEAT_ASI_FIXED[fname];
+  if(fx){
+    var scaleTxt=fx.scale?' Plus +'+Object.keys(fx.scale).map(function(m){return fx.scale[m];}).join('/+')+' '+fx.ability+' at levels '+Object.keys(fx.scale).join(', ')+'.':'';
+    return '<div class="banner" style="margin-top:8px"><span class="bk">❖ '+esc(fname)+' — ability increase</span>'+
+      '<p class="small" style="margin:4px 0">This feat grants +'+fx.amount+' '+fx.ability+' automatically.'+scaleTxt+'</p></div>';
+  }
   var opts=featASIOptions(fname);
   if(!opts) return '';
   var fs=(char.featASI||{})[key]||{};
   /* stale pick — the feat changed away */
   var cur=(fs.feat===fname)?(fs.ability||''):'';
   var html='<div class="banner" style="margin-top:8px"><span class="bk">❖ '+esc(fname)+' — ability increase</span>'+
-    '<p class="small" style="margin:4px 0">This feat grants +1 to '+(opts.length>1?'one ability of your choice':'your '+opts[0])+' (maximum 20).</p>'+
+    '<p class="small" style="margin:4px 0">This feat grants +1 to '+(opts.length>1?'one ability of your choice':'your '+opts[0])+'.</p>'+
     '<div class="field" style="max-width:200px"><label><b>+1 to</b></label><select data-featasi="'+esc(key)+'">';
   if(opts.length>1) html+='<option value="">— choose —</option>';
   opts.forEach(function(a){
@@ -1374,6 +1385,9 @@ function featChoiceSummary(key){
   return fc.picks.join(', ');
 }
 function featASISheetNote(key){
+  var fname=featASILiveName(key);
+  var fx=FEAT_ASI_FIXED[fname];
+  if(fx) return ' <span class="small">(+' + fx.amount + ' ' + fx.ability + ')</span>';
   var fs=(char.featASI||{})[key];
   if(!fs||!fs.ability) return '';
   if(featASILiveName(key)!==fs.feat) return '';
@@ -1386,13 +1400,32 @@ function featChoiceSheetNote(key){
 function featASIBonuses(level){
   level=level||char.level;
   var b={}, fs=char.featASI||{};
+  function add(ab, n){ b[ab]=(b[ab]||0)+n; }
   Object.keys(fs).forEach(function(k){
     var f=fs[k]; if(!f||!f.ability) return;
     if(featASILiveName(k)!==f.feat) return; /* stale */
     if((FEAT_ASI[f.feat]||[]).indexOf(f.ability)<0) return;
     /* ASI feats only count once the character reaches that level */
     if(k.indexOf('asi-')===0 && parseInt(k.slice(4),10)>level) return;
-    b[f.ability]=(b[f.ability]||0)+1;
+    add(f.ability, 1);
+  });
+  /* fixed-amount feat bonuses (Hyper-Intellect: +3 on taking, +1 at 6/11/18) */
+  function fixedFrom(key, featName, takenLevel){
+    var fx=FEAT_ASI_FIXED[featName];
+    if(!fx) return;
+    if(takenLevel>level) return;
+    add(fx.ability, fx.amount);
+    if(fx.scale) Object.keys(fx.scale).forEach(function(ms){
+      var m=+ms;
+      if(m>=takenLevel && m<=level) add(fx.ability, fx.scale[ms]);
+    });
+  }
+  /* background feat (taken at level 1) */
+  if(char.backgroundFeat&&FEAT_ASI_FIXED[char.backgroundFeat]) fixedFrom('bg', char.backgroundFeat, 1);
+  /* ASI feats */
+  Object.keys(char.asiFeat||{}).forEach(function(L){
+    var fn=char.asiFeat[L];
+    if(fn&&FEAT_ASI_FIXED[fn]) fixedFrom('asi-'+L, fn, parseInt(L,10));
   });
   /* body-point feat grants (Heavenly Restriction Strength Technique) */
   if(classLevelCount('Heavenly Restriction', level)>=1){
@@ -1404,8 +1437,9 @@ function featASIBonuses(level){
         if(!p||!p.feat) return;
         var bk='hr-body-'+i, bf=(char.featASI||{})[bk];
         if(bf&&bf.feat===p.feat&&bf.ability&&(FEAT_ASI[p.feat]||[]).indexOf(bf.ability)>=0){
-          b[bf.ability]=(b[bf.ability]||0)+1;
+          add(bf.ability, 1);
         }
+        if(FEAT_ASI_FIXED[p.feat]) fixedFrom(bk, p.feat, 1);
       });
     }
   }
@@ -2429,9 +2463,8 @@ STEP_VALID[3]=function(){
 
 /* ═══════════ STEP 4 — ABILITY SCORES ═══════════ */
 function stepAbilities(body){
-  var maxScore = abilityCeiling();
   var html='<h2>Step 4 — Ability Scores</h2>'+
-    '<p class="sub">Three ways to forge your six scores.'+(isHR()?' Heavenly Restriction raises the ceiling to <b>'+maxScore+'</b> (24 + level).':' Scores cap at <b>'+maxScore+'</b>.')+
+    '<p class="sub">Three ways to forge your six scores. There is no ability score cap.'+
     ' Your ancestry\'s increases apply after assignment.</p>';
   html+='<div class="seg" id="mSeg">'+
     '<button type="button" class="seg-btn'+(char.abilityMethod==='dice'?' is-active':'')+'" data-m="dice">🎲 Roll 4d6 drop lowest</button>'+
@@ -2507,23 +2540,22 @@ function paintDiceSet(setEl,vals,final,total){
 }
 function renderManualUI(){
   var el=$('mBody');
-  var maxScore=abilityCeiling();
-  el.innerHTML='<p class="small">Enter each score directly ('+3+'–'+maxScore+').</p>'+
+  el.innerHTML='<p class="small">Enter each score directly (minimum 3, no maximum).</p>'+
     '<table class="assign-table"><tr><th>Ability</th><th>Score</th></tr>'+
     ABILITIES.map(function(a){
-      return '<tr><td>'+ABIL_NAMES[a]+' ('+a+')</td><td><input type="number" min="3" max="'+maxScore+'" id="man_'+a+'" value="'+(char.abilityBase[a]||'')+'" style="width:110px;font:inherit;background:var(--paper);border:1px solid var(--line2);border-radius:3px;padding:6px 8px"></td></tr>';
+      return '<tr><td>'+ABIL_NAMES[a]+' ('+a+')</td><td><input type="number" min="3" id="man_'+a+'" value="'+(char.abilityBase[a]||'')+'" style="width:110px;font:inherit;background:var(--paper);border:1px solid var(--line2);border-radius:3px;padding:6px 8px"></td></tr>';
     }).join('')+'</table>';
   ABILITIES.forEach(function(a){
     /* 'input' catches programmatic fills, autofill, and assistive tech that never
        fire 'change'; it stores without clobbering the field mid-typing. */
     $('man_'+a).addEventListener('input',function(e){
       var v=parseInt(e.target.value,10);
-      char.abilityBase[a]=isNaN(v)?undefined:Math.max(3,Math.min(maxScore,v));
+      char.abilityBase[a]=isNaN(v)?undefined:Math.max(3,v);
       applyAncestry(); renderFinal(); refreshNav();
     });
     $('man_'+a).addEventListener('change',function(e){
       var v=parseInt(e.target.value,10);
-      if(isNaN(v)) v=3; v=Math.max(3,Math.min(maxScore,v));
+      if(isNaN(v)) v=3; v=Math.max(3,v);
       e.target.value=v; char.abilityBase[a]=v; applyAncestry(); renderFinal(); refreshNav();
     });
   });
@@ -3276,14 +3308,14 @@ function renderLvlRows(){
       }else if(mode==='hr3'){
         var h3cur=(char.asi[r.l]||['STR','STR','STR'])[0]||'STR';
         asiCell+='<div style="margin-top:4px"><select data-hr3="'+r.l+'">'+ABILITIES.map(function(a){return '<option'+(h3cur===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select>'+
-                '<div class="asi-note">HR: +3 to one ability score. Cannot exceed your ability score limit.</div></div>';
+                '<div class="asi-note">HR: +3 to one ability score.</div></div>';
       }else if(mode==='greater'||mode==='hr111'){
         var gcur=char.asi[r.l]||['STR','STR','STR'];
         asiCell+='<div style="margin-top:4px"><select data-asi="'+r.l+'|0">'+ABILITIES.map(function(a){return '<option'+(gcur[0]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select> '+
                 '<select data-asi="'+r.l+'|1">'+ABILITIES.map(function(a){return '<option'+(gcur[1]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select> '+
                 '<select data-asi="'+r.l+'|2">'+ABILITIES.map(function(a){return '<option'+(gcur[2]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select>'+
                 (mode==='hr111'
-                  ? '<div class="asi-note">HR: +1 to three ability scores (repeat a score for +2 or +3). Cannot exceed your ability score limit.</div></div>'
+                  ? '<div class="asi-note">HR: +1 to three ability scores (repeat a score for +2 or +3).</div></div>'
                   : '<div class="asi-note">Greater ASI: +1 × 3 (repeat a score for +2 or +3). Replaces No ASI at 8th.</div></div>');
       }else{
         var cur=char.asi[r.l]||['STR','STR'];
