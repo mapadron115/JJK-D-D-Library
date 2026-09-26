@@ -137,6 +137,9 @@ function matches(t, st) {
 /* ── original techniques (library dossiers) ─── */
 function libHaystack(e) {
   var bits = [e.id, e.title, e.collection, e.summary, e.kind, e.tier, e.grade, e.role, e.source, e.aliases];
+  /* include extracted progression text so feature names/rules are searchable */
+  var lv = (typeof window !== 'undefined' && window.DOSSIER_LEVELS && window.DOSSIER_LEVELS[e.id]) || [];
+  lv.forEach(function (l) { bits.push(l.title, l.rules); });
   return bits.filter(Boolean).join(' ').toLowerCase();
 }
 
@@ -178,11 +181,54 @@ function tierNumeral(e) {
   return GRADE_TIER_FALLBACK[(e && e.grade) || ''] || '';
 }
 
+/* ── library technique entries: inline expandable progression (Ritual Archive
+   aesthetic) instead of a bare dossier link. Non-technique library entries
+   (tools, spirits, primers) keep the link card via renderLibCard. ── */
+function renderLibLevels(id) {
+  var levels = (typeof window !== 'undefined' && window.DOSSIER_LEVELS && window.DOSSIER_LEVELS[id]) || [];
+  if (!levels.length) return '';
+  return levels.map(function (l) {
+    var label = l.level > 0 ? 'LEVEL ' + l.level : 'FEATURE';
+    return '<section class="lvl"><div class="lvl-head"><span class="lvl-chip">' + esc(label) + '</span>' +
+      (l.title ? ' <span class="lvl-title">' + esc(l.title) + '</span>' : '') + '</div>' +
+      (l.rules ? '<div class="feat"><div class="feat-text">' + esc(l.rules) + '</div></div>' : '') +
+      '</section>';
+  }).join('');
+}
+function libDossierHref(e) {
+  var raw = e.href || ((e.id || '') + '.html');
+  return (/^dossiers\//.test(raw) && typeof DOSSIER_BASE === 'string') ? DOSSIER_BASE + raw.slice(9) : raw;
+}
+function renderLibEntry(e) {
+  e = e || {};
+  var id = 'entry-' + (e.id || 'unknown');
+  var open = openIds.has(id) ? ' open' : '';
+  var ci = cardImg(e);
+  var numeral = tierNumeral(e);
+  var tierStamp = numeral ? '<span class="tier-stamp">' + esc(numeral) + '</span>' : '';
+  var roleTag = e.role ? '<span class="role-tag">' + esc(e.role) + '</span>' : '';
+  return '<article class="entry lib-entry' + open + '" id="' + esc(id) + '"' + ci.attr +
+    ' style="--accent:' + esc(e.accent || '#b33a2b') + ';' + ci.css + '">' +
+    '<button class="entry-head" type="button" data-toggle="' + esc(id) + '" aria-expanded="' + openIds.has(id) + '">' +
+    '<span class="head-main">' +
+    '<span class="entry-no">Original · ' + esc(e.collection || 'Library') + '</span>' +
+    '<span class="lib-title">' + esc(e.title || 'Untitled technique') + '</span>' +
+    (e.kind ? '<span class="meta-line">' + esc(e.kind) + '</span>' : '') +
+    (e.summary ? '<span class="concept">' + esc(e.summary) + '</span>' : '') +
+    '</span>' +
+    '<span class="head-side">' + tierStamp + roleTag +
+    '<span class="detail-tag">Full progression</span>' +
+    '<span class="chev">' + (openIds.has(id) ? '−' : '＋') + '</span>' +
+    '</span></button>' +
+    '<div class="entry-body"' + (openIds.has(id) ? '' : ' hidden') + '>' +
+    renderLibLevels(e.id) +
+    '<a class="dossier-cta" href="' + esc(libDossierHref(e)) + '">Full dossier record →</a>' +
+    '</div></article>';
+}
 function renderLibCard(e) {
   e = e || {};
   var accent = e.accent || '#b33a2b';
-  var raw = e.href || ((e.id || '') + '.html');
-  var href = (/^dossiers\//.test(raw) && typeof DOSSIER_BASE === 'string') ? DOSSIER_BASE + raw.slice(9) : raw;
+  var href = libDossierHref(e);
   var ci = cardImg(e);
   var numeral = tierNumeral(e);
   var tierStamp = numeral ? '<span class="tier-stamp">' + esc(numeral) + '</span>' : '';
@@ -278,12 +324,6 @@ function renderDomain(d) {
 
 function renderBody(t) {
   var out = '';
-  /* Full-dossier access: every figure technique now has a fig-<id>.html dossier
-     page in the e509 skeleton. The inline expandable body stays for GMs. */
-  if (t.id) {
-    out += '<a class="dossier-cta fig-dossier-link" href="' + DOSSIER_BASE +
-      'fig-' + esc(t.id) + '.html">Open full dossier →</a>';
-  }
   var stats = [];
   if (t.ce_ability) stats.push('CE ability <b>' + esc(t.ce_ability) + '</b>');
   if (t.primary_verb) stats.push('Primary verb <b>' + esc(t.primary_verb) + '</b>');
@@ -304,6 +344,12 @@ function renderBody(t) {
   if (t.maximum) out += renderCallout('maximum', 'Maximum Technique', t.maximum);
   if (t.domain) out += renderDomain(t.domain);
   if (t.l20) out += renderCallout('l20', 'Level 20 · Capstone', t.l20);
+  /* Full dossier record sits after the inline progression — the dropdown is the
+     primary presentation, the standalone page is the complete record. */
+  if (t.id) {
+    out += '<a class="dossier-cta fig-dossier-link" href="' + DOSSIER_BASE +
+      'fig-' + esc(t.id) + '.html">Full dossier record →</a>';
+  }
   return out;
 }
 
@@ -375,7 +421,7 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = { esc: esc, md: md, haystack: haystack, matches: matches,
     libHaystack: libHaystack, matchesLib: matchesLib,
     groupByLevel: groupByLevel, renderEntry: renderEntry, renderBody: renderBody,
-    renderDomain: renderDomain, renderLibCard: renderLibCard,
+    renderDomain: renderDomain, renderLibCard: renderLibCard, renderLibEntry: renderLibEntry,
     TECHS: TECHS, LIBS: LIBS };
 }
 
@@ -474,8 +520,13 @@ if (typeof document !== 'undefined') {
     function render() {
       var figs = TECHS.filter(function (t) { return matches(t, state); });
       var libs = LIBS.filter(function (e) { return matchesLib(e, state); });
-      /* one unified list: figures first, then originals — each card labels its own origin */
-      grid.innerHTML = figs.map(renderEntry).join('') + libs.map(renderLibCard).join('');
+      /* one unified list: figures first, then originals — each card labels its own origin.
+         Original techniques with extracted progression render as inline expandable
+         entries (Ritual Archive aesthetic); other library entries keep link cards. */
+      grid.innerHTML = figs.map(renderEntry).join('') + libs.map(function (e) {
+        var lv = (typeof window !== 'undefined' && window.DOSSIER_LEVELS && window.DOSSIER_LEVELS[e.id]) || [];
+        return lv.length ? renderLibEntry(e) : renderLibCard(e);
+      }).join('');
       emptyState.classList.toggle('show', !figs.length && !libs.length);
       var total = state.tab === 'tools' ? N_TOOLS
         : state.origin === 'all' ? TECHS.length + N_TECH_LIBS

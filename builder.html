@@ -197,7 +197,6 @@ h1 .amp{color:var(--red)}
 .tech-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
 .tech-body{border-top:3px double var(--ink);padding:20px 22px;background:var(--card2);display:none}
 .npc-note{display:inline-block;font-size:.78rem;font-style:italic;color:var(--ink2);border:1px dashed var(--line2);border-radius:4px;padding:5px 12px;background:var(--card2);margin:2px 0}
-.dossier-frame{width:100%;min-height:480px;border:1px solid var(--line);background:var(--card);display:block;margin:12px 0 4px}
 .tech-card.open .tech-body{display:block}
 .gate-label{font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;margin:18px 0 10px;display:block}
 .gate-label.active{color:var(--olive)}
@@ -557,6 +556,7 @@ img{max-width:100%;height:auto}
 <script src="data/codex_role_fixups.js?v=20260911a"></script>
 <script src="data/codex_inner_circle.js?v=20260911h"></script>
 <script src="data/library.js?v=20260917a"></script>
+<script src="data/dossier_levels.js?v=20260926a"></script>
 <script src="data/technique_feats.js?v=20260917a"></script>
 <script src="data/codex_feats.js?v=20260911g"></script>
 <script src="data/class_features.js?v=20260917a"></script>
@@ -3826,6 +3826,7 @@ function techMatches(e){
     var q=techQ.toLowerCase();
     var hay=[tName(e),tSource(e),tConcept(e),tTier(e),tGrade(e),tRole(e),e.aliases||'',e.id||''];
     if(tIsFigure(e)&&(e.features||[]).forEach){ e.features.forEach(function(f){ hay.push(f.name||''); }); }
+    else{ var _lv=((window.DOSSIER_LEVELS||{})[e.id])||[]; _lv.forEach(function(l){ hay.push(l.title||'',l.rules||''); }); }
     if(!hay.join(' ').toLowerCase().includes(q)) return false;
   }
   return true;
@@ -3872,6 +3873,32 @@ function techCard(e,catalog){
     '</div><div class="tech-side">' + techImg(e) + '</div></div>'+
     '<div class="tech-body">'+techInspectHTML(e,catalog)+'</div></div>';
 }
+/* Inline level progression for Original Library techniques, extracted from the
+   dossier pages into data/dossier_levels.js and rendered in the Ritual Archive
+   aesthetic (mirrors the figure inspector's active/roadmap split). */
+function libLevelHTML(l){
+  return '<div class="lvl"><span class="lvl-chip">'+(l.level>0?'Level '+l.level:'Feature')+'</span></div>'+
+    '<div class="feat"><h5>'+esc(l.title||'Feature')+'</h5>'+
+    '<div class="feat-text"><p>'+esc(l.rules||'')+'</p></div></div>';
+}
+function libProgressionHTML(id, level){
+  var levels=((window.DOSSIER_LEVELS||{})[id])||[];
+  if(!levels.length) return '';
+  var lvl=(level==null?1:level);
+  var active=levels.filter(function(l){ return l.level<=lvl; });
+  var locked=levels.filter(function(l){ return l.level>lvl; });
+  var html='';
+  if(active.length){
+    html+='<span class="gate-label active">✓ Active at your level ('+lvl+') — ('+active.length+' feature'+(active.length===1?'':'s')+')</span>';
+    html+=active.map(libLevelHTML).join('');
+  }
+  if(locked.length){
+    html+='<span class="gate-label locked">🔒 Unlocks as you level — your roadmap</span><ul class="locked-list">';
+    locked.forEach(function(l){ html+='<li><span class="lk">Level '+l.level+'</span><span>'+esc(l.title||'Feature')+'</span></li>'; });
+    html+='</ul>';
+  }
+  return html;
+}
 function techInspectHTML(e,catalog){
   var fig=tIsFigure(e);
   var html='';
@@ -3887,8 +3914,8 @@ function techInspectHTML(e,catalog){
     html+=roadmapHTML(e, char.level);
   }else{
     html+='<span class="gate-label active">Library entry</span><div class="feat-text"><p>'+esc(tConcept(e)||'No summary recorded.')+'</p></div>';
-    if(tHref(e)) html+='<iframe class="dossier-frame" data-dossier-src="'+esc(tHref(e))+'" title="'+esc(tName(e))+' — full dossier" loading="lazy"></iframe>'+
-      '<p class="small"><a href="'+esc(tHref(e))+'" target="_blank" rel="noopener">Open full dossier page →</a> <span class="small">(full level progression — track unlocks with your GM)</span></p>';
+    html+=libProgressionHTML(e.id, char.level);
+    if(tHref(e)) html+='<p class="small"><a href="'+esc(tHref(e))+'" target="_blank" rel="noopener">Full dossier record →</a> <span class="small">(field notes, feats, and printable record)</span></p>';
     else html+='<p class="small">Full level progression lives in the Technique Codex — track unlocks with your GM.</p>';
   }
   return html;
@@ -3946,11 +3973,6 @@ function renderTechResults(){
     b.addEventListener('click',function(){
       var card=b.closest('.tech-card'); card.classList.toggle('open');
       b.textContent=card.classList.contains('open')?'Hide features':'Inspect features';
-      if(card.classList.contains('open')){
-        /* lazy-load dossier iframes only when the panel opens — keeps the list fast */
-        var fr=card.querySelectorAll('iframe[data-dossier-src]');
-        for(var k=0;k<fr.length;k++){ if(!fr[k].getAttribute('src')) fr[k].src=fr[k].getAttribute('data-dossier-src'); }
-      }
     });
   });
   res.querySelectorAll('[data-choose]').forEach(function(b){
@@ -4185,8 +4207,8 @@ function techniqueSheetHTML(entry, variantName){
     html+='<p style="font-family:var(--serif);font-size:1.5rem;font-weight:bold;margin:0">'+esc(tName(entry))+'</p>'+
       '<p class="small" style="margin-top:2px">'+esc(tSource(entry))+(tGrade(entry)?' · '+esc(tGrade(entry)):'')+'</p>'+
       (tConcept(entry)?'<p style="font-style:italic;color:var(--ink2)">“'+esc(tConcept(entry))+'”</p>':'')+
-      (tHref(entry)?'<p><a href="'+esc(tHref(entry))+'">Open the full dossier →</a></p>':'')+
-      '<p class="small">Level progression lives in the Technique Codex dossier — unlocks tracked with your GM.</p>';
+      libProgressionHTML(entry.id, char.level)+
+      (tHref(entry)?'<p class="small"><a href="'+esc(tHref(entry))+'" target="_blank" rel="noopener">Full dossier record →</a></p>':'');
   }
   return html;
 }
@@ -4574,12 +4596,21 @@ function qrCollect(){
       }
       if(locked.length) B.other.push({name:'Roadmap — '+tn,src:'Technique',cost:'',one:locked.join(' · ')});
     });
-    /* Original Library techniques carry no machine-readable features — link the dossier so the
-       player knows exactly where their technique actions live during play. */
+    /* Original Library techniques: their extracted level-progression rules-lines
+       bucket like figure features (active at your level only), with CE-spend
+       buttons for fixed costs. */
     getTechniques().forEach(function(entry){
       if(tIsFigure(entry)) return;
-      B.other.push({name:tName(entry)+' — technique actions',src:'Technique',cost:'',
-        one:'Full rules live in the dossier — open it during play.',href:tHref(entry)||null});
+      var levels=((window.DOSSIER_LEVELS||{})[entry.id])||[];
+      var tn=tName(entry), added=false;
+      levels.forEach(function(l){
+        if(l.level>char.level) return;
+        added=true;
+        var ce=qrFixedCE(l.rules); if(ce!=null) ce=applyEfficiency(ce);
+        add(qrBucket(l.rules),l.title||'Feature',tn,l.rules||'',qrOneLiner(l.rules),ce!=null?{ce:ce,tech:1}:null);
+      });
+      if(!added) B.other.push({name:tn+' — technique actions',src:'Technique',cost:'',
+        one:'Full level progression in the technique section below.'});
     });
   }
 
