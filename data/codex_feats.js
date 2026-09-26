@@ -2,8 +2,9 @@
 // CODEX_FEATS — Innate Technique Feats for the Historical Sorcerers Codex
 // ============================================================================
 // HAND-AUTHORED. These feats were written by hand (with editorial review) for
-// each of the 74 historical figures' Innate Techniques. They are NOT extracted
-// from the figure dossiers — the dossiers contain no feat lists.
+// each historical figure's Innate Technique (77 player techniques + 4 GM-only
+// inner-circle figures). They are NOT extracted from the figure dossiers —
+// the dossiers contain no feat lists.
 //
 // DESIGN PHILOSOPHY: every feat is a new APPLICATION of an existing feature —
 // a clever new way to use what the figure already has — never a flat buff.
@@ -1651,4 +1652,160 @@ window.CODEX_FEATS = {
    "text": "The verdict is the entry against which all others are measured. While Maximum - The Verdict of History affects an enemy, you may use your read-back against it without any recorded entry of that kind: when the affected enemy makes a d20 roll, you may spend your reaction to impose disadvantage on it. Its story is written; the historian merely reads it back."
   }
  ]
+ ,
+ "deaths-due": [
+  {
+   "name": "The Due Transfers",
+   "prereq": "",
+   "text": "When your marked due drops to 0 hit points, you may transfer Death's Mark to a different creature you can see within 60 ft as a free action, no bonus action required. The new mark lasts until a long rest as normal. Death does not wait for paperwork; the ledger simply gains a new line."
+  },
+  {
+   "name": "The Whistle Carries",
+   "prereq": "Prerequisite: The Whistle",
+   "text": "Your marked target hears The Whistle no matter where it is, provided it is within 1 mile of you and on the same plane. Distance is no shelter from a debt. Other creatures must still be within 60 ft to be affected."
+  },
+  {
+   "name": "Why Did You Run",
+   "prereq": "Prerequisite: \"Why Did You Run?\"",
+   "text": "When a creature frightened by your Whistle willingly moves away from you, your pursuit reaction triggers against it as though it were your marked target: move up to your speed toward it without provoking opportunity attacks. Fear is a kind of debt, and debtors run."
+  },
+  {
+   "name": "The Final Accounting",
+   "prereq": "Prerequisite: Wounds That Do Not Close",
+   "text": "When your sickles reduce your marked due to 0 hit points, the wounds speak: each hostile creature within 15 ft of the fallen must succeed on a Wisdom save against your CE save DC or be frightened of you until the end of your next turn. They have watched the ledger close. They know their page is still open."
+  }
+ ],
+ "shattered-mirror": [
+  {
+   "name": "The Mirror Remembers",
+   "prereq": "",
+   "text": "When you reflect an effect with Face the Shards, you learn its exact nature: the attacker's attack bonus or save DC, damage type, and any rider effects. You retain this knowledge for 24 hours. The glass does not merely return what it is shown; it studies it."
+  },
+  {
+   "name": "A Kinder Reflection",
+   "prereq": "Prerequisite: Look Away",
+   "text": "When you use Look Away to vanish an effect into the cracks, you may choose one creature you can see within 30 ft (other than the attacker) to witness the vanishing. That creature gains advantage on its next saving throw against the same attacker's effects within the next minute. You have shown them the cracks; they know where to step."
+  },
+  {
+   "name": "Hall of Mirrors",
+   "prereq": "Prerequisite: Crueler Reflection",
+   "text": "When you reflect an effect, you may redirect it to a different creature within 30 ft of you instead of the attacker, using the same roll against the new target's AC or the new target's save against the attacker's DC. The mirror does not care who stood before it first."
+  },
+  {
+   "name": "Someone Worth Shielding",
+   "prereq": "Prerequisite: Someone Worth Shielding",
+   "text": "You may extend your shards around one willing creature within 5 ft of you. Ranged attacks and damaging cursed-energy effects targeting that creature trigger your Face the Shards as though they targeted you. The Flinch still applies: melee blows shatter the shards instead. The mirror has decided this one is worth keeping whole."
+  }
+ ],
+ "redacted-light": [
+  {
+   "name": "Lantern of Intent",
+   "prereq": "",
+   "text": "Your light construct sheds bright light in a 20-ft radius and dim light for 20 ft beyond. Invisible creatures in the bright light lose the benefits of invisibility against your attacks while the construct persists. Killing intent, properly shaped, leaves nowhere to hide."
+  },
+  {
+   "name": "Prism Split",
+   "prereq": "",
+   "text": "When you throw your light construct, it splits mid-flight: make one attack roll and apply it to two creatures within 15 ft of each other, both within the weapon's thrown range. Each takes the weapon's normal damage on a hit. The bar of light becomes a fork of it."
+  },
+  {
+   "name": "Dawn's Verdict",
+   "prereq": "Prerequisite: Rain of Light",
+   "text": "Creatures restrained by your Rain of Light are also blinded while restrained. The bars of light do not merely pierce; they outshine everything the eyes were doing. A creature that escapes the restraint ends the blindness."
+  },
+  {
+   "name": "Hard Light Aegis",
+   "prereq": "",
+   "text": "When you are hit by a melee weapon attack while holding your light construct, you may use your reaction to interpose it: reduce the damage by 1d8 + your CE modifier. The construct flickers but holds. Light, told firmly enough, can be a wall."
+  }
+ ],
+ "vairocana": [
+  {
+   "name": "The Universe Answers Back",
+   "prereq": "Prerequisite: Harmony",
+   "text": "When you cast Locate Creature or Speak with Animals through Harmony, you may ask one question of what you reach. With Locate Creature, you learn the target's current activity in a single phrase. With Speak with Animals, one beast gives you a truthful answer about what it has seen in the last day. Connection is not a wire; it is a conversation."
+  },
+  {
+   "name": "Ordered Chaos",
+   "prereq": "Prerequisite: Balance",
+   "text": "When you roll on the Chaos Table, you may spend 3 CE before rolling to choose Order's control after seeing the result: you may change the rolled effect's area placement, affected creature, or teleport destination to anything the original effect allowed. You do not tame chaos. You file it."
+  },
+  {
+   "name": "Equilibrium Field",
+   "prereq": "Prerequisite: Balance",
+   "text": "When you choose Equilibrium, you may extend the immunity to one additional creature per point of your CE modifier beyond the normal limit, provided all immune creatures are within 30 ft of you. Balance, widened, becomes sanctuary."
+  },
+  {
+   "name": "Chaos Theory",
+   "prereq": "",
+   "text": "Each time you roll on the Chaos Table, record the result. When you roll a result you have recorded before, you may reroll once and take either result. The universe repeats itself; the wise take notes."
+  }
+ ],
+ "e482": [
+  {
+   "name": "Quarry Sense",
+   "prereq": "",
+   "text": "Your strikes read structures like text. Your double damage against objects and structures extends to constructs and to unattended magical barriers (such as Wall of Force, which you treat as an object with AC 10 for this purpose). The chisel does not distinguish between the quarry and what was built from it."
+  },
+  {
+   "name": "Chisel and Mallet",
+   "prereq": "Prerequisite: Stone Cutting Strike",
+   "text": "When Stone Cutting Strike hits a creature wearing nonmagical armor or a construct, you may crack it: the target's AC is reduced by 2 until repaired (a creature can spend an action to straighten mundane armor; constructs require mending). The blow does not just wound; it unmakes the shape around the wound."
+  },
+  {
+   "name": "Dust Veil",
+   "prereq": "",
+   "text": "When you destroy an object or structure with your strikes, the debris answers: until the end of your next turn, the rubble-filled space within 15 ft of the destruction is lightly obscured. Stone remembers being a mountain; for a moment, it is a storm again."
+  },
+  {
+   "name": "The Mason's Reply",
+   "prereq": "Prerequisite: Swift Fury",
+   "text": "When a creature misses you with a melee weapon attack, you may use your reaction to deliver an unarmed strike against it, provided you used Swift Fury on your last turn. The style's fury is not spent when the turn ends; it waits in the hands."
+  }
+ ],
+ "e483": [
+  {
+   "name": "Seeded Ground",
+   "prereq": "",
+   "text": "You may plant your lotus on a surface within 5 ft instead of on your body: for 2 CE and a bonus action, the lotus waits on the ground, wall, or object for 1 hour. The next creature other than you to touch or strike the surface detonates it as normal. Gardens can be left behind."
+  },
+  {
+   "name": "Double Bloom",
+   "prereq": "",
+   "text": "When your lotus detonates, you may spend 2 CE as a reaction to bloom a second lotus on your body immediately. It waits for the next hit as normal. Patience, doubled, is still patience."
+  },
+  {
+   "name": "Petal Reading",
+   "prereq": "",
+   "text": "When your lotus detonates, the petals carry information: you learn the damage type of the triggering hit, and if it was a cursed technique, you learn its source technique's name if you have seen it before. The flower blooms on being struck; it also remembers the hand."
+  },
+  {
+   "name": "The Gardener's Mercy",
+   "prereq": "",
+   "text": "You may decide which creatures the petals spare after seeing the detonation's damage rolls, rather than before. The gardener chooses; the wise gardener waits for the weather."
+  }
+ ],
+ "e484": [
+  {
+   "name": "Still Water",
+   "prereq": "",
+   "text": "You may hold caught residue instead of spending it: when you catch energy with Flow Technique, you may store it for up to 1 minute rather than adding it to your next damage roll. While stored, your next damage roll before the duration ends gains the bonus. The river can be dammed, briefly."
+  },
+  {
+   "name": "Upstream",
+   "prereq": "",
+   "text": "When you catch residue, you read its source: you learn the direction and distance to the attacker (within 1 mile, same plane) and whether the attack was cursed energy, a cursed technique, or an innate technique. Every blow leaves something behind, including an address."
+  },
+  {
+   "name": "Floodgate",
+   "prereq": "",
+   "text": "When you catch residue, you may forgo the damage bonus to redirect it: choose a creature within 30 ft of you. It takes force damage equal to twice your proficiency bonus as the caught energy discharges. The river does not have to answer the same bank it came from."
+  },
+  {
+   "name": "Deep Current",
+   "prereq": "",
+   "text": "Your Flow Technique's damage reduction lingers: after you catch residue, the next attack against you before the end of your next turn has its damage reduced by your proficiency bonus, even if it is not a cursed attack. The water, once moving, keeps moving."
+  }
+ ]
+
 };
