@@ -1761,6 +1761,19 @@ function renderHeritages(){
         renderStep();
       });
     }
+    /* Jujutsu Sorcerer (human): Beginner Cursed Energy — choose one Cursed Energy feat */
+    if(char.ancestry==='human'&&char.heritage==='sorcerer'){
+      var _sf=((char.ancestryPicks||{}).sorcererFeat)||'';
+      d.innerHTML+='<div class="banner" style="margin-top:10px"><span class="bk">\u2756 Beginner Cursed Energy</span>'+
+        '<p class="small">Gain one Cursed Energy feat for which you meet the prerequisites.</p>'+
+        '<div class="field" style="max-width:320px"><label for="sorcFeat"><b>Chosen feat</b></label>'+
+        '<select id="sorcFeat">'+featSelectOptions(_sf)+'</select></div></div>';
+      var _sfEl=$('sorcFeat');
+      if(_sfEl) _sfEl.addEventListener('change',function(e){
+        char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.sorcererFeat=e.target.value;
+        renderStep();
+      });
+    }
   }else d.innerHTML='';
 }
 STEP_VALID[2]=function(){
@@ -1792,6 +1805,11 @@ STEP_VALID[2]=function(){
   if(char.ancestry==='cursed-corpse'&&char.heritage==='softbody'){
     if(!(char.ancestryPicks||{}).tailoredAppearance)
       return {ok:false,msg:'Tailored Appearance: choose Intimidation, Persuasion, or Performance.'};
+  }
+  /* Jujutsu Sorcerer: Beginner Cursed Energy feat */
+  if(char.ancestry==='human'&&char.heritage==='sorcerer'){
+    if(!(char.ancestryPicks||{}).sorcererFeat)
+      return {ok:false,msg:'Beginner Cursed Energy: choose a Cursed Energy feat.'};
   }
   return {ok:true};
 };
@@ -3599,8 +3617,9 @@ function sheetHTML(){
   html+='<p class="small" style="margin:0 0 4px;letter-spacing:2px;text-transform:uppercase">Feats</p>'+
     (function(){
       var featNote=function(name){ var fi=featInfo(name); return fi&&fi.prereq?' <span class="small">'+esc(fi.prereq)+'</span>':''; };
-      /* Jujutsu Sorcerers automatically have the Cursed Energy feat (unusable under Pure Body) */
-      var autoFeats=(char.heritage==='sorcerer'&&!isHR())?['Beginner Cursed Energy']:[];
+      /* Jujutsu Sorcerers choose one Cursed Energy feat via Beginner Cursed Energy (unusable under Pure Body) */
+      var _sorcFeatPick=((char.ancestryPicks||{}).sorcererFeat)||'';
+      var autoFeats=(char.heritage==='sorcerer'&&!isHR()&&_sorcFeatPick)?[_sorcFeatPick]:[];
       if(hrV()==='rce') autoFeats=autoFeats.concat(['Reverse Cursed Technique (variant auto-grant)','Cursed Technique Reversal (variant auto-grant)','Reverse Cursed Technique Output (variant auto-grant)']);
       var items=autoFeats.map(function(f){
         var tag=f.indexOf('(variant auto-grant)')>=0?' <span class="small">(variant)</span>':' <span class="small">(heritage)</span>';
