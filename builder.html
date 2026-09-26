@@ -277,6 +277,35 @@ h1 .amp{color:var(--red)}
 .tag-list .rm{color:var(--red-deep);cursor:pointer;font-size:.75rem;letter-spacing:1px;text-transform:uppercase}
 .preset-chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
 .preset-chips .btn-small{border-style:dashed}
+/* ── Combat Quick Reference ──────────────────── */
+.qrsec{break-inside:auto}
+.qr-vitals{margin-top:4px}
+.qr-abs{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border:1px solid var(--line2);margin-bottom:10px}
+.qr-abs>div{padding:8px 6px;text-align:center;border-right:1px solid var(--line)}
+.qr-abs>div:last-child{border-right:none}
+.qr-abs b{display:block;font-family:var(--serif);font-size:1.2rem}
+.qr-abs span{font-size:.62rem;letter-spacing:1.5px;color:var(--ink3)}
+.qr-attack{border:2px solid var(--gold-deep,#8f6c1d);border-radius:4px;padding:12px 16px;margin-bottom:12px;background:var(--paper)}
+.qr-attack h4{margin:0 0 6px;font-family:var(--serif);font-size:1.05rem}
+.qr-atk-line{font-size:1rem;margin-bottom:4px}
+.qr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-bottom:10px}
+.qr-bucket{border:1px solid var(--line2);border-radius:4px;padding:10px 12px;background:var(--paper)}
+.qr-bucket h4{margin:0 0 8px;font-family:var(--serif);font-size:.95rem;border-bottom:1px solid var(--line);padding-bottom:6px}
+.qr-ico{margin-right:2px}
+.qr-n{display:inline-block;min-width:20px;text-align:center;font-size:.72rem;background:var(--ink);color:var(--paper);border-radius:10px;padding:1px 6px;vertical-align:2px}
+.qr-entry{margin-bottom:8px}
+.qr-entry:last-child{margin-bottom:0}
+.qr-name{font-weight:bold;font-size:.88rem}
+.qr-src{font-weight:normal;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--ink3)}
+.qr-cost{font-weight:normal;font-size:.72rem;color:var(--gold-deep,#8f6c1d);border:1px solid var(--gold-deep,#8f6c1d);border-radius:3px;padding:0 5px;margin-left:4px;white-space:nowrap}
+.qr-one{font-size:.82rem;color:var(--ink2);margin-top:2px}
+.qr-plist{list-style:none;margin:0;padding:0}
+.qr-plist li{font-size:.82rem;margin-bottom:5px}
+.qr-passive{background:transparent}
+@media print{
+  .qr-grid{grid-template-columns:repeat(2,1fr)}
+  .qrsec{break-inside:auto}
+}
 /* ── manager ─────────────────────────────── */
 .mgr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;margin:20px 0}
 .mgr-card{background:var(--card);border:1px solid var(--line2);border-top:4px solid var(--red);padding:20px 22px;box-shadow:0 2px 0 rgba(34,29,20,.08)}
@@ -311,6 +340,7 @@ h1 .amp{color:var(--red)}
   .shell{max-width:none;padding:0 8px}
   .sheet{border:2px solid #000;break-inside:avoid}
   .sheet-sec{break-inside:avoid}
+  .sheet-sec.qrsec{break-inside:auto}
   a{color:#000;text-decoration:none}
 }
 
@@ -4348,6 +4378,238 @@ function journalSheetHTML(){
   html+='<div class="no-print" style="margin-top:8px"><textarea id="jrnlText" rows="2" style="width:100%" placeholder="What happened this session?"></textarea><button type="button" class="btn" id="jrnlAdd" style="margin-top:6px">Add entry</button></div></div>';
   return html;
 }
+/* ═══════════ COMBAT QUICK REFERENCE ═══════════
+   Pages 1–2 of the sheet: compact stats + the full action economy —
+   every usable option bucketed by Action / Bonus Action / Reaction /
+   Movement / Free, with a calculated attack line (Extra Attack sources
+   stack: each active Extra Attack adds +1 attack). Passives collapse to
+   one-liners. Full rules stay in their sections below. */
+
+/* Normalize a codex cost_line → economy bucket. */
+function qrBucket(costLine){
+  var s=String(costLine||'').toLowerCase();
+  if(/full-?turn/.test(s)) return 'fullturn';
+  if(/bonus action/.test(s)) return 'bonus';
+  if(/reaction/.test(s)) return 'reaction';
+  if(/replace (one|an?) attack/.test(s)) return 'action'; /* attack replacement → part of the Attack action */
+  if(/(^|[—\-,])\s*action\b/.test(s)) return 'action';
+  if(/passive|no action|\(keep\)|triggers? on|trigger:/.test(s)) return 'passive';
+  if(/movement|part of .*crossing/.test(s)) return 'movement';
+  if(/\bfree\b/.test(s)) return 'free';
+  return 'other';
+}
+/* Infer the economy bucket for class features & feats (prose text, no cost_line). */
+function qrInfer(name, text){
+  var n=String(name||''), t=String(text||'');
+  if(/as a bonus action/i.test(t)) return 'bonus';
+  if(/as a reaction/i.test(t)) return 'reaction';
+  if(/as an action|use your action|takes? an action|using an action/i.test(t)) return 'action';
+  if(/^extra attack$/i.test(n.trim())) return 'passive'; /* counted in the attack card */
+  return 'passive';
+}
+/* First sentence of a feature text, markdown stripped, capped for quick scanning. */
+function qrOneLiner(text){
+  var s=String(text||'')
+    .replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g,'$1').replace(/_{1,2}([^_]+)_{1,2}/g,'$1');
+  s=s.split(/\n/)[0].trim();
+  var m=s.match(/^(.{12,170}?[.!?])(\s|$)/);
+  var out=m?m[1]:s.slice(0,170);
+  return out.length<s.length?out.replace(/[.,;:]\s*$/,'')+'…':out;
+}
+function qrSigned(n){ return (n>=0?'+':'')+n; }
+
+/* ── attack math: Extra Attack sources stack (+1 attack each) ── */
+function qrAttackStats(){
+  var P=pb(char.level), ab=abilitiesAt(char.level);
+  var strM=mod(ab.STR||10), dexM=mod(ab.DEX||10);
+  var extra=0, extraSrc=[];
+  var CF=window.CLASS_FEATURES||{};
+  classesTaken().forEach(function(c){
+    var cl=classLevelCount(c,char.level);
+    (CF[c]||[]).forEach(function(f){
+      if((f.level||1)<=cl && /^extra attack$/i.test(String(f.name||'').trim())){ extra++; extraSrc.push(c+' '+(f.level||5)); }
+    });
+  });
+  var tier=ceManipTier(), cm=ceModNow();
+  var strike=null;
+  if(hasCEPool()&&tier>=1){
+    strike={ die: tier===1?'1d10':tier===2?'2d6':'2d8', cap: tier===1?P:(cm+P),
+      rollOpt: tier===3?' May spend up to '+P+' CE to add to an attack roll.':'',
+      war: char.classUnderstanding==='Warrior'?' Warrior: +'+cm+' necrotic, up to '+(2*P)+'×/day.':'' };
+  }
+  var md=null;
+  classesTaken().forEach(function(c){ if(!md) md=martialDieFor(c,classLevelCount(c,char.level)); });
+  return { P:P, strM:strM, dexM:dexM, attacks:1+extra, extra:extra, extraSrc:extraSrc,
+    toHit:strM+P, toHitR:dexM+P, strike:strike, martialDie:md, tier:tier, cm:cm };
+}
+
+/* ── collect every usable option into economy buckets ── */
+function qrCollect(){
+  var B={action:[],bonus:[],reaction:[],fullturn:[],movement:[],free:[],passive:[],other:[]};
+  function add(bucket,name,src,cost,one){
+    if(!B[bucket]) bucket='other';
+    B[bucket].push({name:name,src:src,cost:cost,one:one});
+  }
+  var atk=qrAttackStats();
+
+  /* — technique features (codex cost_line) — */
+  if(hasCEPool()&&hrV()!=='rce'){
+    getTechniques().forEach(function(entry){
+      if(!tIsFigure(entry)) return;
+      var tn=tName(entry), parts=featLists(entry,char.level), locked=[];
+      parts.active.forEach(function(f){
+        add(qrBucket(f.cost_line),f.name,tn,f.cost_line||'',qrOneLiner(f.text));
+      });
+      Object.keys(parts.locked).forEach(function(lv){ locked.push('Lv '+lv+': '+parts.locked[lv].map(function(f){return f.name;}).join(', ')); });
+      if(entry.maximum) locked.push('🔒 Maximum: '+(entry.maximum.name||'Maximum')+' — GM-granted');
+      if(entry.domain) locked.push('🔒 Domain: '+(entry.domain.name||'Domain')+' — GM-granted');
+      if(entry.l20&&char.level<20) locked.push('🔒 L20 capstone: '+(entry.l20.name||'Capstone'));
+      if(locked.length) B.other.push({name:'Roadmap — '+tn,src:'Technique',cost:'',one:locked.join(' · ')});
+    });
+  }
+
+  /* — class features (prose → inferred bucket) — */
+  var CF=window.CLASS_FEATURES||{};
+  classesTaken().forEach(function(c){
+    var cl=classLevelCount(c,char.level);
+    (CF[c]||[]).forEach(function(f){
+      var nm=String(f.name||'');
+      if(/^(innate technique( feature)?|ability score improvement)$/i.test(nm)) return;
+      if((f.level||1)>cl) return;
+      var b=qrInfer(nm,f.text);
+      if(b==='passive'){ B.passive.push({name:nm,src:c,cost:'',one:qrOneLiner(f.text)}); return; }
+      add(b,nm,c+' '+cl,'',qrOneLiner(f.text));
+    });
+  });
+
+  /* — feats (heritage + background + chosen + ASI) — */
+  (function(){
+    var names=[], seen={};
+    var _sf=((char.ancestryPicks||{}).sorcererFeat)||'';
+    if(char.heritage==='sorcerer'&&!isHR()&&_sf) names.push({n:_sf,s:'Heritage'});
+    if(char.backgroundFeat) names.push({n:char.backgroundFeat,s:'Background'});
+    (char.feats||[]).forEach(function(f){ names.push({n:f,s:'Feat'}); });
+    asiFeatEntries().forEach(function(e){ names.push({n:e.name,s:'Feat (Lv '+e.level+')'}); });
+    names.forEach(function(e){
+      if(seen[e.n]) return; seen[e.n]=1;
+      var fi=featInfo(e.n), b=qrInfer(e.n,fi&&fi.text);
+      if(b==='passive'){ B.passive.push({name:e.n,src:e.s,cost:'',one:fi?qrOneLiner(fi.text):''}); return; }
+      add(b,e.n,e.s,fi&&fi.prereq?('Req: '+fi.prereq):'',fi?qrOneLiner(fi.text):'');
+    });
+  })();
+
+  /* — CE Manipulation — */
+  if(hasCEPool()){
+    var t=atk.tier, P=atk.P, cm=atk.cm;
+    if(t>=1){
+      var reinf='Spend up to '+(t===1?cm:(cm+P))+' CE → 5 temp HP per CE'+(char.classUnderstanding==='Juggernaut'?' (10/CE, '+P+'×/day)':'')+'.';
+      if(t===1) add('action','Cursed Reinforcement','CE Manipulation','Action',reinf);
+      else{
+        add('bonus','Cursed Reinforcement','CE Manipulation','Bonus action',reinf);
+        add('reaction','Cursed Reinforcement','CE Manipulation','Reaction',reinf);
+      }
+    }
+    if(t>=2) B.passive.push({name:'Efficiency',src:'CE Manipulation',cost:'',one:'Technique base CE costs reduced by '+(t-1)+' (min 1).'});
+    if(btData().awakenings>0)
+      add('bonus','RCT Healing','CE Manipulation','Bonus action','Spend up to '+Math.max(cm,1)+' CE → heal 10 HP per CE from your RCT pool.');
+  }
+
+  /* — standard combat options every character has — */
+  add('action','Attack','Standard','Action','Make '+atk.attacks+' attack'+(atk.attacks>1?'s':'')+' — see the attack card above.');
+  B.action.push({name:'Dash',src:'Standard',cost:'Action',one:'Double your movement this turn.'});
+  B.action.push({name:'Disengage',src:'Standard',cost:'Action',one:'Your movement provokes no opportunity attacks this turn.'});
+  B.action.push({name:'Dodge',src:'Standard',cost:'Action',one:'Attacks against you have disadvantage; you have advantage on DEX saves.'});
+  B.action.push({name:'Help',src:'Standard',cost:'Action',one:'Give an ally advantage on their next ability check or attack.'});
+  B.action.push({name:'Hide',src:'Standard',cost:'Action',one:'Make a Stealth check to become hidden.'});
+  B.action.push({name:'Ready',src:'Standard',cost:'Action',one:'Prepare an action with a trigger; use your reaction when it occurs.'});
+  B.action.push({name:'Search',src:'Standard',cost:'Action',one:'Make a Perception or Investigation check.'});
+  B.action.push({name:'Use a cursed tool',src:'Standard',cost:'Action',one:'Activate or wield one of your cursed tools.'});
+  B.reaction.unshift({name:'Opportunity attack',src:'Standard',cost:'Reaction',one:'One melee attack when a foe leaves your reach.'});
+  B.movement.unshift({name:'Move',src:'Standard',cost:'Movement',one:'Move up to your speed.'});
+  B.movement.push({name:'Stand up',src:'Standard',cost:'Movement',one:'Standing from prone costs half your movement.'});
+  B.free.push({name:'Object interaction',src:'Standard',cost:'Free',one:'Draw/stow a weapon, open a door, pick up an item (1 free per turn).'});
+  B.free.push({name:'Speak',src:'Standard',cost:'Free',one:'Brief shouts or commands during combat.'});
+
+  return {buckets:B, atk:atk};
+}
+
+/* ── render ── */
+function qrEntryHTML(e){
+  return '<div class="qr-entry"><div class="qr-name">'+esc(e.name)+
+    (e.src?' <span class="qr-src">'+esc(e.src)+'</span>':'')+
+    (e.cost?' <span class="qr-cost">'+esc(e.cost)+'</span>':'')+'</div>'+
+    (e.one?'<div class="qr-one">'+esc(e.one)+'</div>':'')+'</div>';
+}
+function qrBucketHTML(title, icon, list){
+  if(!list.length) return '';
+  return '<div class="qr-bucket"><h4><span class="qr-ico">'+icon+'</span> '+title+
+    ' <span class="qr-n">'+list.length+'</span></h4>'+
+    list.map(qrEntryHTML).join('')+'</div>';
+}
+function quickRefHTML(){
+  var R=qrCollect(), B=R.buckets, atk=R.atk;
+  var ab=abilitiesAt(char.level);
+  var hp=hpMax(), acInfo=baseAC(), spd=walkSpeed();
+  var init=qrSigned(mod(ab.DEX||10));
+
+  var html='<div class="sheet-sec qrsec"><h3><span class="orn">❖</span> Combat Quick Reference</h3>'+
+    '<p class="small" style="margin-top:-4px">Everything you can do on your turn — full rules live in the sections below.</p>';
+
+  /* vitals strip */
+  html+='<div class="vitals qr-vitals">'+
+    '<div><b>'+hp+'</b><span>Max HP</span></div>'+
+    '<div><b>'+acInfo.ac+'</b><span>AC</span></div>'+
+    '<div><b>'+spd+' ft</b><span>Speed</span></div>'+
+    '<div><b>'+init+'</b><span>Initiative</span></div>'+
+    '<div><b>+'+pb(char.level)+'</b><span>Proficiency</span></div>'+
+    (hasCEPool()?'<div><b>'+ceMax()+'</b><span>Max CE</span></div>':'')+'</div>';
+
+  /* ability mods strip */
+  html+='<div class="qr-abs">'+['STR','DEX','CON','INT','WIS','CHA'].map(function(k){
+    return '<div><b>'+qrSigned(mod(ab[k]||10))+'</b><span>'+k+'</span></div>';
+  }).join('')+'</div>';
+
+  /* attack card — fully calculated */
+  html+='<div class="qr-attack"><h4><span class="qr-ico">⚔</span> Attack <span class="qr-cost">Action</span></h4>'+
+    '<div class="qr-atk-line"><b>'+atk.attacks+' attack'+(atk.attacks>1?'s':'')+'</b> · '+
+    qrSigned(atk.toHit)+' to hit · weapon die '+qrSigned(atk.strM)+' damage</div>';
+  if(atk.extraSrc.length)
+    html+='<div class="qr-one">↳ Extra Attack ('+esc(atk.extraSrc.join(' + '))+'): 1 → '+atk.attacks+' attacks <span class="qr-src">stacked</span></div>';
+  if(atk.martialDie)
+    html+='<div class="qr-one">↳ Unarmed: '+qrSigned(atk.toHit)+' to hit · '+esc(atk.martialDie)+qrSigned(atk.strM)+' bludgeoning</div>';
+  html+='<div class="qr-one">↳ Ranged / finesse: '+qrSigned(atk.toHitR)+' to hit · weapon die '+qrSigned(atk.dexM)+'</div>';
+  if(atk.strike)
+    html+='<div class="qr-one"><b>Cursed Strike</b> ('+esc(CE_MANIP_NAMES[atk.tier])+'): on a hit, +'+atk.strike.die+' necrotic per CE (up to '+atk.strike.cap+' CE).'+esc(atk.strike.rollOpt)+esc(atk.strike.war)+'</div>';
+  /* bonus-action & reaction attacks granted by features/feats */
+  B.bonus.concat(B.reaction).forEach(function(e){
+    if(/make (one|an?) [^.]*attack/i.test(e.name+' '+e.one))
+      html+='<div class="qr-one">↳ +1 attack ('+esc(e.cost||'special')+') via <b>'+esc(e.name)+'</b> <span class="qr-src">'+esc(e.src)+'</span></div>';
+  });
+  html+='</div>';
+
+  /* economy buckets */
+  html+='<div class="qr-grid">';
+  html+=qrBucketHTML('Action','🗡',B.action);
+  html+=qrBucketHTML('Bonus Action','⚡',B.bonus);
+  html+=qrBucketHTML('Reaction','🛡',B.reaction);
+  html+=qrBucketHTML('Full-Turn','🌀',B.fullturn);
+  html+=qrBucketHTML('Movement','👣',B.movement);
+  html+=qrBucketHTML('Free','💬',B.free);
+  if(B.other.length) html+=qrBucketHTML('Limited / Special','⏳',B.other);
+  html+='</div>';
+
+  /* passives — collapsed one-liners */
+  if(B.passive.length){
+    html+='<div class="qr-bucket qr-passive"><h4><span class="qr-ico">✦</span> Always On <span class="qr-n">'+B.passive.length+'</span></h4>'+
+      '<ul class="qr-plist">'+B.passive.map(function(e){
+        return '<li><b>'+esc(e.name)+'</b>'+(e.src?' <span class="qr-src">'+esc(e.src)+'</span>':'')+(e.one?' — '+esc(e.one):'')+'</li>';
+      }).join('')+'</ul></div>';
+  }
+  html+='</div>';
+  return html;
+}
+
 /* ═══════════ SHEET TRACKERS ═══════════
    Interactive HP/CE/use trackers on the generated sheet.
    Persisted per character in localStorage; hidden on print. */
@@ -4792,6 +5054,8 @@ function sheetHTML(){
     '<div class="s-eyebrow">❖ Ritual Archive · Illustrated · Character Record ❖</div>'+
     '<h2>'+esc(char.name||'Unnamed')+'</h2>'+
     '<div class="s-sub">Level '+char.level+' '+esc(classBreakdown()||'—')+' · '+esc(ancLine)+' · Player: '+esc(char.player||'—')+'</div></div>';
+  /* ── Combat Quick Reference: stats + action economy first (pages 1–2), everything else after ── */
+  html+=quickRefHTML();
   /* ── interactive trackers (screen only, persisted per character) ── */
   html+=trackerHTML(hp, ce);
   if(isHR()){
