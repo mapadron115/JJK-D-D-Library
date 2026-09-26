@@ -993,6 +993,9 @@ function blankChar(){
     specialTrait:'', // '' | 'perfect-form' | 'cursed-lover' | 'living-prison' | 'six-eyes'
     lover:{},      // Cursed Lover companion: {name, technique, restsLeft}
     carvedTechnique:'', // Living Prison: GM-tracked carved feature record
+    boons:[],     // Special Grade Boons (C&C, level 20, GM-granted): ['unkillable', ...]
+    equipment:[], // Step 8: additional equipment beyond background
+    cursedTools:[], // Step 8: [{name, grade, notes}] — GM-granted cursed tools
     v: SCHEMA_VERSION
   };
 }
@@ -1063,6 +1066,8 @@ function hpMax(){
   /* Heavenly Restriction body-point durability (Hardened/Iron/Adamantine Skin) */
   var _bb2=hrBodyBonuses();
   if(_bb2.hpPerLevel) total+=_bb2.hpPerLevel*char.level;
+  /* Special Grade Boon: Unkillable */
+  if(hasBoon('unkillable')) total+=50;
   return total;
 }
 function ceReserveSum(){
@@ -1091,7 +1096,10 @@ function ceMax(){
   var r = ceReserveSum();
   var ab = abilitiesAt(char.level);
   var ceMod = char.ceAbility ? mod(ab[char.ceAbility]||10) : 0;
-  return r.dieMax + r.sum + ceMod + (parseInt(char.ceBonus,10)||0);
+  var total = r.dieMax + r.sum + ceMod + (parseInt(char.ceBonus,10)||0);
+  /* Special Grade Boon: Unending Cursed Energy Reserves */
+  if(hasBoon('unending-ce')) total+=20;
+  return total;
 }
 function isHR(){ return clsAt(1)==='Heavenly Restriction'; }
 /* ── Heavenly Restriction variant packages (Creeps & Curses) ──
@@ -1213,6 +1221,30 @@ var SPECIAL_TRAITS = {
                'Infinity Optimization: if you have RCT, once per month during a long rest make a DC 20 Arcana check to gain 1 success toward optimizing Infinity. At 12 successes, you no longer spend reactions or CE to nullify attacks with Infinity.'] } }
 };
 var TRAIT_ORDER = ['perfect-form','cursed-lover','living-prison','six-eyes'];
+/* ── Special Grade Boons (Creeps & Curses §1.2) ──
+   Level 20, GM-granted rewards for battling Special Grades. */
+var BOONS = {
+  'ultimate-trait':{ name:'Ultimate Cursed Energy Trait', prereq:'Level 20, Cursed Energy Trait Mastery',
+    desc:'You have mastered your Cursed Energy Trait. Creatures suffer your Mastered Trait penalty even on a successful save vs. your raw CE. Rough: +3 attack, +CE score damage (replaces Mastered bonuses). Smooth: reduce B/P/S by CE score, +15 ft speed, 1 CE reaction for +3×CE mod AC. Elemental: bonus damage = CE score, penalties last until long rest.' },
+  'shikigami-master':{ name:'Shikigami Master', prereq:'Level 20, can summon shikigami',
+    desc:'Gain ability points equal to your level to distribute among shikigami ability scores (even above 20). Shikigami you summon gain 30 temporary HP.' },
+  'unkillable':{ name:'Unkillable', prereq:'Level 20',
+    desc:'Your hit point maximum increases by 50.', hpBonus:50 },
+  'unending-ce':{ name:'Unending Cursed Energy Reserves', prereq:'Level 20',
+    desc:'Your Cursed Energy maximum increases by 20.', ceBonus:20 },
+  'curse-resistance':{ name:'Curse Resistance', prereq:'Level 20',
+    desc:'Advantage on saving throws against cursed techniques and other magical effects.' },
+  'peerless-accuracy':{ name:'Peerless Accuracy', prereq:'Level 20',
+    desc:'2×PB times per long rest, add your PB to an attack or damage roll, even if you already add it.' },
+  'swift-techniques':{ name:'Swift Techniques', prereq:'Level 20',
+    desc:'Once per round, activate any cursed technique as a free action. Techniques costing an action can be used as a bonus action.' },
+  'rct-master':{ name:'Reverse Cursed Master', prereq:'Level 20, Reverse Cursed Technique',
+    desc:'Your RCT pool is doubled, and the HP healed per CE spent is doubled.' },
+  'survivor':{ name:'Survivor', prereq:'Level 20',
+    desc:'When reduced to half your HP or lower, you have resistance to all damage.' }
+};
+var BOON_ORDER = ['ultimate-trait','shikigami-master','unkillable','unending-ce','curse-resistance','peerless-accuracy','swift-techniques','rct-master','survivor'];
+function hasBoon(id){ return (char.boons||[]).indexOf(id)>=0; }
 function traitStage(){
   if(!char.specialTrait) return null;
   return char.level>=14 ? 'awakened' : char.level>=6 ? 'stirring' : 'dormant';
@@ -1710,6 +1742,9 @@ function migrateChar(c){
   if(!('backgroundFeat' in c)) c.backgroundFeat='';
   if(!('backgroundTool' in c)) c.backgroundTool='';
   if(!Array.isArray(c.backgroundEquipment)) c.backgroundEquipment=[];
+  if(!Array.isArray(c.boons)) c.boons=[];
+  if(!Array.isArray(c.equipment)) c.equipment=[];
+  if(!Array.isArray(c.cursedTools)) c.cursedTools=[];
   if(!('mindset' in c)) c.mindset='';
   if(!c.classLevels||!Object.keys(c.classLevels).length){
     c.classLevels={}; for(var l=1;l<=(c.level||1);l++) c.classLevels[l]=c.cls;
@@ -3761,12 +3796,101 @@ function stepDetails(body){
   var html='<h2>Step 8 — Details</h2><p class="sub">The odds and ends that make the character yours. A permanent CE bonus here feeds straight into your Max CE (primer: bonuses are added <b>after</b> the reserve).</p>';
   if(hasCEPool()) html+='<div class="field" style="max-width:280px"><label for="ceBonus">Permanent CE bonus (feats, vows, items)</label>'+
     '<input id="ceBonus" type="number" min="0" max="999" value="'+(parseInt(char.ceBonus,10)||0)+'"></div>';
-  html+='<h3>Cursed tools</h3><p class="small">Cursed tools are awarded through campaign progression — your GM grants them in play, so they aren\u2019t chosen here. The full arsenal lives in the codex\u2019s Cursed Tools tab.</p>';
+  /* Special Grade Boons (C&C) — level 20, GM-granted */
+  if(char.level>=20){
+    html+='<h3>Special Grade Boons <span class="small">(Creeps &amp; Curses — GM-granted, level 20)</span></h3>'+
+      '<p class="small">Rewards for sorcerers capable of battling Special Grades. Your GM chooses which boons you receive.</p><div class="opt-grid">';
+    BOON_ORDER.forEach(function(k){
+      var b=BOONS[k], sel=hasBoon(k);
+      html+='<div class="opt-card'+(sel?' is-selected':'')+'" data-boon="'+k+'" tabindex="0" role="button" aria-pressed="'+sel+'">'+
+        '<span class="check">\u2726</span><h4>'+esc(b.name)+'</h4><p class="tagline">'+esc(b.prereq)+'</p>'+
+        '<p class="small">'+esc(b.desc)+'</p></div>';
+    });
+    html+='</div>';
+  }
+  /* Equipment */
+  html+='<h3>Equipment</h3><p class="small">Your background equipment is listed below. Add anything else you carry — mundane gear, tools, supplies.</p>';
+  html+='<div id="equipList">'+equipmentListHTML()+'</div>';
+  html+='<div class="field" style="max-width:520px"><label for="equipAdd">Add equipment</label>'+
+    '<div style="display:flex;gap:8px"><input id="equipAdd" type="text" placeholder="e.g. Climber\u2019s kit, 50 ft hempen rope" style="flex:1">'+
+    '<button type="button" id="equipAddBtn" class="btn">Add</button></div></div>';
+  /* Cursed tools */
+  html+='<h3>Cursed Tools</h3><p class="small">Cursed tools are awarded through campaign progression — record what your GM has granted. The full arsenal lives in the codex\u2019s Cursed Tools tab.</p>';
+  html+='<div id="ctoolList">'+cursedToolListHTML()+'</div>';
+  html+='<div class="grid2" style="max-width:640px"><div class="field"><label for="ctoolName">Tool name</label>'+
+    '<input id="ctoolName" type="text" placeholder="e.g. Playful Cloud"></div>'+
+    '<div class="field"><label for="ctoolGrade">Grade</label>'+
+    '<select id="ctoolGrade"><option value="">—</option><option>Special Grade</option><option>Grade 1</option><option>Grade 2</option><option>Semi-Grade 1</option><option>Semi-Grade 2</option><option>Grade 3</option><option>Grade 4</option></select></div></div>'+
+    '<div class="field" style="max-width:640px"><label for="ctoolNotes">Notes (abilities, attunement)</label>'+
+    '<input id="ctoolNotes" type="text" placeholder="What it does…"></div>'+
+    '<button type="button" id="ctoolAddBtn" class="btn">Add Cursed Tool</button>';
   html+='<h3>Notes</h3><div class="field"><label for="notes">Freeform — backstory, binding vows, GM notes</label>'+
     '<textarea id="notes" placeholder="Anything the sheet should remember…">'+esc(char.notes)+'</textarea></div>';
   body.innerHTML=html;
   var ceB=$('ceBonus'); if(ceB) ceB.addEventListener('change',function(e){ char.ceBonus=Math.max(0,parseInt(e.target.value,10)||0); });
+  /* boon toggles */
+  body.querySelectorAll('[data-boon]').forEach(function(el){
+    function toggle(){
+      var k=el.getAttribute('data-boon'), i=(char.boons||[]).indexOf(k);
+      if(i>=0) char.boons.splice(i,1); else { if(!char.boons) char.boons=[]; char.boons.push(k); }
+      el.classList.toggle('is-selected'); el.setAttribute('aria-pressed', i<0);
+    }
+    el.addEventListener('click',toggle);
+    el.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); } });
+  });
+  /* equipment add/remove */
+  function refreshEquip(){ $('equipList').innerHTML=equipmentListHTML(); bindEquipRemove(); }
+  function bindEquipRemove(){
+    body.querySelectorAll('[data-equip-rm]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var idx=parseInt(btn.getAttribute('data-equip-rm'),10);
+        char.equipment.splice(idx,1); refreshEquip();
+      });
+    });
+  }
+  bindEquipRemove();
+  $('equipAddBtn').addEventListener('click',function(){
+    var v=$('equipAdd').value.trim(); if(!v) return;
+    if(!char.equipment) char.equipment=[]; char.equipment.push(v);
+    $('equipAdd').value=''; refreshEquip();
+  });
+  /* cursed tool add/remove */
+  function refreshCTool(){ $('ctoolList').innerHTML=cursedToolListHTML(); bindCToolRemove(); }
+  function bindCToolRemove(){
+    body.querySelectorAll('[data-ctool-rm]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var idx=parseInt(btn.getAttribute('data-ctool-rm'),10);
+        char.cursedTools.splice(idx,1); refreshCTool();
+      });
+    });
+  }
+  bindCToolRemove();
+  $('ctoolAddBtn').addEventListener('click',function(){
+    var n=$('ctoolName').value.trim(); if(!n) return;
+    if(!char.cursedTools) char.cursedTools=[];
+    char.cursedTools.push({name:n, grade:$('ctoolGrade').value, notes:$('ctoolNotes').value.trim()});
+    $('ctoolName').value=''; $('ctoolGrade').value=''; $('ctoolNotes').value='';
+    refreshCTool();
+  });
   $('notes').addEventListener('input',function(e){ char.notes=e.target.value; });
+}
+function equipmentListHTML(){
+  var bg=char.backgroundEquipment||[], extra=char.equipment||[];
+  var html='<ul style="margin:4px 0;padding-left:1.3em">';
+  bg.forEach(function(e){ html+='<li class="small">'+esc(e)+' <span class="small" style="opacity:.6">(background)</span></li>'; });
+  extra.forEach(function(e,i){ html+='<li class="small">'+esc(e)+' <button type="button" data-equip-rm="'+i+'" class="btn" style="padding:2px 8px;font-size:.75rem">Remove</button></li>'; });
+  if(!bg.length&&!extra.length) html+='<li class="small" style="opacity:.6">No equipment yet.</li>';
+  return html+'</ul>';
+}
+function cursedToolListHTML(){
+  var tools=char.cursedTools||[];
+  if(!tools.length) return '<p class="small" style="opacity:.6">No cursed tools recorded.</p>';
+  var html='<ul style="margin:4px 0;padding-left:1.3em">';
+  tools.forEach(function(t,i){
+    html+='<li class="small"><b>'+esc(t.name)+'</b>'+(t.grade?' ('+esc(t.grade)+')':'')+(t.notes?' — '+esc(t.notes):'')+
+      ' <button type="button" data-ctool-rm="'+i+'" class="btn" style="padding:2px 8px;font-size:.75rem">Remove</button></li>';
+  });
+  return html+'</ul>';
 }
 STEP_VALID[8]=function(){ return {ok:true}; };
 
@@ -4011,8 +4135,25 @@ function sheetHTML(){
         '<p class="small">'+esc(bg.desc)+'</p>'+
         '<p class="small" style="margin:6px 0 0"><b>Skill proficiencies:</b> '+esc(bg.skills.join(', '))+
         (char.backgroundTool?'<br><b>Tool proficiency:</b> '+esc(char.backgroundTool):'')+
-        '<br><b>Equipment:</b> '+esc((char.backgroundEquipment||[]).join('; '))+'</p>'+
+        '<br><b>Equipment:</b> '+esc((char.backgroundEquipment||[]).concat(char.equipment||[]).join('; '))+'</p>'+
         '<p class="small" style="margin:6px 0 0"><b>Feature: '+esc(bg.featureName)+'.</b> '+esc(bg.featureText)+'</p>';
+    }
+    /* Special Grade Boons */
+    if((char.boons||[]).length){
+      html+='<p style="font-family:var(--serif);font-size:1.05rem;font-weight:bold;margin:12px 0 0">Special Grade Boons</p><ul style="margin:4px 0;padding-left:1.3em">';
+      char.boons.forEach(function(k){
+        var b=BOONS[k]; if(!b) return;
+        html+='<li class="small"><b>'+esc(b.name)+':</b> '+esc(b.desc)+'</li>';
+      });
+      html+='</ul>';
+    }
+    /* Cursed Tools */
+    if((char.cursedTools||[]).length){
+      html+='<p style="font-family:var(--serif);font-size:1.05rem;font-weight:bold;margin:12px 0 0">Cursed Tools</p><ul style="margin:4px 0;padding-left:1.3em">';
+      char.cursedTools.forEach(function(t){
+        html+='<li class="small"><b>'+esc(t.name)+'</b>'+(t.grade?' ('+esc(t.grade)+')':'')+(t.notes?' — '+esc(t.notes):'')+'</li>';
+      });
+      html+='</ul>';
     }
     if(ms){
       html+='<p style="font-family:var(--serif);font-size:1.05rem;font-weight:bold;margin:'+(bg?'12px':'0')+' 0 0">Mindset: '+esc(ms.name)+'</p>'+
