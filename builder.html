@@ -4424,10 +4424,10 @@ function qrEffCE(e){
   if(e.tech && tier>=2) return Math.max(1, base-(tier-1));
   return base;
 }
-/* First sentence of a feature text, markdown stripped, capped for quick scanning. */
+/* First sentence of a feature text, all markdown emphasis stripped, capped for quick scanning. */
 function qrOneLiner(text){
   var s=String(text||'')
-    .replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1')
+    .replace(/\*/g,'')
     .replace(/\[([^\]]+)\]\([^)]+\)/g,'$1').replace(/_{1,2}([^_]+)_{1,2}/g,'$1');
   s=s.split(/\n/)[0].trim();
   var m=s.match(/^(.{12,170}?[.!?])(\s|$)/);
@@ -4611,7 +4611,7 @@ function quickRefHTML(){
     '<div class="qr-atk-line"><b>'+atk.attacks+' attack'+(atk.attacks>1?'s':'')+'</b> · '+
     qrSigned(atk.toHit)+' to hit · weapon die '+qrSigned(atk.strM)+' damage</div>';
   if(atk.extraSrc.length)
-    html+='<div class="qr-one">↳ Extra Attack ('+esc(atk.extraSrc.join(' + '))+'): 1 → '+atk.attacks+' attacks <span class="qr-src">stacked</span></div>';
+    html+='<div class="qr-one">↳ Extra Attack ('+esc(atk.extraSrc.join(' + '))+'): 1 → '+atk.attacks+' attacks'+(atk.extraSrc.length>1?' <span class="qr-src">stacked</span>':'')+'</div>';
   if(atk.martialDie)
     html+='<div class="qr-one">↳ Unarmed: '+qrSigned(atk.toHit)+' to hit · '+esc(atk.martialDie)+qrSigned(atk.strM)+' bludgeoning</div>';
   html+='<div class="qr-one">↳ Ranged / finesse: '+qrSigned(atk.toHitR)+' to hit · weapon die '+qrSigned(atk.dexM)+'</div>';
