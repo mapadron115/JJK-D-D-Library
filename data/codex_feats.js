@@ -1938,5 +1938,137 @@ window.CODEX_FEATS = {
    "prereq": "Prerequisite: Feed on Fear",
    "text": "When a creature frightened by you succeeds on a save to end the frightened condition, you may use your reaction to bottle the fading fear (maximum 3 bottles). As an action, shatter a bottle at a point within 30 ft — each creature within 10 ft makes a WIS save vs your CE DC or is frightened of you until the end of your next turn. (Waste not. Fear keeps.)"
   }
- ]
+ ],
+"dreamworks-puss": [
+  {
+   "name": "Every Death a Teacher",
+   "prereq": "Prerequisite: Nine Lives",
+   "text": "The ledger records more than the fact of dying. When you burn a life, note the damage type of the attack or effect that reduced you to 0 hit points; until the end of your next turn, you have resistance to that damage type. The lesson is specific. The next identical blow lands softer."
+  },
+  {
+   "name": "Boots, Hat, and Flourish",
+   "prereq": "Prerequisite: The Legend's Blade",
+   "text": "The riposte need not draw blood to end a fight. When you use The Legend's Blade, you may forgo the extra 1d8 damage: instead, the attacker must make a DEX save against your CE save DC or drop one weapon it is holding at its feet. A disarmed duelist is a lecture in progress."
+  },
+  {
+   "name": "Fear Me, All of You",
+   "prereq": "Prerequisite: Fear Me, If You Dare",
+   "text": "The legend is contagious. When a creature fails its save against Fear Me, If You Dare, each enemy within 10 ft of it must also make a WIS save against your CE save DC or be frightened of you until the end of your next turn. One witness tells the story; the story does the rest."
+  },
+  {
+   "name": "The Thief of Del Mar",
+   "prereq": "Prerequisite: Softpaws",
+   "text": "Passing through is passing close. When you move through a hostile creature's space, you may make one Sleight of Hand check as part of that movement to lift a small loose object it carries, contested by its Perception. You also have advantage on Stealth checks made to hide in a space you moved through this turn. He was a wanted cat long before he was a legend."
+  }
+ ],
+"dreamworks-toothless": [
+  {
+   "name": "Off the Cliffside",
+   "prereq": "Prerequisite: Plasma Blast",
+   "text": "The blast does not need a straight line. When you fire a concussive Plasma Blast, you may ricochet it off one solid surface: the attack ignores half and three-quarters cover, and you may target a creature you cannot see as long as you know its location. The cliffs of Berk taught him geometry."
+  },
+  {
+   "name": "Death from the Dark",
+   "prereq": "Prerequisite: Night Fury Cloak",
+   "text": "The cloak is not for hiding \u2014 it is for arriving. While you are hidden by your Night Fury Cloak, if you fly at least 30 ft in a straight line toward a creature and then attack it, the attack is made with advantage and deals an extra 2d10 force damage on a hit. The dive is the sentence; the dark is only the punctuation."
+  },
+  {
+   "name": "The Click That Maps",
+   "prereq": "Prerequisite: Echolocation",
+   "text": "One long click, and the dark draws itself. As an action (1 CE), you emit a mapping pulse: you learn the layout of structures, passages, and secret doors within 120 ft, and the locations of hidden creatures there, for 1 minute. This does not make hidden creatures visible \u2014 but you know exactly where every one of them is standing."
+  },
+  {
+   "name": "The Alpha's Mercy",
+   "prereq": "Prerequisite: Alpha's Command",
+   "text": "Command is not the alpha's only voice. You may use Alpha's Command to broker peace instead of obedience: each dragon or beast of your choice within 60 ft must make a WIS save against your CE save DC or have the charmed and frightened conditions end, and it cannot willingly attack another dragon or beast for 1 minute. The king's first decree was a truce."
+  }
+ ],
+"dreamworks-megamind": [
+  {
+   "name": "Working the Crowd",
+   "prereq": "Prerequisite: Presentation!",
+   "text": "Your doubles learn stagecraft. While at least one of your holographic duplicates is active, you may take the Help action to aid an ally within 30 ft of any duplicate \u2014 the double leans in and points at exactly the right moment, and the aid is delivered from the duplicate's position. Additionally, your duplicates can carry and manipulate objects weighing up to 5 lb (opening doors, lifting keys, passing notes). The stagehands are union now."
+  },
+  {
+   "name": "Pocket Arsenal",
+   "prereq": "Prerequisite: Dehydration Gun",
+   "text": "The gun works on things that never had a saving throw. As an action, you may dehydrate one unattended Large or smaller object into a small blue cube for 8 hours; as an action, you may rehydrate a cube you created, restoring the object in an unoccupied space within 5 ft of you. You can maintain up to PB cubes at once; if you exceed the limit, the oldest cube rehydrates harmlessly. Smuggling has never been this polite."
+  },
+  {
+   "name": "Standing Ovation",
+   "prereq": "Prerequisite: The Speech",
+   "text": "End the show on your terms. As a bonus action, you may end The Speech early: each ally within 60 ft who heard it gains temporary hit points equal to your CHA modifier + your level and advantage on its next Charisma check within 1 hour \u2014 they carry the applause with them. Enemies charmed by The Speech remember the performance fondly: for 24 hours they have disadvantage on attack rolls against you, provided you have not damaged them since."
+  },
+  {
+   "name": "Read the Room",
+   "prereq": "Prerequisite: Showman's Gambit",
+   "text": "Your predictions widen. When you declare a Showman's Gambit, you may name a saving throw (Strength, Dexterity, or Wisdom) instead of an action: the first time the named creature makes that saving throw within 1 minute, it does so with disadvantage \u2014 you announced the dodge before it moved. If the creature makes no such save before the minute ends, it takes 2d8 psychic damage as the unanswered prediction hangs in the air."
+  }
+ ],
+"dreamworks-mr-wolf": [
+  {
+   "name": "Lift the Spell",
+   "prereq": "Prerequisite: Pickpocket",
+   "text": "You steal things that were never objects. As an action, choose one creature within 5 ft concentrating on a spell or effect: make a Sleight of Hand check contested by its passive Perception. On a success, its concentration breaks \u2014 you lifted the thread holding the spell together, and it felt like nothing at all. The creature does not learn what broke its focus."
+  },
+  {
+   "name": "Leave It Re-Keyed",
+   "prereq": "Prerequisite: Crack the Safe",
+   "text": "You don't just open the safe \u2014 you change the combination. When you successfully suppress a ward, glyph, barrier, or alarm with Crack the Safe, you may re-key it instead of merely silencing it: for the duration of the suppression, the effect ignores you and your allies but triggers normally against your enemies. The owners never know the lock changed hands."
+  },
+  {
+   "name": "Share the Take",
+   "prereq": "Prerequisite: \"Good\"",
+   "text": "Goodness, fenced and distributed. As a bonus action, you may give any number of your Good points to willing allies within 30 ft \u2014 a creature holding your Good point may spend it to add 1d8 to one d20 roll it makes, as if it were yours. Points you give away count against your maximum until spent. The crew eats first."
+  },
+  {
+   "name": "Plan B",
+   "prereq": "Prerequisite: The Heist",
+   "text": "Every good plan has one. Once per declared heist, when an ally fails an ability check made directly toward the heist's objective, you may let them reroll it and take the higher result \u2014 you accounted for this. If the reroll succeeds, you gain 1 Good point. The crew trusts the planner."
+  }
+ ],
+"dreamworks-bob": [
+  {
+   "name": "Through the Keyhole",
+   "prereq": "Prerequisite: Amorphous",
+   "text": "One willing creature of your size or smaller can ride inside you. While inside, it has total cover, can breathe normally, and moves with you \u2014 including through gaps as narrow as 1 inch when you squeeze. It may climb out as a bonus action on its turn. Smuggling friends past security is just another kind of hug."
+  },
+  {
+   "name": "Jelly Vault",
+   "prereq": "Prerequisite: Engulf",
+   "text": "You can engulf unattended objects of Medium size or smaller, not just creatures. An engulfed object is hidden inside you: it cannot be seen, weighs nothing, and cannot be detected by nonmagical means. You may expel any or all stored objects as a bonus action. The specimen insists this is \"just holding things.\" The specimen is technically correct."
+  },
+  {
+   "name": "Get Behind the Blob",
+   "prereq": "Prerequisite: Indestructible",
+   "text": "When an ally within 5 ft of you takes damage from a single source, you may use your reaction to flow between them and the harm: you take the damage instead, reduced by your Indestructible reduction. The blob does not dodge. The blob is the dodge."
+  },
+  {
+   "name": "Blank Slate",
+   "prereq": "Prerequisite: No Brain to Break",
+   "text": "There is nothing to read. Divination effects, and any other effect that would read your thoughts, sense your emotions, or discern your alignment, automatically fail against you \u2014 and any creature attempting to do so learns only that you are thinking about snacks. Probably."
+  }
+ ],
+"dreamworks-north": [
+  {
+   "name": "He Sees You When You're Sleeping",
+   "prereq": "Prerequisite: The List",
+   "text": "The List does not require line of sight, only knowledge. You may mark a creature you cannot see if you know its true name and it is on the same plane of existence as you \u2014 the mark otherwise follows the normal rules of The List. Distance is no excuse. He knows when you are awake."
+  },
+  {
+   "name": "Plus One",
+   "prereq": "Prerequisite: Portal Tattoos",
+   "text": "Your portals fit two. When you use Portal Tattoos, you may bring one willing creature within 5 ft of you along to the destination \u2014 it steps through the ink at your heels. The yetis have been notified. They are fine with it."
+  },
+  {
+   "name": "Borrowed Wonder",
+   "prereq": "Prerequisite: Center of Wonder",
+   "text": "As a bonus action, choose one ally within 30 ft: for 1 minute, they radiate your wonder in a 15-ft radius \u2014 allies (other than you) within that radius gain the benefits of your Center of Wonder. A creature cannot benefit from two instances of Center of Wonder at once. Wonder, shared, does not diminish."
+  },
+  {
+   "name": "Guilt by Association",
+   "prereq": "Prerequisite: Judgment",
+   "text": "Judgment is contagious. When a creature fails its saving throw against your Judgment stun, you may immediately mark one creature of your choice within 30 ft of it as naughty \u2014 no action required. The List takes note of accomplices."
+  }
+ ],
 };
