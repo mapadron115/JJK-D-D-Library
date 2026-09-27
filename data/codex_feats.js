@@ -1877,66 +1877,66 @@ window.CODEX_FEATS = {
   {
    "name": "The Quill Remembers",
    "prereq": "Prerequisite: The Deal",
-   "text": ""
+   "text": "He always knew what you wanted. That was the whole trick. When a creature accepts your Deal, you learn its heart's desire — the DM tells you one true want it would trade anything for. A creature whose desire you know never thinks to read your Fine Print."
   },
   {
    "name": "A Footnote's Weight",
    "prereq": "Prerequisite: Fine Print",
-   "text": ""
+   "text": "Your Fine Print may name a taboo — one simple act. If the debtor performs it before the price is paid, the Debt becomes due immediately, and you may use Debt Collection as a reaction. (Read the contract. No, really. Read it.)"
   },
   {
    "name": "The Broker's Cut",
    "prereq": "Prerequisite: Debt Collection",
-   "text": ""
+   "text": "When you collect a Debt, you siphon the price itself: regain CE equal to half the psychic damage the collection dealt, up to your CHA modifier. (The house always takes its cut. He is the house.)"
   },
   {
    "name": "Signed, Sealed",
    "prereq": "Prerequisite: All Magic Comes with a Price",
-   "text": ""
+   "text": "Once per long rest, when a creature within 30 ft of you strikes any bargain, vow, or deal that isn't yours, you may use your reaction to interpose your quill — you are added as witness and co-signatory. You learn its exact terms, and each party pays you a toll of 1 CE (or 1d4 psychic damage if they have none). (Every market needs its witness. He volunteers.)"
   }
  ],
 "dreamworks-jack-frost": [
   {
    "name": "Updraft Ally",
    "prereq": "Prerequisite: Wind-Rider",
-   "text": ""
+   "text": "When you Wind-Ride, one willing creature you are touching rides the same gust — it gains your fly speed until the end of your turn (or the full minute, if extended). (The wind likes him. It can be introduced to his friends.)"
   },
   {
    "name": "Windowpane Whispers",
    "prereq": "Prerequisite: Frostbite Patterns",
-   "text": ""
+   "text": "Your frosted surfaces carry sound both ways — while observing through one, you may also speak, and your voice is heard clearly by anyone near the surface. (He spent three hundred years leaving messages on glass. Now he can wait for the reply.)"
   },
   {
    "name": "The Storm Provides",
    "prereq": "Prerequisite: Whiteout",
-   "text": ""
+   "text": "While Whiteout persists, you may use a bonus action to raise the snow into shelter — up to three allies inside the storm gain half cover until the start of your next turn. (A snow day protects its own.)"
   },
   {
    "name": "A Snowball with Your Name on It",
    "prereq": "Prerequisite: Snowball Barrage",
-   "text": ""
+   "text": "Once per turn, you may forgo one snowball's damage to mark its target instead — you and your believers always know the marked creature's direction for 1 hour. (The snow never forgets where you are.)"
   }
  ],
 "dreamworks-pitch-black": [
   {
    "name": "Sand in the Gears",
    "prereq": "Prerequisite: Fear Sand",
-   "text": ""
+   "text": "Your sand finds machinery delicious. As an action, you may clog one nonmagical mechanism within 30 ft — a lock, a crossbow, a trap, a mill wheel — disabling it for 1 minute (or until cleaned as an action). (His sand never learned to be gentle. It learned to be thorough.)"
   },
   {
    "name": "Sweet Dreams",
    "prereq": "Prerequisite: Nightmare Touch",
-   "text": ""
+   "text": "Lay a gentle hand on a sleeping willing creature and give it a true dream — while it sleeps within 1 mile of you, you can speak with it in its dreams, as many words as you like, and it remembers on waking. (Even the Nightmare King knows the difference. He simply prefers the other kind.)"
   },
   {
    "name": "The Dark Is Listening",
    "prereq": "Prerequisite: One with the Dark",
-   "text": ""
+   "text": "While hidden in dim light or darkness, choose one shadow within 60 ft that you can see — for 1 minute, you hear as though you stood within it. (Every shadow is his ear, if he bothers to listen.)"
   },
   {
    "name": "Terror, Bottled",
    "prereq": "Prerequisite: Feed on Fear",
-   "text": ""
+   "text": "When a creature frightened by you succeeds on a save to end the frightened condition, you may use your reaction to bottle the fading fear (maximum 3 bottles). As an action, shatter a bottle at a point within 30 ft — each creature within 10 ft makes a WIS save vs your CE DC or is frightened of you until the end of your next turn. (Waste not. Fear keeps.)"
   }
  ]
 };
