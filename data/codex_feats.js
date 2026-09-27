@@ -1806,6 +1806,137 @@ window.CODEX_FEATS = {
    "prereq": "",
    "text": "Your Flow Technique's damage reduction lingers: after you catch residue, the next attack against you before the end of your next turn has its damage reduced by your proficiency bonus, even if it is not a cursed attack. The water, once moving, keeps moving."
   }
+ ],
+"dreamworks-po": [
+  {
+   "name": "The Pond Is Calm",
+   "prereq": "Prerequisite: Inner Peace",
+   "text": "Stillness is contagious. When you Center yourself, each ally within 15 ft who can see you gains advantage on their next saving throw against being frightened or charmed before the start of your next turn — they borrow your breathing. Still water steadies every boat."
+  },
+  {
+   "name": "Skadoosh, Downward",
+   "prereq": "Prerequisite: Skadoosh",
+   "text": "The shockwave does not care which way is up. When you use Skadoosh, you may aim the cone straight down instead: you take no damage, are launched 20 ft straight up, and land safely without falling damage, while each creature within 10 ft of your launch point must save or be knocked prone. Getting there is half the battle."
+  },
+  {
+   "name": "The Room Fights Too",
+   "prereq": "Prerequisite: Panda Style",
+   "text": "When you hit a creature with an improvised weapon, you may shatter it against them: the attack deals an extra 1d6 bludgeoning damage, and you choose a second creature within 10 ft of the target, which takes 1d6 bludgeoning damage as the debris finds it. The Dragon Warrior never fights alone — the furniture helps."
+  },
+  {
+   "name": "Secret Ingredient Soup",
+   "prereq": "Prerequisite: Dumpling-Fueled Recovery",
+   "text": "Ten quiet minutes and a pot. During a short rest you may cook for up to PB creatures: each creature that eats regains an extra 1d8 hit points and gains advantage on its next saving throw against poison or disease within the next 24 hours. There is no secret ingredient — but there is soup."
+  }
+ ],
+"dreamworks-kai": [
+  {
+   "name": "The Dead Keep Their Chi",
+   "prereq": "Prerequisite: Chi Rip",
+   "text": "Chi lingers a minute in the freshly dead, like heat in a stone. When a creature dies within 30 ft of you, you may use your reaction to rip its fading chi: gain Stolen Chi equal to half its remaining CE (minimum 2). You never let a battlefield go to waste."
+  },
+  {
+   "name": "An Amulet for a Friend",
+   "prereq": "Prerequisite: Jade Amulet",
+   "text": "Generosity, Kai-style: the loan, not the gift. You may lend a worn amulet to a willing creature: while they wear it, they may spend its stored chi 1-for-1 in place of CE on their own technique features. You may reclaim it as a bonus action while within 60 ft — the chain snaps home. Lending is not losing."
+  },
+  {
+   "name": "The Jombie Takes the Blow",
+   "prereq": "Prerequisite: Summon Jombie",
+   "text": "The jade was a warrior once; it remembers how to stand in front. When you are hit by an attack, you may use your reaction to have one active jombie within 5 ft take the hit instead — the attack resolves against the zombie's AC. Loyalty, posthumously enforced."
+  },
+  {
+   "name": "Drag Them Somewhere Worse",
+   "prereq": "Prerequisite: Spirit Realm Chains",
+   "text": "The chains do not just pull — they deliver. When Spirit Realm Chains pulls a creature, you may place it in any space of your choice within the 15 ft, including off a ledge, into hazardous terrain, or through an ally's reach (it provokes opportunity attacks as normal for leaving that reach). Position is a weapon you stole along with the chi."
+  }
+ ],
+"dreamworks-tai-lung": [
+  {
+   "name": "Deadened Nerves",
+   "prereq": "Prerequisite: Nerve Strike",
+   "text": "The same hand that locks a nerve can quiet one. As an action, you may lay Nerve Strike's touch on a willing creature (no saving throw, no CE cost): it gains temporary hit points equal to your level + your DEX modifier and suppresses the effects of one level of exhaustion for 1 hour. Mercy, delivered with the same precision as cruelty."
+  },
+  {
+   "name": "Run Up the Walls",
+   "prereq": "Prerequisite: Leopard Blitz",
+   "text": "A straight line is a suggestion. When you take the Dash action (including Leopard Blitz's bonus-action Dash), you may move across vertical surfaces and liquids without falling, provided you end the movement on solid ground — momentum is just another kind of floor. The palace walls learned this first."
+  },
+  {
+   "name": "Denied Again",
+   "prereq": "Prerequisite: Scroll-Denied Fury",
+   "text": "His fury was never only his. When an ally within 30 ft misses with an attack, or a creature succeeds on a saving throw against an ally's feature, you may use your reaction to gain 1 Fury — their denial feeds you too. Twenty years of practice being angry on everyone's behalf."
+  },
+  {
+   "name": "Not Done Yet",
+   "prereq": "Prerequisite: \"You Don't Know\"",
+   "text": "Refusing to fall is, itself, an attack. When \"You Don't Know\" triggers, each hostile creature within 15 ft that can see you must make a WIS save against your CE save DC or be frightened of you until the end of your next turn. The leopard gets up. Everyone watches."
+  }
+ ],
+"dreamworks-rumpelstiltskin": [
+  {
+   "name": "The Quill Remembers",
+   "prereq": "Prerequisite: The Deal",
+   "text": ""
+  },
+  {
+   "name": "A Footnote's Weight",
+   "prereq": "Prerequisite: Fine Print",
+   "text": ""
+  },
+  {
+   "name": "The Broker's Cut",
+   "prereq": "Prerequisite: Debt Collection",
+   "text": ""
+  },
+  {
+   "name": "Signed, Sealed",
+   "prereq": "Prerequisite: All Magic Comes with a Price",
+   "text": ""
+  }
+ ],
+"dreamworks-jack-frost": [
+  {
+   "name": "Updraft Ally",
+   "prereq": "Prerequisite: Wind-Rider",
+   "text": ""
+  },
+  {
+   "name": "Windowpane Whispers",
+   "prereq": "Prerequisite: Frostbite Patterns",
+   "text": ""
+  },
+  {
+   "name": "The Storm Provides",
+   "prereq": "Prerequisite: Whiteout",
+   "text": ""
+  },
+  {
+   "name": "A Snowball with Your Name on It",
+   "prereq": "Prerequisite: Snowball Barrage",
+   "text": ""
+  }
+ ],
+"dreamworks-pitch-black": [
+  {
+   "name": "Sand in the Gears",
+   "prereq": "Prerequisite: Fear Sand",
+   "text": ""
+  },
+  {
+   "name": "Sweet Dreams",
+   "prereq": "Prerequisite: Nightmare Touch",
+   "text": ""
+  },
+  {
+   "name": "The Dark Is Listening",
+   "prereq": "Prerequisite: One with the Dark",
+   "text": ""
+  },
+  {
+   "name": "Terror, Bottled",
+   "prereq": "Prerequisite: Feed on Fear",
+   "text": ""
+  }
  ]
-
 };
