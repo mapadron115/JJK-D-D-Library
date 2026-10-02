@@ -1,0 +1,269 @@
+/* ════════════════════════════════════════════════════════════════════
+   RITUAL ARCHIVE — DOSSIER PAPER THEME (production, 2026-10-02)
+   The Field Manual "Illustrated Edition" paper aesthetic for all dossier pages.
+   "Illustrated Edition" paper aesthetic. Drop-in replacement for
+   assets/dossier-static.css: every class name kept, new look.
+   Per-page --accent (set inline on <body>) still drives top borders,
+   kickers, and badges; --accent-ink darkens any hue for text on paper.
+   ════════════════════════════════════════════════════════════════════ */
+:root{
+  --paper:#f4efe2; --paper2:#ece4cf; --card:#fbf8ee; --card2:#f6f1e1;
+  --ink:#221d14; --ink2:#57503f; --ink3:#7d7563;
+  --line:#d9cfae; --line2:#c9bfa1;
+  --red:#b33a2b; --red-deep:#8c2a1f;
+  --gold:#c9972f; --gold-deep:#8f6c1d; --gold-pale:#e9cf87;
+  --ivory:#f8f3e6; --night:#14100b;
+  --olive:#5f6238; --stone:#8a8474;
+  --serif:Georgia,'Times New Roman',Charter,'Bitstream Charter','Iowan Old Style',serif;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --accent:#b33a2b;
+  --accent-ink:color-mix(in srgb, var(--accent) 62%, var(--ink));
+  --max:1100px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  line-height:1.62;font-size:16px;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(34,29,20,.028) 31px,rgba(34,29,20,.028) 32px);}
+::selection{background:var(--red);color:var(--paper)}
+
+/* ── dark cinematic topbar (matches main site) ── */
+.bar{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;
+  gap:16px;align-items:center;padding:12px max(20px,calc((100vw - var(--max))/2));
+  background:linear-gradient(180deg,#1a1410,#251c12);border-bottom:3px solid var(--gold);
+  box-shadow:0 4px 20px rgba(20,12,6,.35)}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;
+  color:var(--ivory);font-family:var(--serif);font-weight:bold;letter-spacing:.5px;white-space:nowrap}
+.brand:hover{color:var(--gold-pale)}
+.brand span{display:inline-grid;place-items:center;width:30px;height:30px;margin-right:2px;
+  background:linear-gradient(160deg,#dcb04a,#a5761f);color:#1d150a;
+  font-family:var(--serif);font-size:1.1rem;border-radius:4px;
+  box-shadow:inset 0 0 0 2px rgba(29,21,10,.4),0 1px 10px rgba(220,176,74,.35)}
+.back{color:#cfc2a4;text-decoration:none;font-size:.78rem;letter-spacing:1.8px;
+  text-transform:uppercase;font-weight:600;white-space:nowrap}
+.back:hover{color:var(--gold-pale)}
+
+.shell{max-width:var(--max);margin:0 auto;padding:40px 24px 90px}
+
+/* ── hero: cinematic dark panel on paper, like the main site doc-head ── */
+.hero{position:relative;overflow:hidden;border-radius:8px;
+  background:linear-gradient(180deg,#1a1410,#251c12);
+  border:1px solid #3a2f22;border-top:3px solid var(--accent);
+  padding:clamp(28px,5vw,54px);box-shadow:0 14px 40px rgba(20,12,6,.35);color:var(--ivory)}
+.eyebrow,.supplement-kicker{font-size:.75rem;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold-pale);font-weight:700;margin-bottom:14px}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,5vw,3.4rem);
+  line-height:1.05;margin:.2rem 0 .8rem;color:var(--ivory);text-shadow:0 2px 26px rgba(0,0,0,.65)}
+.summary{max-width:62ch;color:#e3d9bf;font-size:1.08rem;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.chips span{border:1px solid rgba(201,151,47,.55);border-radius:999px;padding:5px 12px;
+  color:#e9dfc6;background:rgba(18,12,8,.55);font-size:.78rem;letter-spacing:.06em}
+.source-note{margin:20px 0;color:var(--ink3);font-size:.9rem}
+.hero-art{margin:26px 0 0;max-width:520px}
+.hero-art img{display:block;width:100%;height:auto;border-radius:6px;
+  border:1px solid rgba(201,151,47,.5);box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.actions{margin-top:22px}
+.actions button{border:1px solid var(--gold);background:transparent;color:var(--gold-pale);
+  border-radius:3px;padding:10px 18px;cursor:pointer;font-size:.78rem;letter-spacing:1.8px;
+  text-transform:uppercase;font-weight:700}
+.actions button:hover{background:rgba(201,151,47,.14)}
+
+/* ── dossier body typography ── */
+.dossier-content{margin-top:34px}
+.dossier-content>*:first-child{margin-top:0}
+.dossier-content h1,.dossier-content h2,.dossier-content h3,.dossier-content h4{
+  font-family:var(--serif);font-weight:400;line-height:1.2;scroll-margin-top:90px;color:var(--ink)}
+.dossier-content h2{margin-top:2.4rem;padding-bottom:.5rem;border-bottom:1px solid var(--line2);font-size:1.7rem}
+.dossier-content h3{margin-top:1.6rem;font-size:1.3rem}
+.dossier-content h4{font-size:1.1rem}
+.dossier-content p,.dossier-content li{color:var(--ink2)}
+.dossier-content a{color:var(--red-deep)}
+.dossier-content a:hover{color:var(--red)}
+.dossier-content strong{color:var(--ink)}
+.dossier-content hr{border:0;border-top:1px solid var(--line2);margin:30px 0}
+.dossier-content table{width:100%;border-collapse:collapse;display:block;overflow-x:auto;margin:16px 0}
+.dossier-content th,.dossier-content td{border:1px solid var(--line2);padding:8px 12px;
+  text-align:left;vertical-align:top;min-width:110px}
+.dossier-content th{background:var(--paper2);color:var(--ink);font-family:var(--serif);font-weight:700}
+.dossier-content td{color:var(--ink2)}
+.dossier-content blockquote{margin:20px 0;padding:14px 18px;border-left:3px solid var(--accent);
+  background:var(--card2);color:var(--ink2);border-radius:0 4px 4px 0}
+.dossier-content code{background:var(--paper2);padding:.12em .4em;border-radius:3px;font-size:.9em;color:var(--ink)}
+.dossier-content .tag,.dossier-content .badge,.dossier-content .pill,.static-button-label{
+  display:inline-block;border:1px solid var(--line2);background:var(--card2);border-radius:999px;
+  padding:3px 10px;margin:2px;color:var(--ink2);font-size:.78rem}
+
+/* ── standard dossier sections ── */
+.dsec{margin:0 0 8px}
+.dsec>.kicker{font-size:.75rem;letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent-ink);font-weight:800;margin:2.8rem 0 .2rem}
+.dsec>h2.stitle{margin:.1rem 0 .6rem;padding:0;border:0;font-size:1.8rem}
+.dsec>.lede{color:var(--ink3);max-width:72ch;margin:.2rem 0 .8rem}
+.dsec-identity .eyebrow{margin-top:4px}
+.dsec-identity h2{margin:.3rem 0 .7rem;padding:0;border:0;font-size:clamp(1.9rem,4.5vw,2.7rem)}
+.dsec-identity h2 em{color:var(--accent-ink);font-style:normal}
+.lead{font-size:1.12rem;color:var(--ink2);max-width:72ch;margin:.4rem 0 .9rem}
+
+/* ── metric strip ── */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0 10px}
+.metric{background:var(--card);border:1px solid var(--line2);border-top:3px solid var(--accent);
+  border-radius:4px;padding:12px 14px;box-shadow:0 2px 0 rgba(34,29,20,.06)}
+.metric span{display:block;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;
+  color:var(--ink3);margin-bottom:6px}
+.metric strong{color:var(--ink);font-size:1rem;font-weight:700}
+
+/* ── cards (feature grid, generic panels) ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin:16px 0}
+.dossier-content .grid .card{margin:0}
+.dossier-content .card,.dossier-content .panel,.dossier-content .box,
+.dossier-content .rule-card,.dossier-content .statblock,.dossier-content .feature,
+.dossier-content .domain,.dossier-content .hero-card,.dossier-content article{
+  background:var(--card);border:1px solid var(--line2);border-top:3px solid var(--accent);
+  border-radius:4px;padding:18px;margin:16px 0;box-shadow:0 2px 0 rgba(34,29,20,.06)}
+.card .tag{display:inline-block;border:1px solid var(--red);border-radius:3px;padding:3px 10px;
+  margin:2px 2px 8px 0;color:var(--red-deep);font-size:.72rem;letter-spacing:2px;font-weight:800}
+.card h3{margin:.3rem 0 .5rem;font-size:1.25rem}
+.dossier-content .danger{border-top-color:var(--red)}
+.callout .cost,.card .cost{font-size:.76rem;letter-spacing:1px;text-transform:uppercase;
+  color:var(--ink2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:7px 2px;margin:10px 0 12px}
+.kind-tag{font-size:.62rem;letter-spacing:2px;color:var(--paper);background:var(--accent-ink);
+  border-radius:2px;padding:3px 8px;text-transform:uppercase;font-weight:800}
+
+/* ── level progression accordions ── */
+.level-stack{margin:16px 0}
+.dossier-content details{border:1px solid var(--line2);border-radius:4px;margin:12px 0;
+  background:var(--card);overflow:hidden;box-shadow:0 2px 0 rgba(34,29,20,.06)}
+.dossier-content details>summary{cursor:pointer;padding:14px 16px;background:var(--card2);
+  font-weight:700;color:var(--ink);list-style-position:inside;font-family:var(--serif);font-size:1.05rem}
+.dossier-content details[open]>summary{border-bottom:1px solid var(--line2)}
+.dossier-content details>.body,.dossier-content details>section,
+.dossier-content details>div:not(:first-child){padding-left:18px;padding-right:18px}
+details.level summary .lv{display:inline-grid;place-items:center;min-width:2.3rem;height:2.3rem;
+  border:1px solid var(--accent-ink);border-radius:3px;color:var(--accent-ink);font-weight:800;
+  margin-right:12px;vertical-align:middle;font-family:var(--sans);font-size:.9rem}
+details.level summary .lv-title{display:inline-block;vertical-align:middle}
+details.level summary .lv-title b{color:var(--ink)}
+.level-body{padding:6px 18px 18px}
+
+/* ── feat cards ── */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin:16px 0}
+.feat{background:var(--card);border:1px solid var(--line2);border-top:3px solid var(--accent);
+  border-radius:4px;padding:18px;box-shadow:0 2px 0 rgba(34,29,20,.06)}
+.feat .prereq{font-size:.74rem;color:var(--accent-ink);letter-spacing:1.5px;
+  text-transform:uppercase;margin-bottom:8px;font-weight:800}
+.feat h3{margin:.2rem 0 .6rem;font-size:1.2rem}
+
+/* ── rule lists ── */
+.rule-list{margin:16px 0}
+.rule-list .rule{border-left:3px solid var(--accent);background:var(--card2);
+  border-radius:0 4px 4px 0;padding:10px 16px;margin:10px 0;color:var(--ink2)}
+
+/* ── callouts (Maximum / Domain / notes) ── */
+.callout{background:var(--card);border:1px solid var(--line2);border-top:3px solid var(--accent);
+  border-radius:4px;padding:20px;margin:20px 0;box-shadow:0 2px 0 rgba(34,29,20,.06)}
+.callout .callout-kicker{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent-ink);font-weight:800}
+.callout-head{padding:2px 0 12px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.callout h4{margin:.25rem 0 .5rem;font-size:1.35rem}
+.callout-domain{border-top-color:#8a5cc7}
+.callout-domain .callout-kicker{color:#6d47b8}
+.callout-maximum{border-top-color:#e06c4f}
+.callout-maximum .callout-kicker{color:#b34a2e}
+.callout-note{border-top-color:#6d9dc5}
+.callout-note .callout-kicker{color:#3f6f96}
+.callout h3.ctitle{margin:.3rem 0 .6rem}
+
+/* ── domain stat grid ── */
+.domain-data{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  border:1px solid var(--line2);border-radius:4px;background:var(--card2);margin:12px 0;overflow:hidden}
+.domain-data>div{padding:10px 16px;border-right:1px solid var(--line2)}
+.domain-data>div:last-child{border-right:none}
+.domain-data dt{font-size:.64rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:2px}
+.domain-data dd{margin:0;font-weight:700;font-size:1rem;color:var(--ink)}
+.prov-note{font-size:.78rem;color:var(--ink3);font-style:italic;margin:8px 0 0}
+
+/* ── rules-first line: explicit mechanics summary ── */
+.rules-line{font-weight:600;color:var(--ink);background:rgba(179,58,43,.06);
+  border-left:3px solid var(--red);padding:9px 14px;margin:0 0 12px;
+  border-radius:0 4px 4px 0;font-size:.95rem;line-height:1.55}
+.rules-line::before{content:"❖ ";color:var(--red)}
+
+/* ── domain visual cutscene ── */
+.domain-visual{font-style:italic;color:#57496b;border-left:3px solid #b276e8;
+  padding:10px 16px;margin:14px 0;background:rgba(178,118,232,.08);border-radius:0 4px 4px 0}
+
+/* ── Sun's marginalia ── */
+.margin-note{border-right:3px solid #b276e8;background:rgba(178,118,232,.07);
+  border-radius:4px 0 0 4px;padding:14px 18px;margin:16px 0;font-style:italic;
+  color:#57496b;position:relative}
+.margin-note .mn-tag{display:block;font-style:normal;font-size:.68rem;letter-spacing:3px;
+  text-transform:uppercase;color:#7c53c0;margin-bottom:8px;font-weight:800}
+.margin-note p{margin:0;color:#57496b}
+
+/* ── longform treatise prose ── */
+.treatise{font-size:1.02rem;line-height:1.7;color:var(--ink2);max-width:72ch}
+.treatise p{margin:.8em 0}
+
+/* ── SCP redaction flourish: black bars survive on paper ── */
+.redacted{background:#14100b;color:transparent;border-radius:2px;padding:0 .35em;
+  cursor:pointer;user-select:none;white-space:nowrap;transition:background .25s,color .25s}
+.redacted:hover{background:#3a3129}
+.redacted.revealed{background:transparent;color:inherit;cursor:default;user-select:text}
+.redact-note{font-size:.78em;color:var(--ink3);font-style:italic}
+
+/* ── legacy source text, source lists, captions ── */
+pre.legacy-source-text{white-space:pre-wrap;word-break:break-word;font-size:.82rem;
+  line-height:1.55;color:var(--ink2);background:var(--card2);border:1px solid var(--line2);
+  border-radius:4px;padding:14px 16px;max-height:420px;overflow:auto;margin:14px 0}
+.source-list{list-style:none;padding:0;margin:12px 0}
+.source-list li{margin:8px 0;color:var(--ink2)}
+.table-scroll{overflow-x:auto;margin:14px 0}
+.caption{color:var(--ink3);font-size:.9rem;margin:14px 0 -6px}
+
+/* ── supplements & endcap ── */
+.source-supplement{border-top:2px solid var(--accent);margin:40px 0 0;padding-top:22px}
+.source-supplement:first-child{margin-top:0}
+.endcap{margin-top:50px;padding-top:24px;border-top:1px solid var(--line2)}
+.endcap a{color:var(--red-deep);text-decoration:none;font-weight:700}
+.endcap a:hover{color:var(--red)}
+
+/* ── alien roster badges (e243 Omnitrix) ── */
+details.alien summary{display:flex;align-items:center;gap:.65em;cursor:pointer}
+.alien-icon{display:inline-grid;place-items:center;width:2em;height:2em;flex:none;
+  border-radius:50%;background:var(--accent);color:var(--paper);font-weight:800;font-size:.95em}
+.alien-title{font-weight:700}
+.alien-sub{display:block;font-size:.85em;color:var(--ink3);font-weight:400}
+
+/* ── responsive ── */
+@media(max-width:700px){
+  .bar{padding:10px 14px}
+  .back{font-size:.72rem;letter-spacing:1px}
+  .shell{padding:24px 14px 60px}
+  .hero{border-radius:6px;padding:24px 18px}
+  .dossier-content{font-size:.96rem}
+  .dossier-content h2{font-size:1.4rem}
+  .dsec>h2.stitle{font-size:1.4rem}
+  .dsec-identity h2{font-size:1.75rem}
+  .dossier-content .card,.dossier-content .panel,.dossier-content .box,
+  .dossier-content .rule-card,.dossier-content .statblock,.dossier-content .feature,
+  .dossier-content .domain,.dossier-content .hero-card,.dossier-content article,.feat{padding:14px}
+  .dossier-content details>summary{padding:12px 14px}
+  .chips{gap:6px}
+}
+
+/* ── print: already paper, so mostly passthrough ── */
+@media print{
+  .bar,.actions,.endcap{display:none!important}
+  body{background:#fff}
+  .hero{background:#fff;border:1px solid #bbb;border-top:3px solid var(--accent);
+    box-shadow:none;color:#111}
+  .hero h1{color:#111;text-shadow:none}
+  .eyebrow,.supplement-kicker{color:var(--red-deep)}
+  .summary{color:#333}
+  .chips span{background:#fff;color:#333;border-color:#bbb}
+  .hero-art img{box-shadow:none}
+  .dossier-content .card,.dossier-content .panel,.dossier-content article,
+  .dossier-content details,.feat{box-shadow:none}
+}
