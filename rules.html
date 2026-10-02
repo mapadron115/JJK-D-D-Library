@@ -63,6 +63,8 @@ h1 .amp{color:var(--red)}
 .sec-body{padding:8px 30px 28px}
 .sec-body h3{font-family:var(--serif);font-size:1.25rem;margin:26px 0 8px;color:var(--ink)}
 .sec-body h3:first-child{margin-top:8px}
+.sec-body h4{font-family:var(--serif);font-size:1.1rem;margin:22px 0 6px;color:var(--ink)}
+.small{font-size:.82rem;color:var(--ink3);font-weight:normal;letter-spacing:.5px}
 .sec-body p{margin:.7em 0}
 .sec-body ul{margin:.6em 0;padding-left:1.4em}
 .sec-body li{margin:.35em 0}
@@ -90,6 +92,15 @@ b.k{font-family:var(--serif)}
 .callout .body p{margin:.6em 0}
 .callout-red{border-color:var(--red)}
 .callout-red .callout-head{background:rgba(179,58,43,.06)}
+/* ── GM-only aside ───────────────────────── */
+.gm-block{border:3px double var(--ink);background:#2b251a;color:var(--paper);margin:22px 0}
+.gm-block .gm-head{padding:12px 20px 8px;border-bottom:1px solid rgba(244,239,226,.25)}
+.gm-block .gm-kicker{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;display:block;margin-bottom:2px;color:#e8c66a;font-weight:bold}
+.gm-block h4{font-family:var(--serif);font-size:1.25rem;margin:0;color:var(--paper)}
+.gm-block .body{padding:6px 20px 16px;font-size:.94rem}
+.gm-block .body p,.gm-block .body li{color:var(--paper)}
+.gm-block .body ul{margin:.4em 0;padding-left:1.3em}
+.gm-block b.k,.gm-block .k{color:#e8c66a}
 /* ── formula box ─────────────────────────── */
 .formula{background:var(--ink);color:var(--paper);padding:20px 24px;margin:18px 0;font-family:var(--serif);font-size:1.08rem;line-height:1.7}
 .formula .f-label{display:block;font-family:var(--sans);font-size:.66rem;letter-spacing:3px;text-transform:uppercase;color:var(--line);margin-bottom:8px}
@@ -246,6 +257,7 @@ b.k{font-family:var(--serif)}
     <li><a href="#special"><span class="n">IX</span>Ten Shadows &amp; Special Systems</a></li>
     <li><a href="#tools"><span class="n">X</span>Cursed Tools</a></li>
     <li><a href="#errata"><span class="n">XI</span>Shared Conventions</a></li>
+    <li><a href="#rules-of-thumb"><span class="n">XII</span>Rules of Thumb &amp; Campaign Options</a></li>
     <li><a href="#cheat"><span class="n">❖</span>Quick Reference</a></li>
   </ol>
 </nav>
@@ -436,13 +448,14 @@ b.k{font-family:var(--serif)}
 <h3>Anti-domain defenses</h3>
 <p><b>Simple Domain</b>, <b>Hollow Wicker Basket</b>, and similar defenses <b>suppress sure-hit</b> against protected creatures. They do not end the Domain, erase its terrain, prevent ordinary attacks, or automatically negate its separate environmental rules. A refined Simple Domain — the New Shadow Style discipline — is achievable around level 6: a 20-foot radius you can raise as a bonus action or as a reaction to a Domain or sure-hit effect, without CE a number of times per long rest equal to your proficiency bonus.</p>
 <h3>Non-lethal Domains</h3>
-<p>A non-lethal Domain replaces sure-hit with a <b>specific rule, trigger, consequence, and completion condition</b>, disclosed to every trapped creature when the Domain opens. A creature that knowingly violates it makes the listed save; success avoids the consequence until the start of its next turn. The procedure must offer meaningful choices — without explicit text it cannot cause instant death, permanent resource loss, or unavoidable violence. It clashes and burns out normally.</p>
+<p>A non-lethal Domain replaces sure-hit with a <b>specific rule, trigger, consequence, and completion condition</b>, disclosed to every trapped creature when the Domain opens. A creature that knowingly violates it makes the listed save; success avoids the consequence until the start of its next turn. The procedure must offer meaningful choices — without explicit text it cannot cause instant death, permanent resource loss, or unavoidable violence. It clashes and burns out normally. <i>(V6's name for this contract: the <b>Peace Treaty</b> — no violence or harmful action inside while the stated condition stands unfulfilled; the Domain ends when the condition is completed.)</i></p>
 <h3>Barriers, stability, and collapse</h3>
 <ul>
-<li><b>Barrier:</b> AC 12 + PB; HP = 10 × max(1, actual CE modifier) + refinement points (doubled at 800+ points). Immune to psychic and poison damage. By default resists damage from inside and is vulnerable from outside; automatically fails saves; immune to conditions. From inside, a creature must use an action and succeed on Wisdom (Perception) against your CE save DC to expose a weak point until the end of its next turn.</li>
+<li><b>Barrier:</b> AC 12 + PB; HP = 10 × max(1, actual CE modifier) + refinement points (doubled at 800+ points). Immune to psychic and poison damage. By default resists damage from inside and is vulnerable from outside; automatically fails saves; immune to conditions. From inside, a creature must use an action and succeed on Wisdom (Perception) against your CE save DC to expose a weak point until the end of its next turn. <i>(V6's original check is a flat DC 30 Wisdom (Perception) check; Ritual Archive reconciled it to your CE save DC.)</i></li>
 <li><b>100-point barrier choice:</b> standard (resistance inside, vulnerability outside), inverted (vulnerability inside, resistance outside), or balanced (+5 CE: neither).</li>
 <li><b>Domain Stability:</b> if one damage source deals at least 20% of your hit point maximum, make a Constitution save (DC 10 or half the damage taken, whichever is higher). On a failure, the Domain collapses. It also collapses if you are incapacitated, die, dismiss it (no action on your turn), its barrier or anchor reaches 0 HP, or another rule breaks it.</li>
 <li><b>A closed barrier</b> blocks physical passage and teleportation across it unless an effect expressly crosses planar barriers. Destroying it collapses the Domain.</li>
+<li><b>Forming a Weak Spot</b> (V6's name): forcing entry from outside works through the normal barrier rules — the barrier has its stated AC and HP, automatically fails saves, and is vulnerable to damage from outside; a breach that destroys the barrier collapses the Domain.</li>
 </ul>
 <h3>Open-barrier Domains — 1,000 refinement</h3>
 <p>A divine technique with an escape route. Omit the outer barrier and choose a visible point on the ground as the anchor: <b>120-foot radius, 1 minute</b>. Creatures can enter or leave normally, but eligible creatures inside remain subject to its effect. The anchor has AC equal to your CE save DC, HP equal to 5 × your character level, immunity to psychic and poison damage, and no vulnerability. Destroying it collapses the Domain.</p>
@@ -556,6 +569,14 @@ b.k{font-family:var(--serif)}
 <li><b>Three or more Domains.</b> Compare every pair. A Domain can outmatch one rival while losing to another. When a Domain collapses, remove it from the comparison; the rest keep clashing.</li>
 <li><b>Non-lethal and open Domains</b> use the same point comparison. An open Domain also makes its barrier attack at initiative 20 during the clash — 4d10 + CE modifier force damage to the closed barrier, before outside vulnerability is applied; two open Domains do not make this attack. An open Domain trailing by 100+ points collapses even if its anchor survives.</li>
 </ul>
+<h3>Weapon clash — the reaction <span class="small">(not a Domain clash)</span></h3>
+<p>Separate from everything above: V6's <b>Clash</b> is a defensive reaction anyone can take.</p>
+<ul>
+<li><b>Reaction.</b> When an attack or damaging effect is directed at you, you can use your reaction to clash it: make a <b>damage roll for a melee weapon attack</b> you could make, and <b>reduce the incoming damage by that roll</b>.</li>
+<li><b>Overwhelm.</b> If the roll reduces the damage past 0, the attacker takes the remaining damage — but only if the attacker is within range of you.</li>
+<li><b>Limits.</b> You cannot clash <b>psychic damage</b> unless you have a feature that deals psychic damage. You can clash this way a number of times equal to your <b>proficiency bonus</b>; you regain all expended uses on a long rest.</li>
+</ul>
+<p>This is the canonical rule text. The interactive weapon-clash calculator in the <a href="tools/clash.html">Field Tools clash page</a> implements it; this section is its rules home.</p>
 </div>
 </section>
 
@@ -631,6 +652,7 @@ b.k{font-family:var(--serif)}
 </table></div>
 <p>Named tools are intentionally stronger than generic equipment: the Inverted Spear of Heaven suppresses spells and CE features on a hit, the Soul Split Katana wounds the soul itself, Dragon Bone banks a third of the damage it deals into the next strike, and the Sword of Extermination exorcises cursed spirits and undead outright — no save, HP irrelevant. Every named tool has exact rules text; use it as written.</p>
 <p>Heavenly Restriction users may wield cursed tools and benefit from passive weapon properties, but cannot fuel a tool with CE or activate a property whose cost or prerequisite requires CE unless the tool supplies its own independent charge.</p>
+<p><b>Maculation</b> — named in the Honoyagi's entry (Creeps &amp; Curses) as one of the two things its stored CE may be spent on, the other being Simple Domain. The source defines it no further, so neither do we.</p>
 <p>The full arsenal — every named tool with complete rules — is catalogued in <a href="library/cursed-tool-arsenal.html">library/cursed-tool-arsenal.html</a>. The mythic end of the spectrum — Special Grade relics drawn from myth, religion, history, folklore and modern legend — has its own archive at <a href="library/special-grade-relic-archive.html">library/special-grade-relic-archive.html</a>.</p>
 </div>
 </section>
@@ -666,6 +688,176 @@ b.k{font-family:var(--serif)}
 <p>Some Maximum Techniques and cursed-tool Releases print a CE cost but no activation action. Unless the dossier says otherwise, the default is: an <b>Action</b> if offensive or area-affecting, a <b>Bonus Action</b> if a self-buff, a <b>Reaction</b> if it triggers off something else — a hit, a save, an enemy's action.</p>
 <h3>Damage-type chooser</h3>
 <p>When an ability lists two damage types — <i>fire/force</i>, <i>slashing/necrotic</i>, and the like — the user <b>chooses which of the two applies at the moment the damage is dealt</b>. The choice is made per damage instance, so resistance, immunity, and vulnerability interact with whichever type was actually delivered.</p>
+<h3>Minor, Major, and True Techniques — design labels</h3>
+<p>Creeps &amp; Curses labels a technique by scope, not power. A <b>Minor Technique</b> is a single feature — it can still be impactful, but it is simple to manage — and may take the form of a Cursed Feat. A <b>Major Technique</b> is an encompassing ability set: the sorcerer's main gimmick, several actions and abilities under one name. A <b>True Technique</b> is the entire technique and its progression in full — every feature it can ever offer, like all of New Shadow Style's forms — though not all at once. A Minor can grow into a Major and then a True. Source examples: <b>Cursed Lotus</b> is a Minor Technique; <b>Falling Blossom Emotion</b> and <b>Blazing Courage</b> are Major Techniques. <i>(Unrelated to the cursed-tool grade table's "minor/par/major technique item" tiers in Section X, which grade tools, not techniques.)</i></p>
+</div>
+</section>
+
+<!-- ═══════════ SECTION XII ═══════════ -->
+<section class="rule-sec" id="rules-of-thumb">
+<div class="plate" aria-hidden="true"><img src="assets/img/panel-megumi-strike.jpg" alt="" loading="lazy"></div>
+<div class="sec-head">
+  <span class="sec-kicker">Section XII</span>
+  <h2>Rules of Thumb &amp; Campaign Options</h2>
+  <p class="deck">V6's rules of thumb (§7.7), the economy and downtime rules, and the Creeps &amp; Curses player options — the combat options, injury rules, and optional variants that sit alongside the core adaptation layer. Nothing here is core: each rule names who must approve it.</p>
+</div>
+<div class="sec-body">
+<h3>Calling Shots</h3>
+<p>You can aim an attack at a body part instead of taking a clean shot. Take a <b>−5 penalty to the attack roll</b>; if the attack's damage exceeds the creature's <b>maximum hit die + its Constitution modifier</b>, the creature is debilitated — shooting out an eye to blind it, breaking a leg to slow it, or whatever the fiction and the GM agree — or resolve it with the Limb Damage Table below.</p>
+<h3>The Limb Damage Table</h3>
+<p>Only specific features with limb-removing effects use this table — <b>Calling Shots</b> above, <b>Execution Evasion</b> below, and the Chaos Table's limb results. <b>Removing a limb requires double the required damage.</b></p>
+<div class="table-wrap"><table class="rtable">
+<tr><th class="num">Roll</th><th>Body part</th><th>Required damage</th><th>Broken</th><th>Lost</th></tr>
+<tr><td class="num"><b class="k">1</b></td><td>Right leg</td><td class="num">Con mod × level</td><td>Movement halved; can't jump.</td><td>You lose the leg.</td></tr>
+<tr><td class="num"><b class="k">2</b></td><td>Left leg</td><td class="num">Con mod × level</td><td>Movement halved; can't jump.</td><td>You lose the leg.</td></tr>
+<tr><td class="num"><b class="k">3</b></td><td>Right arm</td><td class="num">Con mod × level</td><td>Skill checks and attack rolls using this arm have disadvantage.</td><td>Skill checks and attack rolls with this arm are impossible.</td></tr>
+<tr><td class="num"><b class="k">4</b></td><td>Left arm</td><td class="num">Con mod × level</td><td>Skill checks and attack rolls using this arm have disadvantage.</td><td>Skill checks and attack rolls with this arm are impossible.</td></tr>
+<tr><td class="num"><b class="k">5</b></td><td>Torso</td><td class="num">Con mod × (level × 2)</td><td>Hit point maximum is halved.</td><td>The target dies, unless it can live without a torso.</td></tr>
+<tr><td class="num"><b class="k">6</b></td><td>Head</td><td class="num">Con mod × (level × 2)</td><td>The target is unconscious.</td><td>The target dies, unless it can live without a head.</td></tr>
+</table></div>
+<p>Roll a d6 to determine the struck part when a feature demands it. RCT repairs for limbs are in Section V.</p>
+<h3>Fight for your Life</h3>
+<p>When you are rolling <b>death saving throws</b>, you can choose to fight for your life: gain <b>advantage on the next death saving throw</b> you make, but gain <b>1 level of exhaustion</b>. You can gain up to 5 levels of exhaustion this way.</p>
+<h3>Take the Hit</h3>
+<p>As a <b>reaction</b>, when another creature within your movement speed is targeted or hit by a harmful or damaging effect, you can move up to your movement speed toward them and <b>take the attack in their place</b>. You take <b>twice as much damage</b>.</p>
+<h3>Flanking</h3>
+<p>You are never safe from getting double-teamed. If two creatures (that are not incapacitated) are within <b>5 feet on opposite sides</b> of another creature, they gain <b>advantage on attacks</b> against that creature.</p>
+<h3>Execution Evasion</h3>
+<p>A creature that knows what the Executioner's Sword of <b>e010 Deadly Sentencing</b> does can take desperate action. When hit by the sword, it can use its <b>reaction to sever one of its own limbs</b> at the point of contact and avoid death. It takes damage <b>equal to the required damage to remove that limb</b> from the table above — this damage cannot be reduced in any way — and suffers the penalties of missing that limb as normal.</p>
+<h3>Indefinite Madness</h3>
+<p>A lasting madness condition. It accumulates in <b>levels</b>; each level is a madness flaw that persists until removed. Whatever imposes it states how it is gained — the Cursed Tanto's <b>Honorable Death</b> (dossier e453), for example, returns its user as a Vengeful Cursed Spirit under its effects — and your GM states what each level does and how it ends. <i>(Player-safe definition only: what causes it and how a sorcerer becomes a curse are GM material.)</i></p>
+<div class="gm-block"><div class="gm-head"><span class="gm-kicker">❖ GM-only — do not read aloud</span><h4>Cursed Upon Death</h4></div>
+<div class="body">
+<p>The most important thing when killing a sorcerer is to <b>always kill them with cursed energy</b> — or they could come back as a cursed spirit. If a human sorcerer dies by means <b>lacking cursed energy</b>, they return to life as a cursed spirit <b>one week after death</b>, with the following changes:</p>
+<ul>
+<li><b>Race becomes Cursed Spirit</b>, gaining all that race's benefits and losing all of the previous race's. They become a <b>Vengeful Spirit</b>.</li>
+<li>Gain <b>one Cursed Energy feat or Innate Technique feat</b> of their choice that they meet the requirements for.</li>
+<li>Lose <b>all feats and features related to Reverse Cursed Technique</b>; for each feat lost this way, gain one <b>Physical or Cursed feat</b> of their choice instead.</li>
+<li>The more resilient body raises <b>Strength, Dexterity, Constitution, and CE score by 2</b> (including their maximums); the transformation's toll lowers <b>all other mental scores by 4</b>.</li>
+</ul>
+<p>On returning, make a <b>DC 25 Wisdom saving throw</b>. On a failure, gain one level of <b>indefinite madness</b> and repeat the save at the end of each week — further failures add further levels. On a success, gain no madness level, lose any previously gained, and stop making the save.</p>
+</div></div>
+<h3>Repetitive Abilities</h3>
+<p>If a feature would grant you an ability you already have, a benevolent GM can let you <b>swap it for a different ability you qualify for</b> — for example, choosing a feat like Incomplete Domain or Reversed Technique Prodigy and later gaining a feature that grants the same or a better version (Domain Expansion, Reverse Technique Understanding) lets you switch the feat out for another feat you qualify for.</p>
+<h3>Money, work, and equipment</h3>
+<p>The economy runs on <b>dollars ($)</b>. Weapon tables and starting gear are priced in dollars, all gear matches standard 5e with the addition of <b>cellphones at $400</b>, and your clan or school issues one of the following starting equipment packs — each pack includes a <b>unique cursed tool</b> that provides some benefit.</p>
+<div class="table-wrap"><table class="rtable">
+<tr><th>Pack</th><th class="num">Price</th><th>Contents</th></tr>
+<tr><td><b class="k">Explorer's Pack</b></td><td class="num">$1,600</td><td>Hiking backpack, sleeping bag, portable stove, lighter, flashlight, 10 spare batteries, 10 pre-packaged meals, canteen, 60 feet of climbing rope, and an energy tag fermented in cursed energy for 100 years — rip the charm to regain 3 CE.</td></tr>
+<tr><td><b class="k">Dungeoneer's Pack</b></td><td class="num">$1,200</td><td>Heavy-duty duffel bag, crowbar, utility hammer, climbing spikes, flashlight, 10 glowsticks, lighter, 10 ready meals, hydration pack, 60 feet of durable rope, and a basic cursed tool knife.</td></tr>
+<tr><td><b class="k">Burglar's Pack</b></td><td class="num">$1,600</td><td>Compact backpack, steel bearings, nylon wire, small bell alarm, compact crowbar, hammer, climbing hooks, flashlight, 2 bottles of oil, 5 energy bars, lighter, water bottle, 60 feet of rope, and a bundle of binding cord.</td></tr>
+<tr><td><b class="k">Diplomat's Pack</b></td><td class="num">$3,900</td><td>Sleek suitcase, two document tubes, formal attire, fountain pen, ink refills, smartphone, two spare batteries, five parchment sheets, perfume, wax seal kit, a bar of soap, and a cursed seal stamp.</td></tr>
+<tr><td><b class="k">Entertainer's Pack</b></td><td class="num">$4,000</td><td>Duffel bag, sleeping bag, two performance outfits, makeup kit, five candles, five snacks, a water bottle, a disguise kit, and a trick mirror.</td></tr>
+<tr><td><b class="k">Priest's Pack</b></td><td class="num">$1,900</td><td>Modern exorcist's satchel, prayer mat, 10 candles, lighter, alms box, two incense blocks, censer, priest robes, two meals, a water bottle, and a cursed lantern.</td></tr>
+<tr><td><b class="k">Scholar's Pack</b></td><td class="num">$4,000</td><td>Sturdy backpack, notebook, tablet or laptop, stylus pen, 10 sheets of blank paper, sandbag eraser, small utility knife, and a curse detector.</td></tr>
+</table></div>
+<h3>Weapon properties — Lance, Fist, Defensive</h3>
+<ul>
+<li><b>Lance.</b> You have disadvantage when you attack a target within 5 feet of you. A lance requires two hands to wield when you aren't mounted.</li>
+<li><b>Fist.</b> The weapon counts as an unarmed strike <b>and/or</b> a weapon attack for any feature or technique that requires it to be one.</li>
+<li><b>Defensive.</b> While wielding a defensive weapon, you gain a <b>+1 bonus to AC</b>. You can only gain this bonus from one weapon at a time.</li>
+</ul>
+<h3>Ways to make money</h3>
+<ul>
+<li><b>Minimum Wage Employment: 10–40 hrs per week ($80–500).</b> The GM decides what jobs exist where the campaign is. Skill, tool, and even language proficiencies can raise the wage; expertise can raise it further.</li>
+<li><b>Special Employment: CE modifier × d4 × $100 per workweek.</b> Prerequisite: an Innate Technique <b>or</b> RCT. Jobs that use your technique for profit — legality varies by GM, which is where the problems (and opportunities) start. Characters with Reverse Technique Prodigy or Mastered Reverse Technique instead earn <b>$10,000 per week</b> automatically.</li>
+<li><b>Taking Missions.</b> Sorcerers can take on more missions from Jujutsu Tech, the clans, or a government. Reward scales with difficulty: Grade 4 ($500–2,000) · Grade 3 ($3,000–10,000) · Grade 2 ($10,000–25,000) · Grade 1 ($100,000–500,000) · Special ($1,000,000+).</li>
+<li><b>Finding a Cursed Spirit.</b> Spend 1–2 hours searching; make a DC 20 Perception or Investigation check. On a success, roll a d100 for what you find: 1–50 Grade 4, 51–75 Grade 3, 76–90 Semi-Grade 2, 91–99 Grade 2, 100 Semi-Grade 1.</li>
+</ul>
+<h3>Optional rules variants <span class="small">(GM approval only)</span></h3>
+<div class="callout"><div class="callout-head"><span class="callout-kicker">Optional · adopt only if the table wants them</span><h4>Variants live here by name</h4></div>
+<div class="body">
+<ul>
+<li><b>Feat Improvement.</b> Whenever you would gain an Ability Score Improvement, also gain a feat you qualify for.</li>
+<li><b>Increased Hit Points.</b> On level-up, gain the maximum value of your hit die instead of rolling or taking the average.</li>
+<li><b>Yearly Progression.</b> When the GM invokes it, gain one of: an Ability Score Improvement (+2 to one score or +1 to two, maximum 20) or a new feat of your choice, subject to GM approval. A character can benefit at most <b>four times</b>.</li>
+<li><b>Less Blood.</b> Reduce all HP costs of Rot and Blood Manipulation techniques to a lower amount.</li>
+<li><b>Blood Conversion.</b> A character with the Blood Production feat has <b>advantage</b> on rolls to acquire or understand RCT.</li>
+<li><b>Mythical Beast Accuracy.</b> Mythical Beast Amber Release's accuracy increases apply per turn instead of per stage.</li>
+<li><b>Advantage Stacking.</b> Advantage from more than one source grants advantage <b>plus +1 for every extra source</b>. Help from another player must be described (for attacks) or backed by proficiency (for skills) to count.</li>
+<li><b>Crunchy Crits.</b> On a critical hit, roll damage normally and <b>double the entire roll</b> — dice, modifiers, and flat bonuses — instead of doubling only the dice.</li>
+<li><b>Critical Saves.</b> A natural 1 on a save against a damaging effect takes <b>critical damage</b>; a natural 20 takes <b>no damage</b>.</li>
+</ul>
+</div></div>
+<div class="gm-block"><div class="gm-head"><span class="gm-kicker">❖ GM-only — variant material</span><h4>Six Eyes Dependency · Pure Barrier</h4></div>
+<div class="body">
+<ul>
+<li><b>Six Eyes Dependency.</b> For a canon-accurate Limitless: sorcerers <b>without</b> the Six Eyes pay <b>3 CE to activate and maintain Infinity</b>; <b>double</b> the cost of Lapse Blue, Reversal Red, Teleportation, and Offensive Infinity; and add <b>+5 CE</b> to Hollow Purple. Apply to NPCs or players at your discretion.</li>
+<li><b>Pure Barrier.</b> If Tengen — or a comparable barrier master, such as a level 20 Support Specialist — exists in your world, you may designate parts of the world as lying within a pure barrier. Those permitted by the barrier's holder spend only <b>1 CE when casting a Curtain</b> within it.</li>
+</ul>
+</div></div>
+<h3>Creeps &amp; Curses player options — builder reference</h3>
+<p>These exist in the builder with full mechanics; this is the reference so you can talk about them at the table.</p>
+<h4>Seven Heavenly Restriction variants <span class="small">(choose in the builder's class step)</span></h4>
+<ul>
+<li><b>Pure Body.</b> The classic Toji path — absolute physicality, zero cursed energy: no CE ability, no Reserve, no technique, no Domain, no RCT, no Maximum Output, no Black Flash; ability ceiling 25 at 1st level, +1 per level after, maximum 40. The default when you take the Heavenly Restriction class.</li>
+<li><b>Reverse Cursed Energy Generation.</b> Your body produces only positive energy: your CE pool becomes a Reverse Cursed Energy (RCE) pool of equal maximum; you cannot use features requiring CE and are ineligible for Cursed Energy, Barrier, and Innate Technique feats; you auto-gain Reverse Cursed Technique, Cursed Technique Reversal, and RCT Output (1 RCE counts as 2 CE for those); you gain your technique's Reversal instead of its normal features; Cursed Strike becomes <b>Reverse Cursed Strike</b> — spend RCE up to your PB on a hit for +2d6 radiant per RCE.</li>
+<li><b>Limited Cursed Energy.</b> Choose how deep the limitation goes (the rows stack): no CE modifier to CE max · +1 CE per 2 levels · no Basic CE Manipulation · cannot see cursed spirits normally · cannot use CE at all. Each grants bonus ASI and/or HP per level (up to +14 ASI and +2 HP/level at the extreme); variant ASI cannot exceed 24 (26 from 6th). The final row removes your Innate Technique — take Physical/Skill feats at technique milestones and bonus Physical feats at 6th, 10th, and 14th instead.</li>
+<li><b>Limited Physical Potential.</b> A frail or broken body feeding an overflowing reserve: no Con to HP max · −1–6 each to Str/Dex/Con · born without a limb (stackable ×4, +5 CE each) · walking speed 0 · vulnerability to all damage but psychic. Each limitation grants bonus CE, +30 ft range on one technique, and +1 effective CE modifier for DCs and attacks. No score below 4. All five limitations: maintain one technique from 600 miles away. The final row is extreme — take it only with GM discussion.</li>
+<li><b>Healing Incompatibility.</b> No technique — cursed or reverse — can heal you; attempts waste the CE and deal necrotic damage equal to the CE spent. In exchange: hit dice heal double, advantage on death saves, +2 max HP per level, and when reduced to 0 HP you drop to 1 HP instead (once per long rest; twice at 5th, four times at 11th). At 6th level it takes twice the damage to injure or remove a limb. Mundane healing still works.</li>
+<li><b>Overgeneration.</b> You regain 1 CE every hour you aren't incapacitated, and can convert hit dice to CE (CE modifier per die) on a short rest. But every cursed spirit within 120 ft automatically senses you — and a curse starting its turn within 60 ft must make a DC 20 Wisdom save or be charmed for 1 minute, attacking only you (failing by 5+ sends it into a frenzy with advantage against you). This applies to allied spirits too.</li>
+<li><b>Evolutionary Constraint.</b> Cursed Womb ancestry only: choose growing-pains constraints at creation (soft shell, weak constitution, no racial ASI, slow, small body, and more). Growth pangs at 8th level, true rebirth at 11th — each constraint pairs with a rebirth benefit (Harder Shell, Strongest Constitution, Powerful Affinity, Greater ASI, Mobility, Large Body). Your GM may move the thresholds, trigger rebirth at story moments, or trade a constraint for its benefit at level 1.</li>
+</ul>
+<h4>Nine Special Grade Boons <span class="small">(level 20 · GM-granted)</span></h4>
+<div class="table-wrap"><table class="rtable">
+<tr><th>Boon</th><th>Prerequisite</th><th>Effect</th></tr>
+<tr><td><b class="k">Ultimate Cursed Energy Trait</b></td><td>Level 20, Cursed Energy Trait Mastery</td><td>Creatures suffer your mastered trait penalty even on a successful save vs. your raw CE. Rough: +3 attack, +CE score damage. Smooth: reduce B/P/S by CE score, +15 ft speed, 1 CE reaction for +3× CE mod AC. Elemental: bonus damage = CE score; penalties last until a long rest.</td></tr>
+<tr><td><b class="k">Shikigami Master</b></td><td>Level 20, can summon shikigami</td><td>Distribute ability points equal to your level among shikigami ability scores (even above 20); summoned shikigami gain 30 temporary HP.</td></tr>
+<tr><td><b class="k">Unkillable</b></td><td>Level 20</td><td>Hit point maximum +50.</td></tr>
+<tr><td><b class="k">Unending Cursed Energy Reserves</b></td><td>Level 20</td><td>Cursed Energy maximum +20.</td></tr>
+<tr><td><b class="k">Curse Resistance</b></td><td>Level 20</td><td>Advantage on saves against cursed techniques and other magical effects.</td></tr>
+<tr><td><b class="k">Peerless Accuracy</b></td><td>Level 20</td><td>2× PB times per long rest, add your PB to an attack or damage roll even if you already add it.</td></tr>
+<tr><td><b class="k">Swift Techniques</b></td><td>Level 20</td><td>Once per round, activate any cursed technique as a free action; action-cost techniques become bonus actions.</td></tr>
+<tr><td><b class="k">Reverse Cursed Master</b></td><td>Level 20, RCT</td><td>Your RCT pool is doubled, and the HP healed per CE spent is doubled.</td></tr>
+<tr><td><b class="k">Survivor</b></td><td>Level 20</td><td>At half your HP or lower, resistance to all damage.</td></tr>
+</table></div>
+<h4>Four Special Traits <span class="small">(high-power games only · GM approval required)</span></h4>
+<ul>
+<li><b>Six Eyes.</b> Human Gojo-clan sorcerers only. 120 ft truesight (a blindfold guards against information overload); without eye protection in combat, exhaustion accrues; Perfect Cursed Energy Manipulation reduces CE costs by 10×; Technique Analyzer can learn a witnessed technique's capabilities; Infinity Optimization can eventually make Infinity free.</li>
+<li><b>Perfect Form.</b> The perfect body for jujutsu — not available to Cursed Corpses. Extra limbs step technique action costs down, powerful builds grow in size and HP, and unarmed strikes scale to 2d8.</li>
+<li><b>Cursed Lover.</b> A loved one cursed by your grief haunts you — and fights for you: a bound Vengeful Spirit you summon for 3 CE, which can later add your PB to its defenses, share critical-range benefits with you, and eventually share your CE and techniques.</li>
+<li><b>Living Prison.</b> A supremely powerful vessel-body, built to contain: growing HP and speed, rising physical scores with poison defenses, and — after six months as a reincarnated sorcerer's vessel — one of their Innate Technique features carved into you (GM-tracked campaign procedure).</li>
+</ul>
+<p>Stages grow with level: <b>Dormant</b> (levels 1–5), <b>Stirring</b> (6–13), <b>Awakened</b> (14+). Full stage mechanics live in the builder — pick them in the ancestry step and the sheet applies them.</p>
+<h3>Sorcerer Classifications</h3>
+<p class="canon-note">NPC material · partial reference — Creeps and Curses §3.1. The curse-builder covers cursed spirits; these are the sorcerer-side NPC classifications. The source's §§3.3–3.8 are marked "Coming Soon" — this reference is intentionally partial.</p>
+<h4>Curse User</h4>
+<p>NPC classification · Humanoid · mechanically identical to a Sorcerer, but more likely to use dirty tactics when cornered. Jujutsu sorcerers who use their powers for criminal purposes, such as murder, are called Curse Users. Build one exactly as you would a sorcerer NPC of the same grade, then give it the dirty-tactics brief — hostages, civilians as shields, prepared escape routes. It is the doctrine, not the stat block, that makes it a Curse User.</p>
+<h4>Death Painting</h4>
+<p>NPC classification · creature type varies — Humanoid, Undead, or Monstrosity — depending on circumstances. The Death Paintings are cursed objects created with the mixed blood of both a cursed spirit and a human: they occur through a Vessel consuming a Death Painting's cursed object to Incarnate, are born normally, or are created through experimentation to produce a Death Painting with its own body. Choose the creature type when you place it: Humanoid for the born or incarnated, Undead for the vessel-consumed, Monstrosity for the experiment-grown. The type changes what turns, banishes, or heals it — pick before the encounter, not during.</p>
+<p><b>Partial by design:</b> §§3.3–3.8 of the source chapter are "Coming Soon". When they publish, this reference extends; until then, no further classifications are invented.</p>
+<h3>Average Cursed Energy</h3>
+<p class="canon-note">GM reference — V6 §7.7. A benchmark for the CE held by normal people, graded sorcerers, and spirits. Talent, not emotion, sets the aggregate; adjust freely for your table.</p>
+<div class="table-wrap"><table class="rtable">
+<tr><th>Classification</th><th>CE</th><th>Context</th></tr>
+<tr><td>Heavenly Restriction</td><td class="num">0</td><td>No cursed energy; relies entirely on physical prowess.</td></tr>
+<tr><td>Normal person</td><td class="num">½</td><td>Minimal, barely detectable; unaware of curses.</td></tr>
+<tr><td>Normal person (despair)</td><td class="num">1</td><td>Temporary surge from intense emotion — fear, pain, grief.</td></tr>
+<tr><td>Grade 4</td><td class="num">1–5</td><td>Weak; exorcises minor spirits, basic techniques.</td></tr>
+<tr><td>Grade 3</td><td class="num">6–15</td><td>Moderate; capable sorcerer or lesser cursed spirit.</td></tr>
+<tr><td>Grade 2</td><td class="num">16–30</td><td>Strong; skilled sorcerers, mid-tier missions.</td></tr>
+<tr><td>Grade 1</td><td class="num">31–50</td><td>High; veterans and elite spirits.</td></tr>
+<tr><td>Special Grade</td><td class="num">50+</td><td>Massive output; national-level threat.</td></tr>
+</table></div>
+<h3>Class-Specific Understandings</h3>
+<p class="canon-note">Optional rule — V6 §7.7. Different breakthroughs, different epiphanies. Requires the listed class and at least 2 Breakthroughs; you may only ever gain one.</p>
+<ul>
+<li><b>Juggernaut — Skilled Cursed Reinforcement.</b> When you use Cursed Reinforcement, you may instead gain 10 temporary hit points per CE spent, up to PB times per day.</li>
+<li><b>Scout — Reliable Skill.</b> When you make a skill check you are proficient in, treat any roll of 9 or lower as a 10.</li>
+<li><b>Strategist — Enhanced Creativity.</b> Gain two additional Technique Creativity options; reduce a technique's cost by 1 (minimum 1) up to PB times per day.</li>
+<li><b>Shikigami User — Cursed Bond.</b> Your Shikigami Companion, one shikigami, Cursed Corpse, or tamed Cursed Spirit can use Cursed Strike up to PB times per day, benefiting from your Awakened Understanding and Cursed-Strike features. Switch the bond on a long rest.</li>
+<li><b>Support Specialist — Positive Energy Master.</b> A healing pool separate from RCT equal to twice your level; draw any amount as a bonus action to heal yourself (another creature you touch at 5th level).</li>
+<li><b>Warrior — Destructive Cursed Strike.</b> When you use Cursed Strike, deal additional necrotic damage equal to your CE modifier, up to twice PB times per day.</li>
+</ul>
+<h3>Original Innate Techniques — Design Guidelines</h3>
+<p class="canon-note">Player appendix / GM guide — V6. For tables that homebrew techniques. Ritual Archive canon governs Domains (Section IV): the L18 guideline below is conformed to it — ignore the source paragraph's "automatically fail saves" language.</p>
+<ul>
+<li><b>1st level — Lapse.</b> The most basic application, or a precursor ability. Low or no CE cost; not directly powerful, but it may scale with level.</li>
+<li><b>3rd level — Lapse or Extension.</b> Where the technique starts feeling like sorcery. Costs stay low — a base cost or scaling up to CE modifier / PB. Domain-style techniques (e.g. e010 Deadly Sentencing) gain their Domain here with a tempering condition: a CE-gated sure-hit, a non-lethal variant, or a non-offensive sure-hit.</li>
+<li><b>6th level — Extension.</b> New ways to use the technique, or an increase to existing features — a permanent buff or an additional effect that grows with CE spent.</li>
+<li><b>11th level — Maximum.</b> The ultimate expression short of a Domain: extreme burst, a powerful buff, or a debilitating debuff. Another Extension is acceptable if the fantasy fits.</li>
+<li><b>18th level — Domain Expansion.</b> The pinnacle most sorcerers die before reaching. Build it under Section IV's Domain rules (refinement points, initiative-20 sure-hit, burnout) — lethal by default at this tier, with an environmental or sure-hit effect shaped to the technique.</li>
+</ul>
 </div>
 </section>
 
@@ -698,13 +890,13 @@ b.k{font-family:var(--serif)}
 <li>No precognition; temp CE can't pay permanent vow costs</li>
 </ul></div>
 <div class="cheat-card"><h4>Domains</h4><ul>
-<li>Full-turn action · 20 CE · 60-ft enclosed · 1 min (2 min at 500+ refinement pts, 3 min at 1000+)</li>
+<li>Full-turn action · 20 CE · 90-ft enclosed · 1 min (2 min at 500+ refinement pts, 3 min at 1000+)</li>
 <li>Sure-hit: one event at <b>initiative 20</b> (or continuous law, per the Domain)</li>
 <li>Simple Domain / Hollow Wicker Basket suppress sure-hit locally</li>
 <li>Any end → Technique Burnout (technique dark; weapons, CE reinforcement, RCT still work)</li>
 </ul></div>
 <div class="cheat-card"><h4>Clashes</h4><ul>
-<li>Points: 1 / 200 / 500 / 800 / 1000 by refinement tier</li>
+<li>Points: your refinement points — deterministic, no roll</li>
 <li>Gap of 100+ → weaker collapses immediately; equal/under → no auto-winner, no clash roll</li>
 <li>Burnout: 10 / 5 / 3 rounds by points (&lt;500 / 500–999 / 1000)</li>
 <li>Winner's sure-hit resumes at the <b>next</b> initiative 20</li>

@@ -555,9 +555,9 @@ img{max-width:100%;height:auto}
 <script src="data/codex.js?v=20261002b"></script>
 <script src="data/codex_role_fixups.js?v=20260911a"></script>
 <script src="data/codex_inner_circle.js?v=20260911h"></script>
-<script src="data/library.js?v=20261002b"></script>
-<script src="data/dossier_levels.js?v=20261002b"></script>
-<script src="data/technique_feats.js?v=20261002b"></script>
+<script src="data/library.js?v=20261002c"></script>
+<script src="data/dossier_levels.js?v=20261002c"></script>
+<script src="data/technique_feats.js?v=20261002c"></script>
 <script src="data/codex_feats.js?v=20261002b"></script>
 <script src="data/class_features.js?v=20260926a"></script>
 <script src="data/class_choices.js?v=20260926a"></script>
@@ -692,6 +692,7 @@ var ANCESTRIES = {
                 'Speed. Your base walking speed is 30 feet.',
                 'Spiritual Nature. You do not need to eat, drink, breathe, or sleep, but must remain inactive for 4 hours a day to gain the benefits of a long rest. You have advantage on saving throws against disease and being poisoned, and you have resistance to poison damage. You are immune to nonmagical bludgeoning, piercing, and slashing damage. You are invisible to creatures without cursed energy.',
                 'Cursed Energy Affinity. You cannot use reverse cursed technique, which is positive energy, though you can still restore your body with pure cursed energy. Starting at 5th level, as an action once per turn you can spend cursed energy up to your CE modifier to regain 5 hit points per cursed energy spent.',
+                'Increased Affinity. At 10th level, your affinity deepens to better match those wielding Reverse Cursed Technique. As a bonus action, or as a reaction to taking damage, you can spend cursed energy up to your CE modifier to regain 10 hit points per cursed energy spent.',
                 'Grudge. You were once human, but when you died your powerful grudge made you into a curse. When you are reduced to 0 hit points, you can choose to remain at 1 hit point instead. Once per long rest.']},
       'curse':{ name:'Curse',
         asi:'+2 to one ability score and +1 to a different score (your choice).',
@@ -703,6 +704,7 @@ var ANCESTRIES = {
                 'Speed. Your base walking speed is 30 feet.',
                 'Spiritual Nature. You do not need to eat, drink, breathe, or sleep, but must remain inactive for 4 hours a day to gain the benefits of a long rest. You have advantage on saving throws against disease and being poisoned, and you have resistance to poison damage. You are immune to nonmagical bludgeoning, piercing, and slashing damage. You are invisible to creatures without cursed energy.',
                 'Cursed Energy Affinity. You cannot use reverse cursed technique, which is positive energy, though you can still restore your body with pure cursed energy. Starting at 5th level, as an action once per turn you can spend cursed energy up to your CE modifier to regain 5 hit points per cursed energy spent.',
+                'Increased Affinity. At 10th level, your affinity deepens to better match those wielding Reverse Cursed Technique. As a bonus action, or as a reaction to taking damage, you can spend cursed energy up to your CE modifier to regain 10 hit points per cursed energy spent.',
                 'Curse. When you choose this subrace, choose a race that you hated. You gain a +2 bonus to damage rolls against that race.']},
       'imaginary':{ name:'Imaginary',
         asi:'+2 to one ability score and +1 to a different score (your choice).',
@@ -714,6 +716,7 @@ var ANCESTRIES = {
                 'Speed. Your base walking speed is 30 feet.',
                 'Spiritual Nature. You do not need to eat, drink, breathe, or sleep, but must remain inactive for 4 hours a day to gain the benefits of a long rest. You have advantage on saving throws against disease and being poisoned, and you have resistance to poison damage. You are immune to nonmagical bludgeoning, piercing, and slashing damage. You are invisible to creatures without cursed energy.',
                 'Cursed Energy Affinity. You cannot use reverse cursed technique, which is positive energy, though you can still restore your body with pure cursed energy. Starting at 5th level, as an action once per turn you can spend cursed energy up to your CE modifier to regain 5 hit points per cursed energy spent.',
+                'Increased Affinity. At 10th level, your affinity deepens to better match those wielding Reverse Cursed Technique. As a bonus action, or as a reaction to taking damage, you can spend cursed energy up to your CE modifier to regain 10 hit points per cursed energy spent.',
                 'Frightful Presence. You are made of humanity\u2019s fears, formed from a shared negative image. As an action, you can force all creatures within 30 feet of you to make a Wisdom saving throw against your Cursed Energy save DC. On a failure, they are frightened of you for 1 minute. A creature can repeat the save at the end of each of its turns. Once per long rest.',
                 'Fearmonger. You gain proficiency in Intimidation, and you have a +1 bonus to attack and damage rolls against frightened creatures.']},
       'disease':{ name:'Disease',
@@ -726,6 +729,7 @@ var ANCESTRIES = {
                 'Speed. Your base walking speed is 30 feet.',
                 'Spiritual Nature. You do not need to eat, drink, breathe, or sleep, but must remain inactive for 4 hours a day to gain the benefits of a long rest. You have advantage on saving throws against disease and being poisoned, and you have resistance to poison damage. You are immune to nonmagical bludgeoning, piercing, and slashing damage. You are invisible to creatures without cursed energy.',
                 'Cursed Energy Affinity. You cannot use reverse cursed technique, which is positive energy, though you can still restore your body with pure cursed energy. Starting at 5th level, as an action once per turn you can spend cursed energy up to your CE modifier to regain 5 hit points per cursed energy spent.',
+                'Increased Affinity. At 10th level, your affinity deepens to better match those wielding Reverse Cursed Technique. As a bonus action, or as a reaction to taking damage, you can spend cursed energy up to your CE modifier to regain 10 hit points per cursed energy spent.',
                 'Born from Plague. Plague and sickness are concepts cursed by humanity. You are immune to disease and poison, as well as the poisoned condition. Your unarmed strikes deal an extra 1d4 poison damage on a hit.',
                 'Walking Sickness. As an action, you can force all creatures within 30 feet of you to make a Constitution saving throw against your Cursed Energy save DC. On a failure, they gain the poisoned condition for 1 minute. A creature can repeat the save at the end of each of its turns. Once per long rest.']},
       'womb':{ name:'Cursed Womb',
@@ -738,6 +742,7 @@ var ANCESTRIES = {
                 'Speed. Your base walking speed is 30 feet.',
                 'Spiritual Nature. You do not need to eat, drink, breathe, or sleep, but must remain inactive for 4 hours a day to gain the benefits of a long rest. You have advantage on saving throws against disease and being poisoned, and you have resistance to poison damage. You are immune to nonmagical bludgeoning, piercing, and slashing damage. You are invisible to creatures without cursed energy.',
                 'Cursed Energy Affinity. You cannot use reverse cursed technique, which is positive energy, though you can still restore your body with pure cursed energy. Starting at 5th level, as an action once per turn you can spend cursed energy up to your CE modifier to regain 5 hit points per cursed energy spent.',
+                'Increased Affinity. At 10th level, your affinity deepens to better match those wielding Reverse Cursed Technique. As a bonus action, or as a reaction to taking damage, you can spend cursed energy up to your CE modifier to regain 10 hit points per cursed energy spent.',
                 'Hard Shell. You are a young cursed spirit that has yet to develop. While you are not wearing armor, your AC equals 14 + your Constitution modifier.',
                 'Strong Constitution. Your hit point maximum increases by an amount equal to your level, and increases by 1 whenever you gain a level.'],
         hpPerLevel:1}
@@ -832,12 +837,17 @@ function featInfoHTML(name){
 /* Builds the <option> list for every feat picker: the chosen technique's
    feats first, then the general feats. A name already stored on the character
    but absent from both lists is preserved so older sheets never lose data. */
-function featSelectOptions(selected){
-  var entries = chosenTechEntries();
-  var tfeats = techFeatsForAll();
+function featSelectOptions(selected, opts){
+  opts=opts||{};
+  var noTech=!!opts.noTech; /* Techniqueless: no technique chosen, so no technique feats */
+  var entries = noTech?[]:chosenTechEntries();
+  var tfeats = noTech?[]:techFeatsForAll();
   var html = '<option value="">— choose a feat —</option>';
-  /* RCE Generation: ineligible for Innate Technique feats (and CE/Barrier feats) */
-  if(hrV()!=='rce'){
+  /* RCE Generation: ineligible for Innate Technique feats (and CE/Barrier feats);
+     Techniqueless: no technique chosen, so technique feats are not offered */
+  if(noTech){
+    html += '<optgroup label="No technique"><option value="" disabled>Techniqueless — general feats only (no technique feats without a technique)</option></optgroup>';
+  }else if(hrV()!=='rce'){
     entries.forEach(function(entry){
       var ef = techFeatsFor(entry);
       if(ef.length){
@@ -1047,6 +1057,10 @@ function blankChar(){
     levelData:{}, // {level:{hpMode,hpDie,ceMode,ceDie}}
     classLevels:{}, // {charLevel:className} — multiclassing; level 1 is the starting class
     techniques:[], // [{catalog:'figures'|'originals', id}] — up to 2 innate techniques
+    techniqueless:false, // V6 §7.7: no innate technique — ASI or feat at 1st/3rd/6th/11th/18th instead
+    tlMode:{}, // Techniqueless grant per level: {L:'asi'|'feat'}
+    tlAsi:{},  // Techniqueless ASI picks: {L:['STR','STR']}
+    tlFeat:{}, // Techniqueless feat picks: {L:'Feat Name'}
     background:'', backgroundFeat:'', backgroundTool:'', backgroundEquipment:[],
     mindset:'',
     feats:[], tools:[], notes:'', ceBonus:0,
@@ -1098,6 +1112,8 @@ function abilitiesAt(level){
   for(var L=2;L<=level;L++){
     if(hasASIAt(L) && char.asi[L] && (char.asiMode||{})[L]!=='feat') char.asi[L].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
   }
+  /* Techniqueless (V6 §7.7): ASI grants at 1st/3rd/6th/11th/18th — level 1 included */
+  for(var _tl=1;_tl<=level;_tl++) applyTechniquelessASI(ab,_tl);
   /* half-feat +1s (Crusher, Athlete, etc.) — apply at the level the feat was taken, capped at ability ceiling */
   var fb=featASIBonuses(level);
   ABILITIES.forEach(function(a){ if(fb[a]) ab[a]=Math.min((ab[a]||10)+fb[a], abilityCeiling(a)); });
@@ -1124,6 +1140,7 @@ function hpMax(){
   for(var l=1;l<=char.level;l++){
     var C = CLASSES[clsAt(l)]; if(!C) continue;
     if(hasASIAt(l) && char.asi[l] && (char.asiMode||{})[l]!=='feat') char.asi[l].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
+    applyTechniquelessASI(ab,l); /* V6 §7.7 Techniqueless grant */
     /* HP uses the CON effectively in force at this level: cumulative gains
        (manual entry can exceed the ceiling) clamped to the ceiling at that
        level — e.g. a Juggernaut's CON counts as 20 until Unstoppable raises
@@ -1333,6 +1350,7 @@ function allFeatNames(){
   push(char.backgroundFeat);
   (char.feats||[]).forEach(push);
   asiFeatEntries().forEach(function(e){ push(e.name); });
+  techniquelessFeatEntries().forEach(function(e){ push(e.name); }); /* V6 §7.7 Techniqueless grants */
   return out;
 }
 function hasFeatNamed(n){ return allFeatNames().indexOf(n)>=0; }
@@ -1487,6 +1505,7 @@ function ancestrySkillProfs(){
 function featSkillLiveName(key){
   if(key==='bg') return char.backgroundFeat||'';
   if(key&&key.indexOf('asi-')===0) return (char.asiFeat||{})[key.slice(4)]||'';
+  if(key&&key.indexOf('tl-')===0) return (char.tlFeat||{})[key.slice(3)]||''; /* Techniqueless (V6 §7.7) feat at level L */
   return '';
 }
 /* ── half-feat ability increases: feats that grant +1 to an ability ──
@@ -1510,6 +1529,7 @@ var FEAT_ASI_FIXED = {
 function featASILiveName(key){
   if(key==='bg') return char.backgroundFeat||'';
   if(key&&key.indexOf('asi-')===0) return (char.asiFeat||{})[key.slice(4)]||'';
+  if(key&&key.indexOf('tl-')===0) return (char.tlFeat||{})[key.slice(3)]||''; /* Techniqueless (V6 §7.7) feat at level L */
   return '';
 }
 function featASIOptions(featName){
@@ -1644,6 +1664,7 @@ function featASIBonuses(level){
     if((FEAT_ASI[f.feat]||[]).indexOf(f.ability)<0) return;
     /* ASI feats only count once the character reaches that level */
     if(k.indexOf('asi-')===0 && parseInt(k.slice(4),10)>level) return;
+    if(k.indexOf('tl-')===0 && parseInt(k.slice(3),10)>level) return; /* Techniqueless grant feat */
     add(f.ability, 1);
   });
   /* fixed-amount feat bonuses (Hyper-Intellect: +3 on taking, +1 at 6/11/18) */
@@ -2302,6 +2323,35 @@ function renderHeritages(){
       var _rskFn=function(){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.reincarnatedSkills=[$('reincSk0').value,$('reincSk1').value]; renderStep(); };
       _rbind('reincSk0',_rskFn); _rbind('reincSk1',_rskFn);
       _rbind('reincTool',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.reincarnatedTool=e.target.value; });
+      /* Reincarnated build options (V6): Option 1 You are the Vessel / Option 2 You are the Reincarnated — GM-leaning */
+      (function(){
+        var _opt=((char.ancestryPicks||{}).reincarnatedOption)||'';
+        var _optCard=function(id,name,desc){
+          return '<div class="opt-card'+(_opt===id?' is-selected':'')+'" data-reincopt="'+id+'" tabindex="0" role="button" aria-pressed="'+(_opt===id)+'">'+
+            '<span class="check">✦</span><h4>'+esc(name)+'</h4><p class="tagline">'+esc(desc)+'</p></div>';
+        };
+        d.innerHTML+='<div class="banner" style="margin-top:10px"><span class="bk">❖ Incarnation — GM-leaning</span>'+
+          '<p class="small" style="margin:4px 0">V6 gives the reincarnated two builds. <b>Both are GM-leaning</b> — the soul inside you is NPC territory. Agree on the terms with your GM before play.</p>'+
+          '<div class="opt-grid">'+
+          _optCard('vessel','Option 1: You are the Vessel','You resisted the soul inside the cursed object and keep control — for now.')+
+          _optCard('reincarnated','Option 2: You are the Reincarnated','You overwrote the vessel\u2019s soul and hold the body eternally.')+
+          '</div>'+
+          (_opt==='vessel'
+            ?'<ul style="margin:8px 0 0;padding-left:1.3em"><li class="small"><b>You are the Vessel.</b> You took in a cursed object holding the power and memories of a sorcerer or creature of ages past, and you resisted their soul — you maintain control of your body. At times, as your GM determines (when you drop to 0 hit points, or when the soul sees an advantage — use sparingly), the Reincarnated Sorcerer may attempt to take control, forcing you to make a <b>Charisma saving throw, DC 15–30</b> depending on the strength of the soul. While it has control it acts as an <b>NPC controlled by the GM</b>, with access to both its Innate Technique and yours (if you have one) — but only one Innate Technique at a time.</li></ul>'
+            :_opt==='reincarnated'
+            ?'<ul style="margin:8px 0 0;padding-left:1.3em"><li class="small"><b>You are the Reincarnated.</b> You forced your soul into a cursed object with a forbidden technique and reincarnated into a vessel in the present — you have overwritten the vessel\u2019s soul and taken eternal control of the body. You carry knowledge of the era you lived in: secrets and lore other players cannot reach may be more readily available to you, at your GM\u2019s discretion, than to others with skill checks.</li></ul>'
+            :'')+
+          '</div>';
+        d.querySelectorAll('[data-reincopt]').forEach(function(c){
+          var _pick=function(){
+            char.ancestryPicks=char.ancestryPicks||{};
+            char.ancestryPicks.reincarnatedOption=c.getAttribute('data-reincopt');
+            renderStep();
+          };
+          c.addEventListener('click',_pick);
+          c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); _pick(); } });
+        });
+      })();
     }
     /* Softbody cursed corpse: Tailored Appearance — one skill, proficiency + double PB */
     if(char.ancestry==='cursed-corpse'&&char.heritage==='softbody'){
@@ -2463,6 +2513,125 @@ function dropTechniqueFeats(){
       if(allTFeats[char.asiFeat[L]]){ delete char.asiFeat[L]; if((char.asiMode||{})[L]==='feat') delete char.asiMode[L]; }
     });
   }
+}
+/* ── Techniqueless (V6 §7.7): no innate technique → ASI or feat at 1/3/6/11/18.
+   char.techniqueless: bool · char.tlMode[L]:'asi'|'feat' · char.tlAsi[L]:[a,b] · char.tlFeat[L]:name.
+   Levels are TOTAL character levels (technique features unlock by total level in RA canon).
+   Grants pause when the character has no CE pool (Pure Body handles its own no-technique path). */
+var TECHNIQUELESS_LEVELS=[1,3,6,11,18];
+function isTechniqueless(){ return !!char.techniqueless; }
+function isTechniquelessGrant(l){
+  if(hrV()==='rce') return false; /* RCE Generation manifests a technique's Reversal — incompatible */
+  return !!char.techniqueless && hasCEPool() && l>=1 && l<=char.level && TECHNIQUELESS_LEVELS.indexOf(l)>=0;
+}
+function techniquelessFeatEntries(){
+  var out=[];
+  for(var i=0;i<TECHNIQUELESS_LEVELS.length;i++){
+    var L=TECHNIQUELESS_LEVELS[i];
+    if(L>char.level) continue;
+    if((char.tlMode||{})[L]==='feat' && char.tlFeat && char.tlFeat[L])
+      out.push({level:L,name:char.tlFeat[L]});
+  }
+  return out;
+}
+/* apply the Techniqueless ASI at level L to an ability object (mirrors the class-ASI pattern) */
+function applyTechniquelessASI(ab,L){
+  if(isTechniquelessGrant(L) && (char.tlMode||{})[L]!=='feat' && char.tlAsi && char.tlAsi[L])
+    char.tlAsi[L].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
+}
+/* turning Techniqueless on clears chosen techniques (0 techniques, per the dual-technique ruling) */
+function setTechniqueless(on){
+  char.techniqueless=!!on;
+  if(char.techniqueless){ char.techniques=[]; dropTechniqueFeats(); }
+  renderStep();
+}
+/* ── Techniqueless (V6 §7.7) — Step 5 banner, grant pickers, wiring ── */
+function techniquelessBannerHTML(){
+  if(hrV()==='rce') return ''; /* RCE Generation manifests a technique's Reversal — incompatible */
+  var on=!!char.techniqueless;
+  return '<div class="banner'+(on?' warn':'')+'" style="margin-top:10px"><span class="bk">❖ Techniqueless (V6 §7.7)</span>'+
+    '<p class="small" style="margin:4px 0">No innate technique — and no New Shadow Style or Divergent Fist in its place. '+
+    'Instead you gain an <b>Ability Score Increase or a feat you meet the prerequisites for</b> at <b>1st, 3rd, 6th, 11th, and 18th level</b> '+
+    '(total character level). The source warns this is generally weaker than having a technique.</p>'+
+    '<button type="button" class="btn'+(on?' btn-ghost':'')+'" id="tlToggle" style="margin-top:6px;min-height:44px">'+
+    (on?'✓ Techniqueless — choose a technique instead':'Play techniqueless (no innate technique)')+'</button></div>';
+}
+function techniquelessGrantsHTML(){
+  var html='<h3 style="margin-top:14px">Techniqueless grants</h3>'+
+    '<p class="small">One ASI or feat per level below, at your total character level. Grants unlock as you level — picks for higher levels stay stored but inactive while your level is lower.</p>';
+  TECHNIQUELESS_LEVELS.forEach(function(L){
+    if(L>char.level) return;
+    char.tlMode=char.tlMode||{};
+    var mode=char.tlMode[L]||'asi';
+    if(mode==='asi'&&!(char.tlAsi||{})[L]){ char.tlAsi=char.tlAsi||{}; char.tlAsi[L]=['STR','STR']; }
+    html+='<div class="banner" style="margin-top:10px"><span class="bk">❖ Level '+L+' grant</span>'+
+      '<div class="field" style="max-width:280px;margin-top:6px"><label for="tlMode'+L+'"><b>Grant</b></label>'+
+      '<select id="tlMode'+L+'" data-tlmode="'+L+'">'+
+      '<option value="asi"'+(mode==='asi'?' selected':'')+'>ASI +1/+1</option>'+
+      '<option value="feat"'+(mode==='feat'?' selected':'')+'>Feat instead</option></select></div>';
+    if(mode==='feat'){
+      var pf=((char.tlFeat||{})[L])||'';
+      html+='<div class="field" style="max-width:360px;margin-top:6px"><label for="tlFeat'+L+'"><b>Feat</b> <span class="small">(must meet the prerequisites)</span></label>'+
+        '<select id="tlFeat'+L+'" data-tlfeat="'+L+'">'+featSelectOptions(pf,{noTech:true})+'</select>'+
+        featInfoHTML(pf)+featSkillPickersHTML('tl-'+L)+featASIHTML('tl-'+L)+featChoiceHTML('tl-'+L)+'</div>';
+    }else{
+      var cur=(char.tlAsi||{})[L]||['STR','STR'];
+      html+='<div class="grid2" style="margin-top:6px;max-width:420px">'+
+        '<div class="field"><label for="tlAsi'+L+'a"><b>+1 to</b></label><select id="tlAsi'+L+'a" data-tlasi="'+L+'|0">'+
+        ABILITIES.map(function(a){return '<option'+(cur[0]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select></div>'+
+        '<div class="field"><label for="tlAsi'+L+'b"><b>+1 to</b></label><select id="tlAsi'+L+'b" data-tlasi="'+L+'|1">'+
+        ABILITIES.map(function(a){return '<option'+(cur[1]===a?' selected':'')+'>'+a+'</option>';}).join('')+'</select></div></div>'+
+        '<p class="asi-note">+1 / +1 (or the same twice for +2)</p>';
+    }
+    html+='</div>';
+  });
+  return html;
+}
+function wireTechniqueless(body){
+  var tg=$('tlToggle');
+  if(tg) tg.addEventListener('click',function(){ setTechniqueless(!char.techniqueless); });
+  body.querySelectorAll('[data-tlmode]').forEach(function(s){
+    s.addEventListener('change',function(){
+      var L=s.getAttribute('data-tlmode');
+      char.tlMode=char.tlMode||{}; char.tlMode[L]=s.value;
+      if(s.value==='asi'&&!(char.tlAsi||{})[L]){ char.tlAsi=char.tlAsi||{}; char.tlAsi[L]=['STR','STR']; }
+      renderStep();
+    });
+  });
+  body.querySelectorAll('[data-tlasi]').forEach(function(s){
+    s.addEventListener('change',function(){
+      var a=s.getAttribute('data-tlasi').split('|'), L=a[0], idx=+a[1];
+      char.tlAsi=char.tlAsi||{}; char.tlAsi[L]=char.tlAsi[L]||['STR','STR']; char.tlAsi[L][idx]=s.value;
+      renderStep();
+    });
+  });
+  body.querySelectorAll('[data-tlfeat]').forEach(function(s){
+    s.addEventListener('change',function(){
+      var L=s.getAttribute('data-tlfeat');
+      char.tlFeat=char.tlFeat||{};
+      if(s.value) char.tlFeat[L]=s.value; else delete char.tlFeat[L];
+      renderStep();
+    });
+  });
+  wireFeatSkillPickers(body,function(){ renderStep(); });
+  featASIHookup(body); featChoiceHookup(body);
+}
+/* readable summary of the Techniqueless grants for the character sheet */
+function techniquelessSheetGrantsHTML(){
+  var bits=[];
+  TECHNIQUELESS_LEVELS.forEach(function(L){
+    if(L>char.level) return;
+    var mode=((char.tlMode||{})[L])||'asi';
+    if(mode==='feat'){
+      var fn=(char.tlFeat||{})[L];
+      bits.push('<b>Lv '+L+':</b> feat — '+(fn?esc(fn)+featASISheetNote('tl-'+L)+featChoiceSheetNote('tl-'+L):'<i>not chosen</i>'));
+    }else{
+      var a=(char.tlAsi||{})[L]||['STR','STR'];
+      bits.push('<b>Lv '+L+':</b> ASI +1 '+esc(a[0])+', +1 '+esc(a[1]));
+    }
+  });
+  return bits.length?'<ul style="margin:6px 0 0;padding-left:1.3em">'+
+    bits.map(function(b){return '<li class="small">'+b+'</li>';}).join('')+'</ul>':'';
 }
 /* ── Heavenly Restriction variant picker (Step 3) ── */
 function hrVariantPickerHTML(){
@@ -3432,6 +3601,7 @@ function levelRows(){
   for(var l=2;l<=char.level;l++){
     var C=CLASSES[clsAt(l)], hd=C.hd;
     if(hasASIAt(l) && char.asi[l] && (char.asiMode||{})[l]!=='feat') char.asi[l].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
+    applyTechniquelessASI(ab,l); /* V6 §7.7 Techniqueless grant */
     var cm=noConHP?0:mod(ab.CON||10);
     var ld=char.levelData[l]||{};
     var hpDie=(ld.hpMode==='roll')?(ld.hpDie||0):avgDie(hd);
@@ -3823,6 +3993,17 @@ function stepTechnique(body){
     'The gate is on <b>features, not choice</b>: only features of level ≤ '+char.level+' are active now; everything else unlocks as you level and appears on your sheet as a roadmap.</p>'+
     '<p class="small">Cursed tools — the arsenal, sacred treasures, and Djinn metal vessels — are <b>gear, not techniques</b>: they have their own tab in the codex and are awarded through campaign progression.</p>'+
     '<p class="small">Vlad III\u2019s Impaler is GM-only (viewable, not selectable). <b>Campaign rule: up to two innate techniques per character.</b> Each technique\u2019s features unlock by your total character level.</p></div>';
+  /* ── Techniqueless (V6 §7.7): play with NO innate technique, 0 techniques total.
+     Turning it on replaces the picker with the compensating ASI/feat grants. */
+  html+=techniquelessBannerHTML();
+  if(char.techniqueless&&hrV()!=='rce'){
+    html+=techniquelessGrantsHTML();
+    html+=manuscriptSectionHTML(); /* manuscripts are learned CE applications, not techniques */
+    body.innerHTML=html;
+    wireTechniqueless(body);
+    bindManuscriptSection(body);
+    return;
+  }
   /* filters */
   /* Combat role buckets are canonical (Striker/Tank/Controller/Blaster/Support/
      Utility); the figures' freeform role strings map to them by keyword. */
@@ -4067,6 +4248,13 @@ function renderTechResults(){
 }
 STEP_VALID[5]=function(){
   if(!hasCEPool()) return {ok:true};
+  if(char.techniqueless&&hrV()!=='rce'){
+    /* Skill Expert / Skilled sub-picks on Techniqueless feat grants must be complete */
+    var badTL=techniquelessFeatEntries().map(function(e){ return {level:e.level, v:featSkillValid('tl-'+e.level)}; })
+      .filter(function(x){ return !x.v.ok; });
+    if(badTL.length) return {ok:false,msg:'Techniqueless level '+badTL[0].level+' feat — '+badTL[0].v.msg};
+    return {ok:true};
+  }
   if(!HAS_CODEX&&!HAS_LIB) return {ok:false,msg:'Technique data failed to load — check the data/ folder.'};
   if(!(char.techniques||[]).length) return {ok:false,msg:'Choose at least one technique — '+PICKABLE_TECH+' of the '+TOTAL_TECH+' entries are pickable at creation (Vlad III is GM-only).'+(hrV()==='rce'?' (You manifest its Reversal.)':'')};
   /* techniques with expressions require a choice */
@@ -4697,6 +4885,7 @@ function qrCollect(){
     if(char.backgroundFeat) names.push({n:char.backgroundFeat,s:'Background'});
     (char.feats||[]).forEach(function(f){ names.push({n:f,s:'Feat'}); });
     asiFeatEntries().forEach(function(e){ names.push({n:e.name,s:'Feat (Lv '+e.level+')'}); });
+    techniquelessFeatEntries().forEach(function(e){ names.push({n:e.name,s:'Feat (Lv '+e.level+', techniqueless)'}); });
     names.forEach(function(e){
       if(seen[e.n]) return; seen[e.n]=1;
       var fi=featInfo(e.n), b=qrInfer(e.n,fi&&fi.text);
@@ -4719,6 +4908,12 @@ function qrCollect(){
     if(t>=2) B.passive.push({name:'Efficiency',src:'CE Manipulation',cost:'',one:'Technique base CE costs reduced by '+(t-1)+' (min 1).'});
     if(btData().awakenings>0)
       add('bonus','RCT Healing','CE Manipulation','Bonus action','Spend up to '+Math.max(cm,1)+' CE → heal 10 HP per CE from your RCT pool.');
+    /* Increased Affinity (V6 §7.7): cursed-spirit race, 10th level and up */
+    if(char.ancestry==='cursed-spirit'&&char.level>=10){
+      var _iaMax=Math.max(1,cm);
+      add('bonus','Increased Affinity','Ancestry','Bonus action','Spend up to '+_iaMax+' CE (your CE modifier) → regain 10 HP per CE spent.');
+      add('reaction','Increased Affinity','Ancestry','Reaction to damage','Spend up to '+_iaMax+' CE (your CE modifier) → regain 10 HP per CE spent.');
+    }
   }
 
   /* — Manuscripts studied (CE Applications — learned, not techniques) — */
@@ -5322,6 +5517,12 @@ function sheetHTML(){
     '<p style="font-family:var(--serif);font-size:1.15rem;font-weight:bold;margin:0">'+esc(ancLine)+'</p>'+
     (A&&A.blurb?'<p class="small">'+esc(A.blurb)+'</p>':'')+
     (H&&H.traits&&H.traits.length?'<ul style="margin:6px 0 0;padding-left:1.3em">'+H.traits.map(function(t){ return '<li class="small">'+esc(t)+'</li>'; }).join('')+'</ul>':'<p class="small">No ancestry traits recorded.</p>')+
+    /* Reincarnated incarnation choice (V6: You are the Vessel / You are the Reincarnated) — GM-leaning */
+    (char.ancestry==='cursed-vessel'&&char.heritage==='reincarnated'&&((char.ancestryPicks||{}).reincarnatedOption)?
+      '<p class="small" style="margin:6px 0 0"><b>Incarnation (GM-leaning):</b> '+
+      (char.ancestryPicks.reincarnatedOption==='vessel'
+        ?'You are the Vessel — you resisted the soul in the cursed object and keep control. The GM may have the soul attempt takeover (Charisma save, DC 15–30); while it holds the body it acts as a GM-controlled NPC with access to both Innate Techniques, one at a time.'
+        :'You are the Reincarnated — you overwrote the vessel\u2019s soul and hold the body eternally; knowledge of your era and sealed lore comes more readily to you, at the GM\u2019s discretion.')+'</p>':'')+
     (char.heritage==='curse'&&(char.ancestryPicks||{}).hatedRace?'<p class="small" style="margin:6px 0 0"><b>Hated race:</b> '+esc(char.ancestryPicks.hatedRace)+' (+2 to damage rolls against this race)</p>':'')+
     (char.ancestry==='sumerian'?sumerianSheetHTML(ab,P,ceMod):'')+'</div>';
   /* background & mindset */
@@ -5398,6 +5599,7 @@ function sheetHTML(){
         '<p class="small">You manifest the <b>Reversal</b> of this technique instead of its normal features. Reversal rendering is GM-adjudicated until codex reversal content exists.</p>';
     });
   }
+  else if(char.techniqueless) html+='<p class="small"><b>Techniqueless (V6 §7.7).</b> No innate technique — compensating ASI or feat at 1st, 3rd, 6th, 11th, and 18th level (total character level).</p>'+techniquelessSheetGrantsHTML();
   else if(!techEntries.length) html+='<p class="small">No technique recorded.</p>';
   else techEntries.forEach(function(entry,i){
     if(i>0) html+='<div style="border-top:1px solid var(--line);margin:14px 0;"></div>';
@@ -5437,7 +5639,8 @@ function sheetHTML(){
       })
         .concat(char.backgroundFeat?['<li>'+esc(char.backgroundFeat)+' <span class="small">(background)</span>'+featNote(char.backgroundFeat)+featASISheetNote('bg')+featChoiceSheetNote('bg')+'</li>']:[])
         .concat(char.feats.map(function(f){return '<li>'+esc(f)+featNote(f)+'</li>';}))
-        .concat(asiFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat)</span>'+featNote(e.name)+featASISheetNote('asi-'+e.level)+featChoiceSheetNote('asi-'+e.level)+'</li>';}));
+        .concat(asiFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat)</span>'+featNote(e.name)+featASISheetNote('asi-'+e.level)+featChoiceSheetNote('asi-'+e.level)+'</li>';}))
+        .concat(techniquelessFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat, techniqueless)</span>'+featNote(e.name)+featASISheetNote('tl-'+e.level)+featChoiceSheetNote('tl-'+e.level)+'</li>';}));
       /* dedupe: identical feat names collapse, heritage entry (listed first) wins */
       var seenDup={};
       items=items.filter(function(li){

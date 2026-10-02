@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Chaos Table Roller — interactive d100 roller over the full 100-entry Chaos Table (e480 Vairocana). Ritual Archive JJK 5e field tools.">
+<title>Chaos Table Roller — Ritual Archive Field Tools</title>
+<link rel="stylesheet" href="../assets/tools.css">
+<style>
+  .chaos-num{font-size:2.2rem;font-weight:800;color:var(--red-deep);line-height:1.2}
+  .chaos-effect{font-size:1.15rem;line-height:1.7;margin-top:8px}
+  .subroll{border-left:3px solid var(--gold);padding:8px 14px;margin:10px 0;background:var(--paper2);border-radius:0 8px 8px 0}
+  .hist-list{list-style:none;padding:0;margin:10px 0}
+  .hist-list li{border-bottom:1px solid var(--line);padding:8px 2px;font-size:.95rem;color:var(--ink2)}
+  .hist-list b{color:var(--red-deep)}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="nav"><a class="brand" href="../index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a><nav class="navlinks"><a href="../rules.html">Field Guide</a><a href="../builder.html">Character Builder</a><a href="../codex.html">Technique Codex</a><a href="../lore.html">Story So Far</a><a href="index.html" class="is-current">Tools</a></nav><button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button><span class="doc-tag">Chaos Table roller</span></div></header>
+
+<main class="wrap">
+<section class="hero">
+  <p class="eyebrow">Field tool · d100 · e480 Vairocana</p>
+  <h1>Chaos Table Roller</h1>
+  <p class="lede">The full 100-entry Chaos Table at one tap — roll, and the effect lands with your <b>CE modifier as X</b> already substituted in. For Vairocana's <i>Chaos</i> (2 CE, action), its feats that re-roll, and any GM chaos on demand.</p>
+</section>
+
+<section class="panel">
+  <h3>Roll the table</h3>
+  <div class="grid2">
+    <div class="field"><label><span>Your CE modifier (X)</span>
+      <input id="ceMod" type="number" min="0" max="10" step="1" value="3">
+    </label></div>
+    <div class="field"><span>&nbsp;</span>
+      <div class="btn-row" style="margin:0">
+        <button class="btn btn-gold" id="rollBtn" type="button" style="font-size:1.25rem;padding:.9rem 2.4rem;">Roll d100</button>
+        <button class="btn" id="clearHistBtn" type="button">Clear history</button>
+      </div>
+    </div>
+  </div>
+  <p class="note">X = your CE modifier (e480 Vairocana, L3 Chaos). Entries 62 and 95 roll additional effects automatically; 97–99 are your choice — read the entry and pick.</p>
+</section>
+
+<section class="out" id="result" hidden aria-live="polite"></section>
+
+<section class="panel">
+  <h3>Roll history</h3>
+  <ul class="hist-list" id="histList"><li class="note">Nothing rolled yet.</li></ul>
+</section>
+
+<section class="panel">
+  <h3>The table, in full</h3>
+  <p class="note">The roller reads from the same text as these copies — every entry, 1–100:</p>
+  <div class="btn-row">
+    <a class="btn" href="../assets/chaos-table.txt">View full table as plain text</a>
+    <a class="btn" href="../dossiers/e480.html">e480 Vairocana dossier (appendix)</a>
+  </div>
+  <p class="src">Creeps &amp; Curses · Chaos Table (d100). X = your CE modifier.</p>
+</section>
+</main>
+
+<footer class="site"><div class="wrap">
+  <a class="brand" href="../index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
+  <span>Field Tools · fan-made JJK 5e homebrew reference</span>
+</div></footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+var CHAOS_TABLE=[
+ "Roll on this table at the start of each of your turns for the next minute, ignoring this result on subsequent rolls.",
+ "A pillar of flame erupts beneath a random creature within 60 ft, causing Xd12 fire damage.",
+ "Lightning arcs to up to 3 creatures within 30 ft, dealing Xd8 lightning each.",
+ "Thunder explodes in a 15-ft radius around you. Creatures within range take Xd6 thunder damage.",
+ "Burning cracks appear in a random 10-ft radius within 30 ft. A creature that starts their turn standing on these cracks takes Xd4 fire damage. The cracks disappear after X rounds.",
+ "A 5 ft sphere of supercooled air forms in a random area within 15 ft, causing Xd8 cold damage, and a creature is frozen by ice and restrained until the end of their next turn.",
+ "An electrical aura surrounds you until the end of your next turn. A creature that hits you with a melee attack takes 1d8 lightning damage.",
+ "A thunderwave knocks creatures prone in a 15-ft radius around you.",
+ "Meteor sparks rain in a 10-ft radius around you, causing Xd6 fire damage.",
+ "You cast Chaos Bolt at 2nd level at a random creature in range.",
+ "Cold explosions burst forth, causing an 5 ft radius sphere in range to take Xd6 cold damage and the area becomes difficult terrain for X rounds.",
+ "A 20 ft diameter sphere of swirling fire vortex appears at a random point within 60 ft causing Xd6 fire damage.",
+ "Lightning strikes a random creature within 30 ft that is under open sky, causing Xd6 lightning damage.",
+ "A 10 ft diameter sphere of thunder explodes at a random point within 40 ft, causing Xd6 Thunder and pushes creatures 20 ft away.",
+ "Burning chains restrain the closest creature for X rounds. The target takes 2d6 fire damage at the start of their turns. A creature can make a Strength (Athletics) check as an action to burst the chains.",
+ "One random creature within 60 ft is pulled 30 ft toward you.",
+ "One random creature within 60 ft is launched 30 ft away.",
+ "All creatures within 15 ft teleport 10 ft in random directions.",
+ "Gravity reverses until the end of your next turn. Creatures within 60 ft float upward 10 ft and cannot move unless they have a fly speed. Once this ends, affected creatures harmlessly float down.",
+ "Gravity crushes a random creature within 30 ft causing Xd8 force damage.",
+ "A gravity singularity forms at a random point within 60 ft and pulls creatures within 30 ft up to 15 ft toward its center.",
+ "Gravity doubles in a 20ft radius around you. Creatures must make a Strength saving throw or become prone.",
+ "Zero gravity boosts you until the end of your turn. Your movement speed is doubled.",
+ "Spatial distortion gives disadvantage on ranged attacks in a 20 ft radius around you until the end of your next turn.",
+ "A rift teleports a random creature within 30 ft up to 60 ft away.",
+ "A random creature within 30 ft must make a Wisdom save or be under the effects of Confusion for 1 round.",
+ "Cosmic whispers impose disadvantage on the next attack made by a creature within 10 ft.",
+ "Illusory duplicates appear around up to 3 random creatures within 10 ft for X rounds. All creatures are under the effect of the Mirror Image spell.",
+ "A random creature within 30 ft becomes frightened of you for X rounds.",
+ "The minds of creatures within 60 ft briefly link, allowing creatures hear each other's thoughts.",
+ "A random creature within 30 ft takes Xd6 psychic damage.",
+ "A random creature within 30 ft is flooded with information from multiple timelines and is stunned until the end of their turn.",
+ "Creatures within 15 ft have a burning in their eyes and disadvantage on Perception checks for 1 minute.",
+ "A random creature within 30 ft becomes charmed by you for X rounds.",
+ "Up to X random creatures within 30 ft must succeed a Wisdom save or attack a random target next turn.",
+ "The ground 20 ft around you becomes slick ice, causing difficult terrain for X rounds.",
+ "Blinding sparks heavily obscure a random 15 ft radius area within 60 ft for X rounds.",
+ "Random stone structures appear randomly and create half cover in a 15-ft radius around you.",
+ "A violent gust pushes creatures within 5 ft of you up to 15 ft away from you.",
+ "A dark storm cloud forms overhead for 1 minute. A random creature within 30 ft of you takes 2d6 lightning damage at the start of your turn.",
+ "A random non-magical object or structure within 30 ft explodes. Creatures within 5 ft of the object take Xd6 fire damage.",
+ "The ground trembles like a minor earthquake 60 ft around you. All creatures must make a Dexterity save or fall prone.",
+ "Shards of fragmented light rain down in a 15 ft radius around you, causing Xd6 radiant damage.",
+ "The environment becomes warped and distorted until the start of your next turn. You have disadvantage on attacks.",
+ "You cast Chaos Bolt. On a hit, the bolt automatically ricochets to a second target.",
+ "You cast Chaos Bolt, instead creating two bolts. Each bolt must target a different creature.",
+ "You cast Chaos Bolt, which deals maximum damage on a hit.",
+ "You cast Chaos Bolt, which teleports the target 20 ft in random direction on hit.",
+ "You cast Chaos Bolt, which explodes in a 10 ft radius on impact, dealing damage to all creatures.",
+ "You cast Chaos Bolt. On a hit, the bolt automatically ricochets 3 times.",
+ "You cast Chaos Bolt, which deals half damage but stuns the target for 1 round.",
+ "You are targeted by your own Chaos Bolt.",
+ "Time slows down in a 10 ft radius around you, causing creatures to lose reactions for X rounds.",
+ "Time speeds creatures within 10 ft, causing them to gain +20 ft movement for X rounds.",
+ "A mirror duplicate of you appears in an unoccupied space within 5 ft of you for X rounds. It has 1 hit point, acts at the end of your turn and can spend your Cursed Energy.",
+ "A random creature within 30 ft becomes invisible for X rounds.",
+ "A random creature within 30 ft gains advantage on attacks for 1 round.",
+ "You gain temporary HP equal to your level.",
+ "A random weapon within 30 ft becomes unstable, causing disadvantage on attacks for X rounds.",
+ "A gravity well restrains a random creature within 30 ft for X rounds.",
+ "Cosmic light cracks across the sky momentarily. A random creature within 30 ft is blinded for X rounds.",
+ "The timeline splits. Reroll twice on this table.",
+ "You release a psychic scream, causing Xd6 psychic damage to creatures within 20 ft.",
+ "All creatures within 60 ft teleport randomly 60 ft in any direction.",
+ "A 3rd level fireball erupts centered on you, but you are immune to the damage.",
+ "A random creature within 30 ft is banished until the end of its next turn.",
+ "A cosmic beam strikes down and causes 8d6 radiant or necrotic damage to a random creature within 60 ft.",
+ "All creatures within 120 ft with cursed energy are affected by the Levitate spell, automatically failing their save as zero-gravity affects everyone for X rounds.",
+ "A random creature within 30 ft gains the benefits of the Haste spell for 1 round.",
+ "A random creature within 30 ft is paralyzed for 1 round.",
+ "A portal appears at a random point within 60 ft, releasing a 15 ft cone of negative energy in a random direction, causing Xd12 necrotic damage.",
+ "You gain resistance to all damage for 1 round.",
+ "You emit an aura of reversal within 30 ft for X rounds. Damage types deal the opposite within this aura (Fire damage becomes cold, necrotic becomes radiant, etc)",
+ "Silence fills the area within 30 ft around you for X rounds. All creatures in this space are immune to thunder damage and communicating verbally or chanting for techniques is impossible.",
+ "You gain a 60 ft fly speed for 1 minute.",
+ "You open a portal within 10 ft of you that teleports any creature that enters it 500 ft into the air above.",
+ "A random creature within 30 ft is spaghettified, causing Xd12 force damage and gains a random damaged limb on the Limb Damage Table.",
+ "You form an Event Horizon 80 ft around you, creating difficult terrain. Creatures within range must make a Strength saving throw or be pulled 15 ft closer, repeating this save at the start of their turn. A creature that starts its turn within 5 ft of you takes Xd12 force damage.",
+ "Luck inverts for X rounds. Natural 20s becomes Natural 1s and vice versa.",
+ "A random creature within 30 ft must repeat the same action they took last turn.",
+ "A random creature within 30 ft regains 50 hit points.",
+ "A random creature within 30 ft regains 1d4 Cursed Energy.",
+ "The next creature that takes damage before the start of your next turn reflects the damage onto the attacker.",
+ "A burst of positive energy causes all creatures within 120 ft to lose concentration on any effects or techniques they were concentrating on and deactivating any active cursed tool effects for X rounds.",
+ "A random elemental dragon (CR = PB) appears in an unoccupied space within 30 ft for X rounds. The DM determines the elemental statblock and the dragon attacks the nearest creature until the dragon disappears.",
+ "Reality is in shambles and all creatures within 30 ft randomly swap places.",
+ "Gravity changes in a random direction for X rounds. All creatures within 60 ft (other than you) must make a Dexterity saving throw to grab onto a nearby object or structure to stabilize themselves. Otherwise, they fall according to the new gravity.",
+ "Folded space lets you teleport 60 ft as a bonus action for X rounds.",
+ "Space bends for a random creature within 30 ft. For X rounds, they must spend twice as much movement when moving and the range of their attacks and techniques is treated as being halved. The target appears normal to other creatures, but strangely slow and inaccurate.",
+ "Gravity changes in a random direction for X rounds, and changes again at every start of your turn. All creatures within 60 ft (other than you) must make a Dexterity saving throw to grab onto a nearby object or structure to stabilize themselves. Otherwise, they fall according to the new gravity.",
+ "A random 10 ft diameter cube within 60 ft is completely frozen in time. It cannot be affected in any way.",
+ "You form an orbital pull, causing all ranged attacks to automatically miss you and fall into your orbit.",
+ "A critical flux causes the next saving throw made before the start of your next turn to be an automatic nat 20, causing the target to be completely unaffected.",
+ "All creatures within 10 ft of you roll at advantage for X rounds (including hostile creatures).",
+ "Roll 3 times on this table.",
+ "You regain all Cursed Energy spent.",
+ "You choose any effect on this table that is less than 95.",
+ "You choose any 2 effects on this table that is less than 95.",
+ "You choose any 3 effects on this table that is less than 95.",
+ "An act of god occurs. The DM decides a cosmic and potentially unexplainable benefit that causes the situation to turn entirely in your favor."
+];
+</script>
+<script>
+(function () {
+  'use strict';
+  function toast(m){var e=document.getElementById('toast');if(!e){e=document.createElement('div');e.className='toast';e.id='toast';document.body.appendChild(e);}e.textContent=m;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('show');},2400);}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);});}
+  function $(id){return document.getElementById(id);}
+
+  /* Entries synced from assets/chaos-table.txt (2026-10-02). Entry text is the
+     source; the roller only substitutes X and expands reroll entries. */
+  var TABLE = (typeof CHAOS_TABLE !== 'undefined') ? CHAOS_TABLE : [];
+  if (TABLE.length !== 100) {
+    $('result').hidden = false;
+    $('result').innerHTML = '<div class="big">Table data missing</div><div class="sub">The Chaos Table data did not load. Use the <a href="../assets/chaos-table.txt">plain-text table</a> or the <a href="../dossiers/e480.html">e480 dossier appendix</a> instead.</div>';
+    $('rollBtn').disabled = true;
+  }
+
+  var hist = [];
+  function ceMod(){ return Math.max(0, Math.min(10, Math.floor(Number($('ceMod').value) || 0))); }
+  function subX(text){
+    var x = ceMod();
+    return text.replace(/X(?=d\d)/g, String(x)).replace(/\bX\b/g, String(x));
+  }
+  function rollD100(){ return 1 + Math.floor(Math.random() * 100); }
+
+  /* Expand reroll entries one level: 62 rolls 2, 95 rolls 3. Sub-rolls are shown
+     as-is to avoid recursion; choose entries (97–99) are left to the player. */
+  function subRolls(n, count){
+    var out = [];
+    for (var i = 0; i < count; i++) {
+      var r = rollD100();
+      out.push({ n: r, text: TABLE[r - 1] });
+    }
+    return out;
+  }
+
+  function renderResult(n, subs){
+    var html = '<div class="big">Chaos result</div>'
+      + '<div class="chaos-num">' + n + '</div>'
+      + '<div class="chaos-effect">' + esc(subX(TABLE[n - 1])) + '</div>';
+    subs.forEach(function (s) {
+      html += '<div class="subroll"><b>' + s.n + '.</b> ' + esc(subX(s.text)) + '</div>';
+    });
+    if (n === 62) html += '<div class="sub">The timeline splits — two more effects above.</div>';
+    if (n === 95) html += '<div class="sub">Chaos compounds — three more effects above.</div>';
+    if (n >= 97 && n <= 99) html += '<div class="sub">Your choice — pick ' + (n - 96) + ' effect' + (n > 97 ? 's' : '') + ' below 95 from the full table.</div>';
+    if (n === 1) html += '<div class="sub">Ongoing: roll on this table at the start of each of your turns for the next minute.</div>';
+    var el = $('result');
+    el.innerHTML = html;
+    el.hidden = false;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderHist(){
+    var w = $('histList');
+    if (!hist.length) { w.innerHTML = '<li class="note">Nothing rolled yet.</li>'; return; }
+    w.innerHTML = hist.map(function (h) {
+      return '<li><b>' + h.n + '.</b> ' + esc(h.short) + '</li>';
+    }).join('');
+  }
+
+  $('rollBtn').addEventListener('click', function () {
+    if (TABLE.length !== 100) { toast('Table data unavailable.'); return; }
+    var n = rollD100(), subs = [];
+    if (n === 62) subs = subRolls(n, 2);
+    if (n === 95) subs = subRolls(n, 3);
+    renderResult(n, subs);
+    var short = subX(TABLE[n - 1]);
+    if (short.length > 110) short = short.slice(0, 110) + '…';
+    hist.unshift({ n: n, short: short });
+    if (hist.length > 20) hist.length = 20;
+    renderHist();
+  });
+  $('clearHistBtn').addEventListener('click', function () {
+    hist = []; renderHist(); toast('History cleared.');
+  });
+})();
+</script>
+<script>
+(function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(o){t.classList.toggle('nav-open',o);b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});})();
+</script>
+</body>
+</html>

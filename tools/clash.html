@@ -3,9 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Domain Clash Resolver — Ritual Archive Tools</title>
+<title>Clash Resolver — Ritual Archive Tools</title>
 <link rel="stylesheet" href="../assets/tools.css">
 <style>
+  .tabs{display:flex;gap:10px;margin:0 0 16px;flex-wrap:wrap}
+  .tab-btn{min-height:44px;padding:10px 22px;border-radius:4px;border:1px solid var(--line2);background:var(--card2);color:var(--ink);font-size:1rem;font-weight:700;font-family:inherit;cursor:pointer}
+  .tab-btn[aria-selected="true"]{background:var(--red);border-color:var(--red-deep);color:#fff8ee}
+  .weapon-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem}
+  .roll-result{font-size:1.4rem;font-weight:700;line-height:1.5}
+  .uses-pill{display:inline-block;border:1px solid var(--line2);border-radius:999px;padding:8px 16px;background:var(--paper2);font-weight:700}
   .pair { border:1px solid #6b5a2e; border-radius:.5rem; padding:.9rem 1rem; margin:.6rem 0; background:rgba(0,0,0,.25); }
   .pair .verdict { font-size:1.35rem; font-weight:700; line-height:1.35; }
   .pair .detail { font-size:1rem; margin-top:.35rem; opacity:.92; }
@@ -38,11 +44,17 @@
 
 <main class="wrap">
   <section class="hero">
-    <p class="eyebrow">GM Tool · Deterministic Clashes · REL003</p>
-    <h1>Domain Clash Resolver</h1>
-    <p class="lede">Refinement points decide everything. Compare every pair: a lead of 100 or more collapses the weaker Domain immediately — no countdown, no roll. Anything closer resolves through barrier damage, Domain Stability failures, or expiry.</p>
+    <p class="eyebrow">GM Tool · Deterministic Clashes · REL003 · V6 §7.7</p>
+    <h1>Clash Resolver</h1>
+    <p class="lede">Two kinds of clash, one page. Domain clashes are decided by refinement points — deterministic, no countdown. The weapon-clash reaction answers a single attack with a melee weapon damage roll. Pick the clash you're resolving.</p>
   </section>
 
+  <div class="tabs" role="tablist" aria-label="Clash type">
+    <button class="tab-btn" role="tab" id="tabBtnDomain" aria-selected="true" aria-controls="tabDomain" type="button">Domain Clash</button>
+    <button class="tab-btn" role="tab" id="tabBtnWeapon" aria-selected="false" aria-controls="tabWeapon" type="button">Weapon-Clash Reaction</button>
+  </div>
+
+  <div id="tabDomain" role="tabpanel" aria-labelledby="tabBtnDomain">
   <section class="panel">
     <h2>Combatants</h2>
     <div class="clash-grid">
@@ -111,6 +123,50 @@
     </table>
     <p class="src">V6 equal-refinement rule (also superseded): at 1/3 max HP rounded down, the caster makes a DC 15 flat roll with no modifiers to maintain the Domain — on a failure the Domain breaks and the caster suffers burnout.</p>
   </details>
+  </div><!-- /tabDomain -->
+
+  <div id="tabWeapon" role="tabpanel" aria-labelledby="tabBtnWeapon" hidden>
+    <section class="panel">
+      <h2>Weapon-Clash Reaction</h2>
+      <p class="note">The weapon-clash reaction rule is defined in the <b>Field Guide — rules.html, §Clashes</b>. This tab does the numbers only: enter your weapon and the incoming damage, and it resolves the clash.</p>
+      <div class="weapon-grid">
+        <div class="field"><label><span>Weapon dice — number</span>
+          <input id="wNum" type="number" min="1" max="20" step="1" value="1">
+        </label></div>
+        <div class="field"><label><span>Weapon dice — size</span>
+          <select id="wSize">
+            <option value="4">d4</option>
+            <option value="6">d6</option>
+            <option value="8" selected>d8</option>
+            <option value="10">d10</option>
+            <option value="12">d12</option>
+          </select>
+        </label></div>
+        <div class="field"><label><span>STR modifier</span>
+          <input id="wStr" type="number" min="-5" max="10" step="1" value="3">
+        </label></div>
+        <div class="field"><label><span>Other damage bonus (e.g. magic weapon)</span>
+          <input id="wBonus" type="number" min="0" max="10" step="1" value="0">
+        </label></div>
+        <div class="field"><label><span>Incoming damage</span>
+          <input id="wIn" type="number" min="0" max="999" step="1" placeholder="e.g. 28">
+        </label></div>
+        <div class="field"><label><span>Proficiency bonus (uses per long rest)</span>
+          <input id="wPb" type="number" min="2" max="6" step="1" value="2">
+        </label></div>
+      </div>
+      <label class="check"><input type="checkbox" id="wRange"> The attacker is <b>within range</b> (leftover damage is passed back on an over-clash)</label>
+      <label class="check"><input type="checkbox" id="wAtkRoll" checked> The incoming damage is from an <b>attack roll</b> (over-clash redirect only applies to attack rolls)</label>
+      <label class="check"><input type="checkbox" id="wPsychic"> The incoming damage is <b>psychic</b></label>
+      <label class="check"><input type="checkbox" id="wPsychicFeat"> I have a <b>feature that deals psychic damage</b> (allows clashing psychic)</label>
+      <div class="btn-row">
+        <button class="btn btn-gold" id="wClashBtn" type="button" style="font-size:1.15rem;padding:.8rem 1.8rem;">Clash it (reaction)</button>
+        <button class="btn" id="wRestBtn" type="button">Long rest (restore uses)</button>
+        <span class="uses-pill" id="wUses" aria-live="polite">Uses left: —</span>
+      </div>
+    </section>
+    <section class="out" id="wOutput" hidden aria-live="polite"></section>
+  </div><!-- /tabWeapon -->
 </main>
 
 <div class="toast" id="toast" role="status"></div>
@@ -198,6 +254,77 @@
     ['name1','pts1','name2','pts2','name3','pts3'].forEach(function (id) { document.getElementById(id).value = ''; });
     document.getElementById('output').hidden = true;
   });
+
+  /* ── tab switching ── */
+  var tabBtns = { domain: document.getElementById('tabBtnDomain'), weapon: document.getElementById('tabBtnWeapon') };
+  var tabPanels = { domain: document.getElementById('tabDomain'), weapon: document.getElementById('tabWeapon') };
+  function showTab(which) {
+    ['domain', 'weapon'].forEach(function (k) {
+      var active = (k === which);
+      tabBtns[k].setAttribute('aria-selected', active ? 'true' : 'false');
+      tabPanels[k].hidden = !active;
+    });
+  }
+  tabBtns.domain.addEventListener('click', function () { showTab('domain'); });
+  tabBtns.weapon.addEventListener('click', function () { showTab('weapon'); });
+
+  /* ── weapon-clash reaction calculator (V6 §7.7) ──
+     Canon note: the rule grants uses equal to proficiency bonus per long rest
+     and costs no CE — resolved against the source text, not the audit summary. */
+  var wMax = 0, wLeft = 0;
+  function wSetPb() {
+    var pb = Math.max(0, Math.min(6, Math.floor(Number(document.getElementById('wPb').value) || 0)));
+    if (pb !== wMax) { wMax = pb; wLeft = pb; }
+    document.getElementById('wUses').textContent = 'Uses left: ' + wLeft + ' / ' + wMax;
+  }
+  function wRollDie(s) { return 1 + Math.floor(Math.random() * s); }
+  document.getElementById('wPb').addEventListener('change', wSetPb);
+  document.getElementById('wRestBtn').addEventListener('click', function () {
+    wLeft = wMax;
+    document.getElementById('wUses').textContent = 'Uses left: ' + wLeft + ' / ' + wMax;
+    toast('Long rest taken — weapon-clash uses restored.');
+  });
+  document.getElementById('wClashBtn').addEventListener('click', function () {
+    if (document.getElementById('wPsychic').checked && !document.getElementById('wPsychicFeat').checked) {
+      toast('Psychic damage cannot be clashed without a feature that deals psychic damage.');
+      return;
+    }
+    if (wLeft <= 0) { toast('No weapon-clash uses left — take a long rest (uses = proficiency bonus).'); return; }
+    var incRaw = document.getElementById('wIn').value.trim();
+    if (incRaw === '' || isNaN(Number(incRaw))) { toast('Enter the incoming damage first.'); return; }
+    var incoming = Math.max(0, Math.floor(Number(incRaw)));
+    var n = Math.max(1, Math.min(20, Math.floor(Number(document.getElementById('wNum').value) || 1)));
+    var size = Number(document.getElementById('wSize').value) || 8;
+    var str = Math.max(-5, Math.min(10, Math.floor(Number(document.getElementById('wStr').value) || 0)));
+    var bonus = Math.max(0, Math.floor(Number(document.getElementById('wBonus').value) || 0));
+    var rolls = [], i;
+    for (i = 0; i < n; i++) rolls.push(wRollDie(size));
+    var diceTotal = rolls.reduce(function (a, b) { return a + b; }, 0);
+    var clashTotal = Math.max(0, diceTotal + str + bonus);
+    var taken = Math.max(0, incoming - clashTotal);
+    var excess = clashTotal - incoming;
+    var inRange = document.getElementById('wRange').checked;
+    var atkRoll = document.getElementById('wAtkRoll').checked;
+    var redirect = excess > 0 && inRange && atkRoll;
+    wLeft--;
+    document.getElementById('wUses').textContent = 'Uses left: ' + wLeft + ' / ' + wMax;
+    var sign = function (v) { return (v < 0 ? '−' : '+') + ' ' + Math.abs(v); };
+    var out = '<div class="big">Weapon-clash result</div>'
+      + '<div class="roll-result">You take ' + taken + ' damage.</div>'
+      + '<div class="sub">Damage roll: ' + n + 'd' + size + ' [' + rolls.join(', ') + '] ' + sign(str) + ' STR ' + sign(bonus) + ' bonus = <strong>' + clashTotal + '</strong> vs ' + incoming + ' incoming.</div>';
+    if (excess > 0) {
+      var whyLost = !atkRoll ? ' (redirect only applies to <b>attack rolls</b>)' : (!inRange ? ' (attacker <b>not within range</b>)' : '');
+      out += '<div class="sub">' + (redirect
+        ? 'Over-clash: the remaining <strong>' + excess + '</strong> damage is passed back to the attacker.'
+        : 'Over-clash by ' + excess + ' — the excess is lost' + whyLost + '.') + '</div>';
+    }
+    out += '<div class="sub">Uses left: ' + wLeft + ' / ' + wMax + ' (per long rest).</div>';
+    var el = document.getElementById('wOutput');
+    el.innerHTML = out;
+    el.hidden = false;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  wSetPb();
 })();
 </script>
 <script>(function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(o){t.classList.toggle('nav-open',o);b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});})();</script>
