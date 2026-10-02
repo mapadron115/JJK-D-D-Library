@@ -22,6 +22,11 @@ function isToolEntry(e) {
 var N_TECH_LIBS = LIBS.filter(function (e) { return !isToolEntry(e); }).length;
 var N_TOOLS = LIBS.length - N_TECH_LIBS;
 
+/* Cursed spirits of the bestiary — full monster stat blocks on bestiary/.
+   They live on their own tab, like the tools. */
+var BEASTS = (typeof window !== 'undefined' && Array.isArray(window.BESTIARY))
+  ? window.BESTIARY.slice() : [];
+
 var TIER_ORDER = { 'I': 0, 'II': 1, 'III': 2, 'IV': 3, 'V': 4 };
 var DETAIL_LABEL = { full: 'FULL PROGRESSION', summary: 'DOSSIER SUMMARY', bespoke: 'BESPOKE RECORD' };
 
@@ -117,7 +122,7 @@ function haystack(t) {
 }
 
 function matches(t, st) {
-  if (st.tab === 'tools') return false;
+  if (st.tab !== 'tech') return false;
   if (st.origin === 'originals') return false;
   /* Figures carry no collection — any active collection filter excludes them. */
   if (st.collection) return false;
@@ -144,7 +149,9 @@ function libHaystack(e) {
 }
 
 function matchesLib(e, st) {
-  /* Techniques tab hides tools; Cursed Tools tab shows only tools. */
+  /* Techniques tab hides tools; Cursed Tools tab shows only tools; the
+     Bestiary tab shows no library entries at all. */
+  if (st.tab !== 'tech' && st.tab !== 'tools') return false;
   if (st.tab === 'tools' ? !isToolEntry(e) : isToolEntry(e)) return false;
   if (st.origin === 'figures') return false;
   /* Figure-only filters (region, culture, record type): original techniques
@@ -159,6 +166,23 @@ function matchesLib(e, st) {
   if (st.q) {
     var q = st.q.toLowerCase();
     var hit = q.split(/\s+/).every(function (w) { return libHaystack(e).indexOf(w) !== -1; });
+    if (!hit) return false;
+  }
+  return true;
+}
+
+/* ── cursed spirits (bestiary) ────────────────── */
+function beastHaystack(b) {
+  var bits = [b.id, b.name, b.type, b.grade, b.summary, b.traits,
+    (b.cr != null ? 'cr ' + b.cr : ''), 'cursed spirit'];
+  return bits.filter(Boolean).join(' ').toLowerCase();
+}
+/* Only the search box applies on the Bestiary tab — the technique-only
+   filters are hidden there (data-tabonly="tech"). */
+function matchesBeast(b, st) {
+  if (st.q) {
+    var q = st.q.toLowerCase();
+    var hit = q.split(/\s+/).every(function (w) { return beastHaystack(b).indexOf(w) !== -1; });
     if (!hit) return false;
   }
   return true;
@@ -249,6 +273,36 @@ function renderLibCard(e) {
     '</span></span>' +
     (e.summary ? '<span class="concept">' + esc(e.summary) + '</span>' : '') +
     '<span class="dossier-cta">Open full dossier →</span>' +
+    '</a></article>';
+}
+
+/* ── bestiary spirit cards: link cards mirroring renderLibCard, pointing at
+   the full monster stat block on the bestiary page. ── */
+function renderBeastCard(b) {
+  b = b || {};
+  /* Data img paths are site-root-relative (assets/img/…) from codex.html;
+     validated to plain image paths so data can never inject markup. */
+  var imgOk = typeof b.img === 'string' &&
+    /^[A-Za-z0-9][\w\-./]*\.(jpg|jpeg|png|webp)$/i.test(b.img);
+  var ci = imgOk ? { attr: ' data-img="1"', css: "--card-img:url('" + b.img + "')" }
+    : { attr: '', css: '' };
+  return '<article class="entry lib-card"' + ci.attr + ' style="--accent:#8b1e2d;' + ci.css + '">' +
+    '<a class="lib-link" href="' + esc(b.href || 'bestiary/index.html') + '">' +
+    '<span class="lib-headrow">' +
+    '<span class="head-main">' +
+    '<span class="entry-no">Cursed Spirit · Bestiary № ' + esc(b.id || '') + '</span>' +
+    '<span class="lib-title">' + esc(b.name || 'Unnamed spirit') + '</span>' +
+    '<span class="lib-chips">' +
+    (b.cr != null ? '<span class="kind-chip">CR ' + esc(b.cr) + '</span>' : '') +
+    (b.grade ? '<span class="tier-chip">' + esc(b.grade) + '</span>' : '') +
+    '</span></span>' +
+    '<span class="head-side">' +
+    '<span class="detail-tag">Full stat block</span>' +
+    '</span></span>' +
+    (b.type ? '<span class="meta-line">' + esc(b.type) + '</span>' : '') +
+    (b.summary ? '<span class="concept">' + esc(b.summary) + '</span>' : '') +
+    (b.traits ? '<span class="plays-line">' + esc(b.traits) + '</span>' : '') +
+    '<span class="dossier-cta">Open full stat block →</span>' +
     '</a></article>';
 }
 
@@ -421,9 +475,11 @@ function fillSelect(el, options, allLabel) {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { esc: esc, md: md, haystack: haystack, matches: matches,
     libHaystack: libHaystack, matchesLib: matchesLib,
+    beastHaystack: beastHaystack, matchesBeast: matchesBeast,
     groupByLevel: groupByLevel, renderEntry: renderEntry, renderBody: renderBody,
     renderDomain: renderDomain, renderLibCard: renderLibCard, renderLibEntry: renderLibEntry,
-    TECHS: TECHS, LIBS: LIBS };
+    renderBeastCard: renderBeastCard,
+    TECHS: TECHS, LIBS: LIBS, BEASTS: BEASTS };
 }
 
 /* ── DOM wiring (browser only) ────────────────── */
@@ -443,6 +499,7 @@ if (typeof document !== 'undefined') {
     document.getElementById('statFigures').textContent = TECHS.length;
     document.getElementById('statOriginals').textContent = N_TECH_LIBS;
     document.getElementById('statCollections').textContent = collections.length;
+    document.getElementById('statSpirits').textContent = BEASTS.length;
 
     // filter dropdowns built from live data
     // Tier options: figure tiers plus any extra numerals the original library
@@ -482,7 +539,7 @@ if (typeof document !== 'undefined') {
     });
     syncFilterVisibility();
 
-    /* Techniques / Cursed Tools tabs */
+    /* Techniques / Cursed Tools / Bestiary tabs */
     var tabBtns = Array.prototype.slice.call(document.querySelectorAll('[data-tab]'));
     function setTab(t) {
       state.tab = t;
@@ -515,12 +572,21 @@ if (typeof document !== 'undefined') {
       else {
         var le = LIBS.filter(function (e) { return 'entry-' + e.id === want; })[0];
         if (le) { setTab(isToolEntry(le) ? 'tools' : 'tech'); openIds.add(want); }
+        else if (BEASTS.some(function (b) { return b.id === m[1]; })) setTab('bestiary');
       }
     }
 
     function render() {
       var figs = TECHS.filter(function (t) { return matches(t, state); });
       var libs = LIBS.filter(function (e) { return matchesLib(e, state); });
+      var beasts = BEASTS.filter(function (b) { return matchesBeast(b, state); });
+      /* Bestiary tab: spirit cards only, search-filtered. */
+      if (state.tab === 'bestiary') {
+        grid.innerHTML = beasts.map(renderBeastCard).join('');
+        emptyState.classList.toggle('show', !beasts.length);
+        resultCount.textContent = 'Showing ' + beasts.length + ' of ' + BEASTS.length + ' cursed spirits';
+        return;
+      }
       /* one unified list: figures first, then originals — each card labels its own origin.
          Original techniques with extracted progression render as inline expandable
          entries (Ritual Archive aesthetic); other library entries keep link cards. */

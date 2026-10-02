@@ -500,7 +500,7 @@ img{max-width:100%;height:auto}
 <body>
 <header class="topbar"><div class="shell nav">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html" class="is-current">Character Builder</a><a href="codex.html">Technique Codex</a><a href="lore.html">Story So Far</a></nav>
+  <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html" class="is-current">Character Builder</a><a href="codex.html">Codex</a><a href="lore.html">Story So Far</a></nav>
   <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
   <span class="doc-tag">Illustrated · Builder</span>
 </div></header>
@@ -4158,7 +4158,7 @@ function techInspectHTML(e,catalog){
     html+='<span class="gate-label active">Library entry</span><div class="feat-text"><p>'+esc(tConcept(e)||'No summary recorded.')+'</p></div>';
     html+=libProgressionHTML(e.id, char.level);
     if(tHref(e)) html+='<p class="small"><a href="'+esc(tHref(e))+'" target="_blank" rel="noopener">Full dossier record →</a> <span class="small">(field notes, feats, and printable record)</span></p>';
-    else html+='<p class="small">Full level progression lives in the Technique Codex — track unlocks with your GM.</p>';
+    else html+='<p class="small">Full level progression lives in the Codex — track unlocks with your GM.</p>';
   }
   return html;
 }

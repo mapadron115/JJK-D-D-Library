@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ritual Archive illustrated edition: the player-facing technique codex — every campaign technique with full level-by-level mechanics.">
-<title>Technique Codex — Ritual Archive Illustrated</title>
+<meta name="description" content="Ritual Archive illustrated edition: the player-facing codex — every campaign technique with full level-by-level mechanics, plus cursed tools and cursed spirits.">
+<title>Codex — Ritual Archive Illustrated</title>
 <style>
 :root{
   --paper:#f4efe2; --paper2:#ece4cf; --card:#fbf8ee; --card2:#f6f1e1;
@@ -267,22 +267,23 @@ a.fig-dossier-link:hover{text-decoration:underline}
 <body>
 <header class="topbar"><div class="shell nav">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html">Character Builder</a><a href="codex.html" class="is-current">Technique Codex</a><a href="lore.html">Story So Far</a></nav>
+  <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html">Character Builder</a><a href="codex.html" class="is-current">Codex</a><a href="lore.html">Story So Far</a></nav>
   <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-  <span class="doc-tag">Illustrated · Technique Codex</span>
+  <span class="doc-tag">Illustrated · Codex</span>
 </div></header>
 
 <main>
 <section class="doc-head">
 <div class="hero-art" aria-hidden="true"><img src="assets/img/hero-curse-hallway.jpg" alt="" loading="eager"></div><div class="shell">
   <div class="eyebrow"><span class="orn">❖</span> Illustrated · IL-RA-01 · Player Reference <span class="orn">❖</span></div>
-  <h1>Technique <span class="amp">Codex</span></h1>
-  <p class="lede">One codex, every campaign technique: the historical figures' techniques with full level-by-level mechanics, and the original techniques from the library — each with its full dossier. Classify by origin, search across both, then open a figure entry for the progression or follow a card to its dossier. Cursed tools — the arsenal, sacred treasures, and Djinn metal vessels — are gear, not techniques, and live on their own tab.</p>
+  <h1><span class="amp">Codex</span></h1>
+  <p class="lede">One codex for the whole campaign: the historical figures' techniques with full level-by-level mechanics, the original techniques from the library, the cursed tools of the arsenal — and the cursed spirits of the bestiary, with complete monster stat blocks. Classify by origin, search across all of it, then open a figure entry for its progression, follow a card to its dossier, or take a spirit's stat block to the table.</p>
   <div class="statstrip" id="statstrip">
     <div class="stat"><b id="statTotal">—</b><span>catalogued entries</span></div>
     <div class="stat"><b id="statFigures">—</b><span>historical techniques</span></div>
     <div class="stat"><b id="statOriginals">—</b><span>original techniques</span></div>
     <div class="stat"><b id="statCollections">—</b><span>collections</span></div>
+    <div class="stat"><b id="statSpirits">—</b><span>cursed spirits</span></div>
   </div>
 </div></section>
 
@@ -292,11 +293,12 @@ a.fig-dossier-link:hover{text-decoration:underline}
     <div class="seg" role="tablist" aria-label="Catalogue">
       <button type="button" class="seg-btn is-active" data-tab="tech" role="tab" aria-selected="true">Techniques</button>
       <button type="button" class="seg-btn" data-tab="tools" role="tab" aria-selected="false">Cursed Tools</button>
+      <button type="button" class="seg-btn" data-tab="bestiary" role="tab" aria-selected="false">Bestiary</button>
     </div>
   </div>
   <div class="ctrl-grid">
     <div class="field"><label for="q">Search the codex</label>
-      <input id="q" type="search" placeholder="Figure, technique, dossier, rule text…" autocomplete="off"></div>
+      <input id="q" type="search" placeholder="Figure, technique, spirit, dossier, rule text…" autocomplete="off"></div>
     <div class="field" data-tabonly="tech"><label for="fOrigin">Origin</label><select id="fOrigin">
       <option value="all">All origins</option>
       <option value="figures">Historical figures</option>
@@ -317,7 +319,7 @@ a.fig-dossier-link:hover{text-decoration:underline}
     <div class="field btn-field"><button id="clearAll" type="button">Clear all ✦</button></div>
   </div>
   <div class="resultline"><span id="resultCount"></span>
-    <span class="hint">Search covers figures, techniques, concepts, dossier summaries, and every feature's text.</span></div>
+    <span class="hint">Search covers figures, techniques, spirits, concepts, dossier summaries, and every feature's text.</span></div>
 </div></section>
 
 <section><div class="shell">
@@ -329,7 +331,7 @@ a.fig-dossier-link:hover{text-decoration:underline}
 
 <footer class="footer"><div class="shell">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <span class="tiny">IL-RA-01 · Technique Codex · fan-made JJK 5e homebrew reference. Domain profiles per the canon rules — figure Domains are Specific Domains.</span>
+  <span class="tiny">IL-RA-01 · Codex · fan-made JJK 5e homebrew reference. Domain profiles per the canon rules — figure Domains are Specific Domains.</span>
   <span class="editions">Illustrated edition</span>
   <span class="art-credit">Artwork © Gege Akutami / Shueisha / MAPPA and respective rights holders — manga &amp; anime art from the author's JJK 5e PDFs plus sourced franchise/comic/game imagery, used for personal, non-commercial fan purposes only. <a href="image-credits.html">Full image credits</a>.</span>
 </div></footer>
@@ -340,7 +342,8 @@ a.fig-dossier-link:hover{text-decoration:underline}
 <script src="data/dossier_levels.js?v=20261002e"></script>
 <script src="data/codex_role_fixups.js?v=20260911a"></script>
 <script src="data/codex_inner_circle.js?v=20260911h"></script>
-<script src="assets/codex.js?v=20260911e"></script>
+<script src="data/bestiary.js?v=20261002a"></script>
+<script src="assets/codex.js?v=20261002b"></script>
 <script>
 /* responsive nav toggle (added 2026-09-11) */
 (function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(open){t.classList.toggle('nav-open',open);b.setAttribute('aria-expanded',open?'true':'false');b.textContent=open?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});t.querySelectorAll('.navlinks a').forEach(function(a){a.addEventListener('click',function(){set(false);});});document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});})();
