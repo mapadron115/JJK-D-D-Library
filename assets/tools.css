@@ -12,6 +12,8 @@
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.62 system-ui,-apple-system,'Segoe UI',sans-serif;min-height:100vh;
   background-image:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(34,29,20,.028) 31px,rgba(34,29,20,.028) 32px)}
+main a{color:var(--red-deep)}
+main a:hover{color:var(--red)}
 
 /* top bar (mirrors index.html / codex.html) */
 .topbar{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:3px double var(--ink)}

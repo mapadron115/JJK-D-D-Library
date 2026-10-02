@@ -6,49 +6,49 @@
 <title>Binding Vow Forge — Ritual Archive Tools</title>
 <link rel="stylesheet" href="../assets/tools.css">
 <style>
-  .vow-card{border:1px solid #30343e;border-radius:14px;background:var(--panel);padding:18px;margin:14px 0}
+  .vow-card{border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:18px;margin:14px 0;box-shadow:0 2px 10px rgba(60,45,20,.08)}
   .vow-card.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
   .vow-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:8px}
-  .vow-name{font-family:var(--serif);font-size:1.25rem;color:#f2e6c7}
-  .vow-terms{color:#d1cdc3;margin:.4rem 0 1rem;white-space:pre-wrap}
-  .unapproved{display:inline-block;border:1px solid var(--red);color:#f0a3a8;border-radius:999px;padding:3px 12px;font-size:.78rem;font-weight:800;letter-spacing:.08em}
-  .approved{display:inline-block;border:1px solid var(--gold);color:var(--gold-pale);border-radius:999px;padding:3px 12px;font-size:.78rem;font-weight:800;letter-spacing:.08em}
+  .vow-name{font-family:var(--serif);font-size:1.25rem;color:var(--ink)}
+  .vow-terms{color:var(--ink2);margin:.4rem 0 1rem;white-space:pre-wrap}
+  .unapproved{display:inline-block;border:1px solid var(--red);color:var(--red-deep);border-radius:999px;padding:3px 12px;font-size:.78rem;font-weight:800;letter-spacing:.08em}
+  .approved{display:inline-block;border:1px solid var(--gold);color:var(--gold);border-radius:999px;padding:3px 12px;font-size:.78rem;font-weight:800;letter-spacing:.08em}
   .steps{display:flex;gap:8px;margin:18px 0;flex-wrap:wrap}
-  .step-pill{flex:1;min-width:140px;min-height:44px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #3a3e48;border-radius:999px;color:#8b8f9a;font-weight:700;font-size:.9rem;background:#101218}
-  .step-pill.on{border-color:var(--gold);color:var(--gold-pale)}
-  .step-pill.done{border-color:#4a7c59;color:#9fd3ae}
+  .step-pill{flex:1;min-width:140px;min-height:44px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:999px;color:var(--ink3);font-weight:700;font-size:.9rem;background:var(--paper2)}
+  .step-pill.on{border-color:var(--gold);color:var(--gold);background:var(--paper)}
+  .step-pill.done{border-color:#4a7c59;color:#2e5c38;background:var(--paper)}
   .forge-step{display:none}
   .forge-step.on{display:block}
   .scale-wrap{margin:14px 0}
-  .scale-bar{position:relative;height:22px;border:1px solid #3a3e48;border-radius:999px;background:#101218;overflow:hidden}
+  .scale-bar{position:relative;height:22px;border:1px solid var(--line);border-radius:999px;background:var(--paper2);overflow:hidden}
   .scale-price{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#8a6d2f,var(--gold));transition:width .3s}
   .scale-gain{position:absolute;right:0;top:0;bottom:0;background:linear-gradient(90deg,#7c2f36,#b0474f);transition:width .3s}
-  .scale-labels{display:flex;justify-content:space-between;font-size:.8rem;color:#8b8f9a;margin-top:4px}
+  .scale-labels{display:flex;justify-content:space-between;font-size:.8rem;color:var(--ink3);margin-top:4px}
   .verdict{border-radius:10px;padding:12px 14px;margin:12px 0;font-weight:600}
-  .verdict.ok{border:1px solid #4a7c59;background:#12241a;color:#bfe3c9}
-  .verdict.warn{border:1px solid #8a6d2f;background:#241d0e;color:#f0d9a0}
-  .verdict.bad{border:1px solid var(--red);background:#261114;color:#f0a3a8}
-  .guard{border:1px solid #8a6d2f;border-radius:10px;padding:12px 14px;margin:12px 0;background:#1d1810}
-  .guard h4{margin:0 0 6px;color:var(--gold-pale)}
-  .guard.block{border-color:var(--red);background:#221013}
-  .guard.block h4{color:#f0a3a8}
+  .verdict.ok{border:1px solid #4a7c59;background:#e8f1e4;color:#2e5c38}
+  .verdict.warn{border:1px solid #8a6d2f;background:#f6ecd4;color:#6b5426}
+  .verdict.bad{border:1px solid var(--red);background:#f6e3e0;color:#7c2f36}
+  .guard{border:1px solid #8a6d2f;border-radius:10px;padding:12px 14px;margin:12px 0;background:#f6ecd4}
+  .guard h4{margin:0 0 6px;color:var(--gold)}
+  .guard.block{border-color:var(--red);background:#f6e3e0}
+  .guard.block h4{color:var(--red-deep)}
   .chips-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
-  .chip-btn{border:1px solid #4a4e5a;border-radius:999px;background:#161921;color:var(--ink);padding:8px 14px;min-height:44px;font-size:.85rem;cursor:pointer;font-family:inherit}
+  .chip-btn{border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);padding:8px 14px;min-height:44px;font-size:.85rem;cursor:pointer;font-family:inherit}
   .chip-btn:hover{border-color:var(--gold)}
   .type-pick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
   @media(max-width:560px){.type-pick{grid-template-columns:1fr}}
-  .type-card{border:1px solid #3a3e48;border-radius:12px;padding:14px;cursor:pointer;background:#101218;min-height:44px}
-  .type-card h4{margin:0 0 6px;color:#f2e6c7}
-  .type-card p{margin:0;font-size:.88rem;color:#a7a29a}
+  .type-card{border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;background:var(--paper);min-height:44px}
+  .type-card h4{margin:0 0 6px;color:var(--ink)}
+  .type-card p{margin:0;font-size:.88rem;color:var(--ink2)}
   .type-card.sel{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
   .tpl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:12px 0}
-  .tpl-card{border:1px solid #3a3e48;border-radius:12px;padding:12px 14px;background:#101218;cursor:pointer;min-height:44px;text-align:left;font-family:inherit;color:var(--ink)}
+  .tpl-card{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--paper);cursor:pointer;min-height:44px;text-align:left;font-family:inherit;color:var(--ink)}
   .tpl-card:hover{border-color:var(--gold)}
-  .tpl-card h4{margin:0 0 4px;color:var(--gold-pale);font-size:1rem}
-  .tpl-card p{margin:0;font-size:.82rem;color:#8b8f9a}
-  .canon-strip{border-left:3px solid var(--gold);padding:8px 14px;margin:14px 0;color:#a7a29a;font-size:.9rem;background:#14161c;border-radius:0 8px 8px 0}
-  .tag{display:inline-block;border:1px solid #4a4e5a;border-radius:999px;padding:4px 14px;font-size:.78rem;font-weight:800;letter-spacing:.08em;color:#8b8f9a}
-  .tag.on{border-color:var(--gold);color:var(--gold-pale)}
+  .tpl-card h4{margin:0 0 4px;color:var(--gold);font-size:1rem}
+  .tpl-card p{margin:0;font-size:.82rem;color:var(--ink3)}
+  .canon-strip{border-left:3px solid var(--gold);padding:8px 14px;margin:14px 0;color:var(--ink2);font-size:.9rem;background:var(--paper2);border-radius:0 8px 8px 0}
+  .tag{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-size:.78rem;font-weight:800;letter-spacing:.08em;color:var(--ink3)}
+  .tag.on{border-color:var(--gold);color:var(--gold)}
   @media print{
     body{background:#fff;color:#000}
     .vow-card{border:1px solid #000;background:#fff;break-inside:avoid}

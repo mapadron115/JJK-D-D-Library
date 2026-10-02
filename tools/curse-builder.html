@@ -9,14 +9,14 @@
 <style>
 /* curse-builder additions (kept in-page; palette matches tools.css) */
 .radio-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:14px 0}
-.radio-card{position:relative;border:1px solid #3a3e48;border-radius:12px;background:#0d0f14;padding:14px 16px 14px 46px;cursor:pointer;display:block;transition:border-color .15s,background .15s}
+.radio-card{position:relative;border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:14px 16px 14px 46px;cursor:pointer;display:block;transition:border-color .15s,background .15s}
 .radio-card:hover{border-color:var(--gold)}
 .radio-card input{position:absolute;left:14px;top:16px;width:22px;height:22px;accent-color:var(--gold)}
 .radio-card .rc-t{font-family:var(--serif);color:#f2e6c7;font-size:1.08rem;display:block;margin-bottom:6px}
 .radio-card .rc-d{color:var(--muted);font-size:.92rem;display:block}
 .radio-card.sel{border-color:var(--gold);background:#14161d;box-shadow:0 0 0 1px var(--gold)}
 .stepnum{display:inline-grid;place-items:center;width:30px;height:30px;border:1px solid var(--gold);border-radius:50%;color:var(--gold-pale);font-family:var(--serif);margin-right:8px}
-.feat{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0;background:#0d0f14}
+.feat{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0;background:var(--paper)}
 .feat.off{opacity:.45}
 .feat .sub{margin:10px 0 2px 32px;max-width:520px}
 .feat .sub>span{margin-bottom:6px}
