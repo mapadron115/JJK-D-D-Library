@@ -2071,4 +2071,158 @@ window.CODEX_FEATS = {
    "text": "Judgment is contagious. When a creature fails its saving throw against your Judgment stun, you may immediately mark one creature of your choice within 30 ft of it as naughty \u2014 no action required. The List takes note of accomplices."
   }
  ],
+"dreamworks-fairy-godmother": [
+  {
+   "name": "The Books Are Open",
+   "prereq": "Prerequisite: The Favor Ledger",
+   "text": "As an action, spend 1 Favor to audit a creature you can see within 30 ft: you learn one debt, obligation, or secret promise it currently owes to any creature — a favor owed, a vow sworn, a price unpaid. The world's ledger opens to the godmother. The books must balance."
+  },
+  {
+   "name": "Bibbidi-Bobbidi-Boo, Reversed",
+   "prereq": "Prerequisite: Bibbidi-Bobbidi-Boo",
+   "text": "Your transformations cut both ways. When you use Bibbidi-Bobbidi-Boo, you may target a hostile creature instead: it makes a CHA save against your CE save DC; on a failure its weapon becomes a pumpkin (attacks with it deal 1 damage) or its armor becomes rags (−2 AC), your choice, for 1 minute — it repeats the save at the end of each of its turns. Rudeness, redecorated."
+  },
+  {
+   "name": "Spiked Punch Bowl",
+   "prereq": "Prerequisite: Happily Ever After, Bottled",
+   "text": "As an action, you may hurl a vial up to 60 ft, splashing every creature in a 10-ft radius. Each ally in the splash gains the Dashing blessing; each enemy of your choice in the splash must make a WIS save against your CE save DC or be stunned until the end of its next turn, caught admiring its own reflection in the sheen. Vanity is a vintage potion."
+  },
+  {
+   "name": "Manners Cost Nothing",
+   "prereq": "Prerequisite: You Are So Rude",
+   "text": "Your hex reaches further into the soul. A creature hexed by You Are So Rude cannot speak above a whisper for the duration — it cannot cast spells with verbal components or issue orders. You may also trigger You Are So Rude when any ally within 60 ft takes damage, insult or no insult — the godmother defends her own."
+  }
+ ],
+"dreamworks-alex": [
+  {
+   "name": "Opening Act",
+   "prereq": "Prerequisite: Center Stage",
+   "text": "The show starts before the fight. During a short rest, you may perform for your allies (CHA (Performance) DC 13): on a success, you begin your next combat with 1 Spotlight already banked — the crowd arrived early."
+  },
+  {
+   "name": "No One Upstages the King",
+   "prereq": "Prerequisite: Showstopper",
+   "text": "When a creature within 30 ft of you succeeds on a CHA check to impress, charm, or command others, you may use your reaction to out-perform it: contest your CHA (Performance) against its check result; if you win, you gain 1 Spotlight and it has disadvantage on its next CHA check — upstaged, in front of everyone."
+  },
+  {
+   "name": "Playing With Your Food",
+   "prereq": "Prerequisite: Give In to the Hunger",
+   "text": "The predator toys with its prey. While in Predator, when you hit a creature below half its hit points, you may deal no damage and instead grapple it (escape DC equals your CE save DC) and frighten it until the end of your next turn — dinner can wait; the show cannot."
+  },
+  {
+   "name": "Curtain Call",
+   "prereq": "Prerequisite: The Triumphant Roar",
+   "text": "Your roar lifts as well as it terrifies. When you use The Triumphant Roar, you may choose to rally instead: no cone, no damage — each ally within 30 ft gains temporary hit points equal to 1d8 + your CHA modifier + your PB and ends the frightened condition on itself. Same lungs, different show."
+  }
+ ],
+"dreamworks-bunnymund": [
+  {
+   "name": "Tremor Ambush",
+   "prereq": "Prerequisite: The Warren Below",
+   "text": "The earth tells you everything, if you listen with your feet. While you are fully underground, you know the exact location of every creature within 60 ft that is in contact with the ground. Additionally, when a hostile creature moves into a space adjacent to your buried position, you may use your reaction to Erupt — surface in that space and make one melee attack with your Erupt benefits, even though it isn't your turn."
+  },
+  {
+   "name": "Bank Shot",
+   "prereq": "Prerequisite: Twin Boomerangs",
+   "text": "Walls are just suggestions. Your boomerangs ricochet off solid surfaces: your Twin Boomerangs attacks ignore half cover and three-quarters cover, and you may curve a throw around a corner or obstacle, treating a target with total cover as having three-quarters cover instead. If a boomerang misses its target, you may redirect it to a different creature within 15 ft of the original target as part of the same throw."
+  },
+  {
+   "name": "Shell Game",
+   "prereq": "Prerequisite: Egg Constructs",
+   "text": "Which one is the rabbit? When you plant a decoy egg, you may swap silhouettes with it: until the start of your next turn, attack rolls against you have disadvantage as enemies strike at the wrong rabbit — the first attack that would hit you instead cracks the decoy, and you may immediately move up to 10 ft without provoking opportunity attacks as the shell bursts in their face."
+  },
+  {
+   "name": "Warren Evac",
+   "prereq": "Prerequisite: The Warren Network",
+   "text": "Nobody gets left in the open. When you open a warren mouth, you may instead reach out to one willing creature within 30 ft: it uses its reaction to dive into your tunnel, and you move it up to your burrow speed through the earth to surface in an unoccupied space of your choice. An unconscious creature can be pulled through — you drag them by the scruff, gently, the way spring does."
+  }
+ ],
+"dreamworks-eris": [
+  {
+   "name": "A Gift, Obviously",
+   "prereq": "Prerequisite: The Apple of Discord",
+   "text": "Nobody suspects the present. When you produce the apple, you may disguise it as something desirable — a dropped healing potion, a discarded weapon, a sealed letter. The first hostile creature to touch it must make its WIS save against spite-bound at disadvantage, believing it has won something. The apple is always a gift. That is the whole trick."
+  },
+  {
+   "name": "Wear the Rival",
+   "prereq": "Prerequisite: A Thousand Borrowed Faces",
+   "text": "You don't just wear their face — you spend their reputation. While disguised as a specific creature, you may spend 1 Spite as an action to plant a rumor in the mind of one creature that can see you: it must make a WIS save vs your CE DC or believe the person you're impersonating has betrayed it — it is spite-bound toward the original for 1 minute. The frame is the weapon; the face is just delivery."
+  },
+  {
+   "name": "Friendly Fire Doctrine",
+   "prereq": "Prerequisite: Sow Discord",
+   "text": "Your discord doesn't just turn blades — it sharpens them. When a creature spite-bound by you or bound by your Sow Discord damages another creature, it deals an extra 1d8 psychic damage. They were always angry. You merely gave the anger a schedule."
+  },
+  {
+   "name": "The Ledger of Small Wrongs",
+   "prereq": "Prerequisite: Petty Spite",
+   "text": "Eris forgets nothing, especially slights. When a hostile creature damages you, you may mark it in your ledger (no action required). You have advantage on saving throws against the marked creature's effects, and it has disadvantage on saving throws against your discord effects. The ledger has no last page."
+  }
+ ],
+"dreamworks-penguins": [
+  {
+   "name": "Kowalski's Contingency",
+   "prereq": "Prerequisite: Kowalski's Analysis",
+   "text": "A failed plan is still data. When a creature succeeds on its save against Kowalski's Analysis, you gain 1 Plan and learn one of its damage immunities, resistances, or vulnerabilities anyway — Kowalski was watching the dodge, not the target. Options B through Z are already drafted."
+  },
+  {
+   "name": "Rico's Deep Storage",
+   "prereq": "Prerequisite: Rico's Arsenal",
+   "text": "Rico pre-loads before the mission. During a short rest, you may use Rico's Arsenal up to PB times without spending CE or an action, producing items in advance; items produced this way last until your next long rest. Rico's stomach is bigger on the inside. Do not ask how the squad knows this."
+  },
+  {
+   "name": "Private's Secret Weapon",
+   "prereq": "Prerequisite: Private's Heart",
+   "text": "Weaponized adorableness. As an action, spend 1 Plan: Private performs the cute routine for one creature within 30 ft that can see him. Until the end of your next turn, that creature has disadvantage on attack rolls against creatures other than you — it cannot bring itself to look away. 'Aww' is a tactical condition."
+  },
+  {
+   "name": "Need-to-Know Basis",
+   "prereq": "Prerequisite: Skipper's Orders",
+   "text": "Skipper briefs the team before wheels-up. Skipper's Orders and Private's Heart now reach 120 ft, and Skipper's Orders affects allies you cannot see, provided they can hear you — the squad rehearsed this in the dark."
+  }
+ ],
+"dreamworks-tooth-fairy": [
+  {
+   "name": "Tiny Wings, Everywhere",
+   "prereq": "Prerequisite: The Memory Keepers",
+   "text": "The swarm relays. When you use Taken, Not Given or A Cherished Memory, Returned, a mini-fairy may deliver it: the range becomes 120 ft and you do not need a clear path to the target, only for a fairy to reach them. The collectors know every shortcut."
+  },
+  {
+   "name": "Bitter Roots",
+   "prereq": "Prerequisite: Taken, Not Given",
+   "text": "Some memories are thorns. When you spend a Memory on Taken, Not Given, you may instead return the creature's worst memory to it: it makes a WIS save against your CE save DC, and on a failure it is frightened of you for 1 minute and takes 3d6 psychic damage. She keeps the bad ones too. Someone has to."
+  },
+  {
+   "name": "The First Lost Tooth",
+   "prereq": "Prerequisite: A Cherished Memory, Returned",
+   "text": "You carry one perfect memory of your own — the first tooth you ever collected, which was yours. Once per long rest, you may use A Cherished Memory, Returned without spending a Memory; the ally also gains advantage on death saving throws for the next hour. It still works. It always works."
+  },
+  {
+   "name": "A Wall of Wings",
+   "prereq": "Prerequisite: The Swarm Skirmishes",
+   "text": "The swarm intercepts. When an ally within 30 ft of you is hit by an attack, you may use your reaction and spend 2 CE to impose disadvantage on that attack roll — a hundred wings blur the strike. You may do this a number of times equal to your PB per long rest."
+  }
+ ],
+"dreamworks-sandman": [
+  {
+   "name": "Sandwright's Hands",
+   "prereq": "Prerequisite: Dreamsand",
+   "text": "Golden sand, given a moment, learns any trade. When you shape Dreamsand, you may instead shape any set of artisan's tools or mundane adventuring gear — thieves' tools, a climber's kit, a healer's kit (3 uses), a disguise kit — that lasts for 1 hour. The sand remembers the shape of useful things."
+  },
+  {
+   "name": "The Restful Hour",
+   "prereq": "Prerequisite: Lullaby Sand",
+   "text": "Ten quiet minutes under your sand count as a full short rest. As a ritual (10 minutes, 2 CE), you settle up to PB willing creatures into restorative naps: each may spend hit dice as though finishing a short rest. A creature can benefit once per long rest. Even warriors need tucking in."
+  },
+  {
+   "name": "Nightlight",
+   "prereq": "Prerequisite: Guardian's Watch",
+   "text": "You keep a small lantern-wisp of golden sand — a firefly that never burns out. It follows you (or one ally you choose), shedding bright light in a 20-ft radius. While an ally stands in its light, it has advantage on saving throws against being frightened or charmed. Where your light falls, the dark has no vote."
+  },
+  {
+   "name": "The Sandship",
+   "prereq": "Prerequisite: Dreamcraft",
+   "text": "When you conjure your Dreamcraft, you may shape it as a great sand-vessel — part galleon, part dream. It carries up to six creatures and flies at 60 ft for the duration. Wonder, with seating."
+  }
+ ]
 };
