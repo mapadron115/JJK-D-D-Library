@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f4efe2">
+<meta name="description" content="SCP Files — recovered documents from the Special Measures Office for Cursed Phenomena: nine manufactured experimental subjects, one of them uncontained.">
+<title>SCP Files — Ritual Archive</title>
+<link rel="stylesheet" href="../assets/dossier-paper.css">
+<style>
+  #scp .redact{background:#161616;color:#161616;border-radius:2px;padding:0 .35em;white-space:nowrap;user-select:none}
+  #scp .doc-meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+  #scp .doc-meta .tag{display:inline-block;border:1px solid var(--accent);border-radius:3px;padding:3px 10px;font-size:.72rem;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;color:var(--accent)}
+  #scp section.block{margin:34px 0}
+  #scp section.block h2{font-size:1.5rem;margin:0 0 4px}
+  #scp section.block .kicker{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;opacity:.7;margin-bottom:6px}
+  #scp section.block p{margin:.7em 0;line-height:1.65}
+  #scp .subject-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;margin-top:18px}
+  #scp .subject{border:1px solid rgba(139,30,45,.5);border-radius:8px;padding:18px 20px;background:rgba(255,255,255,.35);box-shadow:0 6px 18px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:8px}
+  #scp .subject .desig{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;opacity:.7}
+  #scp .subject h3{margin:0;font-size:1.15rem}
+  #scp .subject p.concept{margin:0;font-size:.92rem;line-height:1.55;flex:1}
+  #scp .subject .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}
+  #scp .stamp{display:inline-block;border-radius:3px;padding:4px 12px;font-size:.72rem;letter-spacing:1.6px;text-transform:uppercase;font-weight:700}
+  #scp .stamp.contained{border:1px solid #4a6741;color:#4a6741}
+  #scp .stamp.uncontained{border:1px solid #8b1e2d;color:#fff;background:#8b1e2d;animation:pulse 2.2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(139,30,45,.45)}50%{box-shadow:0 0 0 6px rgba(139,30,45,0)}}
+  #scp .subject a.dossier{font-size:.85rem;font-weight:700;color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent)}
+  #scp .counsel{border:2px solid #8b1e2d;border-radius:8px;padding:22px 24px;background:rgba(139,30,45,.06);margin:40px 0}
+  #scp .counsel .kicker{font-size:.75rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:800;color:#8b1e2d;margin-bottom:8px}
+  #scp .counsel h2{margin:0 0 6px;font-size:1.4rem}
+  #scp .counsel ul{margin:.6em 0;padding-left:1.3em;line-height:1.65}
+  #scp .counsel li{margin:.45em 0}
+  .actions input.search{border:1px solid var(--gold);background:rgba(255,255,255,.6);color:inherit;border-radius:3px;padding:10px 14px;font-size:.9rem;min-width:min(320px,70vw)}
+  @media print{#scp .subject{box-shadow:none;break-inside:avoid}#scp .counsel{break-inside:avoid}}
+</style>
+</head>
+<body style="--accent:#8b1e2d">
+<header class="bar"><a class="brand" href="../index.html"><span>呪</span>Ritual Archive</a><a class="back" href="../index.html">← Back to home</a></header>
+<main class="shell">
+<article id="scp">
+<header class="hero">
+<div class="eyebrow">Recovered documents · Handle with care</div>
+<h1>Special Measures Office <span class="amp">for Cursed Phenomena</span></h1>
+<p class="summary">A cache of partially-redacted documents recovered from an American black-budget program operating on Japanese soil — nine manufactured experimental subjects, each documented in the Office's own hand. One of them is no longer in its cell.</p>
+<div class="doc-meta">
+<span class="tag">9 subjects</span><span class="tag">1 uncontained</span><span class="tag">Clearance: ████████</span>
+</div>
+<div class="actions">
+<input aria-label="Search subjects" class="search" id="search" placeholder="Search by name or concept…" type="search">
+<button type="button" onclick="window.print()">Print / Save PDF</button>
+</div>
+</header>
+
+<section class="block" id="briefing">
+<div class="kicker">Document 01 · Recovered briefing</div>
+<h2>What the Office is</h2>
+<p><b>Research log.</b> The following was recovered from a <span class="redact">████████</span> server during <span class="redact">████████████</span>. Transcribed as found; redactions as received.</p>
+<p>The Special Measures Office for Cursed Phenomena is an American program operating in Japan, funded through <span class="redact">██████████████</span> appropriations and answering to <span class="redact">██████████</span>. Its charter fragment states the mandate plainly: <i>"the systematic recreation of jujutsu phenomena under controlled conditions."</i> Japan was chosen for exactly one reason — the density of cursed energy. Nowhere else on earth produces so many workable test conditions per square mile.</p>
+<p>Nine manufactured subjects. Not exorcised curses, not inherited techniques — <i>built</i>. Each file below is the Office's own record: observation, hypothesis, containment procedure. Read them the way the Office wrote them, and remember that the Office writes to reassure itself.</p>
+<p>One subject is no longer in its cell. That is why you are reading this.</p>
+</section>
+
+<section class="block" id="subjects">
+<div class="kicker">Documents 02–10 · Subject files</div>
+<h2>The nine subjects</h2>
+<p>Designation, concept, containment status. Full records open as dossiers.</p>
+<div class="subject-grid">
+
+<article class="subject" data-name="e154 blind spot sight observation movement strike" id="sub-e154">
+<div class="desig">Subject e154</div>
+<h3>Blind Spot</h3>
+<p class="concept">Taxes enemy reactions to hold observation, then explodes through any lapse in line of sight with impossible movement and a punishing follow-up strike.</p>
+<div class="row"><span class="stamp contained">Contained</span><a class="dossier" href="../dossiers/e154.html">Open dossier →</a></div>
+</article>
+
+<article class="subject" data-name="e155 shamebound pursuit witness face quarry fury distance" id="sub-e155">
+<div class="desig">Subject e155</div>
+<h3>Shamebound Pursuit</h3>
+<p class="concept">Seeing its face makes you quarry. Distance feeds its Fury, and every obstacle between it and the quarry becomes part of the attack.</p>
+<div class="row"><span class="stamp contained">Contained</span><a class="dossier" href="../dossiers/e155.html">Open dossier →</a></div>
+</article>
+
+<article class="subject" data-name="e156 pestilence doctrine diagnose symptoms cure patients dead" id="sub-e156">
+<div class="desig">Subject e156</div>
+<h3>Pestilence Doctrine</h3>
+<p class="concept">Diagnoses its target, accumulates Symptoms, cashes them into a brutal "Cure" — then turns the dead into crude Patients that extend its reach.</p>
+<div class="row"><span class="stamp contained">Contained</span><a class="dossier" href="../dossiers/e156.html">Open dossier →</a></div>
+</article>
+
+<article class="subject" data-name="e157 corrosive threshold corrosion marks doors hunting space drag" id="sub-e157">
+<div class="desig">Subject e157</div>
+<h3>Corrosive Threshold</h3>
+<p class="concept">Infects surfaces and prey with Corrosion, turns those marks into doors, then drags sufficiently degraded targets into a private hunting space where the geometry belongs to it.</p>
+<div class="row"><span class="stamp contained">Contained</span><a class="dossier" href="../dossiers/e157.html">Open dossier →</a></div>
+</article>
+
+<article class="subject" data-name="e158 with many voices archive voices memory false cries lure" id="sub-e158">
+<div class="desig">Subject e158</div>
+<h3>With Many Voices</h3>
+<p class="concept">Archives perfect voices, breathes away short-term memory, and herds frightened prey toward the voices of their friends.</p>
+<div class="row"><span class="stamp contained">Contained</span><a class="dossier" href="../dossiers/e158.html">Open dossier →</a></div>
+</article>
+
+<article class="subject" data-name="e159 adaptive hatred survive adaptation slots record" id="sub-e159">
+<div class="desig">Subject e159</div>
+<h3>Adaptive Hatred</h3>
+<p class="concept">Survive it once, and it decides whether anything may ever hurt it twice — spending limited Adaptation Slots on what its body is allowed to stop caring about.</p>
+<div class="row"><span class="stamp contained">Contained</span><a class="dossier" href="../dossiers/e159.html">Open dossier →</a></div>
+</article>
+
+<article class="subject" data-name="e160 possessive mask passenger body host mask consciousness uncontained" id="sub-e160">
+<div class="desig">Subject e160</div>
+<h3>The Possessive Mask</h3>
+<p class="concept">One soul, many coats. Wears bodies until they rot, tempts another into accepting the mask, and moves its consciousness across humanoid hosts on one shared ledger of HP and CE.</p>
+<div class="row"><span class="stamp uncontained">Uncontained — active</span><a class="dossier" href="../dossiers/e160.html">Open dossier →</a></div>
+</article>
+
+<article class="subject" data-name="e161 refining clockworks machine gear risk refinement cycles" id="sub-e161">
+<div class="desig">Subject e161</div>
+<h3>Refining Clockworks</h3>
+<p class="concept">A portable cursed clockwork that refines gear — you choose how aggressively the machine interprets "refinement," and whether one more Very Fine cycle is worth the Risk.</p>
+<div class="row"><span class="stamp contained">Contained</span><a class="dossier" href="../dossiers/e161.html">Open dossier →</a></div>
+</article>
+
+<article class="subject" data-name="e162 infinite retail store fixtures ecology interior" id="sub-e162">
+<div class="desig">Subject e162</div>
+<h3>Infinite Retail</h3>
+<p class="concept">Manifests useful store fixtures in ordinary play, then drags the battlefield into an impossible retail interior whose real weapon is its ecology.</p>
+<div class="row"><span class="stamp contained">Contained</span><a class="dossier" href="../dossiers/e162.html">Open dossier →</a></div>
+</article>
+
+</div>
+</section>
+
+<section class="block" id="thread">
+<div class="kicker">Document 11 · Active thread</div>
+<h2>'The Passenger'</h2>
+<p>Subject e160, The Possessive Mask, is uncontained. The active operation carries the working designation <b>'The Passenger'</b> — a two-to-three-session chapter built around civilians behaving subtly wrong, a facility that should not exist, and a mask that is always looking for its next face. Nothing in this file beyond the e160 dossier is required to run it.</p>
+<p>The remaining eight subjects are in their cells. They are not idle. They are waiting. That is the long game — this page will grow as the table does.</p>
+</section>
+
+<section class="counsel" id="gm-counsel">
+<div class="kicker">❖ GM only — players stop here</div>
+<h2>GM counsel</h2>
+<ul>
+<li><b>One subject at a time.</b> The subplot opens with e160 and only e160, given a full 2–3 session chapter. The other eight are background dread — mentioned in passing, glimpsed in redacted files, never deployed until the table is ready for them.</li>
+<li><b>The cells are the point.</b> Eight contained subjects the party knows about but cannot reach is stronger than eight fights. Let the stamps do the work: every session the party sees CONTAINED next to a name they haven't met is a session the dread compounds.</li>
+<li><b>The party gains nothing from the lab.</b> They encounter the Office from outside, as Jujutsu High students and employees. No gear, no techniques, no alliances come out of the facility — it is something that happens <i>to</i> the story, not a resource within it.</li>
+<li><b>Keep the Office deniable and thin.</b> No named staff, no mapped org chart, no larger conspiracy on the page. The Office exists to be glimpsed through redactions, not understood. If the party starts mapping it, you are showing too much.</li>
+<li><b>Escalation ladder (suggested):</b> e160 uncontained now → one contained subject shows signs of waking (your pick, when the table needs a jolt) → the Office notices the party noticing. Never more than one active subject at a time.</li>
+</ul>
+</section>
+
+<div class="endcap"><a href="../index.html">← Return to home</a></div>
+</article>
+</main>
+<script>
+(function(){
+  var input = document.getElementById('search');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#subjects article.subject'));
+  function run(){
+    var q = (input.value || '').trim().toLowerCase();
+    cards.forEach(function(c){
+      var hay = (c.getAttribute('data-name') || '') + ' ' + c.textContent.toLowerCase();
+      c.style.display = (!q || hay.indexOf(q) !== -1) ? '' : 'none';
+    });
+  }
+  input.addEventListener('input', run);
+})();
+</script>
+<script src="../assets/dossier-roll.js"></script>
+</body>
+</html>
