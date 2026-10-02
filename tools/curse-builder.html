@@ -202,17 +202,35 @@
   </div>
 </section>
 
+<section class="panel" aria-labelledby="h-actions">
+  <h3 id="h-actions"><span class="stepnum">4</span>Actions</h3>
+  <p class="note">Custom attacks for the stat block. To-hit defaults to the suggested attack bonus for the CR below — override freely.</p>
+  <div id="attacklist"></div>
+  <div class="btn-row">
+    <button class="btn btn-small" type="button" id="addAttack">+ Add attack</button>
+  </div>
+</section>
+
 <section class="panel" aria-labelledby="h-cr">
-  <h3 id="h-cr">Challenge Rating</h3>
+  <h3 id="h-cr">Challenge Rating &amp; Baselines</h3>
   <div class="grid2">
     <div class="field"><span>Base CR — GM sets</span>
       <input type="number" id="basecr" min="0" max="30" step="1" placeholder="e.g. 3">
+      <p class="note" id="crsuggest" style="margin-top:6px"></p>
     </div>
     <div class="field"><span>Total CR (live)</span>
       <div class="out" style="margin:0;padding:12px 16px"><div class="big" id="crtotal">—</div><div class="sub" id="crbreak">Set a base CR above.</div></div>
     </div>
   </div>
   <p class="note">Total CR = base CR + technique adjustments. Only Cursed Technique and Innate Technique carry source-given CR adjustments (+1–2 and +2–5); Multiple Phases and Legendary Actions/Resistances have <b>no CR number in the source</b> and are GM ruling.</p>
+  <h4>Suggested baselines <span class="gmr">DMG-derived, not source canon</span></h4>
+  <p class="note">From the DMG's Monster Statistics by Challenge Rating. Auto-filled from your CR — edit any value freely; edited fields won't be overwritten.</p>
+  <div class="grid2">
+    <div class="field"><span>Hit points</span><input type="number" id="stat_hp" min="1" step="1" placeholder="—"></div>
+    <div class="field"><span>Armor class</span><input type="number" id="stat_ac" min="1" step="1" placeholder="—"></div>
+    <div class="field"><span>Attack bonus</span><input type="number" id="stat_atk" step="1" placeholder="—"></div>
+    <div class="field"><span>Save DC</span><input type="number" id="stat_dc" min="1" step="1" placeholder="—"></div>
+  </div>
 </section>
 </div><!-- /no-print -->
 
@@ -246,6 +264,68 @@ var CLS={imaginary:"Imaginary Cursed Spirit",vengeful:"Vengeful Cursed Spirit",d
 var GRD={"4":"Grade 4","3":"Grade 3","2":"Grade 2","1":"Grade 1","0":"Special Grade"};
 var GMR='<span class="gmr">GM ruling</span>';
 
+/* DMG Monster Statistics by Challenge Rating — suggested baselines only, NOT source canon.
+   Grade → suggested CR ranges are table convention (Grade 4: 0–1, Grade 3: 2–4, Grade 2: 5–8,
+   Grade 1: 9–12, Special Grade: 13+). */
+var GRADE_CR={"4":[0,1],"3":[2,4],"2":[5,8],"1":[9,12],"0":[13,20]};
+var CR_STATS={
+ 0:{hp:4,ac:13,atk:3,dc:13},1:{hp:78,ac:13,atk:3,dc:13},2:{hp:93,ac:13,atk:3,dc:13},
+ 3:{hp:108,ac:13,atk:4,dc:13},4:{hp:123,ac:14,atk:5,dc:14},5:{hp:138,ac:15,atk:6,dc:15},
+ 6:{hp:153,ac:15,atk:6,dc:15},7:{hp:168,ac:15,atk:6,dc:15},8:{hp:183,ac:16,atk:7,dc:16},
+ 9:{hp:198,ac:16,atk:7,dc:16},10:{hp:213,ac:17,atk:7,dc:16},11:{hp:228,ac:17,atk:8,dc:17},
+ 12:{hp:243,ac:17,atk:8,dc:17},13:{hp:258,ac:18,atk:8,dc:18},14:{hp:273,ac:18,atk:8,dc:18},
+ 15:{hp:288,ac:18,atk:8,dc:18},16:{hp:303,ac:18,atk:9,dc:18},17:{hp:318,ac:19,atk:10,dc:19},
+ 18:{hp:331,ac:19,atk:10,dc:19},19:{hp:341,ac:19,atk:10,dc:19},20:{hp:351,ac:19,atk:10,dc:19},
+ 21:{hp:361,ac:19,atk:11,dc:20},22:{hp:371,ac:19,atk:11,dc:20},23:{hp:381,ac:19,atk:11,dc:20},
+ 24:{hp:391,ac:19,atk:12,dc:21},25:{hp:401,ac:19,atk:12,dc:21},26:{hp:411,ac:19,atk:12,dc:21},
+ 27:{hp:421,ac:19,atk:13,dc:22},28:{hp:431,ac:19,atk:13,dc:22},29:{hp:441,ac:19,atk:13,dc:22},
+ 30:{hp:451,ac:19,atk:14,dc:23}
+};
+function crStats(cr){
+  cr=Math.max(0,Math.min(30,Math.round(cr)));
+  return CR_STATS[cr]||CR_STATS[0];
+}
+
+/* custom attacks */
+var attacks=[];
+function renderAttacks(){
+  var wrap=$("attacklist");
+  wrap.innerHTML="";
+  attacks.forEach(function(a,i){
+    var d=document.createElement("div");
+    d.className="feat";
+    d.innerHTML='<div class="grid2">'
+      +'<div class="field"><span>Attack name</span><input type="text" data-ak="name" value="'+esc(a.name)+'" placeholder="e.g. Grasping Tendrils" autocomplete="off"></div>'
+      +'<div class="field"><span>To-hit bonus</span><input type="number" data-ak="tohit" value="'+esc(a.tohit)+'" step="1"></div></div>'
+      +'<div class="grid2">'
+      +'<div class="field"><span>Damage (dice + mods)</span><input type="text" data-ak="dmg" value="'+esc(a.dmg)+'" placeholder="e.g. 2d8+4" autocomplete="off"></div>'
+      +'<div class="field"><span>Damage type</span><input type="text" data-ak="type" value="'+esc(a.type)+'" placeholder="e.g. bludgeoning" autocomplete="off"></div></div>'
+      +'<div class="field"><span>Save / rider effect (optional)</span><input type="text" data-ak="save" value="'+esc(a.save)+'" placeholder="e.g. DC 14 STR or grappled" autocomplete="off"></div>'
+      +'<div class="btn-row"><button class="btn btn-small btn-danger" type="button" data-rm="'+i+'">Remove attack</button></div>';
+    wrap.appendChild(d);
+  });
+  wrap.querySelectorAll("input").forEach(function(inp){
+    inp.addEventListener("input",function(){
+      var row=inp.closest(".feat");
+      var idx=Array.prototype.indexOf.call(wrap.children,row);
+      if(idx>=0&&attacks[idx]){attacks[idx][inp.getAttribute("data-ak")]=inp.value;update();}
+    });
+  });
+  wrap.querySelectorAll("[data-rm]").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      attacks.splice(Number(btn.getAttribute("data-rm")),1);
+      renderAttacks();update();
+    });
+  });
+}
+$("addAttack").addEventListener("click",function(){
+  var baseRaw=$("basecr").value;
+  var base=baseRaw===""?null:parseInt(baseRaw,10);
+  var st=base===null?{atk:3}:crStats(base);
+  attacks.push({name:"",tohit:String(st.atk),dmg:"",type:"",save:""});
+  renderAttacks();update();
+});
+
 function classif(){var r=document.querySelector('input[name="classif"]:checked');return r?r.value:null;}
 function rank(){var v=$("grade").value;return v===""?null:parseInt(v,10);}
 
@@ -264,6 +344,30 @@ var FEATS=[
 
 function update(){
   var c=classif(), r=rank();
+
+  /* grade → suggested CR */
+  var sug=$("crsuggest");
+  if(r!==null&&GRADE_CR[String(r)]){
+    var gr=GRADE_CR[String(r)];
+    sug.innerHTML="Suggested base CR for "+esc(GRD[String(r)])+": <b>"+gr[0]+"–"+gr[1]+"</b> (table convention, GM decides).";
+    var bc=$("basecr");
+    if(bc.value===""&&!bc.dataset.touched){
+      bc.value=String(Math.round((gr[0]+gr[1])/2));
+    }
+  }else{
+    sug.textContent="";
+  }
+
+  /* CR → DMG baseline auto-fill (never overwrites manual edits) */
+  var baseRaw=$("basecr").value;
+  var baseForStats=baseRaw===""?null:parseInt(baseRaw,10);
+  if(baseForStats!==null&&!isNaN(baseForStats)){
+    var st=crStats(baseForStats);
+    [["stat_hp",st.hp],["stat_ac",st.ac],["stat_atk",st.atk],["stat_dc",st.dc]].forEach(function(pair){
+      var el=$(pair[0]);
+      if(el.dataset.touched!=="1"){el.value=String(pair[1]);}
+    });
+  }
 
   /* radio card highlight */
   document.querySelectorAll(".radio-card").forEach(function(card){
@@ -354,8 +458,31 @@ function update(){
   var nm=$("cname").value.trim()||"Unnamed Curse";
   var html='<div class="sb-name">'+esc(nm)+'</div>';
   html+='<p class="sb-line"><b>'+(c?esc(CLS[c]):"No classification chosen")+'</b> &middot; '+(r!==null?esc(GRD[String(r)]):"No grade chosen")+'</p>';
+  var shp=$("stat_hp").value, sac=$("stat_ac").value, satk=$("stat_atk").value, sdc=$("stat_dc").value;
+  if(shp||sac||satk||sdc){
+    html+='<p class="sb-line">';
+    var bits=[];
+    if(shp)bits.push('<b>HP</b> '+esc(shp));
+    if(sac)bits.push('<b>AC</b> '+esc(sac));
+    if(satk)bits.push('<b>Attack</b> +'+esc(satk));
+    if(sdc)bits.push('<b>Save DC</b> '+esc(sdc));
+    html+=bits.join(' &middot; ')+'</p>';
+  }
   html+='<div class="sb-sec">Universal traits</div>'+th;
   html+='<div class="sb-sec">Features</div>'+(F.length?F.join(""):'<p class="note">None selected.</p>');
+  var liveAttacks=attacks.filter(function(a){return (a.name||"").trim()!=="";});
+  if(liveAttacks.length){
+    html+='<div class="sb-sec">Actions</div>';
+    liveAttacks.forEach(function(a){
+      var line='<p><b>'+esc(a.name.trim())+'.</b>';
+      var parts=[];
+      if((a.tohit||"").trim()!=="")parts.push('+'+esc(a.tohit.trim())+' to hit');
+      if((a.dmg||"").trim()!=="")parts.push(esc(a.dmg.trim())+((a.type||"").trim()!==""?" "+esc(a.type.trim()):"")+' damage');
+      if(parts.length)line+=' '+parts.join(', ');
+      if((a.save||"").trim()!=="")line+='. '+esc(a.save.trim());
+      html+=line+'.</p>';
+    });
+  }
   html+='<div class="sb-cr">Challenge Rating '+(total===null?"—":esc(String(total)))+(total===null?'<span class="note"> — GM sets the base CR</span>':'<span class="note"> (base '+esc(String(base))+(adj>0?" + "+adj+" adjustments":"")+')</span>')+'</div>';
   $("statblock").innerHTML=html;
 }
@@ -364,6 +491,12 @@ document.querySelectorAll("input,select,textarea").forEach(function(el){
   el.addEventListener("input",update);
   el.addEventListener("change",update);
 });
+/* manual-edit tracking: auto-filled baselines never overwrite GM edits */
+["stat_hp","stat_ac","stat_atk","stat_dc"].forEach(function(id){
+  var el=$(id);
+  el.addEventListener("input",function(){el.dataset.touched="1";});
+});
+$("basecr").addEventListener("input",function(){$("basecr").dataset.touched="1";});
 $("printbtn").addEventListener("click",function(){window.print();});
 update();
 })();

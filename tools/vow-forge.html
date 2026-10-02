@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Binding Vow Forge — Ritual Archive Tools</title>
+<link rel="stylesheet" href="../assets/tools.css">
+<style>
+  .vow-card{border:1px solid #30343e;border-radius:14px;background:var(--panel);padding:18px;margin:14px 0}
+  .vow-card.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+  .vow-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .vow-name{font-family:var(--serif);font-size:1.25rem;color:#f2e6c7}
+  .vow-terms{color:#d1cdc3;margin:.4rem 0 1rem;white-space:pre-wrap}
+  .unapproved{display:inline-block;border:1px solid var(--red);color:#f0a3a8;border-radius:999px;padding:3px 12px;font-size:.78rem;font-weight:800;letter-spacing:.08em}
+  .approved{display:inline-block;border:1px solid var(--gold);color:var(--gold-pale);border-radius:999px;padding:3px 12px;font-size:.78rem;font-weight:800;letter-spacing:.08em}
+  .steps{display:flex;gap:8px;margin:18px 0;flex-wrap:wrap}
+  .step-pill{flex:1;min-width:140px;min-height:44px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #3a3e48;border-radius:999px;color:#8b8f9a;font-weight:700;font-size:.9rem;background:#101218}
+  .step-pill.on{border-color:var(--gold);color:var(--gold-pale)}
+  .step-pill.done{border-color:#4a7c59;color:#9fd3ae}
+  .forge-step{display:none}
+  .forge-step.on{display:block}
+  .scale-wrap{margin:14px 0}
+  .scale-bar{position:relative;height:22px;border:1px solid #3a3e48;border-radius:999px;background:#101218;overflow:hidden}
+  .scale-price{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#8a6d2f,var(--gold));transition:width .3s}
+  .scale-gain{position:absolute;right:0;top:0;bottom:0;background:linear-gradient(90deg,#7c2f36,#b0474f);transition:width .3s}
+  .scale-labels{display:flex;justify-content:space-between;font-size:.8rem;color:#8b8f9a;margin-top:4px}
+  .verdict{border-radius:10px;padding:12px 14px;margin:12px 0;font-weight:600}
+  .verdict.ok{border:1px solid #4a7c59;background:#12241a;color:#bfe3c9}
+  .verdict.warn{border:1px solid #8a6d2f;background:#241d0e;color:#f0d9a0}
+  .verdict.bad{border:1px solid var(--red);background:#261114;color:#f0a3a8}
+  .guard{border:1px solid #8a6d2f;border-radius:10px;padding:12px 14px;margin:12px 0;background:#1d1810}
+  .guard h4{margin:0 0 6px;color:var(--gold-pale)}
+  .guard.block{border-color:var(--red);background:#221013}
+  .guard.block h4{color:#f0a3a8}
+  .chips-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .chip-btn{border:1px solid #4a4e5a;border-radius:999px;background:#161921;color:var(--ink);padding:8px 14px;min-height:44px;font-size:.85rem;cursor:pointer;font-family:inherit}
+  .chip-btn:hover{border-color:var(--gold)}
+  .type-pick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+  @media(max-width:560px){.type-pick{grid-template-columns:1fr}}
+  .type-card{border:1px solid #3a3e48;border-radius:12px;padding:14px;cursor:pointer;background:#101218;min-height:44px}
+  .type-card h4{margin:0 0 6px;color:#f2e6c7}
+  .type-card p{margin:0;font-size:.88rem;color:#a7a29a}
+  .type-card.sel{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+  .tpl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:12px 0}
+  .tpl-card{border:1px solid #3a3e48;border-radius:12px;padding:12px 14px;background:#101218;cursor:pointer;min-height:44px;text-align:left;font-family:inherit;color:var(--ink)}
+  .tpl-card:hover{border-color:var(--gold)}
+  .tpl-card h4{margin:0 0 4px;color:var(--gold-pale);font-size:1rem}
+  .tpl-card p{margin:0;font-size:.82rem;color:#8b8f9a}
+  .canon-strip{border-left:3px solid var(--gold);padding:8px 14px;margin:14px 0;color:#a7a29a;font-size:.9rem;background:#14161c;border-radius:0 8px 8px 0}
+  .tag{display:inline-block;border:1px solid #4a4e5a;border-radius:999px;padding:4px 14px;font-size:.78rem;font-weight:800;letter-spacing:.08em;color:#8b8f9a}
+  .tag.on{border-color:var(--gold);color:var(--gold-pale)}
+  @media print{
+    body{background:#fff;color:#000}
+    .vow-card{border:1px solid #000;background:#fff;break-inside:avoid}
+    .vow-name{color:#000}
+    .vow-terms{color:#222}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar no-print"><div class="nav"><a class="brand" href="../index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a><nav class="navlinks"><a href="../rules.html">Field Guide</a><a href="../builder.html">Character Builder</a><a href="../codex.html">Technique Codex</a><a href="../lore.html">Story So Far</a><a href="index.html" class="is-current">Tools</a></nav><button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">&#x2630;</button><span class="doc-tag">GM &amp; table tools</span></div></header>
+
+<main class="wrap">
+  <section class="hero no-print">
+    <p class="eyebrow">Field Tool · V6 §7.1 · Section III canon</p>
+    <h1>Binding Vow Forge</h1>
+    <p class="lede">A guided forge for binding vows: state the price, name the gain, set the penalty — Heaven judges the scales, and the forge enforces the iron law before a card is struck. Forged vows save to your character and appear on the <a href="vows.html">Binding Vow Cards</a> page.</p>
+  </section>
+
+  <div class="charbar no-print">
+    <div class="field"><span>Character</span><select id="charSel" aria-label="Character"></select></div>
+  </div>
+  <p class="note no-print" id="charEmpty" hidden>Your character list is empty. <a href="../builder.html">Create a character in the builder</a> first — forged vows are saved to a character.</p>
+
+  <div id="app" class="no-print" hidden>
+    <section class="panel">
+      <h3>Start from a template <span class="note" style="display:inline">— optional; templates teach the shape</span></h3>
+      <div class="tpl-grid" id="tplGrid"></div>
+    </section>
+
+    <div class="steps" id="stepPills" aria-label="Forge steps">
+      <div class="step-pill" data-s="1"><b>1</b> The Price</div>
+      <div class="step-pill" data-s="2"><b>2</b> The Gain</div>
+      <div class="step-pill" data-s="3"><b>3</b> The Penalty</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <section class="forge-step panel" id="step1">
+      <h3>Step 1 — The Price</h3>
+      <div class="canon-strip">The iron law: no vow grants anything for nothing. The price must be real — lost options, lost resources, a genuine vulnerability. A vow whose "restriction" never actually restricts you grants nothing. <b>Heaven can tell.</b></div>
+      <div class="field"><span>Vow name</span><input type="text" id="fName" maxlength="80" placeholder="e.g. The Silent Road"></div>
+      <div class="field"><span>What kind of trade is this?</span></div>
+      <div class="type-pick" role="radiogroup" aria-label="Vow type">
+        <div class="type-card sel" id="typeRestrict" role="radio" aria-checked="true" tabindex="0">
+          <h4>Restriction for power</h4>
+          <p>Limit yourself — what you cannot do, must do, or give up — and gain something in return. (Revealing One's Hand, Overtime.)</p>
+        </div>
+        <div class="type-card" id="typeConseq" role="radio" aria-checked="false" tabindex="0">
+          <h4>Power for consequence</h4>
+          <p>Declare something now and name the price you pay if you break it. The consequence fires automatically, without appeal.</p>
+        </div>
+      </div>
+      <div class="field"><span>The price, stated plainly</span><textarea id="fPrice" placeholder="What you cannot do, must do, or give up — in words every creature at the table can understand."></textarea></div>
+      <div id="fakeWarn"></div>
+      <div class="btn-row">
+        <span></span>
+        <button class="btn btn-gold" id="toStep2" type="button">Next: the gain →</button>
+      </div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section class="forge-step panel" id="step2">
+      <h3>Step 2 — The Gain</h3>
+      <div class="canon-strip">What the vow returns: more output, a new option, a sharper edge — <b>sized to the price</b>. The GM adjudicates whether a price is genuine. Err on the side of a steeper price.</div>
+      <div class="field"><span>The gain</span><textarea id="fGain" placeholder="What the vow returns…"></textarea></div>
+      <div class="scale-wrap">
+        <div class="field" style="margin-bottom:6px"><span>Heaven's scale — price vs gain</span></div>
+        <div class="scale-bar" aria-hidden="true"><div class="scale-price" id="scalePrice"></div><div class="scale-gain" id="scaleGain"></div></div>
+        <div class="scale-labels"><span>◀ price (<b id="priceScore">0</b>)</span><span>gain (<b id="gainScore">0</b>) ▶</span></div>
+      </div>
+      <div id="scaleVerdict"></div>
+      <div class="btn-row">
+        <button class="btn" id="backTo1" type="button">← Back</button>
+        <button class="btn btn-gold" id="toStep3" type="button">Next: the penalty →</button>
+      </div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section class="forge-step panel" id="step3">
+      <h3>Step 3 — The Penalty</h3>
+      <div class="canon-strip">What you lose if you violate the vow — paid automatically, without appeal. <b>Breaking a vow always costs more than keeping it.</b></div>
+      <div class="field"><span>The penalty for breaking</span><textarea id="fPenalty" placeholder="What breaking costs…"></textarea></div>
+      <div class="field"><span>Steepen it — suggestions</span></div>
+      <div class="chips-row" id="penChips"></div>
+      <div id="guards"></div>
+      <div id="permNote"></div>
+      <div class="btn-row">
+        <button class="btn" id="backTo2" type="button">← Back</button>
+        <button class="btn btn-gold" id="forgeBtn" type="button">⚒ Forge the vow</button>
+      </div>
+    </section>
+
+    <section id="cardOut" hidden>
+      <h3 class="no-print">The forged card</h3>
+      <div id="forgedCard"></div>
+      <div class="btn-row no-print">
+        <button class="btn" type="button" onclick="window.print()">Print card</button>
+        <button class="btn btn-gold" id="saveCharBtn" type="button">Save to character</button>
+        <button class="btn" id="forgeAnother" type="button">Forge another</button>
+      </div>
+      <p class="note no-print">Saving adds the card to this character's vow list on the <a href="vows.html">Binding Vow Cards</a> page as a custom vow — it stays <b>unapproved</b> until your GM approves it there.</p>
+    </section>
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  function toast(m){var e=document.getElementById('toast');if(!e){e=document.createElement('div');e.className='toast';e.id='toast';document.body.appendChild(e);}e.textContent=m;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('show');},2400);}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);});}
+  function store(k,v){try{if(v===undefined){return JSON.parse(localStorage.getItem(k));}localStorage.setItem(k,JSON.stringify(v));}catch(e){}return null;}
+  function storeRaw(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  function readRaw(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function uid(){return 'v'+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36);}
+  function $(id){return document.getElementById(id);}
+
+  var CHARS_KEY='ritual-archive-characters';
+  var ACTIVE_KEY='ra_vows_char';
+  var charId=null;
+  var vowType='restriction';
+
+  /* ── templates: canon-shaped starting points ── */
+  var TEMPLATES=[
+    {name:"Revealing One's Hand",type:'restriction',
+     price:"Reveal your technique's workings — its rules, costs, and tells — to an enemy creature that can understand you.",
+     gain:"Attacks and technique effects with the revealed technique gain +3 to hit and +3 damage against that creature until combat ends. A GM-set bonus may apply for a particularly costly reveal.",
+     penalty:"The knowledge persists: that creature keeps everything it learned, and you may never use this vow twice against the same creature.",
+     blurb:"Output for information — the classic Sukuna trade."},
+    {name:"Overtime",type:'restriction',
+     price:"During your declared work hours (e.g. 9 AM–5 PM), your CE maximum is reduced by your CE modifier and your technique damage dice drop one tier.",
+     gain:"Outside those hours: temporary CE equal to twice your CE modifier and technique damage dice rise two tiers, lasting a number of hours equal to your proficiency bonus.",
+     penalty:"Break the hours and the surge is gone for a full workweek — and Heaven notes the attempt.",
+     blurb:"Nanami's sacrifice window — restraint with a clock on it."},
+    {name:"The Cornered Rat",type:'restriction',
+     price:"You cannot willingly move away from the enemy you are fighting — no retreat, no disengage, no repositioning to safety.",
+     gain:"While you hold your ground, your melee and technique damage dice rise one tier against that enemy.",
+     penalty:"If you break and flee, you are frightened of that enemy until the next dawn, and the vow is spent.",
+     blurb:"Give up retreat, gain teeth."},
+    {name:"Borrowed Time",type:'consequence',
+     price:"Declare it aloud: for the next minute, your CE output doubles — costs unchanged, effects doubled.",
+     gain:"One minute of overwhelming output, usable once per long rest.",
+     penalty:"When the minute ends: 2 levels of exhaustion and your CE maximum is halved until your next long rest. The bill always comes due.",
+     blurb:"Power now, consequence after — the classic overdraft."},
+    {name:"The Witnessed Truce",type:'consequence',
+     price:"You and the other signatories declare mutual non-aggression for the scene — no attacks, no harmful techniques against each other.",
+     gain:"Safe parley: the scene cannot be broken by 'accident'. Everyone at the table knows Heaven is watching.",
+     penalty:"Whoever breaks it takes 3d8 psychic damage, no save — Heaven witnessed the words. The truce ends for all.",
+     blurb:"Multi-party vow — the table's ceasefire, enforced."}
+  ];
+
+  /* ── characters (same keys as vows.html) ── */
+  function loadChars(){var a=[];try{a=JSON.parse(localStorage.getItem(CHARS_KEY))||[];}catch(e){a=[];}return Array.isArray(a)?a:[];}
+  function lsKey(){return 'ra_vows_'+charId;}
+  function loadVows(){var d=store(lsKey());if(!d||!Array.isArray(d.vows)){d={vows:[]};}return d;}
+  function saveVows(d){store(lsKey(),d);}
+
+  /* ── step navigation ── */
+  var step=1;
+  function goStep(n){
+    step=n;
+    [1,2,3].forEach(function(i){
+      $('step'+i).classList.toggle('on',i===n);
+      var pill=document.querySelector('.step-pill[data-s="'+i+'"]');
+      pill.classList.toggle('on',i===n);
+      pill.classList.toggle('done',i<n);
+    });
+    if(n===2)updateScale();
+    if(n===3)renderGuards();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  /* ── type picker ── */
+  function setType(t){
+    vowType=t;
+    $('typeRestrict').classList.toggle('sel',t==='restriction');
+    $('typeConseq').classList.toggle('sel',t==='consequence');
+    $('typeRestrict').setAttribute('aria-checked',t==='restriction'?'true':'false');
+    $('typeConseq').setAttribute('aria-checked',t==='consequence'?'true':'false');
+  }
+
+  /* ── Heaven's scale: price vs gain proportionality ── */
+  var COST_PATTERNS=[
+    [/permanent/i,3],[/\b(die|dies|death)\b/i,3],[/lose a limb/i,3],[/\b(blind|deaf|mute)\b/i,3],
+    [/\b(cannot|never|unable)\b/i,2],[/sacrifice/i,2],[/exhaustion/i,2],[/CE maximum|hit point maximum|max hp/i,2],
+    [/\blose[sd]?\b/i,1],[/reduc/i,1],[/halv/i,1],[/vulnerable/i,1],[/disadvantage/i,1],[/frightened/i,1]
+  ];
+  var POWER_PATTERNS=[
+    [/\b(double|triple|immunit)/i,3],
+    [/\badvantage\b/i,2],[/additional/i,2],[/extra/i,2],[/\+\d/i,2],[/regain/i,2],[/resistance/i,2],
+    [/damage/i,1],[/heal/i,1],[/bonus/i,1],[/\bignore[sd]?\b/i,1]
+  ];
+  var FAKE_PATTERNS=[
+    /when i (want|choose|decide|feel like)/i, /if i (want|choose)/i, /at my discretion/i,
+    /\boptional\b/i, /only when (i|it suits|convenient)/i, /whenever i (want|choose)/i,
+    /may choose (not )?to/i
+  ];
+  function scoreText(t,patterns){
+    var s=0;
+    patterns.forEach(function(p){var m=t.match(p[0]);if(m)s+=p[1]*m.length;});
+    return s;
+  }
+  function detectFake(t){return FAKE_PATTERNS.some(function(p){return p.test(t);});}
+
+  function updateScale(){
+    var price=$('fPrice').value, gain=$('fGain').value;
+    var ps=scoreText(price,COST_PATTERNS), gs=scoreText(gain,POWER_PATTERNS);
+    var tot=Math.max(ps+gs,1);
+    $('scalePrice').style.width=Math.round(ps/tot*100)+'%';
+    $('scaleGain').style.width=Math.round(gs/tot*100)+'%';
+    $('priceScore').textContent=ps;
+    $('gainScore').textContent=gs;
+    var v=$('scaleVerdict');
+    var fake=detectFake(price);
+    if(fake){
+      v.innerHTML='<div class="verdict bad"><b>HEAVEN CAN TELL.</b> Your price contains an escape hatch — "when I want", "if I choose", "at my discretion". A restriction you can switch off at will is not a restriction, and the vow grants <b>nothing</b>. Rewrite the price so it actually binds you.</div>';
+    } else if(!price.trim()||!gain.trim()){
+      v.innerHTML='';
+    } else {
+      var ratio=gs/Math.max(ps,1);
+      if(ratio<=1.2){
+        v.innerHTML='<div class="verdict ok"><b>The scales balance.</b> The price is real and sized to the gain. Heaven accepts the shape of this trade — the GM still adjudicates the details.</div>';
+      } else if(ratio<=2){
+        v.innerHTML='<div class="verdict warn"><b>The gain outweighs the price.</b> Heaven may find this trade light — consider steepening the price or tempering the gain. Err on the side of a steeper price; the game will be better for it.</div>';
+      } else {
+        v.innerHTML='<div class="verdict warn"><b>The price is a whisper next to the gain.</b> This much power for this little cost will not survive contact with your GM. Strengthen the price — a permanent cost, a real vulnerability — or cut the gain down.</div>';
+      }
+    }
+    /* live fake warning on step 1 */
+    var fw=$('fakeWarn');
+    if(detectFake(price)){
+      fw.innerHTML='<div class="verdict bad"><b>Heaven can tell:</b> that price has an escape hatch. A togglable restriction grants nothing.</div>';
+    } else { fw.innerHTML=''; }
+  }
+
+  /* ── canon guardrails ── */
+  var COMPEL_RE=/\b(must|forces?|forced|compel|compelled|controls?|dominates?|obeys?)\b/i;
+  var COMPEL_TARGET_RE=/(target|creature|enemy|foe|opponent).{0,20}\bmust\b/i;
+  var PRECOG_RE=/\b(future|foresee|precognition|divination|predict|prophes)/i;
+  var PRECOG_RE2=/reveal.{0,30}(hidden|secret|truth)/i;
+
+  function renderGuards(){
+    var g=$('guards');
+    var gain=$('fGain').value, price=$('fPrice').value, penalty=$('fPenalty').value;
+    var html='';
+    var compel=COMPEL_RE.test(gain)||COMPEL_TARGET_RE.test(gain);
+    var precog=PRECOG_RE.test(gain)||PRECOG_RE.test(price)||PRECOG_RE2.test(gain);
+    if(compel){
+      html+='<div class="guard block" id="guardCompel"><h4>⚠ Compulsory effect detected</h4>'
+        +'<p>Your gain compels another creature. Canon (Section III) requires a fair procedure before this vow can be struck — pick one:</p>'
+        +'<label class="check"><input type="checkbox" id="valveSave"> <span>The target gets a <b>saving throw</b> against my CE save DC to resist.</span></label>'
+        +'<label class="check"><input type="checkbox" id="valveDecline"> <span><b>Willing-decline valve:</b> the target may refuse and suffer a stated, bounded consequence instead — <input type="text" id="valveText" maxlength="120" placeholder="e.g. takes 2d8 psychic and the vow ends" style="margin-top:6px"></span></label>'
+        +'<p class="note">No vow removes another creature\'s agency without giving them a roll or a choice. Forging is blocked until one is chosen.</p></div>';
+    }
+    if(precog){
+      html+='<div class="guard block"><h4>⚠ No precognition</h4>'
+        +'<p>Vows cannot extract information the vow-maker could not otherwise know — no futures revealed, no hidden truths read, no divination engine. A vow binds conduct and cost; it is not a window.</p>'
+        +'<label class="check"><input type="checkbox" id="precogAck"> <span>I understand: any divination phrasing will be struck by the GM, and the vow stands or falls without it.</span></label></div>';
+    }
+    if(/permanent/i.test(price)||/permanent/i.test(penalty)){
+      html+='<div class="guard"><h4>Permanent costs</h4><p>Permanent vow costs must be paid with your <b>natural CE or a real permanent sacrifice</b> — temporary CE can never fund one. Make sure the table knows what is permanently gone.</p></div>';
+    }
+    g.innerHTML=html;
+  }
+
+  function guardsPass(){
+    var gain=$('fGain').value;
+    var compel=COMPEL_RE.test(gain)||COMPEL_TARGET_RE.test(gain);
+    if(compel){
+      var s=$('valveSave'), d=$('valveDecline');
+      if(!s||(!s.checked&&!d.checked)){toast('Compulsory vow: choose a save or a willing-decline valve.');return false;}
+      if(d.checked&&!$('valveText').value.trim()){toast('Name the bounded consequence for declining.');return false;}
+    }
+    var precog=PRECOG_RE.test(gain)||PRECOG_RE.test($('fPrice').value)||PRECOG_RE2.test(gain);
+    if(precog){
+      var a=$('precogAck');
+      if(!a||!a.checked){toast('Acknowledge the no-precognition rule to continue.');return false;}
+    }
+    return true;
+  }
+
+  /* ── penalty suggestions ── */
+  var PEN_SUGGESTIONS=[
+    "Lose the vow's benefit permanently for 7 days and suffer 2 levels of exhaustion.",
+    "Take 4d10 psychic damage, no save — Heaven collects immediately.",
+    "Your CE maximum is halved until your next long rest, and the vow cannot be remade for a month."
+  ];
+  function renderPenChips(){
+    var w=$('penChips');w.innerHTML='';
+    PEN_SUGGESTIONS.forEach(function(s){
+      var b=document.createElement('button');
+      b.type='button';b.className='chip-btn';b.textContent='+ '+s;
+      b.addEventListener('click',function(){
+        var t=$('fPenalty');
+        t.value=t.value? (t.value.replace(/\s+$/,'')+' '+s) : s;
+        toast('Penalty steepened.');
+      });
+      w.appendChild(b);
+    });
+  }
+
+  /* ── card output: exact vows.html format ── */
+  var lastForged=null;
+  function buildTerms(){
+    var price=$('fPrice').value.trim(), gain=$('fGain').value.trim(), penalty=$('fPenalty').value.trim();
+    var type=vowType==='restriction'?'Restriction for power':'Power for consequence';
+    var valve='';
+    var s=$('valveSave'), d=$('valveDecline');
+    if(s&&s.checked)valve=' Valve: target saves vs vow-maker\'s CE save DC.';
+    if(d&&d.checked)valve=' Valve: willing decline — '+$('valveText').value.trim()+'.';
+    return '['+type+']'+valve+' GIVES UP: '+price+' — GAINS: '+gain+' — PENALTY: '+penalty;
+  }
+  function renderCard(v){
+    var w=$('forgedCard');
+    w.innerHTML='<section class="vow-card"><div class="vow-head"><div><div class="vow-name">'+esc(v.name)+'</div>'
+      +'<div style="margin-top:6px"><span class="unapproved">UNAPPROVED — REQUIRES GM APPROVAL</span></div></div>'
+      +'<span class="tag">INACTIVE</span></div>'
+      +'<p class="vow-terms">'+esc(v.terms)+'</p></section>';
+  }
+  function forge(){
+    var name=$('fName').value.trim();
+    if(!name){toast('Give the vow a name.');goStep(1);return;}
+    if(!$('fPrice').value.trim()){toast('State the price.');goStep(1);return;}
+    if(!$('fGain').value.trim()){toast('Name the gain.');goStep(2);return;}
+    if(!$('fPenalty').value.trim()){toast('Set the penalty — breaking always costs more than keeping.');goStep(3);return;}
+    if(detectFake($('fPrice').value)){toast('Heaven rejects a price with an escape hatch.');goStep(1);return;}
+    if(!guardsPass())return;
+    lastForged={id:uid(),name:name,terms:buildTerms(),active:false,custom:true,approved:false,
+      forged:{type:vowType,price:$('fPrice').value.trim(),gain:$('fGain').value.trim(),penalty:$('fPenalty').value.trim()}};
+    renderCard(lastForged);
+    $('cardOut').hidden=false;
+    $('cardOut').scrollIntoView({behavior:'smooth',block:'start'});
+    toast('Vow forged — Heaven has witnessed it.');
+  }
+
+  /* ── templates ── */
+  function renderTemplates(){
+    var g=$('tplGrid');g.innerHTML='';
+    TEMPLATES.forEach(function(t,i){
+      var b=document.createElement('button');
+      b.type='button';b.className='tpl-card';
+      b.innerHTML='<h4>'+esc(t.name)+'</h4><p>'+esc(t.blurb)+'</p>';
+      b.addEventListener('click',function(){loadTemplate(i);});
+      g.appendChild(b);
+    });
+  }
+  function loadTemplate(i){
+    var t=TEMPLATES[i];
+    $('fName').value=t.name;
+    setType(t.type);
+    $('fPrice').value=t.price;
+    $('fGain').value=t.gain;
+    $('fPenalty').value=t.penalty;
+    updateScale();
+    goStep(1);
+    toast('Template loaded — make it yours.');
+  }
+
+  /* ── init ── */
+  function initChars(){
+    var sel=$('charSel');
+    var chars=loadChars();
+    sel.innerHTML='';
+    chars.forEach(function(c){
+      var o=document.createElement('option');
+      o.value=c.id;o.textContent=c.name||'(unnamed)';
+      sel.appendChild(o);
+    });
+    var saved=readRaw(ACTIVE_KEY);
+    var found=chars.some(function(c){return c.id===saved;});
+    if(found)sel.value=saved;
+    else if(chars.length)sel.selectedIndex=0;
+    charId=chars.length?(sel.value||chars[0].id):null;
+    $('charEmpty').hidden=chars.length>0;
+    $('app').hidden=chars.length===0;
+    sel.disabled=chars.length===0;
+  }
+
+  $('charSel').addEventListener('change',function(){
+    charId=this.value||null;storeRaw(ACTIVE_KEY,charId||'');
+  });
+  $('typeRestrict').addEventListener('click',function(){setType('restriction');});
+  $('typeConseq').addEventListener('click',function(){setType('consequence');});
+  $('typeRestrict').addEventListener('keydown',function(e){if(e.key===' '||e.key==='Enter'){e.preventDefault();setType('restriction');}});
+  $('typeConseq').addEventListener('keydown',function(e){if(e.key===' '||e.key==='Enter'){e.preventDefault();setType('consequence');}});
+  $('toStep2').addEventListener('click',function(){
+    if(!$('fName').value.trim()){toast('Give the vow a name.');return;}
+    if(!$('fPrice').value.trim()){toast('State the price first.');return;}
+    if(detectFake($('fPrice').value)){toast('Heaven rejects a price with an escape hatch.');return;}
+    goStep(2);
+  });
+  $('backTo1').addEventListener('click',function(){goStep(1);});
+  $('toStep3').addEventListener('click',function(){
+    if(!$('fGain').value.trim()){toast('Name the gain.');return;}
+    goStep(3);
+  });
+  $('backTo2').addEventListener('click',function(){goStep(2);});
+  $('forgeBtn').addEventListener('click',forge);
+  $('fPrice').addEventListener('input',updateScale);
+  $('fGain').addEventListener('input',updateScale);
+  $('forgeAnother').addEventListener('click',function(){
+    $('fName').value='';$('fPrice').value='';$('fGain').value='';$('fPenalty').value='';
+    setType('restriction');lastForged=null;
+    $('cardOut').hidden=true;updateScale();goStep(1);
+  });
+  $('saveCharBtn').addEventListener('click',function(){
+    if(!lastForged||!charId){toast('Nothing to save.');return;}
+    var d=loadVows();
+    d.vows.push(lastForged);
+    saveVows(d);
+    toast('Saved to character — unapproved until your GM approves it.');
+  });
+  document.querySelectorAll('.step-pill').forEach(function(p){
+    p.addEventListener('click',function(){
+      var n=Number(p.getAttribute('data-s'));
+      if(n<step)goStep(n);
+    });
+  });
+
+  renderTemplates();
+  renderPenChips();
+  initChars();
+  goStep(1);
+})();
+</script>
+<script>(function(){var t=document.querySelector('.topbar');var b=document.querySelector('.nav-toggle');if(!t||!b)return;function set(o){t.classList.toggle('nav-open',o);b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'\u2715':'\u2630';}b.addEventListener('click',function(){set(!t.classList.contains('nav-open'));});})();</script>
+
+</body>
+</html>
