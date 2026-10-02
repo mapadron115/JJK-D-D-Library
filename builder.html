@@ -564,6 +564,7 @@ img{max-width:100%;height:auto}
 <script src="data/backgrounds.js?v=20260913a"></script>
 <script src="data/mindsets.js?v=20260913a"></script>
 <script src="data/general_feats.js?v=20260917a"></script>
+<script src="data/manuscripts.js?v=20261002a"></script>
 <script>
 /* ════════════════════════════════════════════════════════════════
    Ritual Archive — Character Builder (IL-RA-02)
@@ -1049,6 +1050,7 @@ function blankChar(){
     background:'', backgroundFeat:'', backgroundTool:'', backgroundEquipment:[],
     mindset:'',
     feats:[], tools:[], notes:'', ceBonus:0,
+    manuscripts:[], // CE Applications studied: ['manuscript-spinjitzu', ...] — learned, not techniques
     classSkills:{}, // class skill proficiencies: {ClassName:[skill, skill]} — picked in Step 7
     expertise:[],   // skills with expertise (double PB): Tailored Appearance, Skill Expert
     featSkills:{},  // per-feat skill picks: {key:{feat:'Skill Expert'|'Skilled', prof:..., expertise:...}}
@@ -1889,6 +1891,7 @@ function migrateChar(c){
   if(!Array.isArray(c.equipment)) c.equipment=[];
   if(!Array.isArray(c.cursedTools)) c.cursedTools=[];
   if(!Array.isArray(c.trackers)) c.trackers=[];
+  if(!Array.isArray(c.manuscripts)) c.manuscripts=[];
   if(!c.breakthroughs||typeof c.breakthroughs!=='object') c.breakthroughs={};
     if(typeof c.breakthroughs.flashes!=='number') c.breakthroughs.flashes=0;
     if(typeof c.breakthroughs.awakenings!=='number') c.breakthroughs.awakenings=0;
@@ -3739,6 +3742,62 @@ function roleBuckets(role){
   return out;
 }
 var GROUP_ORDER=['Anime & Manga','Video Games','Magic: The Gathering','Marvel','DC','Ben 10','Jujutsu Kaisen','Original Codex','SCP Anomalies','Bestiary \u2014 Cryptids','Bestiary \u2014 Mythology','Cursed Tool Arsenal','Applied Systems'];
+/* ── CE Applications: Manuscripts Studied ──────────────────────────
+   Manuscripts teach learnable CE applications — not techniques (no L1–L20,
+   outside the 2-technique limit). Study gates: CE Manipulation tier +
+   character level (downtime is an honor rule at the table). */
+function manuscriptById(id){
+  var arr=window.MANUSCRIPTS||[];
+  for(var i=0;i<arr.length;i++) if(arr[i].id===id) return arr[i];
+  return null;
+}
+function manuscriptMeets(m){
+  if(!hasCEPool()) return {ok:false, why:'No CE pool'};
+  var tier=ceManipTier(), lvl=char.level||1;
+  if(tier < m.study.ceTier) return {ok:false, why:'Needs CE Manipulation ('+m.study.ceTierName+')'};
+  if(lvl < m.study.level) return {ok:false, why:'Needs character level '+m.study.level};
+  return {ok:true, why:''};
+}
+function manuscriptSectionHTML(){
+  var arr=window.MANUSCRIPTS||[];
+  if(!arr.length) return '';
+  var cards=arr.map(function(m){
+    var studied=(char.manuscripts||[]).indexOf(m.id)>=0;
+    var gate=manuscriptMeets(m);
+    var status=studied
+      ? '<span class="chip solid">✓ Studied</span>'
+      : (gate.ok ? '<span class="chip">Eligible — study available</span>'
+                 : '<span class="chip plain">🔒 '+esc(gate.why)+'</span>');
+    return '<div class="tech-card"><div class="tech-head"><div>'+
+      '<span class="t-figure">❖ Manuscript · '+esc(m.author)+'</span>'+
+      '<span class="t-name">'+esc(m.title)+'</span>'+
+      '<span class="t-concept">Teaches <b>'+esc(m.application.name)+'</b> — '+esc(m.application.costLine)+'</span>'+
+      '<div class="chips">'+status+
+      '<span class="chip plain">'+esc(m.study.ceTierName)+' · Lv '+m.study.level+'+</span></div>'+
+      '<p class="small">'+esc(m.summary)+'</p>'+
+      '<p class="small"><a href="'+esc(m.dossier)+'" target="_blank" rel="noopener">Read the treatise →</a> <span class="small">(study: 30 days + INT vs DC 15 — downtime is an honor rule)</span></p>'+
+      '<div class="tech-actions"><label class="grant-toggle" style="min-height:44px;display:inline-flex;align-items:center;gap:8px">'+
+      '<input type="checkbox" data-manuscript="'+esc(m.id)+'"'+(studied?' checked':'')+(gate.ok||studied?'':' disabled')+' style="width:22px;height:22px"> '+
+      (studied?'✓ Studied — click to remove':'Mark as studied')+'</label></div>'+
+      '</div></div></div>';
+  }).join('');
+  return '<h2 style="margin-top:28px">CE Applications — Manuscripts</h2>'+
+    '<p class="small">Learnable applications of cursed energy, taught by manuscript. <b>Not techniques</b> — they never count against the two-technique limit and have no level progression. Study the text, meet the requirements, mark it studied; the application lands on your sheet\'s quick reference.</p>'+
+    '<div id="manuscriptResults">'+cards+'</div>';
+}
+function bindManuscriptSection(body){
+  var boxes=body.querySelectorAll('[data-manuscript]');
+  boxes.forEach(function(box){
+    box.addEventListener('change',function(){
+      var id=box.getAttribute('data-manuscript');
+      char.manuscripts=char.manuscripts||[];
+      var i=char.manuscripts.indexOf(id);
+      if(box.checked && i<0) char.manuscripts.push(id);
+      if(!box.checked && i>=0) char.manuscripts.splice(i,1);
+      upsertChar(char);
+    });
+  });
+}
 function stepTechnique(body){
   var html='<h2>Step 5 — Techniques</h2>';
   if(!hasCEPool()){
@@ -3796,7 +3855,9 @@ function stepTechnique(body){
     '<div class="field"><label>&nbsp;</label><button class="btn btn-small btn-ghost" id="tClear" type="button">Clear</button></div>'+
     '</div><div class="resultline"><span id="techResultCount"></span><span class="hint">Inspect any entry to see what is active at level 1 vs. what unlocks later.</span></div></div>';
   html+='<div id="techResults"></div>';
+  html+=manuscriptSectionHTML();
   body.innerHTML=html;
+  bindManuscriptSection(body);
   var tq=$('tq');
   tq.addEventListener('input',function(){ techQ=tq.value; renderTechResults(); });
   $('tg').addEventListener('change',function(e){ techGroup=e.target.value; renderTechResults(); });
@@ -4658,6 +4719,18 @@ function qrCollect(){
     if(t>=2) B.passive.push({name:'Efficiency',src:'CE Manipulation',cost:'',one:'Technique base CE costs reduced by '+(t-1)+' (min 1).'});
     if(btData().awakenings>0)
       add('bonus','RCT Healing','CE Manipulation','Bonus action','Spend up to '+Math.max(cm,1)+' CE → heal 10 HP per CE from your RCT pool.');
+  }
+
+  /* — Manuscripts studied (CE Applications — learned, not techniques) — */
+  if(hasCEPool()){
+    (char.manuscripts||[]).forEach(function(mid){
+      var m=manuscriptById(mid); if(!m) return;
+      var app=m.application, fixed=qrFixedCE(app.costLine);
+      var adv=(m.advanced||[]).map(function(a){ return a.name+': '+a.text; }).join(' ');
+      add(qrBucket(app.costLine), app.name, 'Manuscript · '+m.title, app.costLine,
+          app.text+(adv?' Advanced: '+adv:''),
+          fixed!=null?{ce:fixed,tech:1}:null);
+    });
   }
 
   /* — standard combat options every character has — */
