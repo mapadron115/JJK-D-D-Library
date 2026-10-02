@@ -45,12 +45,27 @@ def extract_one(path):
     for b in re.findall(r'<details class="level"[^>]*>(.*?)</details>', sec, re.S):
         sm = re.search(r'<span class="lv">([^<]*)</span>', b)
         tm = re.search(r'<span class="lv-title">(.*?)</span>', b, re.S)
-        rm = re.search(r'<p class="rules-line">(.*?)</p>', b, re.S)
-        if not rm:
-            pm = re.search(r'<p>(.*?)</p>', b, re.S)
-            rules = clean_text(pm.group(1)) if pm else ''
+        # collect ALL rules-lines in the block (multi-feature L1 blocks like
+        # e151/e152/e162 carry several cards); join with ' · '
+        rls = [clean_text(x) for x in re.findall(r'<p class="rules-line">(.*?)</p>', b, re.S)]
+        rls = [x for x in rls if x]
+        if rls:
+            rules = ' · '.join(rls)
         else:
-            rules = clean_text(rm.group(1))
+            # no rules-lines: gather card h3 + first-p pairs (e151/e152/e162 style)
+            cards = []
+            for c in re.findall(r'<article class="card">(.*?)</article>', b, re.S):
+                hm = re.search(r'<h3>(.*?)</h3>', c, re.S)
+                pm = re.search(r'<p>(.*?)</p>', c, re.S)
+                htxt = clean_text(hm.group(1)) if hm else ''
+                ptxt = clean_text(pm.group(1)) if pm else ''
+                if htxt or ptxt:
+                    cards.append((htxt + ': ' + ptxt).strip(': '))
+            if cards:
+                rules = ' · '.join(cards)
+            else:
+                pm = re.search(r'<p>(.*?)</p>', b, re.S)
+                rules = clean_text(pm.group(1)) if pm else ''
         lv = parse_level(sm.group(1)) if sm else None
         title = clean_title(tm.group(1)) if tm else ''
         if lv is None:
@@ -68,6 +83,11 @@ def extract_one(path):
         lv = parse_level(tagm.group(1)) if tagm else 0
         if lv is None:
             lv = 0  # "Base", "Form", "Activation" — unleveled features
+        if lv == 0:
+            # feat-style cards gated by level ("Prerequisite: level 6") get real levels
+            pm2 = re.search(r'[Pp]rerequisite:\s*level\s*(\d+)', (tm.group(1) if tm else ''))
+            if pm2:
+                lv = int(pm2.group(1))
         rm = re.search(r'<p class="rules-line">(.*?)</p>', c, re.S)
         if not rm:
             pm = re.search(r'<p>(.*?)</p>', c, re.S)
