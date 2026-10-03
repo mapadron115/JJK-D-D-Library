@@ -124,8 +124,8 @@ function haystack(t) {
 function matches(t, st) {
   if (st.tab !== 'tech') return false;
   if (st.origin === 'originals') return false;
-  /* Figures carry no collection — any active collection filter excludes them. */
-  if (st.collection) return false;
+  /* Figures match a collection filter through their named module (e.g. DreamWorks). */
+  if (st.collection && (t.module || '') !== st.collection) return false;
   if (st.tier && (t.tier || '') !== st.tier) return false;
   if (st.role && roleBuckets(t.role).indexOf(st.role) < 0) return false;
   if (st.region && (t.region || '') !== st.region) return false;
@@ -494,7 +494,12 @@ if (typeof document !== 'undefined') {
 
     // stat strip — tools are gear, not techniques (see the page lede), so the
     // "original techniques" stat counts technique entries only, not tools.
-    var collections = uniqSorted(LIBS.map(function (e) { return e.collection; }));
+    var collections = uniqSorted(LIBS.map(function (e) { return e.collection; }).concat(
+      TECHS.map(function (t) { return t.module; }).filter(function (m) {
+        /* figure modules: only named collections (e.g. DreamWorks), not lore-module numbers */
+        return m && isNaN(+m);
+      })
+    ));
     document.getElementById('statTotal').textContent = TECHS.length + N_TECH_LIBS;
     document.getElementById('statFigures').textContent = TECHS.length;
     document.getElementById('statOriginals').textContent = N_TECH_LIBS;
