@@ -240,7 +240,7 @@ window.CODEX_FEATS = {
   },
   {
    "name": "The Bride Names Her Champion",
-   "prereq": "Prerequisite: Domain Expansion: The Wedding at Corinth",
+   "prereq": "Prerequisite: The Wedding at Corinth",
    "text": "At a wedding, the bride may give away the first dance. When you cast Domain Expansion: The Wedding at Corinth, you may name one willing ally: for the duration, the trigger list's exception reads 'any hostile action other than directly engaging [that ally]' instead of 'directly engaging Medea'. The hall's attention turns where she points it - face her champion, or face the curse."
   }
  ],
@@ -296,7 +296,7 @@ window.CODEX_FEATS = {
   },
   {
    "name": "Open Veins",
-   "prereq": "Prerequisite: Drink Deep & Crimson Vintage",
+   "prereq": "Prerequisite: Drink Deep",
    "text": "Your Crimson Vintages are open veins. When you use Drink Deep, you may spend 1 Year Drunk to drink from a wound you did not make: choose one living creature within 60 ft of you that dealt damage with a weapon or unarmed attack this turn - you gain temporary hit points equal to the damage it dealt (before First Sip\'s healing), instead of drinking only from your own strikes. Still once per round. The vintage is shared, not wasted."
   },
   {
@@ -372,7 +372,7 @@ window.CODEX_FEATS = {
   },
   {
    "name": "Speak Through the Flood",
-   "prereq": "Prerequisite: The Flood Remembers (Maximum)",
+   "prereq": "Prerequisite: The Flood Remembers",
    "text": "While your Maximum's flood is active, you can speak through the roar: your voice emanates from any point in the flood, and Come to the Water can originate from that point."
   }
  ],
@@ -394,7 +394,7 @@ window.CODEX_FEATS = {
   },
   {
    "name": "The City Is the Audience",
-   "prereq": "Prerequisite: The Eternal City Aflame (Maximum)",
+   "prereq": "Prerequisite: The Eternal City Aflame",
    "text": "While your Maximum's burning zone is active, you may conduct your Dirge through the zone itself: hostile creatures inside the zone count as being in your Audience regardless of range or hearing — the city listens."
   }
  ],
@@ -1181,7 +1181,7 @@ window.CODEX_FEATS = {
   },
   {
    "name": "The Question Under Heaven",
-   "prereq": "Prerequisite: Maximum: The First Word and the Last",
+   "prereq": "Prerequisite: The First Word and the Last",
    "text": "While your Maximum endures, no creature within 120 ft of you can speak falsely about a vow, bargain, or binding — and you may put that truth to work. As an action, pose one question about a vow, bargain, or binding to a creature within 120 ft: it must answer truthfully unless it succeeds on a Charisma saving throw against your technique DC. It may choose silence — the Maximum forbids falsehood, not quiet — but what it says of bargains will be true."
   },
   {
@@ -1384,7 +1384,7 @@ window.CODEX_FEATS = {
   },
   {
    "name": "The Table Polices Itself",
-   "prereq": "Prerequisite: Domain Expansion: THE CONGRESS OF MATAMBA (full-turn action, 20 CE)",
+   "prereq": "Prerequisite: THE CONGRESS OF MATAMBA",
    "text": "While the Domain stands, the Congress needs no chair to defend it. When a signatory would break the Congress Truce, another signatory within 30 ft of the breaker may use its reaction to interpose: the breaker must succeed on a WIS save against your technique DC or the breaking attack fails outright. No CE cost to you. Once per round."
   }
  ],
@@ -1401,12 +1401,12 @@ window.CODEX_FEATS = {
   },
   {
    "name": "The Fire Runs Door to Door",
-   "prereq": "Prerequisite: Maximum: THE BURNING (action, 10 CE, once per long rest)",
+   "prereq": "Prerequisite: THE BURNING",
    "text": "During THE BURNING, when you use The Opened Door on a willing creature, the fire follows the shape of the chain: you may also unwrite the same binding — the same effect from the same originator — on one additional willing creature within 60 ft of the first, as part of the same action."
   },
   {
    "name": "The Door Comes Knocking",
-   "prereq": "Prerequisite: Domain Expansion: THE SAINT'S POSSESSION (full-turn action, 20 CE)",
+   "prereq": "Prerequisite: THE SAINT'S POSSESSION",
    "text": "While the Domain stands, you need not wait for the bound to come to the door. As a bonus action, you may name a binding you have witnessed: one enemy within 60 ft bearing it must immediately choose — as a free action — whether to be released from it or keep it. The choice is always free; declining costs nothing. Once per round."
   }
  ],
@@ -1489,12 +1489,12 @@ window.CODEX_FEATS = {
   },
   {
    "name": "The Famine Eats Iron Too",
-   "prereq": "Prerequisite: Maximum: WINTER'S MOTHER (action, 10 CE, once per long rest)",
+   "prereq": "Prerequisite: Maximum: WINTER'S MOTHER",
    "text": "While Maximum: WINTER'S MOTHER is active, hunger takes more than courage. When a creature kneels and drops its weapons (the famine's willing-decline), you may sweep the dropped objects into the basket with no action required: they are Devoured - unreachable by any means while you live. A kneeling creature that stands finds its hands empty."
   },
   {
    "name": "The Basket Calls Loudest",
-   "prereq": "Prerequisite: HU-HU-HU — THE BASKET OF THE WILD WOMAN (action, 20 CE)",
+   "prereq": "Prerequisite: HU-HU-HU — THE BASKET OF THE WILD WOMAN",
    "text": "When the Domain's sure-hit pulls a hostile creature to within 15 ft of you, you may have the forest hold it gently instead of striking it: that creature takes no bludgeoning damage from the sure-hit this round, and must succeed on a STR save vs your technique DC or be grappled (escape DC = your technique DC) - within reach of Into the Basket on your next turn."
   }
  ],
