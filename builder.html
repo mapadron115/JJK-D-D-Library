@@ -1766,6 +1766,10 @@ function ancestryToolProfs(){
   var out=[], p=char.ancestryPicks||{};
   if(char.ancestry==='sumerian'&&char.heritage==='deskunte') out.push('Light armor','Medium armor (Warrior Training)');
   if(p.shaamaTool) out.push(p.shaamaTool+' (Shaama)');
+  if(char.ancestry==='cursed-vessel'&&char.heritage==='reincarnated'&&p.reincarnatedTool){
+    var _rrs=(p.reincarnatedSkills||[]).filter(Boolean);
+    if(_rrs.length===1) out.push(p.reincarnatedTool+' (Life Experience)');
+  }
   return out;
 }
 /* walking speed: ancestry base + heritage overrides + class bonuses.
@@ -2321,6 +2325,9 @@ function renderHeritages(){
       var _rp=char.ancestryPicks||{};
       var _rsk=[_rp.reincarnatedSkills&&_rp.reincarnatedSkills[0]||'', _rp.reincarnatedSkills&&_rp.reincarnatedSkills[1]||''];
       var _rtool=_rp.reincarnatedTool||'';
+      /* two skills XOR (one skill + tool): enforce mutual exclusion */
+      var _twoPicked=!!(_rsk[0]&&_rsk[1]);
+      if(_twoPicked&&_rtool){ _rtool=''; char.ancestryPicks.reincarnatedTool=''; }
       var rSkOpts=function(cur,other){
         return '<option value="">\u2014 choose \u2014</option>'+SKILL_LIST.map(function(s){
           var dis=(s===other);
@@ -2331,12 +2338,12 @@ function renderHeritages(){
         '<p class="small">Gain proficiency in <b>two skills</b>, or <b>one skill and one tool</b>, of your choice.</p>'+
         '<div class="grid2"><div class="field"><label for="reincSk0"><b>Skill proficiency</b> (1 of 2)</label><select id="reincSk0">'+rSkOpts(_rsk[0],_rsk[1])+'</select></div>'+
         '<div class="field"><label for="reincSk1"><b>Skill proficiency</b> (2 of 2, or skip for a tool)</label><select id="reincSk1">'+rSkOpts(_rsk[1],_rsk[0])+'</select></div></div>'+
-        '<div class="field" style="max-width:320px"><label for="reincTool"><b>Artisan\u2019s tool proficiency</b> (instead of the second skill)</label><select id="reincTool"><option value="">\u2014 choose \u2014</option>'+
+        '<div class="field" style="max-width:320px"><label for="reincTool"><b>Artisan\u2019s tool proficiency</b> (instead of the second skill)</label><select id="reincTool"'+(_twoPicked?' disabled':'')+'><option value="">\u2014 choose \u2014</option>'+
         ARTISAN_TOOLS.map(function(t){ return '<option'+(_rtool===t?' selected':'')+'>'+t+'</option>'; }).join('')+'</select></div></div>';
       var _rbind=function(id,fn){ var el=$(id); if(el) el.addEventListener('change',fn); };
-      var _rskFn=function(){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.reincarnatedSkills=[$('reincSk0').value,$('reincSk1').value]; renderStep(); };
+      var _rskFn=function(){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.reincarnatedSkills=[$('reincSk0').value,$('reincSk1').value]; var _skc=char.ancestryPicks.reincarnatedSkills.filter(Boolean); if(_skc.length===2) char.ancestryPicks.reincarnatedTool=''; renderStep(); };
       _rbind('reincSk0',_rskFn); _rbind('reincSk1',_rskFn);
-      _rbind('reincTool',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.reincarnatedTool=e.target.value; refreshNav(); });
+      _rbind('reincTool',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.reincarnatedTool=e.target.value; if(e.target.value){ var _sk=(char.ancestryPicks.reincarnatedSkills||[]); char.ancestryPicks.reincarnatedSkills=[_sk[0]||'','']; } renderStep(); });
       /* Reincarnated build options (V6): Option 1 You are the Vessel / Option 2 You are the Reincarnated — GM-leaning */
       (function(){
         var _opt=((char.ancestryPicks||{}).reincarnatedOption)||'';
