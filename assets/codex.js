@@ -153,6 +153,8 @@ function matchesLib(e, st) {
      Bestiary tab shows no library entries at all. */
   if (st.tab !== 'tech' && st.tab !== 'tools') return false;
   if (st.tab === 'tools' ? !isToolEntry(e) : isToolEntry(e)) return false;
+  /* Cursed spirits live on the Bestiary tab, never the technique/tool tabs. */
+  if ((e.kind || '') === 'Cursed Spirit') return false;
   if (st.origin === 'figures') return false;
   /* Figure-only filters (region, culture, record type): original techniques
      carry none of that data, so any active figure-only filter excludes them —
