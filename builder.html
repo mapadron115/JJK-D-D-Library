@@ -2307,11 +2307,11 @@ function renderHeritages(){
         '<button type="button" class="seg-btn'+(_cast==='WIS'?' is-active':'')+'" data-ca="WIS">Wisdom</button>'+
         '<button type="button" class="seg-btn'+(_cast==='CHA'?' is-active':'')+'" data-ca="CHA">Charisma</button></span></div></div></div>';
       var _bind=function(id,fn){ var el=$(id); if(el) el.addEventListener('change',fn); };
-      _bind('shmCantrip',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaCantrip=e.target.value; });
-      var _gm=$('shmGM'); if(_gm) _gm.addEventListener('change',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaCantripGM=e.target.checked; });
+      _bind('shmCantrip',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaCantrip=e.target.value; refreshNav(); });
+      var _gm=$('shmGM'); if(_gm) _gm.addEventListener('change',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaCantripGM=e.target.checked; refreshNav(); });
       var _skFn=function(){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaSkills=[$('shmSk0').value,$('shmSk1').value]; renderStep(); };
       _bind('shmSk0',_skFn); _bind('shmSk1',_skFn);
-      _bind('shmTool',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaTool=e.target.value; });
+      _bind('shmTool',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaTool=e.target.value; refreshNav(); });
       d.querySelectorAll('#shmCastSeg .seg-btn').forEach(function(b){
         b.addEventListener('click',function(){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.shaamaCast=b.getAttribute('data-ca'); renderStep(); });
       });
@@ -2336,7 +2336,7 @@ function renderHeritages(){
       var _rbind=function(id,fn){ var el=$(id); if(el) el.addEventListener('change',fn); };
       var _rskFn=function(){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.reincarnatedSkills=[$('reincSk0').value,$('reincSk1').value]; renderStep(); };
       _rbind('reincSk0',_rskFn); _rbind('reincSk1',_rskFn);
-      _rbind('reincTool',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.reincarnatedTool=e.target.value; });
+      _rbind('reincTool',function(e){ char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks.reincarnatedTool=e.target.value; refreshNav(); });
       /* Reincarnated build options (V6): Option 1 You are the Vessel / Option 2 You are the Reincarnated — GM-leaning */
       (function(){
         var _opt=((char.ancestryPicks||{}).reincarnatedOption)||'';
