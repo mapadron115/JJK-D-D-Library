@@ -20,6 +20,11 @@ for a transformative, non-commercial fan project.
 
 | File | Source PDF | Depicts | Intended use |
 |---|---|---|---|
+| a-dc-atlantean.jpg | e537 | © DC Comics (Ivan Reis cover) — via https://www.comicbookrevolution.com/10-biggest-takeaways-from-dc-comics-october-2023-solicitations/aquaman-and-the-lost-kingdom-special-1-ivan-reis-cover/ — personal non-commercial fan use | https://www.comicbookrevolution.com/10-biggest-takeaways-from-dc-comics-october-2023-solicitations/aquaman-and-the-lost-kingdom-special-1-ivan-reis-cover/ |
+| a-dc-raven.jpg | e540 | © DC Comics (official press image) — via https://www.meganerd.it/tales-of-the-titans-la-serie-con-i-segreti-del-gruppo/ — personal non-commercial fan use | https://www.meganerd.it/tales-of-the-titans-la-serie-con-i-segreti-del-gruppo/ |
+| a-dc-shazam.jpg | e538 | © DC Comics (variant cover) — via https://www.cbr.com/dc-comics-solicitations-april-2020 — personal non-commercial fan use | https://www.cbr.com/dc-comics-solicitations-april-2020 |
+| a-dc-zatanna.jpg | e539 | © DC Comics — via https://movieweb.com/thread/where-is-shrek-5/ — personal non-commercial fan use | https://movieweb.com/thread/where-is-shrek-5/ |
+| a-orig-fiftytwo.jpg | e541 | © Enoch Lau, CC BY-SA 3.0 — via https://commons.wikimedia.org/wiki/File:Ace_playing_cards.jpg — personal non-commercial fan use | https://commons.wikimedia.org/wiki/File:Ace_playing_cards.jpg |
 | hero-curse-hallway.jpg | JJK 5e V.6 | Dark hallway, looming cursed presence | hero banner |
 | hero-talisman-wall.jpg | JJK 5e V.6 | Wall of golden ofuda talismans (color) | hero banner |
 | hero-pagoda-battle.jpg | JJK 5e V.6 | Battle erupting before a temple gate | hero banner |
