@@ -25,6 +25,7 @@ for a transformative, non-commercial fan project.
 | a-dc-shazam.jpg | e538 | © DC Comics (variant cover) — via https://www.cbr.com/dc-comics-solicitations-april-2020 — personal non-commercial fan use | https://www.cbr.com/dc-comics-solicitations-april-2020 |
 | a-dc-zatanna.jpg | e539 | © DC Comics — via https://movieweb.com/thread/where-is-shrek-5/ — personal non-commercial fan use | https://movieweb.com/thread/where-is-shrek-5/ |
 | a-orig-fiftytwo.jpg | e541 | © Enoch Lau, CC BY-SA 3.0 — via https://commons.wikimedia.org/wiki/File:Ace_playing_cards.jpg — personal non-commercial fan use | https://commons.wikimedia.org/wiki/File:Ace_playing_cards.jpg |
+| a-orig-resonance.jpg | e542 | Chladni plate cymatics photograph (colored sand) — via https://nervoussquirrel.com/chladni_plates.html — personal non-commercial fan use | https://nervoussquirrel.com/chladni_plates.html |
 | hero-curse-hallway.jpg | JJK 5e V.6 | Dark hallway, looming cursed presence | hero banner |
 | hero-talisman-wall.jpg | JJK 5e V.6 | Wall of golden ofuda talismans (color) | hero banner |
 | hero-pagoda-battle.jpg | JJK 5e V.6 | Battle erupting before a temple gate | hero banner |
@@ -389,3 +390,4 @@ for a transformative, non-commercial fan project.
 | a-scp-294.jpg | e530 | espresso machine photograph, Black! Magazine — via https://blackmagazine.com.mx/del-grano-a-la-taza-la-experiencia-cultural-del-cafe/ — personal non-commercial fan use | https://blackmagazine.com.mx/del-grano-a-la-taza-la-experiencia-cultural-del-cafe/ |
 | a-scp-087.jpg | e531 | dark basement stairwell photograph — via https://www.rayzeek.com/blog/basement-stair-lighting-safety — personal non-commercial fan use | https://www.rayzeek.com/blog/basement-stair-lighting-safety |
 | a-scp-012.jpg | e532 | SCP Wiki contributors — CC BY-SA 3.0 — SCP-012 article image, mirrored on thecodex.wiki — via https://featteca.thecodex.wiki/images_featteca/1/1a/SCP-012.png — personal non-commercial fan use | https://featteca.thecodex.wiki/images_featteca/1/1a/SCP-012.png |
+| a-orig-superposition.png | e543 | Dhatfield — CC BY-SA 3.0 — Schrödinger's cat illustration — via https://commons.wikimedia.org/wiki/File:Schrodingers_cat.svg — personal non-commercial fan use | https://commons.wikimedia.org/wiki/File:Schrodingers_cat.svg |
