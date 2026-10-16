@@ -5064,7 +5064,7 @@ function quickRefHTML(){
    Persisted per character in localStorage; hidden on print. */
 function trackerKey(){ return 'ra_trackers_'+(char.id||'noid'); }
 function trackerState(){
-  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null };
+  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null, siphon:{counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false} };
   try{
     var raw=localStorage.getItem(trackerKey());
     if(raw) d=Object.assign(d, JSON.parse(raw));
@@ -5184,6 +5184,10 @@ function trackerHTML(hpMaxV, ceMaxV){
       '<div class="tracker-controls"><input id="trkCeAmt" type="number" min="1" value="1" aria-label="Cursed energy amount" style="width:64px">'+
       '<button type="button" class="btn" id="trkCeSpend">Spend</button><button type="button" class="btn" id="trkCeRecover">Recover</button></div></div>';
   }
+  /* Siphon tracker (e036) */
+  if(hasSiphon()){
+    html+='<div class="tracker-card"><div id="trkSiphonBody">'+siphonCardHTML(st)+'</div></div>';
+  }
   /* custom use-trackers */
   html+='<div class="tracker-card"><div class="tracker-title"><span>Limited Uses</span><span>Mark when expended</span></div>'+
     '<div id="trkUses">'+trackerUsesHTML(st)+'</div>'+
@@ -5218,6 +5222,94 @@ function trackerUsesHTML(st){
       '<span class="use-pips">'+boxes+'</span>'+
       '<button type="button" class="btn use-rm" data-trk-rm="'+t.id+'" style="padding:2px 8px;font-size:.75rem">✕</button></div>';
   }).join('');
+}
+/* ── Siphon tracker (e036) ──
+   Counter + Temp CE pool + Colosseum Pool + Momentum + Spoil roller.
+   State lives in the tracker state (localStorage, per character). */
+var SIPHON_SPOILS=[
+ {n:'Gladius of the First Cut',t:'Shortsword (1d6 piercing, finesse, light). Once/turn, hit at full HP/Gladiator HP: +1d6. Hit counts as 2 Siphon hits.'},
+ {n:'Scutum of the Dead Legion',t:'Shield (+2 AC). Reaction when hit: reduce damage by PB; inside Domain, +1 CE to Pool.'},
+ {n:'Pilum of the Pinned Offering',t:'Javelin (1d6 piercing, thrown 30/120). Hit: speed −10 ft until your next turn. Inside Domain: target loses 1 Gladiator HP at start of its turn.'},
+ {n:'Net and Trident of the Retiarius',t:'Net + trident (1d6 piercing, thrown 20/60, versatile 1d8; net restrains). Trident hit: STR save or restrained until end of your next turn. Restrained target hit by you loses 1 CE.'},
+ {n:'Cestus of the Pit Fighter',t:'Worn hand-wraps (unarmed base). Unarmed strikes count as cursed tools, +1d4. All-unarmed chain: drain +1 CE.'},
+ {n:'Sica of the Shieldbreaker',t:'Dagger (1d4 piercing, finesse, light, thrown 20/60). Ignore up to 2 AC from shield/cover. Hit: target cannot react until its next turn.'},
+ {n:"Executioner's Axe of the Final Roar",t:'Greataxe (1d12 slashing, heavy, two-handed). Reduce HP/Gladiator HP to 0: gain Temp HP = PB + STR. Inside Domain: +2 CE to Pool.'},
+ {n:"Champion's Spear",t:'Spear (1d6 piercing, versatile 1d8, thrown 20/60) with reach (10 ft). Once/round when a creature enters reach: opportunity attack without reaction. Hit advances Siphon.'},
+ {n:'Murmillo Armor Fragment',t:'Resist first B/P/S instance each round. Inside Domain, preventing damage adds 1 CE to Pool.'},
+ {n:'Laurel of the Victor',t:'Advantage on Intimidation and fear saves. Once/duration, chosen enemies in Domain make WIS save or lose 2 Gladiator HP.'},
+ {n:'Lion Shikigami (Arena Beast)',t:'Pouncer: knocks prone, advances Siphon, frightens, intercepts attacks.'},
+ {n:'Bull Shikigami (Arena Beast)',t:'Line charger: breaks formations, shoves, demolishes barriers, feeds Pool.'},
+ {n:'Wolf Pack Shikigami (Arena Beast)',t:'Mobile swarm: shares spaces, hunts wounded, advantaged double advances.'},
+ {n:'Bear Shikigami (Arena Beast)',t:'Guardian: grapples/crushes, takes attacks meant for allies.'},
+ {n:'Serpent Shikigami (Arena Beast)',t:'Long-reach constrictor: venom taxes CE, drains CE.'},
+ {n:'Boar Shikigami (Arena Beast)',t:'Juggernaut: one-use Rampage, demolition, thick hide, kill follow-through.'},
+ {n:'Eagle Shikigami (Arena Beast)',t:'Flying scout: dives, carries prey, ranged Help, spoils ranged attacks.'},
+ {n:'Crocodile Shikigami (Arena Beast)',t:'Ambusher: restrains in locked jaws, drains CE, death roll.'},
+ {n:'Tiger Shikigami (Arena Beast)',t:'Executioner: pursues wounded, empowers attacks vs. below-half-HP.'},
+ {n:"The Emperor's Favor",t:'Choose any other Spoil. It lasts 10 min instead of 1 min.'}
+];
+var SIPHON_MOMENTUM=[
+ {min:0,max:0,title:'Silent Victor',t:'Momentum state for Encore Casting, no numerical bonus. Still get Spoil, no Burnout.'},
+ {min:1,max:5,title:'Survivor',t:'5 temp HP, +1 damage on qualifying attacks.'},
+ {min:6,max:10,title:'Blooded Victor',t:'10 temp HP, +1 damage on qualifying attacks, one additional attack once on your next turn.'},
+ {min:11,max:20,title:'Crowd Favorite',t:'20 temp HP, +1 to attack rolls, +10-ft speed, one additional attack whenever you take the Attack action.'},
+ {min:21,max:35,title:'Pit Champion',t:'30 temp HP, +1 AC and attack rolls, +10-ft speed, +1d6 damage on one qualifying hit per turn, one additional attack whenever you take the Attack action.'},
+ {min:36,max:50,title:'Arena King',t:'45 temp HP; STR and CON +2 (max 24); +1 AC and attack rolls; +10-ft speed; +1d6 damage on one qualifying hit per turn; two additional attacks whenever you take the Attack action.'},
+ {min:51,max:75,title:'Uncrowned Tyrant',t:'60 temp HP; STR, DEX, CON +2 (max 26); +2 AC and attack rolls; +20-ft speed; +1d8 damage on one qualifying hit per turn; advantage on STR, DEX, CON saves; two additional attacks whenever you take the Attack action.'},
+ {min:76,max:100,title:'Calamity Victor',t:'80 temp HP; STR, DEX, CON +4 (max 28); +2 AC, attack rolls, and saving throws; +30-ft speed; +2d8 damage on one qualifying hit per turn; resistance to B/P/S; three additional attacks whenever you take the Attack action.'},
+ {min:101,max:149,title:'Living Legend',t:'110 temp HP; STR, DEX, CON +4 (max 30); +3 AC, attack rolls, and saving throws; +40-ft speed; +2d10 damage on one qualifying hit per turn; resistance to B/P/S, force, necrotic; three additional attacks whenever you take the Attack action.'},
+ {min:150,max:1e9,title:'Emperor of the Dead',t:'150 temp HP; STR, DEX, CON +6 (max 32); +4 AC, attack rolls, and saving throws; +60-ft speed; +3d10 damage on one qualifying hit per turn; resistance to all damage; qualifying attacks crit on 19–20; four additional attacks whenever you take the Attack action.'}
+];
+function siphonThreshold(){ return char.level>=6?2:3; }
+function siphonTempCap(){ return 5*char.level; }
+function siphonFavor(pool){ return Math.min(pb(char.level), Math.floor((pool||0)/5)); }
+function siphonState(st){ if(!st.siphon) st.siphon={counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false}; return st.siphon; }
+function siphonMomentumFor(score){ for(var i=0;i<SIPHON_MOMENTUM.length;i++){ var m=SIPHON_MOMENTUM[i]; if(score>=m.min&&score<=m.max) return i; } return -1; }
+function siphonCardHTML(st){
+  var sp=siphonState(st), th=siphonThreshold(), cap=siphonTempCap(), P=pb(char.level);
+  var fav=siphonFavor(sp.pool);
+  var html='<div class="tracker-title"><span>⚔ Siphon</span><span>Temp CE cap '+cap+'</span></div>';
+  html+='<div class="tracker-num"><span>Counter</span> <b>'+sp.counter+' / '+th+'</b></div>'+
+    '<div class="tracker-controls">'+
+    '<button type="button" class="btn" id="trkSiphHit">＋ Hit</button>'+
+    '<button type="button" class="btn" id="trkSiphMiss">Miss (reset)</button>'+
+    '<button type="button" class="btn" id="trkSiphReset">Reset</button></div>';
+  if(sp.pendingDrain){
+    html+='<div class="tracker-controls" style="margin-top:6px"><span class="small">SIPHON TRIGGERS — target lost (max '+P+' CE):</span>'+
+      '<input id="trkSiphDrainAmt" type="number" min="0" max="'+P+'" value="'+P+'" style="width:56px">'+
+      '<button type="button" class="btn" id="trkSiphDrain">Drain → Temp CE</button></div>';
+  }
+  html+='<div class="tracker-title" style="margin-top:8px"><span>Temporary CE</span><span>'+sp.tempCE+' / '+cap+'</span></div>'+
+    '<div class="tracker-controls"><input id="trkSiphTempAmt" type="number" min="1" value="1" style="width:56px">'+
+    '<button type="button" class="btn" id="trkSiphTempAdd">Add</button>'+
+    '<button type="button" class="btn" id="trkSiphTempSpend">Spend</button>'+
+    '<button type="button" class="btn" id="trkSiphTap">Siphon Tap</button></div>'+
+    '<p class="small" style="margin:4px 0 0">Tap: spend up to '+Math.floor(cap/2)+' Temp CE → +1d6 force per 2 spent, until end of turn.</p>';
+  html+='<div class="tracker-title" style="margin-top:8px"><span>Colosseum Pool</span><span>Favor +'+fav+'</span></div>'+
+    '<div class="tracker-num"><b>'+sp.pool+'</b><span> Pool</span></div>'+
+    '<div class="tracker-controls"><input id="trkSiphPoolAmt" type="number" min="1" value="1" style="width:56px">'+
+    '<button type="button" class="btn" id="trkSiphPoolAdd">Add</button>'+
+    '<button type="button" class="btn" id="trkSiphPoolSpend">Spend</button>'+
+    '<button type="button" class="btn" id="trkSiphCashout">🏆 Victory Cashout</button></div>';
+  if(sp.momentum>=0){
+    var m=SIPHON_MOMENTUM[sp.momentum];
+    html+='<div class="tracker-title" style="margin-top:8px"><span>Momentum: '+esc(m.title)+'</span><button type="button" class="btn" id="trkSiphMomClear" style="padding:2px 8px;font-size:.75rem">Clear</button></div>'+
+      '<p class="small" style="margin:4px 0 0">'+esc(m.t)+'</p>';
+  }
+  html+='<div class="tracker-title" style="margin-top:8px"><span>Colosseum Spoil</span></div>';
+  if(sp.spoil>0){ var s1=SIPHON_SPOILS[sp.spoil-1];
+    html+='<p class="small" style="margin:4px 0 0"><b>🎲 '+sp.spoil+' — '+esc(s1.n)+'</b> — '+esc(s1.t)+'</p>'; }
+  if(sp.spoil2>0){ var s2=SIPHON_SPOILS[sp.spoil2-1];
+    html+='<p class="small" style="margin:4px 0 0"><b>🎲 '+sp.spoil2+' — '+esc(s2.n)+'</b> — '+esc(s2.t)+'</p>'; }
+  html+='<div class="tracker-controls"><button type="button" class="btn" id="trkSiphRoll">🎲 Roll d20 Spoil</button>';
+  if(char.level>=18){
+    html+='<button type="button" class="btn" id="trkSiphRoll2">Roll Twice (L18)</button>'+
+    '<select id="trkSiphPick">'+SIPHON_SPOILS.map(function(x,i){return '<option value="'+(i+1)+'">'+(i+1)+' — '+esc(x.n)+'</option>';}).join('')+'</select>'+
+    '<button type="button" class="btn" id="trkSiphPickBtn">Choose (L18)</button>';
+  }
+  html+='<button type="button" class="btn" id="trkSiphSpoilClear">Clear</button></div>';
+  html+='<p class="small" style="margin:6px 0 0;opacity:.7">Marked prey: threshold −1 (min 1) vs. the marked target. Temp CE lasts until spent or long rest.</p>';
+  return html;
 }
 /* Combat Quick Reference: fixed-cost CE spend buttons (screen only, hidden on print).
    Top-level for testability; called from bindTrackers which owns st/spendCe/save/toast. */
@@ -5317,7 +5409,8 @@ function bindTrackers(hpMaxV, ceMaxV){
     var _rm=rctMax(); if(_rm!=null){ st.rct=_rm; }
     st.exhaustion=Math.max(0,(st.exhaustion||0)-1);
     st.zoneRounds=0; st.zoneStacks=0; st.jugReinf=0; st.warStrike=0; st.posPool=null;
-    save(); refreshUses(); renderRct(); renderBt(); renderExh();
+    st.siphon={counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false};
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderSiphon();
     var _ri=$('trkRct'); if(_ri&&_rm!=null) _ri.value=_rm;
     toast('Long rest — HP, CE, RCT pool, and uses restored; \u22121 exhaustion.');
   });
@@ -5338,7 +5431,7 @@ function bindTrackers(hpMaxV, ceMaxV){
     st=trackerState(); st.hp=hpMaxV; if(ceMaxV!=null) st.ce=ceMaxV;
     $('trkHp').value=hpMaxV; $('trkTemp').value=0;
     if(ceMaxV!=null) $('trkCe').value=ceMaxV;
-    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); toast('Trackers reset.');
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); renderSiphon(); toast('Trackers reset.');
   });
 
   /* ── shared mini-helpers for the new cards ── */
@@ -5453,6 +5546,93 @@ function bindTrackers(hpMaxV, ceMaxV){
   }
   bindBt();
   /* ── exhaustion & conditions ── */
+  /* ── Siphon tracker (e036) ── */
+  function renderSiphon(){ var b=$('trkSiphonBody'); if(!b) return; b.innerHTML=siphonCardHTML(st); bindSiphon(); }
+  function bindSiphon(){
+    var sp=siphonState(st), th=siphonThreshold(), cap=siphonTempCap(), P=pb(char.level);
+    function refresh(){ save(); renderSiphon(); }
+    function num(id,def){ var el=$(id); return el?parseInt(el.value,10)||def:def; }
+    var hit=$('trkSiphHit');
+    if(hit) hit.addEventListener('click',function(){
+      sp.counter++;
+      if(sp.counter>=th){ sp.pendingDrain=true; toast('SIPHON TRIGGERS — enter the CE the target lost.'); }
+      refresh();
+    });
+    var miss=$('trkSiphMiss');
+    if(miss) miss.addEventListener('click',function(){ sp.counter=0; sp.pendingDrain=false; refresh(); toast('Chain broken — counter reset.'); });
+    var rst=$('trkSiphReset');
+    if(rst) rst.addEventListener('click',function(){ sp.counter=0; sp.pendingDrain=false; refresh(); toast('Counter reset.'); });
+    var dr=$('trkSiphDrain');
+    if(dr) dr.addEventListener('click',function(){
+      var amt=Math.max(0,Math.min(P, num('trkSiphDrainAmt',P)));
+      var room=Math.max(0, cap-sp.tempCE);
+      var gained=Math.min(amt, room);
+      sp.tempCE+=gained; sp.counter=0; sp.pendingDrain=false;
+      refresh();
+      toast('Siphon drained '+amt+' CE'+(gained<amt?' ('+(amt-gained)+' over cap, lost)':'')+'. Temp CE: '+sp.tempCE+'/'+cap+'.');
+    });
+    var ta=$('trkSiphTempAdd');
+    if(ta) ta.addEventListener('click',function(){
+      var amt=Math.max(1, num('trkSiphTempAmt',1));
+      sp.tempCE=Math.min(cap, sp.tempCE+amt); refresh(); toast('Temp CE: '+sp.tempCE+'/'+cap+'.');
+    });
+    var ts=$('trkSiphTempSpend');
+    if(ts) ts.addEventListener('click',function(){
+      var amt=Math.max(1, num('trkSiphTempAmt',1));
+      if(amt>sp.tempCE){ toast('Not enough Temp CE — '+sp.tempCE+' held.'); return; }
+      sp.tempCE-=amt; refresh(); toast('Spent '+amt+' Temp CE ('+sp.tempCE+' left).');
+    });
+    var tap=$('trkSiphTap');
+    if(tap) tap.addEventListener('click',function(){
+      var amt=Math.max(1, num('trkSiphTempAmt',1));
+      var maxTap=Math.floor(cap/2);
+      if(amt>maxTap){ toast('Siphon Tap caps at '+maxTap+' Temp CE (half your max).'); return; }
+      if(amt>sp.tempCE){ toast('Not enough Temp CE — '+sp.tempCE+' held.'); return; }
+      sp.tempCE-=amt; refresh();
+      toast('Siphon Tap: spent '+amt+' Temp CE → +'+Math.floor(amt/2)+'d6 force on qualifying strikes until end of turn.');
+    });
+    var pa=$('trkSiphPoolAdd');
+    if(pa) pa.addEventListener('click',function(){
+      var amt=Math.max(1, num('trkSiphPoolAmt',1));
+      sp.pool+=amt; refresh(); toast('Pool: '+sp.pool+' (Favor +'+siphonFavor(sp.pool)+').');
+    });
+    var ps=$('trkSiphPoolSpend');
+    if(ps) ps.addEventListener('click',function(){
+      var amt=Math.max(1, num('trkSiphPoolAmt',1));
+      if(amt>sp.pool){ toast('Not enough Pool — '+sp.pool+' held.'); return; }
+      sp.pool-=amt; refresh(); toast('Pool: '+sp.pool+' (Favor +'+siphonFavor(sp.pool)+').');
+    });
+    var co=$('trkSiphCashout');
+    if(co) co.addEventListener('click',function(){
+      var score=sp.pool;
+      var mi=siphonMomentumFor(score);
+      var room=Math.max(0, cap-sp.tempCE);
+      var absorbed=Math.min(score, room);
+      sp.tempCE+=absorbed; sp.pool=0; sp.counter=0; sp.pendingDrain=false; sp.momentum=mi;
+      refresh();
+      toast('Victory! Cashout '+score+' → '+(mi>=0?SIPHON_MOMENTUM[mi].title:'—')+'. Absorbed '+absorbed+' Temp CE. Roll for your Spoil.');
+    });
+    var mc=$('trkSiphMomClear');
+    if(mc) mc.addEventListener('click',function(){ sp.momentum=-1; refresh(); toast('Momentum cleared.'); });
+    var roll=$('trkSiphRoll');
+    if(roll) roll.addEventListener('click',function(){
+      sp.spoil=Math.floor(Math.random()*20)+1; sp.spoil2=0; refresh();
+      toast('Spoil: '+sp.spoil+' — '+SIPHON_SPOILS[sp.spoil-1].n+'.');
+    });
+    var roll2=$('trkSiphRoll2');
+    if(roll2) roll2.addEventListener('click',function(){
+      sp.spoil=Math.floor(Math.random()*20)+1; sp.spoil2=Math.floor(Math.random()*20)+1; refresh();
+      toast('Spoils: '+sp.spoil+' — '+SIPHON_SPOILS[sp.spoil-1].n+' · '+sp.spoil2+' — '+SIPHON_SPOILS[sp.spoil2-1].n+'.');
+    });
+    var pick=$('trkSiphPickBtn');
+    if(pick) pick.addEventListener('click',function(){
+      sp.spoil=num('trkSiphPick',1); sp.spoil2=0; refresh();
+      toast('Spoil chosen: '+sp.spoil+' — '+SIPHON_SPOILS[sp.spoil-1].n+'.');
+    });
+    var sc=$('trkSiphSpoilClear');
+    if(sc) sc.addEventListener('click',function(){ sp.spoil=0; sp.spoil2=0; refresh(); toast('Spoil cleared.'); });
+  }
+  bindSiphon();
   function renderExh(){ var b=$('trkExhBody'); if(!b) return; b.innerHTML=exhCardHTML(st); bindExh(); }
   function bindExh(){
     var b=$('trkExhBody'); if(!b) return;
