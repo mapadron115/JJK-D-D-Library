@@ -1198,9 +1198,14 @@ function ceReserveSum(){
   }
   return {dieMax:dieMax, sum:sum};
 }
+/* Siphon (e036): native CE is 5 flat — no reserve formula. Temp CE (cap 5 x level) is the real fuel. */
+function hasSiphon(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e036'; });
+}
 function ceMax(){
   var base;
   if(clsAt(1)==='Heavenly Restriction') base=hrCEMax();
+  else if(hasSiphon()) base=5;
   else{
     var r = ceReserveSum();
     var ab = abilitiesAt(char.level);
@@ -3684,7 +3689,8 @@ function classSkillsValid(){
 function stepLevelUps(body){
   var C=CLASSES[char.cls], hd=C.hd;
   var ceBit;
-  if(!isHR()) ceBit=' and <b>CE = '+C.reserve+' (max Reserve Die)</b>';
+  if(hasSiphon()) ceBit=' and <b>native CE = 5 (Siphon — no reserve rolls; build Temp CE through hits)</b>';
+  else if(!isHR()) ceBit=' and <b>CE = '+C.reserve+' (max Reserve Die)</b>';
   else if(hasCEPool()) ceBit=' and <b>'+cePoolLabel()+'</b> per your restriction package (HR levels grant no Reserve Die)';
   else ceBit='.';
   var html='<h2>Step 7 — Level-Up Rolls</h2>'+
@@ -3792,7 +3798,8 @@ function renderLvlRows(){
     var hpCell='<button class="btn btn-small" type="button" data-hproll="'+r.l+'">🎲 Roll d'+C.hd+'</button> '+
                '<button class="btn btn-small btn-ghost" type="button" data-hpfixed="'+r.l+'">Fixed '+avgDie(C.hd)+'</button><br>'+hpRes+
                ' <span class="small" data-hpdice="'+r.l+'"></span>';
-    var ceCell = (!hasCEPool()||r.cls==='Heavenly Restriction') ? '<span class="small">— '+(!hasCEPool()?esc(hrVariantDef(hrV()).short):'no reserve')+'</span>' :
+    var ceCell = hasSiphon() ? '<span class="small">— Siphon: native CE 5, no reserve rolls</span>' :
+      (!hasCEPool()||r.cls==='Heavenly Restriction') ? '<span class="small">— '+(!hasCEPool()?esc(hrVariantDef(hrV()).short):'no reserve')+'</span>' :
       '<button class="btn btn-small" type="button" data-ceroll="'+r.l+'">🎲 Roll d'+C.reserve+'</button> '+
       '<button class="btn btn-small btn-ghost" type="button" data-cefixed="'+r.l+'">Fixed '+C.fixed+'</button><br>'+
       (ld.ceMode==='roll'
