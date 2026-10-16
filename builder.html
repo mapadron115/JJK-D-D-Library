@@ -556,7 +556,7 @@ img{max-width:100%;height:auto}
 <script src="data/codex_role_fixups.js?v=20260911a"></script>
 <script src="data/codex_inner_circle.js?v=20260911h"></script>
 <script src="data/library.js?v=20261016h"></script>
-<script src="data/dossier_levels.js?v=20261016o"></script>
+<script src="data/dossier_levels.js?v=20261016p"></script>
 <script src="data/technique_feats.js?v=20261016i"></script>
 <script src="data/codex_feats.js?v=20261011a"></script>
 <script src="data/class_features.js?v=20260926a"></script>
@@ -1119,6 +1119,30 @@ function upsertChar(c){
 
 /* ── derived math ── */
 /* Final abilities after ASI schedule (ASI at level L applies before L's rolls) */
+/* Technique-granted ability bonuses (e.g. e557 Spider Physique +2 STR/DEX,
+   e027/e037 L11 +2 + maxima). Structured `asi` / `asiMax` on dossier_levels
+   entries; 'CE' = the character's CE ability. Cumulative up to `level`. */
+function techniqueASIBonuses(level){
+  var asi={}, asiMax={};
+  (char.techniques||[]).forEach(function(t){
+    if(!t || !t.id) return;
+    var levels=(window.DOSSIER_LEVELS||{})[t.id]||[];
+    levels.forEach(function(e){
+      if(!e || !e.asi || e.level>level || e.level>char.level) return;
+      Object.keys(e.asi).forEach(function(k){
+        var a=(k==='CE')?char.ceAbility:k;
+        if(!a) return;
+        asi[a]=(asi[a]||0)+e.asi[k];
+      });
+      if(e.asiMax) Object.keys(e.asiMax).forEach(function(k){
+        var a=(k==='CE')?char.ceAbility:k;
+        if(!a) return;
+        asiMax[a]=(asiMax[a]||0)+e.asiMax[k];
+      });
+    });
+  });
+  return {asi:asi, asiMax:asiMax};
+}
 function abilitiesAt(level){
   var ab = Object.assign({}, char.abilities);
   if(!ab.STR) ABILITIES.forEach(function(a){ ab[a]=10; });
@@ -1131,6 +1155,9 @@ function abilitiesAt(level){
   /* half-feat +1s (Crusher, Athlete, etc.) — apply at the level the feat was taken, capped at ability ceiling */
   var fb=featASIBonuses(level);
   ABILITIES.forEach(function(a){ if(fb[a]) ab[a]=Math.min((ab[a]||10)+fb[a], abilityCeiling(a)); });
+  /* technique-granted ability bonuses (e.g. Spider Physique) */
+  var tb=techniqueASIBonuses(level);
+  ABILITIES.forEach(function(a){ if(tb.asi[a]) ab[a]=(ab[a]||10)+tb.asi[a]; });
   /* enforce ceiling on all scores */
   ABILITIES.forEach(function(a){ var c=abilityCeiling(a); if(ab[a]>c) ab[a]=c; });
   return ab;
@@ -1154,6 +1181,9 @@ function hpMax(){
   for(var l=1;l<=char.level;l++){
     var C = CLASSES[clsAt(l)]; if(!C) continue;
     if(hasASIAt(l) && char.asi[l] && (char.asiMode||{})[l]!=='feat') char.asi[l].forEach(function(a){ if(ab[a]!=null) ab[a]++; });
+    /* technique-granted CON (e.g. e027 L11) — delta gained at this level */
+    var _tc=techniqueASIBonuses(l).asi.CON||0, _tp=techniqueASIBonuses(l-1).asi.CON||0;
+    if(_tc!==_tp) ab.CON=(ab.CON||10)+(_tc-_tp);
     applyTechniquelessASI(ab,l); /* V6 §7.7 Techniqueless grant */
     /* HP uses the CON effectively in force at this level: cumulative gains
        (manual entry can exceed the ceiling) clamped to the ceiling at that
@@ -1444,6 +1474,9 @@ function abilityCeilingAt(ability, level){
     if(s==='dormant') base = Math.max(base, 22);
     else if(s) base = Math.max(base, 24);
   }
+  /* technique-granted maxima (e.g. e027/e037 +2 maxima) */
+  var _tm=techniqueASIBonuses(level).asiMax;
+  if(_tm[a]) base+=_tm[a];
   return base;
 }
 function abilityCeiling(ability){ return abilityCeilingAt(ability, char.level); }
