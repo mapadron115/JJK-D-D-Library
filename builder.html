@@ -214,6 +214,7 @@ h1 .amp{color:var(--red)}
 .cost{font-size:.74rem;letter-spacing:1px;color:var(--ink2);text-transform:uppercase;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px 2px;margin:8px 0 10px}
 .feat-text{color:var(--ink);font-size:.94rem}
 .feat-text p{margin:.6em 0}
+.rules-toggle{background:none;border:none;color:var(--red-deep,#a02020);font-size:.8rem;cursor:pointer;padding:2px 0;text-decoration:underline;font-family:inherit}
 .feat-text ul{margin:.6em 0;padding-left:1.4em}
 .feat-text li{margin:.3em 0}
 .callout{border:2px solid var(--ink);margin:22px 0;background:var(--card)}
@@ -347,6 +348,8 @@ h1 .amp{color:var(--red)}
   .sheet{border:2px solid #000;break-inside:avoid}
   .sheet-sec{break-inside:avoid}
   .sheet-sec.qrsec{break-inside:auto}
+  .rules-full{display:block !important}
+  .rules-preview,.rules-toggle{display:none !important}
   a{color:#000;text-decoration:none}
 }
 
@@ -1414,6 +1417,22 @@ function findTechEntry(id){
   for(var p=0;p<pools.length;p++){ var arr=pools[p][1]||[]; for(var i=0;i<arr.length;i++) if(arr[i].id===id) return {e:arr[i],catalog:pools[p][0]}; }
   return null;
 }
+/* Long technique descriptions: expand/collapse toggle (wizard technique
+   inspector + character sheet). One delegated listener survives re-renders on both. */
+document.addEventListener('click', function(ev){
+  var t=ev.target;
+  if(!t||!t.hasAttribute||!t.hasAttribute('data-rules-toggle')) return;
+  var wrap=t.closest?t.closest('.feat-text'):null;
+  if(!wrap) return;
+  var prev=wrap.querySelector('.rules-preview'), full=wrap.querySelector('.rules-full');
+  if(t.getAttribute('data-open')==='1'){
+    if(prev)prev.hidden=false; if(full)full.hidden=true;
+    t.setAttribute('data-open','0'); t.textContent='Read full description';
+  }else{
+    if(prev)prev.hidden=true; if(full)full.hidden=false;
+    t.setAttribute('data-open','1'); t.textContent='Show less';
+  }
+});
 /* GM-grant toggles live in roadmapHTML callouts on two surfaces (wizard technique
    inspector + character sheet). One delegated listener survives re-renders on both. */
 document.addEventListener('change', function(ev){
@@ -4180,9 +4199,21 @@ function techCard(e,catalog){
    dossier pages into data/dossier_levels.js and rendered in the Ritual Archive
    aesthetic (mirrors the figure inspector's active/roadmap split). */
 function libLevelHTML(l){
+  var rules=l.rules||'';
+  var body;
+  if(rules.length>600){
+    /* long descriptions collapse to a preview on screen (sheet + inspector);
+       full text stays one tap away and always prints */
+    var cut=rules.slice(0,600), sp=cut.lastIndexOf(' ');
+    var preview=(sp>400?cut.slice(0,sp):cut).replace(/[.,;:\u00b7]\s*$/,'')+'\u2026';
+    body='<div class="feat-text"><p class="rules-preview">'+esc(preview)+'</p>'+
+      '<p class="rules-full" hidden>'+esc(rules)+'</p>'+
+      '<button type="button" class="rules-toggle no-print" data-rules-toggle data-open="0">Read full description</button></div>';
+  }else{
+    body='<div class="feat-text"><p>'+esc(rules)+'</p></div>';
+  }
   return '<div class="lvl"><span class="lvl-chip">'+(l.level>0?'Level '+l.level:'Feature')+'</span></div>'+
-    '<div class="feat"><h5>'+esc(l.title||'Feature')+'</h5>'+
-    '<div class="feat-text"><p>'+esc(l.rules||'')+'</p></div></div>';
+    '<div class="feat"><h5>'+esc(l.title||'Feature')+'</h5>'+body+'</div>';
 }
 function libProgressionHTML(id, level){
   var levels=((window.DOSSIER_LEVELS||{})[id])||[];
