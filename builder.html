@@ -559,7 +559,7 @@ img{max-width:100%;height:auto}
 <script src="data/codex_role_fixups.js?v=20260911a"></script>
 <script src="data/codex_inner_circle.js?v=20260911h"></script>
 <script src="data/library.js?v=20261016h"></script>
-<script src="data/dossier_levels.js?v=20261016p"></script>
+<script src="data/dossier_levels.js?v=20261020a"></script>
 <script src="data/technique_feats.js?v=20261020a"></script>
 <script src="data/codex_feats.js?v=20261011a"></script>
 <script src="data/class_features.js?v=20260926a"></script>
@@ -4849,13 +4849,19 @@ function qrFixedCE(costLine){
     var bl=before.toLowerCase(), al=after.toLowerCase();
     if(/(regain|gains?|restore|recover)\s*$/.test(bl)) continue; /* CE gained, not spent */
     if(/\bup to\s*$/.test(bl)) continue; /* "up to N CE" is variable */
-    if(/^\s*per\b/.test(al)) continue; /* "N CE per X" is variable */
+    if(/^\s*per\b(?!\s*(use|activation|casting)\b)/.test(al)) continue; /* "N CE per X" is variable — but "per use" is a fixed cost */
     if(/^\s*each\b/.test(al)) continue; /* "N CE each" is variable */
-    if(/variable|sustain|\bor more\b/.test(bl+' '+al)) continue;
-    if(/\+\s*$/.test(bl)||/^\s*\+/.test(al)) continue; /* combined "N CE + ..." cost */
+    if(/variable|sustain/.test(bl+' '+al)) continue;
+    if(/^\s*or more\b/.test(al)) continue; /* "N CE or more" is a variable minimum — "or more" elsewhere in the window is another phrase's business */
+    if(/\+\s*$/.test(bl)||(/^\s*\+/.test(al) && !/^\s*\+\s*(speak|say|shout|utter|chant)\b/.test(al))) continue; /* combined "N CE + ..." cost — unless the + is a verbal component */
     if(/\u00d7/.test(bl+' '+al)) continue; /* "N \u00d7 level" */
+    if(/\(min(imum)?\s*$/.test(bl)) continue; /* "(min N CE)" is a floor, not the cost */
+    if(/\d\s*[-\u2013\u2014]\s*$/.test(bl)) continue; /* top of a "1-5 CE" range \u2014 variable */
+    if(/\bonly\s*$/.test(bl) && !/\b(spends?|costs?|pays?)\b/.test(bl)) continue; /* "only N CE" quantity statement with no cost verb */
+    var upI=bl.lastIndexOf('up to');
+    if(upI>=0 && bl.slice(upI).indexOf('\u00b7')<0 && !/\b(spends?|costs?|pays?)\b/.test(bl.slice(upI+5))) continue; /* "up to ... N CE" is variable even with words in between */
     /* must read as a spend: cost verb, parenthesized, or cost-first "N CE \u00b7" dossier style */
-    if(!/(\bspends?\b|\bcosts?\b|\bpays?\b|\bfor\b|\bwith\b|\bat\b|\bthen\b|[(\u00b7,:])\s*$/.test(bl)
+    if(!/(\bspends?\b|\bcosts?\b|\bpays?\b|\bfor\b|\bwith\b|\bat\b|\bthen\b|[(\u00b7,:]\s*$)/.test(bl)
        && !/^\s*[\u00b7,]/.test(al) && start!==0) continue;
     out=v; break;
   }
