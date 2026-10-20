@@ -4744,7 +4744,7 @@ function grantsRCT(){
   if(char.rctOptIn) return true;
   return rctGrantedByClass();
 }
-function rctMax(){ if(!hasCEPool()) return null; var m=10*char.level; if((char.boons||[]).indexOf('rct-master')>=0) m*=2; return m; }
+function rctMax(){ if(!hasCEPool()) return null; var m=char.level*(10+ceModNow()); if((char.boons||[]).indexOf('rct-master')>=0) m*=2; return m; }
 function rctPerCE(){ var v=10; if((char.boons||[]).indexOf('rct-master')>=0) v*=2; if(rctGrantedByClass()) v=20; return v; }
 var EXHAUSTION_FX=['No exhaustion','Disadvantage on ability checks','Speed halved','Disadvantage on attack rolls and saving throws','Hit point maximum halved','Speed reduced to 0','Death'];
 var CONDITIONS=['blinded','charmed','deafened','frightened','grappled','incapacitated','invisible','paralyzed','petrified','poisoned','prone','restrained','stunned','unconscious'];
