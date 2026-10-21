@@ -2,8 +2,107 @@
  "codex_version": "1.0.0",
  "generated": "2026-09-11",
  "source": "Ritual Archive campaign lore bible drafts",
- "count": 70,
+ "count": 71,
  "techniques": [
+  {
+   "ce_ability": "WIS",
+   "concept": "The battle is won or lost before it is ever fought — and Sun Tzu fought his final battle twenty-five centuries ago. Everything since has been the mopping-up. Victory Before Battle declares rules to the world itself — IF this, THEN I have already answered — and Heaven, which enforces every spoken vow, enforces them.",
+   "culture": "Chinese",
+   "detail": "full",
+   "domain": {
+    "activation": "full-turn action",
+    "burnout_rounds": 3,
+    "ce_cost": 20,
+    "clash_points": 1000,
+    "cost_line": "Full-turn action · 20 CE · 1,000 clash points · burnout 3 rounds · duration 3 minutes · 120-ft open radius · disclosed.",
+    "duration_min": 3,
+    "kind": "domain",
+    "level": 18,
+    "name": "Victory Already Decided — The War Room Beneath Heaven",
+    "radius": "120-ft radius",
+    "text": "A war room beneath Heaven, open to the sky that witnesses it. The room harms no one. It requires one thing: inside it, no creature can deliberately falsify a course of action it declares aloud. A creature may stay silent — silence is always legal — but what it has declared, it declared truly, and Heaven marks the difference. At initiative 20, the sure-hit **Strategic Error**: choose up to your proficiency bonus in hostile creatures in the Domain; each must declare aloud the action it will attempt this round. If a chosen creature abandons its declaration before the next initiative 20, you may immediately formulate a Plan against it and fire that Plan at half its normal fire cost (rounded up, minimum 1 CE), with a Responder inside the Domain. The War Room forces nothing. It simply makes changing your mind the most dangerous thing on the field."
+   },
+   "era": "544–496 BC · Spring and Autumn",
+   "features": [
+    {
+     "cost_line": "Bonus action · 1 CE.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Laying Plans",
+     "text": "**Tier V · Controller (strategist) · Suggested CE ability: WIS · Primary verb: *Decide.*** *Technique DC = 8 + proficiency bonus + WIS modifier. Your technique attack bonus = proficiency bonus + WIS modifier.*\n\nAll warfare is deception, but this is older than deception: this is decision, made before the enemy has finished choosing. Declare a **Plan**: a specific, observable **IF** trigger — something that has not yet happened and can be witnessed — a declared **response**, and a designated **Responder**: any creature you can see within 120 feet, or yourself. The Responder does not consent, and there is no saving throw: the prediction is the restriction. If the trigger does not occur exactly as declared, the Plan simply never fires — Heaven holds only accurate declarations, and an inaccurate one is cursed energy spent on a future that did not happen. There is no limit to the number of pending Plans you may hold — Heaven's ledger is exactly as deep as your cursed energy. The only caps on your preparation are what you can pay to declare (1 CE each) and what you can pay when it all comes due. A pending Plan lasts until it triggers or you finish a long rest. A Plan's response must be something the Responder could do — Heaven enforces answers, never nullification: a Plan cannot declare that a technique, Maximum, or Domain simply fails.\n\nWhen the trigger occurs, the Plan fires immediately: the Responder performs the declared response — one action, or movement up to their speed. **Fire cost:** when a Plan resolves, you pay 3 CE. If the Responder accepts **Tempo Debt** (see below), the fire cost is 1 CE instead. The fire cost is paid whether the response succeeds or fails. **The perfect-prediction rule:** if the declared trigger occurs exactly as specified and the response resolves as declared — the GM adjudicates — the prediction was perfect, and Heaven waives the CE: the fire cost is 0. Being right is its own economy, and the General is not charged for it. **But the Tempo Debt is never waived.** If the Responder borrowed against their next turn, they owe it in full, perfect prediction or not — the debt is the ledger that caps this art, and Heaven always collects it. A creature that owes Tempo Debt cannot be designated as a Responder.\n\n**The slip.** Formulating a Plan manifests a slip of cursed paper in your hand, and your declaration writes itself across it in brush script — the IF, the THEN, the Responder's name. The slip then vanishes from your hand; Heaven holds the only copy. When the Plan fires, the slip reappears in front of the Responder an instant before they move, its writing legible only to them, and burns to ash as they act. It is the technique's only visible tell: by the time anyone sees the paper, the answer is already happening."
+    },
+    {
+     "cost_line": "Passive.",
+     "kind": "feature",
+     "level": 1,
+     "name": "Tempo Debt",
+     "text": "Time borrowed must be repaid. The universe keeps accounts, and it has never once been cheated. When a Responder accepts Tempo Debt to cheapen a Plan's fire cost, they owe the economy they borrowed: at the start of their next turn, the debt is repaid automatically — they lose the corresponding action (if the response used an action) or their movement (if the response was movement). A Responder can owe at most one debt at a time and cannot accept another while one is outstanding. There is no way to default, and no way to refuse repayment: the debt is not a choice the future gets to revisit. There is no exception: not a perfect prediction, not a Maximum, not a Domain forgives, reduces, or delays a Tempo Debt. A perfect prediction waives the General's price in cursed energy; it never touches the Responder's debt. The debt is what caps the art — a borrowed creature cannot be borrowed again until it has paid, and the army of the owed is always smaller than the army of the willing moment. Heaven always collects."
+    },
+    {
+     "cost_line": "Passive.",
+     "kind": "feature",
+     "level": 3,
+     "name": "Linked Plans",
+     "text": "Chain the answers so that one response becomes the next question. When one of your Plans fires, you may immediately formulate a new Plan keyed to the outcome of the response that just resolved, paying the normal 1 CE formulation cost; formulating this way requires no action. There is no limit to how many of your Plans may resolve in a single round, and no limit to how long the chain runs — each link is bought twice, once when you declare it and once when it fires, and the chain ends only when your cursed energy does. This is the whole of the art: a prediction accurate enough to cause the next event, and the next, each answer laying the board for the question after it."
+    },
+    {
+     "cost_line": "Passive.",
+     "kind": "feature",
+     "level": 6,
+     "name": "Revealed Strategy",
+     "text": "Show them the trap. Knowing the trap and avoiding the trap are different skills, and the difference has been priced. When you formulate a Plan, you may declare it openly — speaking its trigger and its response aloud so that enemies can hear. If an enemy who heard the declaration knowingly causes the trigger to occur anyway, that Plan's fire cost is reduced by 1 CE (minimum 1): Heaven holds a witnessed vow more cheaply. Also, once per round, when a creature you have already seen act in this combat declares an action, you may learn whether its declared intent is genuine. This costs no action and no CE — the General has read this page before. Nothing in this feature — or in Heaven's accounting — requires a spoken declaration to correspond to a Plan you have actually formulated. You may announce Plans you have not made, in the same voice, with the same certainty, and no effect, inspection, or insight can distinguish the announcement of a true Plan from an invented one: Heaven holds the slips, and Heaven does not show its hand. A declared Plan therefore never has to be real. It only has to be believed — and disbelieving the wrong one is how armies walk into the real one with their eyes open."
+    },
+    {
+     "cost_line": "Action · 1 CE per officer.",
+     "kind": "feature",
+     "level": 11,
+     "name": "Distributed Command",
+     "text": "Lend the answers to officers you trust, until the whole army moves as one mind. Designate up to your proficiency bonus in officers among creatures you could designate as Responders; the designation lasts until you finish your next long rest. An officer holds your Plans as if they were their own for designation purposes: a Plan may designate any Responder within 1 mile of one of its officers, even if that Responder is beyond your own sight. An officer remains a valid Responder for your Plans as normal."
+    },
+    {
+     "cost_line": "Reaction · 2 CE · once per round.",
+     "kind": "feature",
+     "level": 18,
+     "name": "No Plan Survives Contact",
+     "text": "The answer does not break on contact with reality. It updates. When a Plan's trigger fails to occur as declared, or its designated Responder cannot execute the declared response, you may rewrite that Plan's trigger and response on the spot. The rewritten Plan remains pending under all its original terms. A disproved prediction is not a defeat. It is information, purchased at the price of being wrong once."
+    },
+    {
+     "cost_line": "Passive.",
+     "kind": "feature",
+     "level": 18,
+     "name": "Supreme Excellence",
+     "text": "The field itself becomes a place you are already three moves inside. Formulating a Plan no longer requires you to see the Responder — you must know where they are. And when one of your Plans proves a perfect prediction, you may immediately formulate a new Plan without spending an action, paying the normal 1 CE: perfection lays the next stone itself. Supreme excellence is not winning a hundred battles. It is having decided them all before the first."
+    }
+   ],
+   "figure": "Sun Tzu",
+   "grade": "Calamity",
+   "id": "sun-tzu",
+   "img": "c-fig-suntzu.jpg",
+   "l20": {
+    "cost_line": "Once per long rest · action · 5 CE.",
+    "kind": "l20",
+    "level": 20,
+    "name": "Master of the Field",
+    "text": "Every prepared answer whose moment has arrived, resolved in the order of your choosing. Not an attack — a conclusion. For 1 minute, formulating Plans requires no action — you may declare as many as you can pay for, in any moment, even inside the chain of their own resolutions — your Plans fire at the 1 CE Tempo Debt rate, the Responder owing the debt in full as always, and you may key a Plan's trigger to anything a creature you can perceive could observe, as if you stood where it stands. For one minute, the field is a place you have already finished deciding."
+   },
+   "maximum": {
+    "cost_line": "Action · 10 CE · once per long rest.",
+    "kind": "maximum",
+    "level": 11,
+    "name": "Subdue the Enemy Without Fighting",
+    "text": "The supreme art of war is to subdue the enemy without fighting. Every hostile creature within 120 feet makes a WIS save against your technique DC. On a failure, for 1 minute the creature cannot willingly take a hostile action against you or your allies; it repeats the save at the end of each of its turns, ending the effect on itself on a success. The effect ends for a creature if it takes damage, and it ends for **all** creatures the moment you or an ally takes a hostile action against any creature — the General's peace holds only while the General keeps it. On a success, a creature is unaffected."
+   },
+   "module": "00",
+   "primary_verb": "Decide",
+   "region": "China",
+   "role": "Controller (strategist)",
+   "serves": null,
+   "source_file": "00-sun-tzu.md",
+   "summary_text": null,
+   "technique": "Victory Before Battle",
+   "tier": "V",
+   "title": "SUN TZU"
+  },
   {
    "id": "miyamoto-musashi",
    "module": "01",
@@ -326,7 +425,7 @@
      "name": "The Open Gates",
      "cost_line": "Bonus action · 1 CE · until the start of your next turn.",
      "kind": "feature",
-     "text": "**Tier V · Controller (trickster) · suggested CE ability INT · Primary verb: *Feint.*** *Strength is a rumor you spread about yourself. Empty Fort Stratagem weaponizes absence: appear weak, let them commit, and invoice the commitment. The fort was empty. The invoice is real.* **Borrowed Arrows (core engine):** whenever a ranged attack misses you, you gain 1 Borrowed Arrow (max = PB; arrows fade after 1 minute). When you activate a technique feature, you may expend any number of arrows: each arrow grants +1 to that feature's save DC or +1d6 to its damage. (He armed himself with the enemy's own attack.)\n\nThe first attack made against you before the duration ends has advantage — you invite it. If that attack misses, the attacker is **Marked**: your next attack against the Marked creature before the end of your next turn has advantage and deals +1d8 force damage, and you gain 1 Borrowed Arrow. (The gates are open. Come in.)"
+     "text": "**Tier V · Controller (trickster) · suggested CE ability INT · Primary verb: *Feint.*** *Strength is a rumor you spread about yourself. Empty Fort Stratagem weaponizes absence: appear weak, let them commit, and invoice the commitment. The fort was empty. The invoice is real.* **Borrowed Arrows (core engine):** whenever a ranged attack misses you, you gain 1 Borrowed Arrow (max = PB; arrows fade after 1 minute). When you activate a technique feature, you may expend up to your proficiency bonus in arrows: each arrow grants +1 to that feature's save DC or +1d6 to its damage. (He armed himself with the enemy's own attack.)\n\nThe first attack made against you before the duration ends has advantage — you invite it. If that attack misses, the attacker is **Marked**: your next attack against the Marked creature before the end of your next turn has advantage and deals +1d8 force damage, and you gain 1 Borrowed Arrow. (The gates are open. Come in.)"
     },
     {
      "level": 3,
@@ -368,26 +467,33 @@
      "name": "The Northern Expedition",
      "cost_line": "Action · 8 CE.",
      "kind": "feature",
-     "text": "The grand feint, launched at last: every enemy within 90 ft must make an INT save. On a failure, for 1 minute the creature perceives your forces as tripled — attacks against your allies have disadvantage, and your allies' weapon attacks deal +2d6 force damage (morale, weaponized). The first time you activate this feature, your technique save DC increases by 2 permanently (this benefit can be granted only once). (Five expeditions. The sixth is the one that matters.)"
+     "text": "The grand feint, launched at last: every enemy within 90 ft must make an INT save. On a failure, for 1 minute the creature perceives your forces as tripled — attacks against your allies have disadvantage, and your allies' weapon attacks deal +2d6 force damage (morale, weaponized). A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. The first time you activate this feature, your technique save DC increases by 2 permanently (this benefit can be granted only once). (Five expeditions. The sixth is the one that matters.)"
+    },
+    {
+     "level": 18,
+     "name": "The Empty City — Personal Domain",
+     "cost_line": "Full-turn action · 20 CE · 1,000 clash points · burnout 3 rounds · duration 3 minutes · 60-ft enclosed radius · disclosed.",
+     "kind": "feature",
+     "text": "This is his personal Domain expression — the empty fort itself, raised around one city and one open gate; the war Domain he carries onto open ground is **The Empty Battlefield**. The Xicheng wall. The guqin. The open gate. This is a **rule-domain**, and its **sure-hit** is *Nothing to Strike*: every hostile inside perceives an empty fort — they cannot target you or your allies with attacks or techniques requiring sight (area effects still function). A hostile may make an INT save at the start of each of its turns; on a success, it sees through the emptiness for that turn only. The domain's binding rule — **The Weaker He Appears** — holds throughout: whenever an attack misses you inside the domain, the attacker takes 2d8 psychic damage and you gain 2 Borrowed Arrows. (The army came. The army looked at the open gate, listened to the music — and turned back.)"
     }
    ],
    "maximum": {
-    "level": null,
+    "level": 11,
     "name": "The Empty City: Sima Yi Turned Back",
     "cost_line": "Action · 10 CE · 1 minute (concentration).",
     "kind": "maximum",
     "text": "You become the empty fort incarnate: all attacks against you have disadvantage; whenever an attack misses you, the attacker takes 4d8 psychic damage and you gain 2 Borrowed Arrows; and your Open Gates invitation is always active (the first attack each round against you has advantage, and its miss is invoiced as above). (Come. The gates are open. They were always open.)"
    },
    "domain": {
-    "level": null,
-    "name": "The Empty City: Where the Army Refused to Enter",
-    "cost_line": "Full-turn action · 20 CE · 1,000 clash points · burnout 3 rounds · duration 3 minutes · 60-ft radius · disclosed.",
+    "level": 18,
+    "name": "The Empty Battlefield",
+    "cost_line": "Full-turn action · 20 CE · 1,000 clash points · burnout 3 rounds · duration 3 minutes · 120-ft open radius · disclosed",
     "kind": "domain",
-    "text": "The Xicheng wall. The guqin. The open gate. This is a **rule-domain**, and its **sure-hit** is *Nothing to Strike*: every hostile inside perceives an empty fort — they cannot target you or your allies with attacks or techniques requiring sight (area effects still function). A hostile may make an INT save at the start of each of its turns; on a success, it sees through the emptiness for that turn only. The domain's binding rule — **The Weaker He Appears** — holds throughout: whenever an attack misses you inside the domain, the attacker takes 2d8 psychic damage and you gain 2 Borrowed Arrows. (The army came. The army looked at the open gate, listened to the music — and turned back.)",
+    "text": "The Empty Battlefield. No wall. No gate. No city to hold — an open field where an army should be, and is not. This is a **rule-domain**, and its **sure-hit** is *Nothing to Strike*: every hostile inside perceives an absence where his forces stand — they cannot target you or your allies with attacks or techniques requiring sight (area effects still function). A hostile may make an INT save at the start of each of its turns; on a success, it sees through the emptiness for that turn only. The domain's binding rule — **The Weaker He Appears** — holds throughout: whenever an attack misses you inside the domain, the attacker takes 2d8 psychic damage and you gain 2 Borrowed Arrows. (Two armies came to this field to decide a war. One of them was never there. The other one lost.)",
     "clash_points": 1000,
     "duration_min": 3,
     "burnout_rounds": 3,
-    "radius": "60-ft radius",
+    "radius": "120-ft open radius",
     "activation": "full-turn action",
     "ce_cost": 20
    },
@@ -396,10 +502,11 @@
     "name": "The Dead Frighten the Living",
     "cost_line": "Once per long rest.",
     "kind": "l20",
-    "text": "When you drop to 0 hit points, you do not fall: you remain conscious and fighting for 1 minute — your features cost no CE during that minute, and every enemy within 60 ft must make a WIS save or be frightened of you for the duration (they may repeat the save at the end of each of their turns). At the end of the minute, you die — unless healed above 0 in the meantime. (At Wuzhang, they turned his banner around, and the living general fled from the dead one. The plan endures.)"
+    "text": "When you drop to 0 hit points, you do not fall: you remain conscious and fighting for 1 minute — your features cost half their normal CE cost (rounded up, minimum 1) during that minute, and every enemy within 60 ft must make a WIS save or be frightened of you for the duration (they may repeat the save at the end of each of their turns). At the end of the minute, you die — unless healed above 0 in the meantime. (At Wuzhang, they turned his banner around, and the living general fled from the dead one. The plan endures.)"
    },
    "summary_text": null,
-   "source_file": "04-zhuge-liang.md"
+   "source_file": "04-zhuge-liang.md",
+   "img": "c-fig-strategist.jpg"
   },
   {
    "id": "oda-nobunaga",
@@ -1716,10 +1823,10 @@
     "cost_line": "Full-turn action · 20 CE · 1,000 clash points · burnout 3 rounds · duration 3 minutes · 120-ft open radius.",
     "duration_min": 3,
     "kind": "domain",
-    "level": null,
+    "level": 18,
     "name": "Under the Eternal Blue Sky: One World, One Tumen",
     "radius": "120-ft open radius",
-    "text": "An open *support* Domain held under a Binding Vow: it never imposes an offensive sure-hit on an unwilling creature. At **initiative 20**, each willing Arban member that has not yet acted enters the **Tumen Phase** immediately after — each member still takes exactly one ordinary turn, fully interleaved with the others; no member gains extra movement, actions, or attacks. The **Yam ignores ordinary walls**: reported information reaches all Arban members instantly, regardless of barriers or distance within the Domain. **Nerge lines extend to 60 ft** while the Domain persists. **Clash victory:** your refinement grows by 10% per person currently under the technique's influence (non-compounding). The open sky feeds on the formation it shelters — the longer a fight runs under it, the stronger the Arban grows. End fights fast, or thin the Arban first."
+    "text": "An open *support* Domain held under a Binding Vow: it never imposes an offensive sure-hit on an unwilling creature. At **initiative 20**, each willing Arban member that has not yet acted enters the **Tumen Phase** immediately after — each member still takes exactly one ordinary turn, fully interleaved with the others; no member gains extra movement, actions, or attacks. The **Yam ignores ordinary walls**: reported information reaches all Arban members instantly, regardless of barriers or distance within the Domain. **Nerge lines extend to 60 ft** while the Domain persists. **Clash victory:** your refinement grows by 10% per member of your Arban (non-compounding). This growth applies only while this Domain is active: it neither persists after the Domain ends nor stacks between castings. The open sky feeds on the formation it shelters — the longer a fight runs under it, the stronger the Arban grows. End fights fast, or thin the Arban first."
    },
    "era": "1162–1227 · 12th–13th c.",
    "features": [
@@ -1742,10 +1849,10 @@
      "kind": "feature",
      "level": 3,
      "name": "War Phase",
-     "text": "When 2 or more Mustered members' consecutive turns form a phase, each member may **pause** its turn once, **yield** to another member, and **resume** later within the same phase — turns interleave like cavalry across a valley. Start- and end-of-turn effects stay pinned to the individual creature. The economy is ordinary: **no member ever gains extra movement, actions, or attacks** from the interleave."
+     "text": "When 2 or more Mustered members' consecutive turns form a phase, each member may **pause** its turn once, **yield** to another member, and **resume** later within the same phase — turns interleave like cavalry across a valley. Start- and end-of-turn effects stay pinned to the individual creature. The economy is ordinary: **no member ever gains extra movement, actions, or attacks** from the interleave. Muster and the War Phase function only while a member is within 120 feet of you; a member beyond that distance remains in the Arban but takes its own normal initiative and cannot interleave until it returns to range."
     },
     {
-     "cost_line": "Bonus action · designate the Noyan and split the Arban.",
+     "cost_line": "Bonus action · designate the Noyan and split the Arban · 1 CE.",
      "kind": "feature",
      "level": 6,
      "name": "Noyan and Detachments",
@@ -1756,21 +1863,21 @@
      "kind": "feature",
      "level": 6,
      "name": "White and Black Sülde",
-     "text": "The **White Sülde** — memory, law, identity — is a static command post planted where you stand; it does not move once planted. The **Black Sülde** — ambition, terror, forward motion — is a formation anchor you may reposition up to 30 ft as a bonus action. Neither sülde attacks, and neither takes damage meant for others. They are load-bearing: if **both** are destroyed, the Knot breaks and the Arban dissolves. You may plant a replacement sülde within 5 ft of you as an action (1 CE)."
+     "text": "The **White Sülde** — memory, law, identity — is a static command post planted where you stand; it does not move once planted. The **Black Sülde** — ambition, terror, forward motion — is a formation anchor you may reposition up to 30 ft as a bonus action · 1 CE. Neither sülde attacks, and neither takes damage meant for others. They are load-bearing: if **both** are destroyed, the Knot breaks and the Arban dissolves. You may plant a replacement sülde within 5 ft of you as an action (1 CE)."
     },
     {
      "cost_line": "Passive · the doctrine at full strength.",
      "kind": "feature",
      "level": 11,
      "name": "Full Tumen Doctrine",
-     "text": "The Arban grows to **10 members**, with **two Noyans** and **three Detachments**, each Detachment with its own War Phase. Pause/resume inside a phase is unlimited, still within the ordinary one-turn economy — no extra movement, actions, or attacks, ever. **The Horde Has No Center:** if you are incapacitated, command passes to a Noyan for 1 minute — the formation fights on without you. There is no head to cut off."
+     "text": "The Arban grows to **10 members**, with **two Noyans** and **three Detachments**, each Detachment with its own War Phase. Pause/resume inside a phase is unlimited, still within the ordinary one-turn economy — no extra movement, actions, or attacks, ever. **The Horde Has No Center:** if you are incapacitated, command passes to a Noyan for 1 minute — the formation fights on without you. There is no head to cut off.\n\n**Succession — what command passes, and what it does not.** Being killed triggers succession exactly as being incapacitated does. A successor Noyan **can** maintain the Knot, run the War Phase, reposition the sülde by paying their normal costs, and — at 18th level — transfer members between Detachments. A successor **cannot** re-form a broken Knot, plant a sülde, invoke the Nerge, open the Domain, or use The Last Tumen — those are the Khan's alone. At this level the succession lasts 1 minute: if you remain incapacitated when that minute expires, the Knot dissolves."
     },
     {
      "cost_line": "Passive · the succession never breaks.",
      "kind": "feature",
      "level": 18,
      "name": "Khagan of the Living Army",
-     "text": "You gain a **third Noyan**. You may transfer members between Detachments before the first Arban member acts in a round. Succession continues until **all Noyans fall or the Arban dissolves** — incapacitate one commander and the next inherits, and the next, and the next."
+     "text": "You gain a **third Noyan**. You may transfer members between Detachments before the first Arban member acts in a round. Succession continues until **all Noyans fall or the Arban dissolves** — incapacitate one commander and the next inherits, and the next, and the next. A successor commanding under this feature does so without that time limit — succession here ends only when all Noyans fall or the Arban dissolves."
     }
    ],
    "figure": "Genghis Khan",
@@ -1780,14 +1887,14 @@
     "kind": "l20",
     "level": 20,
     "name": "The Last Tumen",
-    "text": "Your answer to the question that has haunted you since the steppe: can the doctrine work on the *unwilling* world? Offer the Knot to up to 10 creatures within 60 ft — willing or not. Each unwilling target makes a Wisdom save against your technique DC; on a failure it is **Knotted for 1 minute**, counting as willing for your technique's effects. Fight as one, or die as ten."
+    "text": "Your answer to the question that has haunted you since the steppe: can the doctrine work on the *unwilling* world? Offer the Knot to up to 10 creatures within 60 ft — willing or not. Each unwilling target makes a Wisdom save against your technique DC; on a failure it is **Knotted for 1 minute**, counting as willing for your technique's effects. Fight as one, or die as ten. Creatures Knotted this way count toward the Arban's 10-member cap, and they **Muster onto your initiative count** for the duration — that is the point of the feature. They do **not** join the Yam Relay: they hear only orders you address to the Arban, they cannot reply, they hear no other Relay traffic, and the Relay leaks nothing to them."
    },
    "maximum": {
     "cost_line": "Action · 10 CE · Focus.",
     "kind": "maximum",
     "level": 11,
     "name": "Nerge: The Great Hunt",
-    "text": "Designate one creature you can see as the **Quarry** for 1 minute. **Hunt Lines** form between pairs of Arban members within 30 ft of each other, drawn across the field. When the Quarry voluntarily crosses a Hunt Line, the member who formed that line may use a reaction to move up to 10 ft and make one opportunity attack against it. When three or more members form a **closed polygon** around the Quarry, it is **Caught in the Nerge**: it cannot Hide from the Arban, Disengage covers only one line-crossing per turn, and teleporting from inside to outside requires a CE check against your technique DC or it lands back inside. The Hunt breaks if the forming members move, are disabled, or are separated beyond line range."
+    "text": "Designate one creature you can see as the **Quarry** for 1 minute. **Hunt Lines** form between pairs of Arban members within 30 ft of each other, drawn across the field. When the Quarry voluntarily crosses a Hunt Line, the member who formed that line may use a reaction to move up to 10 ft and make one opportunity attack against it. When three or more members form a **closed polygon** around the Quarry, it is **Caught in the Nerge**: it cannot Hide from the Arban, Disengage covers only one line-crossing per turn, and teleporting from inside to outside requires the creature to make a check using its CE ability modifier + its proficiency bonus against your technique DC, or it lands back inside. Each **Hunt Line** breaks individually: a line breaks if either of its endpoint members voluntarily moves (movement granted by the Nerge itself does not count), becomes disabled, or is separated beyond line range, and only that line's effects end. The Quarry is **Caught in the Nerge** only while the polygon around it is closed — if any line of the polygon breaks, the trap ends, but unbroken lines still grant their reaction attacks."
    },
    "module": "21",
    "primary_verb": "Interleave",
@@ -1795,6 +1902,7 @@
    "role": "Commander / Formation Controller",
    "serves": null,
    "source_file": "21-genghis-khan.md",
+   "img": "c-fig-genghis.jpg",
    "summary_text": null,
    "technique": "Tumen Doctrine",
    "tier": "V",
@@ -3029,9 +3137,9 @@
    "technique": "Mandate of the First Emperor",
    "tier": "V",
    "grade": "Calamity",
-   "role": null,
-   "ce_ability": null,
-   "primary_verb": null,
+   "role": "Controller / Tank",
+   "ce_ability": "INT",
+   "primary_verb": "Assess",
    "region": "China",
    "era": "259–210 BCE · 3rd c. BCE",
    "culture": "Chinese",
@@ -3043,49 +3151,49 @@
      "level": 1,
      "kind": "feature",
      "cost_line": "Bonus action · 1 CE · 1 minute.",
-     "text": "Your gaze extends 60 feet: you perceive the **Crux Stars** — where power converges in creatures, objects, and effects. The Gaze reveals, never the hidden rules. **Price — Mirror-Touch Synesthesia:** whenever a creature you can see takes 10 or more damage, you take 1 Imperial Die of psychic damage. Your Imperial Die is a d6 (d8 at L6, d12 at L18)."
+     "text": "**Tier V · Controller / Tank · Suggested CE ability: INT · Primary verb: *Assess.*** *Technique DC = 8 + proficiency bonus + INT modifier. Your technique attack bonus = proficiency bonus + INT modifier.*\n\nYour gaze extends 60 feet: you perceive the **Crux Stars** — where power converges in creatures, objects, and effects. The Gaze reveals, never the hidden rules. **Price — Mirror-Touch Synesthesia:** whenever a creature you can see takes 10 or more damage, you take 1 Imperial Die of psychic damage. Your Imperial Die is a d6 (d8 at L6, d12 at L18). While the Gaze is active, you know whether any creature you can see is above or below half its hit points, and your Chi You form attacks score a critical hit on a roll of 19–20 against creatures suffering Flow Break — you are striking the crux star itself."
     },
     {
      "name": "Flow Break",
      "level": 1,
      "kind": "feature",
      "cost_line": "Applied through the Fivefold Chi You forms.",
-     "text": "Your signature debility. A creature under Flow Break suffers: −1 Imperial Die to attack rolls; −1 die + your modifier to one damage roll; −1 to save DCs. You maintain Flow Break on 1 target (2 at L6, PB at L18)."
+     "text": "Your signature debility. A creature under Flow Break suffers: −1 Imperial Die to attack rolls; −1 die + your Intelligence modifier to one damage roll; −1 to save DCs. You maintain Flow Break on 1 target (2 at L6, PB at L18). **The Fivefold Chi You forms** — Drifting Tortoise, Heavenly Phoenix, Mount Tai Dragon Claw, White Tiger Crescent Moon, Swallow Slash — are the forms through which Flow Break is applied. Flow Break persists while you maintain it — if you apply it beyond your target cap, the oldest maintained Flow Break ends. At the end of each of its turns, a target may make an INT save against your technique DC, ending Flow Break on itself on a success. Flow Break also ends on all targets if you are incapacitated."
     },
     {
      "name": "Tribute",
      "level": 1,
      "kind": "feature",
      "cost_line": "Passive resource.",
-     "text": "Your Tribute cap is PB (PB + CE modifier at L18). Gain 1 Tribute per round (it persists 1 minute) when you: meaningfully reduce damage with Heavenly Phoenix, cause a failed attack through Flow Break, or redirect force with a Chi You form."
+     "text": "Your Tribute cap is PB (PB + CE modifier at L18). Gain 1 Tribute (it fades after 1 minute) from each of the following, once per round each: you meaningfully reduce damage with Heavenly Phoenix; an attack fails because of Flow Break; you redirect force with a Chi You form. **Imperial Remittance:** spend 1 Tribute (no action) when you hit with a weapon or technique attack to deal an additional 1 Imperial Die of force damage — the treasury disburses."
     },
     {
      "name": "Drifting Tortoise",
      "level": 1,
      "kind": "feature",
      "cost_line": "Replace one attack · 1 CE.",
-     "text": "A ranged Crux strike that applies Flow Break and deals no damage. The tortoise drifts; the blow lands where the power converges."
+     "text": "A ranged Crux strike that applies Flow Break and deals no damage. Range 60 ft; make a spell attack using your CE ability, and apply Flow Break on a hit. The tortoise drifts; the blow lands where the power converges. (invented: range and attack procedure)"
     },
     {
      "name": "Heavenly Phoenix",
      "level": 1,
      "kind": "feature",
      "cost_line": "Reaction · 2 CE.",
-     "text": "Reduce incoming damage by 2 Imperial Dice + your modifier; consume the attacker's Flow Break to roll 3 dice instead. If you reduce 10 or more, gain 1 Tribute. A melee attacker is pushed 5 feet."
+     "text": "Reduce incoming damage by 2 Imperial Dice + your Intelligence modifier; consume the attacker's Flow Break to roll 3 dice instead. If you reduce 10 or more, gain 1 Tribute. A melee attacker is pushed 5 feet."
     },
     {
      "name": "Mount Tai Dragon Claw",
      "level": 3,
      "kind": "feature",
      "cost_line": "Replace one attack · 2 CE.",
-     "text": "2 Imperial Dice + modifier piercing damage. Spend Tribute to slow the target."
+     "text": "2 Imperial Dice + your Intelligence modifier piercing damage. Spend 1 Tribute to reduce the target’s speed by 10 ft until the end of your next turn. (invented: Tribute amount, slow amount, and duration)"
     },
     {
      "name": "White Tiger Crescent Moon",
      "level": 3,
      "kind": "feature",
      "cost_line": "Action (or replace one attack) · 2 CE.",
-     "text": "2 Imperial Dice + modifier bludgeoning damage; push the target 15 feet or knock it prone."
+     "text": "Make a melee weapon attack: on a hit, deal 2 Imperial Dice + modifier bludgeoning damage, and the target makes a STR save vs. your technique DC or is pushed 15 ft or knocked prone, attacker’s choice. (invented: attack procedure, save, and attacker’s choice)"
     },
     {
      "name": "Sovereign Sight",
@@ -3098,8 +3206,8 @@
      "name": "Celestial Reversal",
      "level": 6,
      "kind": "feature",
-     "cost_line": "Reaction · 1 Tribute (trigger: reduce damage to 0 with Heavenly Phoenix).",
-     "text": "When Heavenly Phoenix reduces damage to 0, spend 1 Tribute to make a free unarmed strike in the same reaction: +1 Imperial Die force damage, against an attacker within 15 feet."
+     "cost_line": "Reaction · 1 Tribute · 2 CE (trigger: reduce damage to 0 with Heavenly Phoenix).",
+     "text": "When Heavenly Phoenix reduces damage to 0, spend 1 Tribute and 2 CE to make a free unarmed strike in the same reaction: +1 Imperial Die force damage, against an attacker within 15 feet."
     },
     {
      "name": "Imperial Disruption",
@@ -3113,13 +3221,13 @@
      "level": 11,
      "kind": "feature",
      "cost_line": "Bonus action · 3 CE · 1 minute.",
-     "text": "You forge a CE sword (1d8). **Imperial Power Embrace:** force you reduce is stored in the blade; your next Swallow Slash gains the stored dice plus Tribute-generated dice."
+     "text": "You forge a CE sword (1d8). **Imperial Power Embrace:** when Heavenly Phoenix reduces damage while Goujian is embraced, you store Imperial Dice in the blade equal to the number of dice in that reduction roll, up to a maximum of PB stored dice; your next Swallow Slash adds all stored dice as force damage and clears the store."
     },
     {
      "name": "Swallow Slash",
      "level": 11,
      "kind": "feature",
-     "cost_line": "2 CE (sword attack).",
+     "cost_line": "Replace one attack · 2 CE.",
      "text": "Weapon damage + 2 Imperial Dice; spend up to 3 Tribute for +1 die each."
     },
     {
@@ -3130,11 +3238,18 @@
      "text": "Apply Flow Break to the technique's creator."
     },
     {
+     "name": "Terracotta Legions",
+     "level": 11,
+     "kind": "feature",
+     "cost_line": "Action · 10 CE.",
+     "text": "Raise up to your PB terracotta soldiers in unoccupied spaces you can see within 60 ft. **Terracotta Soldier:** AC 15, HP 30, speed 30 ft; STR 14 (+2), DEX 10 (+0), CON 16 (+3), INT 3 (−4), WIS 10 (+0), CHA 3 (−4); resistance to piercing damage; immunity to poison and psychic damage; vulnerability to bludgeoning damage. **Terracotta Spear:** a soldier makes an attack using your technique attack bonus; on a hit it deals 1d8 + 3 piercing damage. Soldiers act immediately after your turn. On your turn you may issue one command to the legion as a bonus action (no CE): every soldier moves up to its speed and makes one Terracotta Spear attack; a soldier that receives no command takes the Dodge action. Soldiers cannot apply Flow Break. You can have at most PB soldiers active at once; raising a soldier beyond that cap crumbles the oldest. A soldier lasts until it is destroyed, you dismiss it (no action), or you finish a long rest."
+    },
+    {
      "name": "The Mandate Perfected",
      "level": 18,
      "kind": "feature",
      "cost_line": "Passive.",
-     "text": "Your Imperial Die becomes d12. Your Tribute cap becomes PB + CE modifier. You may maintain Flow Break on PB targets. Consuming Flow Break grants 1 Tribute, ignoring the 1/round limit."
+     "text": "Your Imperial Die becomes d12. Your Tribute cap becomes PB + CE modifier. You may maintain Flow Break on PB targets. Consuming Flow Break grants 1 Tribute — a fourth payout, once per round like the others."
     }
    ],
    "maximum": {
@@ -3147,13 +3262,13 @@
    "domain": {
     "name": "All Under Heaven — Throne of the First Emperor",
     "kind": "domain",
-    "level": null,
-    "cost_line": "Full-turn action · 20 CE · 1,000 clash points · burnout 3 rounds · duration 3 minutes · 60-ft enclosed.",
-    "text": "At initiative 20, the sure-hit **Imperial Meridian** automatically Flow-Breaks one hostile. **Tribute of Heaven** uncaps your Tribute gain. **Five Forms One Emperor:** chain 3 different Chi You forms, paying their CE costs without spending actions or reactions.",
+    "level": 18,
+    "cost_line": "Full-turn action · 20 CE · 1,000 clash points · burnout 3 rounds · duration 3 minutes · 120-ft open radius.",
+    "text": "At initiative 20, the sure-hit **Imperial Meridian** automatically Flow-Breaks one hostile. **Tribute of Heaven** removes your Tribute cap while you are inside the Domain — each gain condition still pays only once per round, as normal. **Five Forms One Emperor:** chain 3 different Chi You forms, paying their CE costs without spending actions or reactions.",
     "clash_points": 1000,
     "burnout_rounds": 3,
     "duration_min": 3,
-    "radius": "60-ft radius",
+    "radius": "120-ft radius",
     "activation": "full-turn action",
     "ce_cost": 20
    },
@@ -3161,11 +3276,12 @@
     "name": "Tianxia, Complete",
     "kind": "l20",
     "level": 20,
-    "cost_line": "Once per long rest · bonus action.",
+    "cost_line": "Once per long rest · bonus action · 10 CE.",
     "text": "For 1 minute, Flow Break rests on every hostile creature you can see — no Gaze targeting required; the gaze becomes the sky — and your Tribute cap is doubled. All under heaven, administered all at once."
    },
    "summary_text": null,
-   "source_file": "38-qin.md"
+   "source_file": "38-qin.md",
+   "img": "c-fig-qin-ror.jpg"
   },
   {
    "id": "nikola-tesla",
