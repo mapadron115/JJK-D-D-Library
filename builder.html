@@ -4970,7 +4970,7 @@ function qrCollect(){
       levels.forEach(function(l){
         if(l.level>char.level) return;
         added=true;
-        var ce=qrFixedCE(l.rules); if(ce!=null) ce=applyEfficiency(ce);
+        var ce=qrFixedCE(l.rules); if(ce!=null) ce=qrEffCE({ce:ce, tech:1});
         add(qrBucket(l.rules),l.title||'Feature',tn,l.rules||'',qrOneLiner(l.rules),ce!=null?{ce:ce,tech:1}:null);
       });
       if(!added) B.other.push({name:tn+' — technique actions',src:'Technique',cost:'',
