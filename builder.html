@@ -1986,6 +1986,7 @@ function migrateChar(c){
   if(!c.grants||typeof c.grants!=='object') c.grants={};
   if(!Array.isArray(c.equipment)) c.equipment=[];
   if(!Array.isArray(c.cursedTools)) c.cursedTools=[];
+  if(!Array.isArray(c.feats)) c.feats=[];
   if(!Array.isArray(c.trackers)) c.trackers=[];
   if(!Array.isArray(c.manuscripts)) c.manuscripts=[];
   if(!c.breakthroughs||typeof c.breakthroughs!=='object') c.breakthroughs={};
@@ -4394,6 +4395,16 @@ function stepDetails(body){
     '<div class="field" style="max-width:640px"><label for="ctoolNotes">Notes (abilities, attunement)</label>'+
     '<input id="ctoolNotes" type="text" placeholder="What it does…"></div>'+
     '<button type="button" id="ctoolAddBtn" class="btn">Add Cursed Tool</button>';
+  /* Additional feats — Cursed Energy + Barrier lists (GM-granted / bonus feats) */
+  html+='<h3>Additional Feats</h3><p class="small">Feats granted outside the usual slots — GM awards, story rewards, downtime training — drawn from the Cursed Energy and Barrier (curtain) lists. Feats taken through your heritage, background, or level-up choices live in those steps and are not repeated here.</p>';
+  if(hrV()==='rce'){
+    html+='<div class="banner"><span class="bk">❖ Reverse Cursed Energy Generation</span><p class="small" style="margin:4px 0">This variant cannot take Cursed Energy or Barrier feats.</p></div>';
+  }else if(window.GENERAL_FEATS){
+    html+='<div id="featList">'+addedFeatListHTML()+'</div>';
+    html+='<div class="field" style="max-width:640px"><label for="featAdd">Add a feat</label>'+
+      '<div style="display:flex;gap:8px"><select id="featAdd" style="flex:1">'+addedFeatOptions()+'</select>'+
+      '<button type="button" id="featAddBtn" class="btn">Add</button></div><div id="featAddNote"></div></div>';
+  }
   html+='<h3>Notes</h3><div class="field"><label for="notes">Freeform — backstory, binding vows, GM notes</label>'+
     '<textarea id="notes" placeholder="Anything the sheet should remember…">'+esc(char.notes)+'</textarea></div>';
   body.innerHTML=html;
@@ -4442,6 +4453,26 @@ function stepDetails(body){
     $('ctoolName').value=''; $('ctoolGrade').value=''; $('ctoolNotes').value='';
     refreshCTool();
   });
+  /* additional feat add/remove */
+  var featSel=$('featAdd');
+  if(featSel){
+    function refreshFeats(){ $('featList').innerHTML=addedFeatListHTML(); bindFeatRemove(); featSel.innerHTML=addedFeatOptions(); featSel.value=''; $('featAddNote').innerHTML=''; }
+    function bindFeatRemove(){
+      body.querySelectorAll('[data-feat-rm]').forEach(function(btn){
+        btn.addEventListener('click',function(){
+          char.feats.splice(parseInt(btn.getAttribute('data-feat-rm'),10),1); refreshFeats();
+        });
+      });
+    }
+    bindFeatRemove();
+    featSel.addEventListener('change',function(e){ $('featAddNote').innerHTML=featInfoHTML(e.target.value); });
+    $('featAddBtn').addEventListener('click',function(){
+      var v=featSel.value; if(!v) return;
+      if(!Array.isArray(char.feats)) char.feats=[];
+      if(char.feats.indexOf(v)<0) char.feats.push(v);
+      refreshFeats();
+    });
+  }
   $('notes').addEventListener('input',function(e){ char.notes=e.target.value; });
 }
 function equipmentListHTML(){
@@ -4461,6 +4492,34 @@ function cursedToolListHTML(){
       ' <button type="button" data-ctool-rm="'+i+'" class="btn" style="padding:2px 8px;font-size:.75rem">Remove</button></li>';
   });
   return html+'</ul>';
+}
+/* Step 8 additional feats: stored in char.feats, which the sheet's Details
+   section and the quick reference already read — this is their only writer. */
+function addedFeatListHTML(){
+  var feats=char.feats||[];
+  if(!feats.length) return '<p class="small" style="opacity:.6">No additional feats recorded.</p>';
+  var html='<ul style="margin:4px 0;padding-left:1.3em">';
+  feats.forEach(function(f,i){
+    var fi=featInfo(f);
+    html+='<li class="small"><b>'+esc(f)+'</b>'+(fi&&fi.prereq&&fi.prereq!=='N/A'?' <span style="opacity:.7">('+esc(fi.prereq)+')</span>':'')+
+      ' <button type="button" data-feat-rm="'+i+'" class="btn" style="padding:2px 8px;font-size:.75rem">Remove</button></li>';
+  });
+  return html+'</ul>';
+}
+function addedFeatOptions(){
+  var owned={}; allFeatNames().forEach(function(n){ owned[n]=1; });
+  function group(label, arr){
+    if(!arr||!arr.length) return '';
+    var opts=arr.filter(function(f){ return !owned[f.name]; }).map(function(f){
+      var lab=f.name+(f.prereq?' ('+f.prereq+')':'');
+      return '<option value="'+esc(f.name)+'" title="'+esc((f.prereq?f.prereq+'. ':'')+f.text)+'">'+esc(lab)+'</option>';
+    }).join('');
+    return opts?'<optgroup label="'+label+'">'+opts+'</optgroup>':'';
+  }
+  var GF=window.GENERAL_FEATS||{};
+  return '<option value="">— choose a feat —</option>'+
+    group('Cursed Energy feats', GF.ce)+
+    group('Barrier feats', GF.barrier);
 }
 STEP_VALID[8]=function(){ return {ok:true}; };
 
