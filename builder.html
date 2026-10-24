@@ -281,6 +281,10 @@ h1 .amp{color:var(--red)}
 .tag-list{list-style:none;margin:0;padding:0}
 .tag-list li{background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:8px 14px;margin-bottom:8px;font-size:.92rem;display:flex;justify-content:space-between;gap:12px;align-items:center}
 .tag-list .rm{color:var(--red-deep);cursor:pointer;font-size:.75rem;letter-spacing:1px;text-transform:uppercase}
+/* sheet feat hover tooltips (Details list): full feat text on hover/focus;
+   plain names (no feat record) render without a tooltip */
+.feat-tip{border-bottom:1px dotted var(--ink3);cursor:help;position:relative}
+.feat-tip:hover::after,.feat-tip:focus::after{content:attr(data-tip);position:absolute;left:0;top:100%;z-index:60;width:max-content;max-width:min(340px,80vw);max-height:320px;overflow-y:auto;white-space:normal;background:var(--card);border:1px solid var(--line2);border-radius:4px;box-shadow:0 4px 14px rgba(34,29,20,.25);padding:10px 12px;font-size:.85rem;font-weight:normal;line-height:1.5;color:var(--ink);margin-top:6px}
 .preset-chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
 .preset-chips .btn-small{border-style:dashed}
 /* ── Combat Quick Reference ──────────────────── */
@@ -348,6 +352,7 @@ h1 .amp{color:var(--red)}
   .sheet{border:2px solid #000;break-inside:avoid}
   .sheet-sec{break-inside:avoid}
   .sheet-sec.qrsec{break-inside:auto}
+  .feat-tip{border-bottom:none}
   .rules-full{display:block !important}
   .rules-preview,.rules-toggle{display:none !important}
   a{color:#000;text-decoration:none}
@@ -6002,22 +6007,33 @@ function sheetHTML(){
   html+='<p class="small" style="margin:0 0 4px;letter-spacing:2px;text-transform:uppercase">Feats</p>'+
     (function(){
       var featNote=function(name){ var fi=featInfo(name); return fi&&fi.prereq?' <span class="small">'+esc(fi.prereq)+'</span>':''; };
+      /* Hoverable feat name: full feat text in a tooltip; plain name when
+         no feat record exists (e.g. variant auto-grants without a dossier). */
+      var featTip=function(name){
+        var fi=featInfo(name);
+        if(!fi) fi=featInfo(String(name).replace(' (variant auto-grant)',''));
+        if(!fi || !fi.text) return esc(name);
+        var tip=((fi.prereq?fi.prereq+'. ':'')+fi.text).replace(/\s+/g,' ').trim();
+        return '<span class="feat-tip" tabindex="0" data-tip="'+esc(tip)+'">'+esc(name)+'</span>';
+      };
       /* Jujutsu Sorcerers choose one Cursed Energy feat via Beginner Cursed Energy (unusable under Pure Body) */
       var _sorcFeatPick=((char.ancestryPicks||{}).sorcererFeat)||'';
       var autoFeats=(char.heritage==='sorcerer'&&!isHR()&&_sorcFeatPick)?[_sorcFeatPick]:[];
       if(hrV()==='rce') autoFeats=autoFeats.concat(['Reverse Cursed Technique (variant auto-grant)','Cursed Technique Reversal (variant auto-grant)','Reverse Cursed Technique Output (variant auto-grant)']);
       var items=autoFeats.map(function(f){
         var tag=f.indexOf('(variant auto-grant)')>=0?' <span class="small">(variant)</span>':' <span class="small">(heritage)</span>';
-        return '<li>'+esc(f)+tag+featNote(f)+'</li>';
+        var base=f.replace(' (variant auto-grant)','');
+        var suffix=f.indexOf('(variant auto-grant)')>=0?' (variant auto-grant)':'';
+        return '<li>'+featTip(base)+suffix+tag+featNote(f)+'</li>';
       })
-        .concat(char.backgroundFeat?['<li>'+esc(char.backgroundFeat)+' <span class="small">(background)</span>'+featNote(char.backgroundFeat)+featASISheetNote('bg')+featChoiceSheetNote('bg')+'</li>']:[])
-        .concat(char.feats.map(function(f){return '<li>'+esc(f)+featNote(f)+'</li>';}))
-        .concat(asiFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat)</span>'+featNote(e.name)+featASISheetNote('asi-'+e.level)+featChoiceSheetNote('asi-'+e.level)+'</li>';}))
-        .concat(techniquelessFeatEntries().map(function(e){return '<li>'+esc(e.name)+' <span class="small">(Lv '+e.level+' feat, techniqueless)</span>'+featNote(e.name)+featASISheetNote('tl-'+e.level)+featChoiceSheetNote('tl-'+e.level)+'</li>';}));
+        .concat(char.backgroundFeat?['<li>'+featTip(char.backgroundFeat)+' <span class="small">(background)</span>'+featNote(char.backgroundFeat)+featASISheetNote('bg')+featChoiceSheetNote('bg')+'</li>']:[])
+        .concat(char.feats.map(function(f){return '<li>'+featTip(f)+featNote(f)+'</li>';}))
+        .concat(asiFeatEntries().map(function(e){return '<li>'+featTip(e.name)+' <span class="small">(Lv '+e.level+' feat)</span>'+featNote(e.name)+featASISheetNote('asi-'+e.level)+featChoiceSheetNote('asi-'+e.level)+'</li>';}))
+        .concat(techniquelessFeatEntries().map(function(e){return '<li>'+featTip(e.name)+' <span class="small">(Lv '+e.level+' feat, techniqueless)</span>'+featNote(e.name)+featASISheetNote('tl-'+e.level)+featChoiceSheetNote('tl-'+e.level)+'</li>';}));
       /* dedupe: identical feat names collapse, heritage entry (listed first) wins */
       var seenDup={};
       items=items.filter(function(li){
-        var m=li.match(/<li>([^<]+)/); var nm=m?m[1].trim():li;
+        var m=li.match(/<li>(?:<span[^>]*>)?([^<]+)/); var nm=m?m[1].trim():li;
         if(seenDup[nm]) return false; seenDup[nm]=1; return true;
       });
       return items.length?'<ul class="tag-list">'+items.join('')+'</ul>':'<p class="small">—</p>';
