@@ -303,7 +303,7 @@ h1 .amp{color:var(--red)}
 .qr-entry:last-child{margin-bottom:0}
 .qr-name{font-weight:bold;font-size:.88rem}
 .qr-src{font-weight:normal;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--ink3)}
-.qr-cost{font-weight:normal;font-size:.72rem;color:var(--gold-deep,#8f6c1d);border:1px solid var(--gold-deep,#8f6c1d);border-radius:3px;padding:0 5px;margin-left:4px;white-space:nowrap}
+.qr-cost{font-weight:normal;font-size:.72rem;color:var(--gold-deep,#8f6c1d);border:1px solid var(--gold-deep,#8f6c1d);border-radius:3px;padding:0 5px;margin-left:4px}
 .qr-one{font-size:.82rem;color:var(--ink2);margin-top:2px}
 .qr-spend{margin:6px 0 2px 8px;padding:8px 12px;font-size:.7rem;min-height:44px;vertical-align:middle}
 .qr-plist{list-style:none;margin:0;padding:0}
@@ -4931,6 +4931,22 @@ function qrFixedCE(costLine){
   }
   return out;
 }
+/* Short pill label for an Original Library rules-line: the leading economy
+   word plus a bare CE amount when the next segment is exactly one
+   ("Reaction · 2 CE"). Anything else (prose segments, unprefixed rules)
+   yields '' — the full rules text must NEVER reach the pill: rendered
+   inside .qr-cost (white-space:nowrap) it ran off the sheet as one
+   unbreakable line. Bucket heading + CE button + one-liner already
+   carry the economy, cost, and summary. */
+function qrLibCost(rules){
+  var parts=String(rules||'').split('·');
+  var first=(parts[0]||'').trim();
+  if(!first || first.length>28) return '';
+  var cost=first;
+  var second=(parts[1]||'').trim();
+  if(/^\d+\s*CE$/i.test(second)) cost+=' · '+second;
+  return cost;
+}
 /* Efficiency (Advanced/Mastered CE Manipulation) reduces technique CE costs, min 1. */
 function qrEffCE(e){
   var base=e.ce||0, tier=ceManipTier();
@@ -5035,7 +5051,7 @@ function qrCollect(){
         if(l.level>char.level) return;
         added=true;
         var ce=qrFixedCE(l.rules); if(ce!=null) ce=qrEffCE({ce:ce, tech:1});
-        add(qrBucket(l.rules),l.title||'Feature',tn,l.rules||'',qrOneLiner(l.rules),ce!=null?{ce:ce,tech:1}:null);
+        add(qrBucket(l.rules),l.title||'Feature',tn,qrLibCost(l.rules),qrOneLiner(l.rules),ce!=null?{ce:ce,tech:1}:null);
       });
       if(!added) B.other.push({name:tn+' — technique actions',src:'Technique',cost:'',
         one:'Full level progression in the technique section below.'});
