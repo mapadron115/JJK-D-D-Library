@@ -5157,9 +5157,13 @@ function qrEntryHTML(e){
       (eff!==e.ce?' title="Includes Efficiency discount (base '+e.ce+' CE)"':'')+
       ' aria-label="Spend '+eff+' cursed energy: '+esc(e.name)+'">⚡ '+eff+' CE</button>';
   }
+  /* QR cost pills removed 2026-10-26 (zack): the bucket heading already states the
+     economy and the lightning button already states the CE cost, so a cost_line pill
+     only duplicated both and wrapped ugly mid-entry. Feat "Req: ..." pills are kept —
+     requirements are the one thing the pill alone carries. */
   return '<div class="qr-entry"><div class="qr-name">'+nm+
     (e.src?' <span class="qr-src">'+esc(e.src)+'</span>':'')+
-    (e.cost?' <span class="qr-cost">'+esc(e.cost)+'</span>':'')+btn+'</div>'+
+    (e.cost&&e.cost.indexOf('Req: ')===0?' <span class="qr-cost">'+esc(e.cost)+'</span>':'')+btn+'</div>'+
     (e.one?'<div class="qr-one">'+esc(e.one)+'</div>':'')+'</div>';
 }
 function qrBucketHTML(title, icon, list){
