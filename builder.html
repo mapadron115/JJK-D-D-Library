@@ -5173,6 +5173,8 @@ function quickRefHTML(){
   var ab=abilitiesAt(char.level);
   var hp=hpMax(), acInfo=baseAC(), spd=walkSpeed();
   var init=qrSigned(mod(ab.DEX||10));
+  var ceModQ=(hasCEPool()&&char.ceAbility)?mod(ab[char.ceAbility]||10):null;
+  var ceEffQ=ceModQ==null?null:ceModQ+hrCEModBonus();
 
   var html='<div class="sheet-sec qrsec"><h3><span class="orn">❖</span> Combat Quick Reference</h3>'+
     '<p class="small" style="margin-top:-4px">Everything you can do on your turn — full rules live in the sections below.</p>';
@@ -5184,7 +5186,8 @@ function quickRefHTML(){
     '<div><b>'+spd+' ft</b><span>Speed</span></div>'+
     '<div><b>'+init+'</b><span>Initiative</span></div>'+
     '<div><b>+'+pb(char.level)+'</b><span>Proficiency</span></div>'+
-    (hasCEPool()?'<div><b>'+ceMax()+'</b><span>Max CE</span></div>':'')+'</div>';
+    (hasCEPool()?'<div><b>'+ceMax()+'</b><span>Max CE</span></div>':'')+
+    (hasCEPool()?'<div><b>'+qrSigned(ceEffQ)+'</b><span>CE modifier</span></div><div><b>'+(8+pb(char.level)+ceEffQ)+'</b><span>Technique DC</span></div>':'')+'</div>';
 
   /* ability mods strip */
   html+='<div class="qr-abs">'+['STR','DEX','CON','INT','WIS','CHA'].map(function(k){
