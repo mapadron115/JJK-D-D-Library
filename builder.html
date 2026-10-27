@@ -5274,7 +5274,7 @@ function quickRefHTML(){
    Persisted per character in localStorage; hidden on print. */
 function trackerKey(){ return 'ra_trackers_'+(char.id||'noid'); }
 function trackerState(){
-  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null, siphon:{counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false}, guanyin:{vector:null,intention:null,second:null,names:{},reactions:0}, crazy:{held:[],secondSpin:false,encore:false,encoreReady:false,double:false,survivor:false,survivorHeld:false,fullHouse:false,lastRolls:[],lastMode:'',lastTake:0,lastKind:'',lastPrice:'',lastTie:false}, fiftytwo:{deck:[],hand:[],discard:[],decl:null,coldDeck:false,marked:false,river:false,sleight:false,domain:false,feats:{counter:false,marked:false,sleight:false,river:false,redblack:false},mode:'normal',sel:[],keepSel:[],drawPending:0,drawPurpose:'',peek:null,pickN:0,endArmed:false,newArmed:false,newArmedTok:0}, adaptive:{tags:[],slots:[],tempSlots:[],encounterInstall:null,round:1,regenRound:0,lentRound:0,hostileRound:0,keterRound:0,termination:false,maximum:false,recordBlocked:false,keterArmed:null,replaceTarget:null,feats:{lent:false,hostile:false,keter:false,rebuild:false}}, revenge:{total:0,interest:false}, pain:{bank:0,armor:false,aura:false,sun:false}, jin:{charges:0,domain:false}, miracle:{pool:0,blindUsed:false,domain:false}, visitors:{mischief:0,swarm:false,swarmHp:null,dispersed:false,freeReformUsed:false,pileFreeUsed:false,maxActive:false} };
+  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null, siphon:{counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false}, guanyin:{vector:null,intention:null,second:null,names:{},reactions:0}, crazy:{held:[],secondSpin:false,encore:false,encoreReady:false,double:false,survivor:false,survivorHeld:false,fullHouse:false,lastRolls:[],lastMode:'',lastTake:0,lastKind:'',lastPrice:'',lastTie:false}, fiftytwo:{deck:[],hand:[],discard:[],decl:null,coldDeck:false,marked:false,river:false,sleight:false,domain:false,feats:{counter:false,marked:false,sleight:false,river:false,redblack:false},mode:'normal',sel:[],keepSel:[],drawPending:0,drawPurpose:'',peek:null,pickN:0,endArmed:false,newArmed:false,newArmedTok:0}, adaptive:{tags:[],slots:[],tempSlots:[],encounterInstall:null,round:1,regenRound:0,lentRound:0,hostileRound:0,keterRound:0,termination:false,maximum:false,recordBlocked:false,keterArmed:null,replaceTarget:null,feats:{lent:false,hostile:false,keter:false,rebuild:false}}, revenge:{total:0,interest:false}, pain:{bank:0,armor:false,aura:false,sun:false}, jin:{charges:0,domain:false}, miracle:{pool:0,blindUsed:false,domain:false}, visitors:{mischief:0,swarm:false,swarmHp:null,dispersed:false,freeReformUsed:false,pileFreeUsed:false,maxActive:false}, hakoware:{loans:[],bailoutUsed:false}, style:{style:'Swordmaster',rankIdx:0,riseUsed:false,aIgnoreUsed:false,guards:0,secondStyle:'',trigger:false,danteUsed:false,gauge:false,sinTrigger:false,sinRounds:0,quadUsed:false}, kinetic:{objects:[]}, overdue:{books:[],deniedUsed:false,specialUsed:false}, hunter:{pages:[],invoked:0}, game:{pieces:[],blocked:[],moves:0,tempoUsed:false,domain:false} };
   try{
     var raw=localStorage.getItem(trackerKey());
     if(raw) d=Object.assign(d, JSON.parse(raw));
@@ -5432,6 +5432,30 @@ function trackerHTML(hpMaxV, ceMaxV){
   /* Visitors mischief bank + swarm (e172) — e172 characters only */
   if(hasVisitors()){
     html+='<div class="tracker-card"><div id="trkVisitorsBody">'+visitorsCardHTML(st)+'</div></div>';
+  }
+  /* Hakoware A.P.R. ledger (e058) — e058 characters only */
+  if(hasHakoware()){
+    html+='<div class="tracker-card"><div id="trkHakowareBody">'+hakowareCardHTML(st)+'</div></div>';
+  }
+  /* Style Devil rank + styles (e110) — e110 characters only */
+  if(hasStyle()){
+    html+='<div class="tracker-card"><div id="trkStyleBody">'+styleCardHTML(st)+'</div></div>';
+  }
+  /* Kinetic Imbuement loaded objects (e040) — e040 characters only */
+  if(hasKinetic()){
+    html+='<div class="tracker-card"><div id="trkKineticBody">'+kineticCardHTML(st)+'</div></div>';
+  }
+  /* Overdue lending desk (e555) — e555 characters only */
+  if(hasOverdue()){
+    html+='<div class="tracker-card"><div id="trkOverdueBody">'+overdueCardHTML(st)+'</div></div>';
+  }
+  /* Skill Hunter black book (e511) — e511 characters only */
+  if(hasHunter()){
+    html+='<div class="tracker-card"><div id="trkHunterBody">'+hunterCardHTML(st)+'</div></div>';
+  }
+  /* Immortal Game board (e559) — e559 characters only */
+  if(hasGame()){
+    html+='<div class="tracker-card"><div id="trkGameBody">'+gameCardHTML(st)+'</div></div>';
   }
   /* custom use-trackers */
   html+='<div class="tracker-card"><div class="tracker-title"><span>Limited Uses</span><span>Mark when expended</span></div>'+
@@ -6252,6 +6276,270 @@ function visitorsCardHTML(st){
   }
   return h;
 }
+/* ── Hakoware A.P.R. ledger (e058) ── */
+function hasHakoware(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e058'; });
+}
+function hakowareState(st){
+  if(!st.hakoware) st.hakoware={loans:[], bailoutUsed:false, garnishRound:false};
+  return st.hakoware;
+}
+function roundsToBankruptcy(debt, maxCE){
+  if(debt<=0) return null;
+  if(debt>maxCE) return 0;
+  var d=debt, n=0;
+  while(d<=maxCE && n<200){ d=Math.floor(d*1.10); n++; }
+  return n>=200?null:n;
+}
+function hakowareCardHTML(st){
+  var f=hakowareState(st);
+  var lvl=char.level||1;
+  var principal=lvl>=18?3*lvl:2*lvl;
+  var cap=lvl>=6?2:1;
+  var active=f.loans.filter(function(l){ return !l.bankrupt; }).length;
+  var h='<div class="tracker-title">Hakoware · A.P.R. Ledger</div>';
+  h+='<div class="small">Principal '+principal+' (2×level'+(lvl>=18?', 3× at L18':'')+') added to the debtor\'s current and max CE on latching. One loan at a time'+(lvl>=6?', two at L6+':'')+'. Potclean can\'t be damaged while a loan is active.</div>';
+  if(active<cap){
+    h+='<div style="margin-top:8px">Debtor: <input id="hak-name" type="text" placeholder="Name" style="width:110px"> Max CE (after principal): <input id="hak-max" type="number" min="0" value="" placeholder="0" style="width:70px"> <button id="hak-new">Conjure Potclean (action, 2 CE)</button></div>';
+  } else {
+    h+='<div class="small" style="margin-top:8px">Loan capacity reached ('+cap+').</div>';
+  }
+  f.loans.forEach(function(l, idx){
+    var eff=l.debt+l.pending;
+    var rtb=roundsToBankruptcy(l.debt, l.maxCE);
+    h+='<div class="adapt-slot"><b>'+l.name+'</b>'+(l.bankrupt?' — <b>BANKRUPT</b>':(l.debt>l.maxCE?' — <b>BANKRUPT</b>':''));
+    h+='<div class="bank-num">'+l.debt+' <span class="small">debt · Max CE '+l.maxCE+' · Pending damage '+l.pending+' · Effective '+(eff)+'</span></div>';
+    if(lvl>=3 && !l.bankrupt) h+='<div class="small">Audit: rounds until bankruptcy at the current rate (no new damage): '+(rtb==null?'—':rtb)+'</div>';
+    if(l.bankrupt){
+      h+='<div class="small">Bankrupt: debtor can\'t spend CE until a long rest; Potclean has returned.</div>';
+      h+='<div style="margin-top:6px"><button data-hak-clear="'+idx+'">Clear loan</button></div>';
+    } else {
+      h+='<div style="margin-top:6px">Damage dealt: <input data-hak-dmg="'+idx+'" type="number" min="0" value="" placeholder="0" style="width:70px"> <button data-hak-add="'+idx+'">Add damage</button> · Debtor hit me: <input data-hak-shr="'+idx+'" type="number" min="0" value="" placeholder="0" style="width:70px"> <button data-hak-shr-btn="'+idx+'">Shrink debt</button></div>';
+      h+='<div style="margin-top:6px"><button data-hak-tick="'+idx+'">Tick (start of debtor\'s turn)</button>';
+      if(lvl>=11) h+=' · Debtor spent CE: <input data-hak-gar="'+idx+'" type="number" min="0" value="" placeholder="0" style="width:70px"> <button data-hak-gar-btn="'+idx+'"'+(l.garnishUsed?' disabled':'')+'>Garnish</button>';
+      if(lvl>=20) h+=' <button data-hak-bail="'+idx+'"'+(f.bailoutUsed?' disabled':'')+'>Bailout (forgive, 1/long rest)</button>';
+      h+=' <button data-hak-clear="'+idx+'">Clear loan</button></div>';
+      h+='<div class="small">Tick: new debt = (old debt + damage since last tick) × 1.10, rounded down. Bankruptcy when debt exceeds max CE.'+(lvl>=11?' Garnish (L11): first CE spend each round grows the debt by the amount spent.':'')+'</div>';
+    }
+    h+='</div>';
+  });
+  h+='<div style="margin-top:8px"><button id="hak-round">New round</button></div>';
+  h+='<div class="small">New round clears Garnish flags. Damage the debtor deals to you shrinks the debt. Bailout (L20): forgive a loan, regain CE equal to half the forgiven debt (up to your max).</div>';
+  return h;
+}
+/* ── Style Devil rank, styles, guards, gauge (e110) ── */
+var STYLE_RANKS=['D','C','B','A','S','SS','SSS'];
+var STYLE_INFO={
+  Swordmaster:'+1 weapon die once/turn'+' (two dice at rank B+)',
+  Gunslinger:'+30 ranged range, ignore half cover',
+  Trickster:'+10 speed, Disengage',
+  Royalguard:'Reaction · 1 CE: reduce damage by 1d10 + level (2d10 + level at rank B+); each reduction stores 1 Guard (max PB)'
+};
+function hasStyle(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e110'; });
+}
+function styleState(st){
+  if(!st.style) st.style={style:'Swordmaster', rankIdx:0, riseUsed:false, aIgnoreUsed:false, guards:0, secondStyle:'', trigger:false, danteUsed:false, gauge:false, sinTrigger:false, sinRounds:0, quadUsed:false};
+  return st.style;
+}
+function styleCardHTML(st){
+  var f=styleState(st);
+  var lvl=char.level||1, pb=pbFor(lvl);
+  var rank=STYLE_RANKS[f.rankIdx];
+  var h='<div class="tracker-title">Style Devil · Rank &amp; Styles</div>';
+  h+='<div class="bank-num">'+rank+' <span class="small">Style Rank · Style: '+f.style+(f.secondStyle?' + '+f.secondStyle+' (two Styles, SS+)':'')+'</span></div>';
+  h+='<div class="small">D→C→B→A→S→SS→SSS, start D. Rise once/turn for landing a different named attack or style interaction than the last qualifying action. Heavy damage (single instance ≥25% max HP, minimum 20) drops one rank; repeating the same action three turns running cannot raise it. Riders — C: +5 ft speed. B: style riders that roll dice gain one extra die. A: once per combat, ignore one rank drop from heavy damage.</div>';
+  h+='<div style="margin-top:8px"><button id="style-rise"'+(f.riseUsed || f.rankIdx>=6?' disabled':'')+'>Rise one rank</button> <button id="style-drop">Drop one rank (heavy damage)</button> <button id="style-turn">New turn</button> <button id="style-combat">New combat</button></div>';
+  h+='<div style="margin-top:8px">Style (bonus action): ';
+  ['Swordmaster','Gunslinger','Trickster','Royalguard'].forEach(function(s){
+    h+='<button data-style-pick="'+s+'"'+(f.style===s?' disabled':'')+'>'+s+'</button> ';
+  });
+  h+='</div><div class="small">'+f.style+': '+STYLE_INFO[f.style]+'</div>';
+  if(lvl>=13 && f.rankIdx>=5){
+    h+='<div style="margin-top:6px">Second Style (SS+, Quadruple Style): <select id="style-second"><option value="">— none —</option>'+['Swordmaster','Gunslinger','Trickster','Royalguard'].map(function(s){ return '<option value="'+s+'"'+(f.secondStyle===s?' selected':'')+'>'+s+'</option>'; }).join('')+'</select></div>';
+    if(f.secondStyle) h+='<div class="small">'+f.secondStyle+': '+STYLE_INFO[f.secondStyle]+'</div>';
+  }
+  h+='<div style="margin-top:8px">Guards: <b>'+f.guards+' / '+pb+'</b> <button id="style-guard">Royalguard reduction (reaction, 1 CE)</button> <span style="white-space:nowrap">Spend <input id="style-guard-amt" type="number" min="1" value="1" style="width:50px"> <button id="style-guard-ac">for +1 AC (reaction)</button> <button id="style-guard-hit">on a melee hit (+1d10 force each)</button></span></div>';
+  h+='<div class="small">Each Royalguard reduction stores 1 Guard (max PB). Spend 1 Guard as a reaction for +1 AC until the start of your next turn; on a melee hit, spend any Guard for +1d10 force each.</div>';
+  if(lvl>=9 && !f.trigger){
+    h+='<div style="margin-top:8px"><button id="style-trigger">Devil Trigger (action, '+(f.rankIdx>=4?'3':'4')+' CE, 1 min)</button></div>';
+    h+='<div class="small">30-ft fly, heal PB HP/turn, resistance to bludgeoning/piercing/slashing, attacks +1d8. Cost 3 CE at S rank.</div>';
+  }
+  if(f.trigger){
+    h+='<div class="fifty-panel"><b>Devil Trigger active (1 min)</b><div class="small">30-ft fly, heal PB HP/turn (mark it), resistance to bludgeoning/piercing/slashing, attacks +1d8.</div><div style="margin-top:6px"><button id="style-trigger-end">End Devil Trigger</button></div></div>';
+  }
+  if(lvl>=11){
+    h+='<div style="margin-top:8px"><button id="style-dante"'+(f.danteUsed?' disabled':'')+'>Devil Sword Dante (once/turn, 2 CE)</button></div>';
+    h+='<div class="small">Weave four Mirage Swords: +2d8 force on an attack, +2 AC until your next turn, or four 1d8 bolts split among targets.</div>';
+  }
+  if(lvl>=15 && f.rankIdx>=6 && !f.gauge && !f.sinTrigger){
+    h+='<div style="margin-top:8px"><button id="style-gauge">Convert 6 CE → full Sin Gauge (SSS)</button></div>';
+  }
+  if(f.gauge){
+    h+='<div class="fifty-panel"><b>Sin Gauge full</b><div style="margin-top:6px"><button id="style-sin">Sin Devil Trigger (bonus action, consume gauge, 3 rounds)</button></div></div>';
+  }
+  if(f.sinTrigger){
+    h+='<div class="fifty-panel"><b>Sin Devil Trigger active ('+f.sinRounds+' rounds left)</b><div class="small">80-ft fly, resistance to all but psychic/radiant, attacks +2d10.</div><div style="margin-top:6px"><button id="style-stinger">Sin Stinger (action, 2 CE)</button> <button id="style-demo">Demolition (action, 4 CE)</button> <button id="style-sin-round">Round passed</button> <button id="style-sin-end">End</button></div><div class="small">Sin Stinger: melee CE attack, 4d10 force, Str save or launched 20 ft upward and prone. Demolition: 20-ft burst within 60 ft, Dex save, 6d10 force (half on success).</div></div>';
+  }
+  if(lvl>=18 && f.rankIdx>=6 && !f.quadUsed && !f.sinTrigger){
+    h+='<div style="margin-top:8px"><button id="style-quad">Quadruple S (SSS, 1/short rest: Sin Devil Trigger 1 round, gauge kept)</button></div>';
+  }
+  if(lvl>=18) h+='<div style="margin-top:6px"><button id="style-shortrest">Short rest</button></div>';
+  if(lvl>=20) h+='<div class="small" style="margin-top:6px">Legendary Dark Knight: Style cannot fall below B while conscious; first Style switch each round is free; at SSS all four Styles function simultaneously.</div>';
+  return h;
+}
+/* ── Kinetic Imbuement loaded objects (e040) ── */
+function hasKinetic(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e040'; });
+}
+function kineticState(st){
+  if(!st.kinetic) st.kinetic={objects:[]};
+  return st.kinetic;
+}
+function kineticDie(lvl){ return lvl>=18?'d10':lvl>=11?'d8':'d6'; }
+function kineticCardHTML(st){
+  var f=kineticState(st);
+  var lvl=char.level||1, pb=pbFor(lvl);
+  var die=kineticDie(lvl);
+  var h='<div class="tracker-title">Kinetic Imbuement · Loaded Objects</div>';
+  h+='<div class="small">Kinetic Die '+die+' (d6 → d8 at L11 → d10 at L18). Charge lasts 1 minute (10 minutes at L11, 1 hour at L18). Detonation: 2 dice per Charge as force, radius up to 5 ft per Charge (5-ft steps, down to a focused 0-ft discharge); you are unaffected, others Dex save for half. An ordinary charged object is destroyed when it detonates; the centered object takes maximum damage.</div>';
+  h+='<div style="margin-top:8px">Object: <input id="kin-name" type="text" placeholder="Name" style="width:110px"> Scale: <select id="kin-scale"><option value="Token">Token</option><option value="Handheld">Handheld</option><option value="Set Piece">Set Piece</option><option value="Landmark">Landmark</option></select> Charges: <input id="kin-amt" type="number" min="1" value="1" style="width:60px"> <button id="kin-charge">Charge (CE = charges)</button></div>';
+  h+='<div class="small">Deposit limit per step: Token/Handheld PB ('+pb+'); Set Piece/Landmark '+(lvl>=11?'2×PB ('+(2*pb)+')':'PB ('+pb+') before L11')+'. 1 CE = 1 Charge. Bound Conduit capacity 2×PB ('+(2*pb)+').</div>';
+  f.objects.forEach(function(o, idx){
+    var conduit=o.bound?' · <b>Bound Conduit</b>':'';
+    h+='<div class="adapt-slot"><b>'+o.name+'</b> ('+o.scale+') — '+o.charges+' Charge'+(o.charges!==1?'s':'')+', '+o.charges*2+die+' on detonation, radius up to '+(o.charges*5)+' ft'+conduit+'</div>';
+    h+='<div style="margin-top:4px">Release <input data-kin-rel="'+idx+'" type="number" min="1" value="'+o.charges+'" style="width:60px"> <button data-kin-det="'+idx+'">Detonate</button>';
+    if(o.bound) h+=' <button data-kin-atk="'+idx+'">Release into attack (after a hit)</button> <button data-kin-unbind="'+idx+'">Unbind</button>';
+    else h+=' <button data-kin-bind="'+idx+'">Bind as Conduit (bonded over a rest)</button>';
+    h+=' <button data-kin-del="'+idx+'">Remove</button></div>';
+  });
+  h+='<div class="small" style="margin-top:8px">Loaded Toss: throw a charged Token or throwable Handheld within 60/180 ft (ranged CE attack); hit: 1 Kinetic Die + CE mod force, then detonate as direct delivery (direct target takes released damage with no save; dice double on a crit); miss: area detonation at an unoccupied impact point within 10 ft. L3: Trigger Discipline (timed/commanded detonations), Vector Discharge (blast → movement), Kinetic Footwork (+10 speed), Cardsharp Barrage (up to PB Tokens as one action). L6: Chain Reaction (one blast detonates every charged object it reaches), Saboteur\'s Touch (charge hostile equipment), Static Mind. L11: Remote Charge (60 ft), Advanced Agility (Evasion, cross walls/water), Maximum Fifty-Two Pickup (60-ft kill zone). L18: Remote Charge 300 ft, mass deposit 3×PB, ordinary kinetic damage ignores resistance and immunity, Domain House of the Loaded World.</div>';
+  return h;
+}
+/* ── Overdue lending desk (e555) ── */
+function hasOverdue(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e555'; });
+}
+function overdueState(st){
+  if(!st.overdue) st.overdue={books:[], deniedUsed:false, specialUsed:false};
+  return st.overdue;
+}
+var OVERDUE_BOOKS={
+  'Field Manual':'+1 to attack rolls',
+  'Ward Folio':'resistance to one damage type (chosen at lending)',
+  'Atlas':'+10 ft movement speed',
+  'Second Wind':'once while held, holder may use a bonus action to regain 2d8 HP',
+  'Clarity':'advantage on saving throws against charmed and frightened'
+};
+function overdueCardHTML(st){
+  var f=overdueState(st);
+  var lvl=char.level||1, pb=pbFor(lvl);
+  var cap=lvl>=18?2*pb:pb;
+  var payDie=lvl>=6?'d8':'d6';
+  var h='<div class="tracker-title">Overdue · The Lending Desk</div>';
+  h+='<div class="small">Books lent: '+f.books.length+' / '+cap+'. Due in 3 rounds (willing), 2 rounds (force-lent or Special). Each overdue round: stacking −1 to attack rolls, ability checks, and saving throws'+(lvl>=11?' (Special: −2)':'')+'. Payback on return: 1'+payDie+' psychic per overdue round.</div>';
+  if(f.books.length<cap){
+    h+='<div style="margin-top:8px">Holder: <input id="ov-holder" type="text" placeholder="Name" style="width:100px"> Volume: <select id="ov-vol">'+Object.keys(OVERDUE_BOOKS).filter(function(v){ return lvl>=6 || (v!=='Second Wind' && v!=='Clarity'); }).map(function(v){ return '<option value="'+v+'">'+v+'</option>'; }).join('')+'</select> <button id="ov-lend">Lend (bonus action, 1 CE)</button>';
+    if(lvl>=3) h+=' <button id="ov-force">Force Lend (action, 2 CE, Wis save negates)</button>';
+    h+='</div>';
+  }
+  if(lvl>=11){
+    h+='<div style="margin-top:6px">Special Collections holder: <input id="ov-special-holder" type="text" placeholder="Name" style="width:100px"> <button id="ov-special"'+(f.specialUsed?' disabled':'')+'>Lend Special volume (action, 8 CE, 1/short rest)</button></div>';
+    h+='<div class="small">Special: holder gains +2 AC, advantage on all saving throws, +2d6 to attack rolls. Due in 2 rounds; fines −2 per overdue round; 3+ rounds overdue on return/recall → technique burnout (no technique features until the end of their next turn).</div>';
+  }
+  f.books.forEach(function(b, idx){
+    var neverOverdue=(lvl>=18 && !b.forced && !b.special);
+    var status=neverOverdue?'Never overdue (L18 ally)':(b.overdue>0?'OVERDUE '+b.overdue+' round'+(b.overdue!==1?'s':'')+' (−'+(b.special?2*b.overdue:b.overdue)+')':(b.due>0?'Due in '+b.due+' round'+(b.due!==1?'s':''):'Due now'));
+    var payback=b.overdue>0?(b.overdue+payDie+' psychic'):'none';
+    var buff=b.special?'+2 AC, advantage on all saving throws, +2d6 to attack rolls':OVERDUE_BOOKS[b.volume];
+    h+='<div class="adapt-slot"><b>'+b.holder+'</b> — '+b.volume+(b.special?' (Special)':'')+(b.forced?' (force-lent)':'')+' · '+buff+' · '+status+' · Payback: '+payback+'</div>';
+    h+='<div style="margin-top:4px"><button data-ov-ret="'+idx+'">Returned (payback)</button> <button data-ov-rec="'+idx+'">Recall (bonus action, free)</button>';
+    if(lvl>=6) h+=' <button data-ov-deny="'+idx+'"'+(f.deniedUsed?' disabled':'')+'>Deny return (once/round)</button>';
+    h+='</div>';
+  });
+  h+='<div style="margin-top:8px"><button id="ov-round">End of round</button> <button id="ov-shortrest">Short rest</button>';
+  if(lvl>=18) h+=' <button id="ov-audit">The Audit — Maximum (action, 10 CE)</button>';
+  h+='</div>';
+  h+='<div class="small">Holder may return a willing book as a free action once per turn; a force-lent book costs the holder\'s action to return. Recall any lent book as a bonus action (no CE). Renewal Denied (L6): once per round, deny a return attempt (no action) — they keep the book. L18: lending is a free action once per turn (still 1 CE per book); willing allies\' books never go overdue; Force Lend DC +2. Audit: every lent book called in — willing allies within due date regain 2d8 HP and gain +2d6 to their next roll; overdue books take payback at double rate (2d8 per overdue round); force-lent books are always audited as overdue.</div>';
+  return h;
+}
+/* ── Skill Hunter black book (e511) ── */
+function hasHunter(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e511'; });
+}
+function hunterState(st){
+  if(!st.hunter) st.hunter={pages:[], invoked:0};
+  return st.hunter;
+}
+function hunterCardHTML(st){
+  var f=hunterState(st);
+  var lvl=char.level||1;
+  var maxInvoke=lvl>=6?2:1;
+  var h='<div class="tracker-title">Skill Hunter · The Black Book</div>';
+  h+='<div class="small">Invoked this round: '+f.invoked+' / '+maxInvoke+(lvl>=20?' · Every page counts as bookmarked (Open Shelf)':'')+'</div>';
+  h+='<div style="margin-top:8px">Feature: <input id="hu-feat" type="text" placeholder="Stolen feature" style="width:130px"> Owner: <input id="hu-owner" type="text" placeholder="Victim" style="width:100px"> Feature level: <input id="hu-lvl" type="number" min="1" value="1" style="width:55px"> <button id="hu-add">Inscribe stolen feature</button></div>';
+  h+='<div class="small">The rite (all within 1 hour): witness the victim use the feature, ask about it aloud and receive an answer aloud (even a refusal; silence does not count), press the palm print against the victim\'s flesh (action; melee CE attack if unwilling). The victim loses the feature while the page holds it. Invoke requires your level ≥ the feature\'s level; you pay its costs normally, using your CE save DC.</div>';
+  f.pages.forEach(function(p, idx){
+    var tooHigh=p.level>lvl;
+    h+='<div class="adapt-slot"><b>'+p.feature+'</b> (from '+p.owner+', level '+p.level+')'+(p.bookmarked || lvl>=20?' · <b>Bookmarked</b>':'')+(tooHigh?' · <b>Too high level to invoke</b>':'')+'</div>';
+    h+='<div style="margin-top:4px">';
+    if(lvl>=3 && lvl<20) h+='<button data-hu-mark="'+idx+'"'+(p.bookmarked?' disabled':'')+'>Bookmark (bonus action)</button> ';
+    h+='<button data-hu-invoke="'+idx+'"'+(tooHigh || f.invoked>=maxInvoke?' disabled':'')+'>Invoke</button> ';
+    h+='<button data-hu-rel="'+idx+'">Release page</button></div>';
+  });
+  h+='<div style="margin-top:8px"><button id="hu-round">New round</button></div>';
+  h+='<div class="small">One stolen ability per round (Bookmark, L3: the bookmarked ability invokes while the book is open elsewhere; move the bookmark as a bonus action). Two Pages Open (L6): invoke two in a round; each costs +1 additional CE. Due Diligence (L11): observe a creature for 1 minute to learn every Innate Technique feature it holds (does not satisfy the rite\'s witnessing). The Question Compels (L18): the rite\'s question compels a truthful, complete answer on a failed Wisdom save (success = immune 24 hours).</div>';
+  return h;
+}
+/* ── Immortal Game board (e559) ── */
+var GAME_PIECES={
+  pawn:{cost:1, hp:function(l){ return 10+2*l; }, strike:function(cem){ return '1d8 + '+cem; }, move:'10 ft straight forward (20 ft on its first move if the path is clear); strikes only the two forward-diagonal squares'},
+  knight:{cost:2, hp:function(l){ return 10+3*l; }, strike:function(cem){ return '2d6 + '+cem; }, move:'Leaps in an L up to 15 ft, ignoring everything between; strikes the landing square'},
+  bishop:{cost:2, hp:function(l){ return 10+3*l; }, strike:function(cem){ return '2d8 + '+cem; }, move:'Slides diagonally up to 30 ft; strikes only the first creature on the line'},
+  rook:{cost:3, hp:function(l){ return 15+3*l; }, strike:function(cem){ return '2d10 + '+cem; }, move:'Slides orthogonally up to 30 ft; strikes only the first creature on the line'},
+  queen:{cost:6, hp:function(l){ return 15+4*l; }, strike:function(cem){ return '3d8 + '+cem; }, move:'Slides in any direction up to 35 ft; strikes only the first creature on the line'}
+};
+function hasGame(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e559'; });
+}
+function gameState(st){
+  if(!st.game) st.game={pieces:[], blocked:[], moves:0, tempoUsed:false, domain:false};
+  return st.game;
+}
+function gameCardHTML(st){
+  var f=gameState(st);
+  var lvl=char.level||1, pb=pbFor(lvl), cem=ceModEff();
+  var baseLimit=f.domain?2:1;
+  var moveLimit=baseLimit+(f.tempoUsed?1:0);
+  var h='<div class="tracker-title">The Immortal Game · Board</div>';
+  h+='<div class="small">Pieces fielded: '+f.pieces.length+' / '+pb+' · Moves this turn: '+f.moves+' / '+moveLimit+(f.domain?' · Checkmate Domain active (two Moves/turn, Tempo free)':'')+(f.blocked.length?' · Lost until long rest: '+f.blocked.join(', ') :'')+'</div>';
+  h+='<div class="small">All pieces: AC '+(13+pb)+', saves equal to your technique attack modifier, immune to poison and psychic, strikes deal force damage.</div>';
+  var types=['pawn','knight'];
+  if(lvl>=3) types.push('bishop','rook');
+  if(lvl>=11) types.push('queen');
+  h+='<div style="margin-top:8px">Summon: <select id="game-type">'+types.map(function(t){ return '<option value="'+t+'">'+t+' ('+GAME_PIECES[t].cost+' CE)</option>'; }).join('')+'</select> <button id="game-summon">Summon (action)</button>';
+  if(f.pieces.length===0) h+=' <button id="game-free">Free pawn (initiative, no pieces fielded)</button>';
+  h+='</div>';
+  f.pieces.forEach(function(p, idx){
+    var spec=GAME_PIECES[p.type];
+    h+='<div class="adapt-slot"><b>'+p.type+'</b> — HP '+p.hp+' / '+p.maxHp+' · Strike '+spec.strike(cem)+' · '+spec.move+'</div>';
+    h+='<div style="margin-top:4px">Damage: <input data-game-dmg="'+idx+'" type="number" min="0" value="" placeholder="0" style="width:70px"> <button data-game-hit="'+idx+'">Damage piece</button> <button data-game-move="'+idx+'"'+(f.moves>=moveLimit?' disabled':'')+'>Move</button> <button data-game-dismiss="'+idx+'">Dismiss</button>';
+    if(p.type==='pawn' && lvl>=6){
+      h+=' <select data-game-promo="'+idx+'"><option value="knight">knight (1 CE)</option><option value="bishop">bishop (1 CE)</option><option value="rook">rook (2 CE)</option></select> <button data-game-promote="'+idx+'">Promote</button>';
+    }
+    h+='</div>';
+  });
+  h+='<div style="margin-top:8px"><button id="game-turn">New turn</button>';
+  if(lvl>=6) h+=' <button id="game-tempo"'+(f.tempoUsed?' disabled':'')+'>Tempo Move ('+(f.domain?'free':'2 CE')+', once/turn)</button>';
+  if(lvl>=3) h+=' <button id="game-castle">Castling (reaction, 2 CE)</button>';
+  if(lvl>=18 && !f.domain) h+=' <button id="game-domain">Checkmate — Domain (full-turn, 20 CE)</button>';
+  h+='</div>';
+  if(f.domain){
+    h+='<div class="fifty-panel"><b>Checkmate Domain active (1 min, 60-ft radius, chessboard floor)</b><div class="small">Two Moves per turn; additional Moves bought with Tempo cost no CE. Sure-hit Checkmate: a creature that starts its turn in check and is still in check at the end of its turn takes 5d10 + CE modifier force damage, no attack roll, no saving throw.</div><div style="margin-top:6px"><button id="game-domain-end">End Domain</button></div></div>';
+  }
+  h+='<div class="small" style="margin-top:6px">The Move (bonus action or action): command one piece to move along its pattern and strike; one Move per turn. Check (L6): a creature that starts its turn on a square one of your pieces could capture to is in check — disadvantage on attack rolls against any creature other than a piece giving it check. Promotion (L6): when your pawn reduces a creature to 0 HP with its strike, or ends its Move at least 60 ft from where it was summoned, pay the CE difference to transform it (it regains HP equal to the difference between the two pieces\' maximum HP). Combination (L11): when you summon the queen, each other piece may immediately move along its pattern without striking. A destroyed piece\'s type cannot be summoned again until a long rest; dismissed pieces are exempt.</div>';
+  return h;
+}
 function siphonCardHTML(st){
   var sp=siphonState(st), th=siphonThreshold(), cap=siphonTempCap(), P=pb(char.level);
   var fav=siphonFavor(sp.pool);
@@ -6519,7 +6807,13 @@ function bindTrackers(hpMaxV, ceMaxV){
     if(st.jin){ st.jin.charges=0; st.jin.domain=false; }
     if(st.miracle){ st.miracle.blindUsed=false; st.miracle.domain=false; }
     if(st.visitors){ var vs=st.visitors; vs.swarm=false; vs.swarmHp=null; vs.dispersed=false; vs.freeReformUsed=false; vs.pileFreeUsed=false; vs.maxActive=false; }
-    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive(); renderRevenge(); renderPain(); renderJin(); renderMiracle(); renderVisitors();
+    if(st.hakoware){ var hk=st.hakoware; hk.loans=hk.loans.filter(function(l){ return !l.bankrupt; }); hk.bailoutUsed=false; }
+    if(st.style){ var sy=st.style; sy.rankIdx=(char.level>=20?2:0); sy.riseUsed=false; sy.aIgnoreUsed=false; sy.trigger=false; sy.danteUsed=false; sy.sinTrigger=false; sy.sinRounds=0; sy.quadUsed=false; }
+    if(st.kinetic) st.kinetic.objects=[];
+    if(st.overdue){ st.overdue.books=[]; st.overdue.deniedUsed=false; st.overdue.specialUsed=false; }
+    if(st.hunter) st.hunter.invoked=0;
+    if(st.game){ var gm=st.game; gm.blocked=[]; gm.moves=0; gm.tempoUsed=false; gm.domain=false; }
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive(); renderRevenge(); renderPain(); renderJin(); renderMiracle(); renderVisitors(); renderHakoware(); renderStyle(); renderKinetic(); renderOverdue(); renderHunter(); renderGame();
     var _ri=$('trkRct'); if(_ri&&_rm!=null) _ri.value=_rm;
     toast('Long rest — HP, CE, RCT pool, and uses restored; \u22121 exhaustion.');
   });
@@ -6540,7 +6834,7 @@ function bindTrackers(hpMaxV, ceMaxV){
     st=trackerState(); st.hp=hpMaxV; if(ceMaxV!=null) st.ce=ceMaxV;
     $('trkHp').value=hpMaxV; $('trkTemp').value=0;
     if(ceMaxV!=null) $('trkCe').value=ceMaxV;
-    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive(); renderRevenge(); renderPain(); renderJin(); renderMiracle(); renderVisitors(); toast('Trackers reset.');
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive(); renderRevenge(); renderPain(); renderJin(); renderMiracle(); renderVisitors(); renderHakoware(); renderStyle(); renderKinetic(); renderOverdue(); renderHunter(); renderGame(); toast('Trackers reset.');
   });
 
   /* ── shared mini-helpers for the new cards ── */
@@ -7561,6 +7855,7 @@ function bindTrackers(hpMaxV, ceMaxV){
     if(fg) fg.addEventListener('click',function(){ gain(1); });
     var by=$('jin-buy');
     if(by) by.addEventListener('click',function(){
+      if(f.charges>=cap){ toast('Jin pool full at '+cap+'.'); return; }
       if(!spendOrToast(1)) return;
       gain(lvl>=11?2:1);
     });
@@ -7793,6 +8088,608 @@ function bindTrackers(hpMaxV, ceMaxV){
     if(me) me.addEventListener('click',function(){ f.maxActive=false; refresh(); });
   }
   bindVisitors();
+  /* ── Hakoware A.P.R. ledger (e058) ── */
+  function renderHakoware(){ var b=$('trkHakowareBody'); if(!b) return; b.innerHTML=hakowareCardHTML(st); bindHakoware(); }
+  function bindHakoware(){
+    var b=$('trkHakowareBody'); if(!b) return;
+    var f=hakowareState(st);
+    var lvl=char.level||1;
+    function refresh(){ save(); renderHakoware(); }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    function numFrom(sel){
+      var el=b.querySelector(sel);
+      var n=el?parseInt(el.value,10):NaN;
+      return isNaN(n)?0:n;
+    }
+    var nw=$('hak-new');
+    if(nw) nw.addEventListener('click',function(){
+      var nameEl=$('hak-name');
+      var name=nameEl?nameEl.value.trim():'';
+      var maxCE=numFrom('#hak-max');
+      if(!name){ toast('Enter the debtor\'s name.'); return; }
+      if(maxCE<=0){ toast('Enter the debtor\'s max CE (after the principal boost).'); return; }
+      if(!spendOrToast(2)) return;
+      f.loans.push({name:name, maxCE:maxCE, debt:0, pending:0, bankrupt:false, garnishUsed:false});
+      refresh(); toast('Potclean latched onto '+name+' (max CE '+maxCE+' after principal).');
+    });
+    b.querySelectorAll('[data-hak-add]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var l=f.loans[+el.getAttribute('data-hak-add')];
+        var amt=numFrom('[data-hak-dmg="'+el.getAttribute('data-hak-add')+'"]');
+        if(amt<=0){ toast('Enter damage dealt.'); return; }
+        l.pending+=amt; refresh(); toast('Damage since last tick: '+l.pending+' (debt '+l.debt+').');
+      });
+    });
+    b.querySelectorAll('[data-hak-shr-btn]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var idx=el.getAttribute('data-hak-shr-btn');
+        var l=f.loans[+idx];
+        var amt=numFrom('[data-hak-shr="'+idx+'"]');
+        if(amt<=0){ toast('Enter damage the debtor dealt to you.'); return; }
+        var fromPending=Math.min(amt, l.pending);
+        l.pending-=fromPending;
+        l.debt=Math.max(0, l.debt-(amt-fromPending));
+        refresh(); toast('Debt shrunk: debt '+l.debt+', pending '+l.pending+'.');
+      });
+    });
+    b.querySelectorAll('[data-hak-tick]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var l=f.loans[+el.getAttribute('data-hak-tick')];
+        l.debt=Math.floor((l.debt+l.pending)*1.10);
+        l.pending=0;
+        var bankrupted=l.debt>l.maxCE;
+        if(bankrupted) l.bankrupt=true;
+        refresh();
+        toast(bankrupted?'BANKRUPTCY — '+l.name+' can\'t spend CE until a long rest; Potclean has returned.':'Tick: debt '+l.debt+' (max CE '+l.maxCE+').');
+      });
+    });
+    b.querySelectorAll('[data-hak-gar-btn]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var idx=el.getAttribute('data-hak-gar-btn');
+        var l=f.loans[+idx];
+        if(l.garnishUsed) return;
+        var amt=numFrom('[data-hak-gar="'+idx+'"]');
+        if(amt<=0){ toast('Enter CE the debtor spent.'); return; }
+        l.debt+=amt; l.garnishUsed=true;
+        if(l.debt>l.maxCE) l.bankrupt=true;
+        refresh(); toast('Garnished: debt '+l.debt+'.'+(l.bankrupt?' BANKRUPTCY.':''));
+      });
+    });
+    b.querySelectorAll('[data-hak-bail]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var idx=+el.getAttribute('data-hak-bail');
+        var l=f.loans[idx];
+        if(f.bailoutUsed) return;
+        var forgiven=l.debt+l.pending;
+        var gain=0;
+        if(ceMaxV!=null){
+          var cur=st.ce==null?ceMaxV:st.ce;
+          gain=Math.min(Math.floor(forgiven/2), ceMaxV-cur);
+          if(st.ce!=null) st.ce=cur+gain;
+          var ceEl=$('trkCe'); if(ceEl) ceEl.value=st.ce==null?ceMaxV:st.ce;
+        }
+        f.loans.splice(idx, 1);
+        f.bailoutUsed=true;
+        refresh(); toast('Bailout: '+l.name+' freed; you regain '+gain+' CE (half the forgiven debt '+forgiven+').');
+      });
+    });
+    b.querySelectorAll('[data-hak-clear]').forEach(function(el){
+      el.addEventListener('click',function(){
+        f.loans.splice(+el.getAttribute('data-hak-clear'), 1);
+        refresh();
+      });
+    });
+    var nr=$('hak-round');
+    if(nr) nr.addEventListener('click',function(){
+      f.loans.forEach(function(l){ l.garnishUsed=false; });
+      refresh();
+    });
+  }
+  bindHakoware();
+  /* ── Style Devil rank, styles, guards, gauge (e110) ── */
+  function renderStyle(){ var b=$('trkStyleBody'); if(!b) return; b.innerHTML=styleCardHTML(st); bindStyle(); }
+  function bindStyle(){
+    var b=$('trkStyleBody'); if(!b) return;
+    var f=styleState(st);
+    var lvl=char.level||1, pb=pbFor(lvl);
+    function refresh(){ save(); renderStyle(); }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    function rollDice(n, sides){
+      var total=0;
+      for(var i=0;i<n;i++) total+=Math.floor(Math.random()*sides)+1;
+      return total;
+    }
+    var rs=$('style-rise');
+    if(rs) rs.addEventListener('click',function(){
+      if(f.riseUsed || f.rankIdx>=6) return;
+      f.rankIdx++; f.riseUsed=true;
+      refresh(); toast('Style Rank rose to '+STYLE_RANKS[f.rankIdx]+'.');
+    });
+    var dp=$('style-drop');
+    if(dp) dp.addEventListener('click',function(){
+      if(f.rankIdx<=0) return;
+      if(f.rankIdx>=3 && !f.aIgnoreUsed){
+        f.aIgnoreUsed=true;
+        refresh(); toast('A-rank: ignored the rank drop (once per combat).');
+        return;
+      }
+      var floor=lvl>=20?2:0;
+      f.rankIdx=Math.max(floor, f.rankIdx-1);
+      refresh(); toast('Style Rank fell to '+STYLE_RANKS[f.rankIdx]+'.');
+    });
+    var nt=$('style-turn');
+    if(nt) nt.addEventListener('click',function(){ f.riseUsed=false; f.danteUsed=false; refresh(); });
+    var nc=$('style-combat');
+    if(nc) nc.addEventListener('click',function(){ f.aIgnoreUsed=false; refresh(); });
+    b.querySelectorAll('[data-style-pick]').forEach(function(el){
+      el.addEventListener('click',function(){
+        f.style=el.getAttribute('data-style-pick');
+        refresh(); toast('Style: '+f.style+'.');
+      });
+    });
+    var ss=$('style-second');
+    if(ss) ss.addEventListener('change',function(){ f.secondStyle=ss.value; refresh(); });
+    var gr=$('style-guard');
+    if(gr) gr.addEventListener('click',function(){
+      if(f.guards>=pb){ toast('Guards full at PB ('+pb+').'); return; }
+      if(!spendOrToast(1)) return;
+      var dice=f.rankIdx>=2?2:1;
+      var red=rollDice(dice, 10)+lvl;
+      f.guards++;
+      refresh(); toast('Royalguard reduction: damage reduced by '+red+' ('+dice+'d10 + '+lvl+'). Guard stored ('+f.guards+' / '+pb+').');
+    });
+    var ga=$('style-guard-ac');
+    if(ga) ga.addEventListener('click',function(){
+      var amtEl=$('style-guard-amt');
+      var n=amtEl?parseInt(amtEl.value,10):NaN;
+      if(isNaN(n) || n<=0){ toast('Enter Guards to spend.'); return; }
+      if(n>f.guards){ toast('Only '+f.guards+' Guards stored.'); return; }
+      f.guards-=n; refresh(); toast('Spent '+n+' Guard'+(n>1?'s':'')+': +1 AC until the start of your next turn.');
+    });
+    var gh=$('style-guard-hit');
+    if(gh) gh.addEventListener('click',function(){
+      var amtEl=$('style-guard-amt');
+      var n=amtEl?parseInt(amtEl.value,10):NaN;
+      if(isNaN(n) || n<=0){ toast('Enter Guards to spend.'); return; }
+      if(n>f.guards){ toast('Only '+f.guards+' Guards stored.'); return; }
+      f.guards-=n; refresh(); toast('Royal Release: +'+n+'d10 force on the melee hit.');
+    });
+    var tr=$('style-trigger');
+    if(tr) tr.addEventListener('click',function(){
+      if(!spendOrToast(f.rankIdx>=4?3:4)) return;
+      f.trigger=true; refresh(); toast('Devil Trigger (1 min).');
+    });
+    var te=$('style-trigger-end');
+    if(te) te.addEventListener('click',function(){ f.trigger=false; refresh(); });
+    var dn=$('style-dante');
+    if(dn) dn.addEventListener('click',function(){
+      if(f.danteUsed) return;
+      if(!spendOrToast(2)) return;
+      f.danteUsed=true; refresh(); toast('Devil Sword Dante: +2d8 force on an attack, +2 AC until your next turn, or four 1d8 bolts split among targets.');
+    });
+    var gg=$('style-gauge');
+    if(gg) gg.addEventListener('click',function(){
+      if(f.rankIdx!==6) return;
+      if(!spendOrToast(6)) return;
+      f.gauge=true; refresh(); toast('Sin Gauge full.');
+    });
+    var sn=$('style-sin');
+    if(sn) sn.addEventListener('click',function(){
+      f.gauge=false; f.sinTrigger=true; f.sinRounds=3;
+      refresh(); toast('Sin Devil Trigger (3 rounds).');
+    });
+    var sr=$('style-sin-round');
+    if(sr) sr.addEventListener('click',function(){
+      f.sinRounds--;
+      if(f.sinRounds<=0){ f.sinTrigger=false; f.sinRounds=0; }
+      refresh();
+    });
+    var se=$('style-sin-end');
+    if(se) se.addEventListener('click',function(){ f.sinTrigger=false; f.sinRounds=0; refresh(); });
+    var st1=$('style-stinger');
+    if(st1) st1.addEventListener('click',function(){
+      if(!spendOrToast(2)) return;
+      refresh(); toast('Sin Stinger: melee CE attack, 4d10 force, Str save or launched 20 ft upward and prone.');
+    });
+    var dm=$('style-demo');
+    if(dm) dm.addEventListener('click',function(){
+      if(!spendOrToast(4)) return;
+      refresh(); toast('Demolition: 20-ft burst within 60 ft, Dex save, 6d10 force (half on success).');
+    });
+    var qd=$('style-quad');
+    if(qd) qd.addEventListener('click',function(){
+      if(f.quadUsed || f.rankIdx!==6) return;
+      f.quadUsed=true; f.sinTrigger=true; f.sinRounds=1;
+      refresh(); toast('Quadruple S: Sin Devil Trigger for 1 round, gauge kept.');
+    });
+    var sh=$('style-shortrest');
+    if(sh) sh.addEventListener('click',function(){ f.quadUsed=false; refresh(); });
+  }
+  bindStyle();
+  /* ── Kinetic Imbuement loaded objects (e040) ── */
+  function renderKinetic(){ var b=$('trkKineticBody'); if(!b) return; b.innerHTML=kineticCardHTML(st); bindKinetic(); }
+  function bindKinetic(){
+    var b=$('trkKineticBody'); if(!b) return;
+    var f=kineticState(st);
+    var lvl=char.level||1, pb=pbFor(lvl);
+    var die=kineticDie(lvl);
+    function refresh(){ save(); renderKinetic(); }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    var ch=$('kin-charge');
+    if(ch) ch.addEventListener('click',function(){
+      var nameEl=$('kin-name');
+      var name=nameEl?nameEl.value.trim():'';
+      var scaleEl=$('kin-scale');
+      var scale=scaleEl?scaleEl.value:'Token';
+      var amtEl=$('kin-amt');
+      var amt=amtEl?parseInt(amtEl.value,10):NaN;
+      if(!name){ toast('Enter the object\'s name.'); return; }
+      if(isNaN(amt) || amt<=0){ toast('Enter charges to deposit.'); return; }
+      var limit=(scale==='Token' || scale==='Handheld')?pb:(lvl>=11?2*pb:pb);
+      if(amt>limit){ toast('Deposit limit per step for '+scale+' is '+limit+'.'); return; }
+      var existing=null;
+      f.objects.forEach(function(o){ if(o.name===name && o.scale===scale) existing=o; });
+      if(existing && existing.bound && existing.charges+amt>2*pb){ toast('Bound Conduit capacity is 2×PB ('+(2*pb)+').'); return; }
+      if(!spendOrToast(amt)) return;
+      if(existing) existing.charges+=amt;
+      else f.objects.push({name:name, scale:scale, charges:amt, bound:false});
+      refresh(); toast('Charged '+name+' ('+scale+'): +'+amt+' Charge'+(amt>1?'s':'')+'.');
+    });
+    b.querySelectorAll('[data-kin-det]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var idx=+el.getAttribute('data-kin-det');
+        var o=f.objects[idx];
+        if(!o) return;
+        var relEl=b.querySelector('[data-kin-rel="'+idx+'"]');
+        var want=relEl?parseInt(relEl.value,10):NaN;
+        if(isNaN(want) || want<=0) want=o.charges;
+        var c=Math.min(want, o.charges);
+        var dice=2*c, radius=5*c;
+        if(o.bound){
+          o.charges-=c;
+          refresh(); toast('Detonation from '+o.name+': '+dice+die+' force, radius up to '+radius+' ft (5-ft steps, 0 focused); Dex save for half; you are unaffected. The Conduit survives.');
+        } else {
+          f.objects.splice(idx, 1);
+          refresh(); toast('Detonation: '+dice+die+' force, radius up to '+radius+' ft (5-ft steps, 0 focused); Dex save for half; you are unaffected; '+o.name+' destroyed; centered object takes maximum damage.');
+        }
+      });
+    });
+    b.querySelectorAll('[data-kin-atk]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var idx=+el.getAttribute('data-kin-atk');
+        var o=f.objects[idx];
+        if(!o) return;
+        var relEl=b.querySelector('[data-kin-rel="'+idx+'"]');
+        var want=relEl?parseInt(relEl.value,10):NaN;
+        if(isNaN(want) || want<=0) want=o.charges;
+        var c=Math.min(want, o.charges);
+        o.charges-=c;
+        refresh(); toast('Released '+c+' Charge'+(c!==1?'s':'')+' into the attack: +'+(2*c)+die+' force (direct target takes it with no save; dice double on a crit).');
+      });
+    });
+    b.querySelectorAll('[data-kin-bind]').forEach(function(el){
+      el.addEventListener('click',function(){
+        f.objects.forEach(function(o){ o.bound=false; });
+        var o=f.objects[+el.getAttribute('data-kin-bind')];
+        if(o){
+          if(o.charges>2*pb) o.charges=2*pb;
+          o.bound=true;
+        }
+        refresh(); toast('Bound Conduit bonded (capacity 2×PB).');
+      });
+    });
+    b.querySelectorAll('[data-kin-unbind]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var o=f.objects[+el.getAttribute('data-kin-unbind')];
+        if(o) o.bound=false;
+        refresh();
+      });
+    });
+    b.querySelectorAll('[data-kin-del]').forEach(function(el){
+      el.addEventListener('click',function(){
+        f.objects.splice(+el.getAttribute('data-kin-del'), 1);
+        refresh();
+      });
+    });
+  }
+  bindKinetic();
+  /* ── Overdue lending desk (e555) ── */
+  function renderOverdue(){ var b=$('trkOverdueBody'); if(!b) return; b.innerHTML=overdueCardHTML(st); bindOverdue(); }
+  function bindOverdue(){
+    var b=$('trkOverdueBody'); if(!b) return;
+    var f=overdueState(st);
+    var lvl=char.level||1, pb=pbFor(lvl);
+    var cap=lvl>=18?2*pb:pb;
+    var paySides=lvl>=6?8:6;
+    function refresh(){ save(); renderOverdue(); }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    function rollDice(n, sides){
+      var total=0;
+      for(var i=0;i<n;i++) total+=Math.floor(Math.random()*sides)+1;
+      return total;
+    }
+    function payback(idx){
+      var bk=f.books[idx];
+      if(!bk) return 0;
+      var dmg=bk.overdue>0?rollDice(bk.overdue, paySides):0;
+      return dmg;
+    }
+    function returnBook(idx, via){
+      var bk=f.books[idx];
+      if(!bk) return;
+      var dmg=payback(idx);
+      var burn=bk.special && bk.overdue>=3;
+      f.books.splice(idx, 1);
+      refresh();
+      toast(bk.holder+' '+via+' '+bk.volume+'. Payback: '+dmg+' psychic.'+(burn?' TECHNIQUE BURNOUT — '+bk.holder+' cannot use technique features until the end of their next turn.':''));
+    }
+    var ld=$('ov-lend');
+    if(ld) ld.addEventListener('click',function(){
+      var holderEl=$('ov-holder');
+      var holder=holderEl?holderEl.value.trim():'';
+      var volEl=$('ov-vol');
+      var vol=volEl?volEl.value:'Field Manual';
+      if(!holder){ toast('Enter the holder\'s name.'); return; }
+      if(f.books.length>=cap){ toast('Lending capacity reached ('+cap+').'); return; }
+      if(!spendOrToast(1)) return;
+      f.books.push({holder:holder, volume:vol, due:3, overdue:0, forced:false, special:false});
+      refresh(); toast('Lent '+vol+' to '+holder+' (due in 3 rounds).');
+    });
+    var fc=$('ov-force');
+    if(fc) fc.addEventListener('click',function(){
+      var holderEl=$('ov-holder');
+      var holder=holderEl?holderEl.value.trim():'';
+      var volEl=$('ov-vol');
+      var vol=volEl?volEl.value:'Field Manual';
+      if(!holder){ toast('Enter the holder\'s name.'); return; }
+      if(f.books.length>=cap){ toast('Lending capacity reached ('+cap+').'); return; }
+      if(!spendOrToast(2)) return;
+      f.books.push({holder:holder, volume:vol, due:2, overdue:0, forced:true, special:false});
+      refresh(); toast('Force-lent '+vol+' to '+holder+' (due in 2 rounds; return costs their action).');
+    });
+    var sp=$('ov-special');
+    if(sp) sp.addEventListener('click',function(){
+      if(f.specialUsed) return;
+      var holderEl=$('ov-special-holder');
+      var holder=holderEl?holderEl.value.trim():'';
+      if(!holder){ toast('Enter the holder\'s name.'); return; }
+      if(f.books.length>=cap){ toast('Lending capacity reached ('+cap+').'); return; }
+      if(!spendOrToast(8)) return;
+      f.specialUsed=true;
+      f.books.push({holder:holder, volume:'Special Collections', due:2, overdue:0, forced:false, special:true});
+      refresh(); toast('Lent a Special Collections volume to '+holder+' (due in 2 rounds).');
+    });
+    b.querySelectorAll('[data-ov-ret]').forEach(function(el){
+      el.addEventListener('click',function(){ returnBook(+el.getAttribute('data-ov-ret'), 'returned'); });
+    });
+    b.querySelectorAll('[data-ov-rec]').forEach(function(el){
+      el.addEventListener('click',function(){ returnBook(+el.getAttribute('data-ov-rec'), 'recalled'); });
+    });
+    b.querySelectorAll('[data-ov-deny]').forEach(function(el){
+      el.addEventListener('click',function(){
+        if(f.deniedUsed) return;
+        var bk=f.books[+el.getAttribute('data-ov-deny')];
+        f.deniedUsed=true;
+        refresh(); toast('Renewal denied — '+(bk?bk.holder:'the holder')+' keeps the book.');
+      });
+    });
+    var rd=$('ov-round');
+    if(rd) rd.addEventListener('click',function(){
+      f.books.forEach(function(bk){
+        if(lvl>=18 && !bk.forced && !bk.special) return;
+        if(bk.due>0) bk.due--;
+        else bk.overdue++;
+      });
+      f.deniedUsed=false;
+      refresh();
+    });
+    var sr=$('ov-shortrest');
+    if(sr) sr.addEventListener('click',function(){ f.specialUsed=false; refresh(); });
+    var au=$('ov-audit');
+    if(au) au.addEventListener('click',function(){
+      if(!spendOrToast(10)) return;
+      var parts=[];
+      f.books.forEach(function(bk){
+        var willing=!bk.forced && bk.overdue===0;
+        if(willing){
+          var heal=rollDice(2, 8);
+          parts.push(bk.holder+' regains '+heal+' HP and gains +2d6 to their next roll');
+        } else {
+          var dmg=bk.overdue>0?rollDice(bk.overdue*2, 8):0;
+          parts.push(bk.holder+' takes '+dmg+' psychic (audited as overdue, double rate)');
+        }
+      });
+      f.books=[];
+      refresh(); toast('The Audit: '+parts.join('; ')+'. All books called in.');
+    });
+  }
+  bindOverdue();
+  /* ── Skill Hunter black book (e511) ── */
+  function renderHunter(){ var b=$('trkHunterBody'); if(!b) return; b.innerHTML=hunterCardHTML(st); bindHunter(); }
+  function bindHunter(){
+    var b=$('trkHunterBody'); if(!b) return;
+    var f=hunterState(st);
+    var lvl=char.level||1;
+    var maxInvoke=lvl>=6?2:1;
+    function refresh(){ save(); renderHunter(); }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    var ad=$('hu-add');
+    if(ad) ad.addEventListener('click',function(){
+      var featEl=$('hu-feat');
+      var feat=featEl?featEl.value.trim():'';
+      var ownerEl=$('hu-owner');
+      var owner=ownerEl?ownerEl.value.trim():'';
+      var lvlEl=$('hu-lvl');
+      var flvl=lvlEl?parseInt(lvlEl.value,10):NaN;
+      if(!feat){ toast('Enter the stolen feature.'); return; }
+      if(!owner){ toast('Enter the victim\'s name.'); return; }
+      if(isNaN(flvl) || flvl<1){ toast('Enter the feature\'s level.'); return; }
+      f.pages.push({feature:feat, owner:owner, level:flvl, bookmarked:false});
+      refresh(); toast('Inscribed: '+feat+' (from '+owner+'). '+owner+' loses it while the page holds it.');
+    });
+    b.querySelectorAll('[data-hu-mark]').forEach(function(el){
+      el.addEventListener('click',function(){
+        f.pages.forEach(function(p){ p.bookmarked=false; });
+        var p=f.pages[+el.getAttribute('data-hu-mark')];
+        if(p) p.bookmarked=true;
+        refresh(); toast('Bookmark moved to '+(p?p.feature:'')+'.');
+      });
+    });
+    b.querySelectorAll('[data-hu-invoke]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var p=f.pages[+el.getAttribute('data-hu-invoke')];
+        if(!p) return;
+        if(p.level>lvl){ toast('Your level is below the feature\'s level.'); return; }
+        if(f.invoked>=maxInvoke) return;
+        if(f.invoked===1){
+          if(!spendOrToast(2)) return;
+          f.invoked=2;
+          refresh(); toast('Invoked '+p.feature+' (Two Pages Open: +1 CE per ability = 2 CE surcharge). Pay its cost normally; your CE save DC.');
+        } else {
+          f.invoked=1;
+          refresh(); toast('Invoked '+p.feature+' (pay its cost normally; your CE save DC).');
+        }
+      });
+    });
+    b.querySelectorAll('[data-hu-rel]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var p=f.pages[+el.getAttribute('data-hu-rel')];
+        f.pages.splice(+el.getAttribute('data-hu-rel'), 1);
+        refresh(); toast('Page released — '+(p?p.owner:'the victim')+' regains '+(p?p.feature:'the feature')+'.');
+      });
+    });
+    var nr=$('hu-round');
+    if(nr) nr.addEventListener('click',function(){ f.invoked=0; refresh(); });
+  }
+  bindHunter();
+  /* ── Immortal Game board (e559) ── */
+  function renderGame(){ var b=$('trkGameBody'); if(!b) return; b.innerHTML=gameCardHTML(st); bindGame(); }
+  function bindGame(){
+    var b=$('trkGameBody'); if(!b) return;
+    var f=gameState(st);
+    var lvl=char.level||1, pb=pbFor(lvl), cem=ceModEff();
+    var baseLimit=f.domain?2:1;
+    var moveLimit=baseLimit+(f.tempoUsed?1:0);
+    function refresh(){ save(); renderGame(); }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    var sm=$('game-summon');
+    if(sm) sm.addEventListener('click',function(){
+      var typeEl=$('game-type');
+      var type=typeEl?typeEl.value:'pawn';
+      if(f.pieces.length>=pb){ toast('Field capacity reached ('+pb+' pieces).'); return; }
+      if(f.blocked.indexOf(type)>=0){ toast(type+' was destroyed — it cannot be summoned again until a long rest.'); return; }
+      var cost=GAME_PIECES[type].cost;
+      if(!spendOrToast(cost)) return;
+      var maxHp=GAME_PIECES[type].hp(lvl);
+      f.pieces.push({type:type, hp:maxHp, maxHp:maxHp});
+      refresh(); toast('Summoned '+type+' (HP '+maxHp+').'+(type==='queen'?' Combination: each other piece may immediately move along its pattern without striking.':''));
+    });
+    var fp=$('game-free');
+    if(fp) fp.addEventListener('click',function(){
+      if(f.pieces.length>0) return;
+      var maxHp=GAME_PIECES.pawn.hp(lvl);
+      f.pieces.push({type:'pawn', hp:maxHp, maxHp:maxHp});
+      refresh(); toast('Free pawn summoned at initiative (HP '+maxHp+').');
+    });
+    b.querySelectorAll('[data-game-hit]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var idx=+el.getAttribute('data-game-hit');
+        var p=f.pieces[idx];
+        if(!p) return;
+        var dmgEl=b.querySelector('[data-game-dmg="'+idx+'"]');
+        var amt=dmgEl?parseInt(dmgEl.value,10):NaN;
+        if(isNaN(amt) || amt<=0){ toast('Enter damage to the piece.'); return; }
+        p.hp-=amt;
+        if(p.hp<=0){
+          f.pieces.splice(idx, 1);
+          if(f.blocked.indexOf(p.type)<0) f.blocked.push(p.type);
+          refresh(); toast(p.type+' destroyed — its type cannot be summoned again until a long rest.');
+        } else refresh();
+      });
+    });
+    b.querySelectorAll('[data-game-move]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var p=f.pieces[+el.getAttribute('data-game-move')];
+        if(!p) return;
+        if(f.moves>=moveLimit) return;
+        f.moves++;
+        refresh(); toast('Moved '+p.type+' along its pattern and struck ('+GAME_PIECES[p.type].strike(cem)+' force).');
+      });
+    });
+    b.querySelectorAll('[data-game-dismiss]').forEach(function(el){
+      el.addEventListener('click',function(){
+        f.pieces.splice(+el.getAttribute('data-game-dismiss'), 1);
+        refresh();
+      });
+    });
+    b.querySelectorAll('[data-game-promote]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var idx=+el.getAttribute('data-game-promote');
+        var p=f.pieces[idx];
+        if(!p || p.type!=='pawn') return;
+        var selEl=b.querySelector('[data-game-promo="'+idx+'"]');
+        var target=selEl?selEl.value:'knight';
+        var diff=GAME_PIECES[target].cost-GAME_PIECES.pawn.cost;
+        if(!spendOrToast(diff)) return;
+        var oldMax=p.maxHp, newMax=GAME_PIECES[target].hp(lvl);
+        p.type=target; p.maxHp=newMax; p.hp=p.hp+(newMax-oldMax);
+        refresh(); toast('Promoted to '+target+' (HP '+p.hp+' / '+newMax+').');
+      });
+    });
+    var nt=$('game-turn');
+    if(nt) nt.addEventListener('click',function(){ f.moves=0; f.tempoUsed=false; refresh(); });
+    var tp=$('game-tempo');
+    if(tp) tp.addEventListener('click',function(){
+      if(f.tempoUsed) return;
+      if(!f.domain && !spendOrToast(2)) return;
+      f.tempoUsed=true;
+      refresh(); toast('Tempo: one additional Move this turn.');
+    });
+    var cs=$('game-castle');
+    if(cs) cs.addEventListener('click',function(){
+      if(!spendOrToast(2)) return;
+      refresh(); toast('Castling: teleport-swap places with a piece within 60 ft; if an attack triggered this, the piece becomes its target instead.');
+    });
+    var dm=$('game-domain');
+    if(dm) dm.addEventListener('click',function(){
+      if(!spendOrToast(20)) return;
+      f.domain=true;
+      refresh(); toast('Checkmate Domain (1 min, 60-ft radius).');
+    });
+    var de=$('game-domain-end');
+    if(de) de.addEventListener('click',function(){ f.domain=false; refresh(); });
+  }
+  bindGame();
   function renderExh(){ var b=$('trkExhBody'); if(!b) return; b.innerHTML=exhCardHTML(st); bindExh(); }
   function bindExh(){
     var b=$('trkExhBody'); if(!b) return;
