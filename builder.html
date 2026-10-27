@@ -5274,7 +5274,7 @@ function quickRefHTML(){
    Persisted per character in localStorage; hidden on print. */
 function trackerKey(){ return 'ra_trackers_'+(char.id||'noid'); }
 function trackerState(){
-  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null, siphon:{counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false}, guanyin:{vector:null,intention:null,second:null,names:{},reactions:0}, crazy:{held:[],secondSpin:false,encore:false,encoreReady:false,double:false,survivor:false,survivorHeld:false,fullHouse:false,lastRolls:[],lastMode:'',lastTake:0,lastKind:'',lastPrice:'',lastTie:false}, fiftytwo:{deck:[],hand:[],discard:[],decl:null,coldDeck:false,marked:false,river:false,sleight:false,domain:false,feats:{counter:false,marked:false,sleight:false,river:false,redblack:false},mode:'normal',sel:[],keepSel:[],drawPending:0,drawPurpose:'',peek:null,pickN:0,endArmed:false,newArmed:false,newArmedTok:0}, adaptive:{tags:[],slots:[],tempSlots:[],encounterInstall:null,round:1,regenRound:0,lentRound:0,hostileRound:0,keterRound:0,termination:false,maximum:false,recordBlocked:false,keterArmed:null,replaceTarget:null,feats:{lent:false,hostile:false,keter:false,rebuild:false}}, revenge:{total:0,interest:false}, pain:{bank:0,armor:false,aura:false,sun:false}, jin:{charges:0,domain:false}, miracle:{pool:0,blindUsed:false,domain:false}, visitors:{mischief:0,swarm:false,swarmHp:null,dispersed:false,freeReformUsed:false,pileFreeUsed:false,maxActive:false}, hakoware:{loans:[],bailoutUsed:false}, style:{style:'Swordmaster',rankIdx:0,riseUsed:false,aIgnoreUsed:false,guards:0,secondStyle:'',trigger:false,danteUsed:false,gauge:false,sinTrigger:false,sinRounds:0,quadUsed:false}, kinetic:{objects:[]}, overdue:{books:[],deniedUsed:false,specialUsed:false}, hunter:{pages:[],invoked:0}, game:{pieces:[],blocked:[],moves:0,tempoUsed:false,domain:false} };
+  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null, siphon:{counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false}, guanyin:{vector:null,intention:null,second:null,names:{},reactions:0}, crazy:{held:[],secondSpin:false,encore:false,encoreReady:false,double:false,survivor:false,survivorHeld:false,fullHouse:false,lastRolls:[],lastMode:'',lastTake:0,lastKind:'',lastPrice:'',lastTie:false}, fiftytwo:{deck:[],hand:[],discard:[],decl:null,coldDeck:false,marked:false,river:false,sleight:false,domain:false,feats:{counter:false,marked:false,sleight:false,river:false,redblack:false},mode:'normal',sel:[],keepSel:[],drawPending:0,drawPurpose:'',peek:null,pickN:0,endArmed:false,newArmed:false,newArmedTok:0}, adaptive:{tags:[],slots:[],tempSlots:[],encounterInstall:null,round:1,regenRound:0,lentRound:0,hostileRound:0,keterRound:0,termination:false,maximum:false,recordBlocked:false,keterArmed:null,replaceTarget:null,feats:{lent:false,hostile:false,keter:false,rebuild:false}}, revenge:{total:0,interest:false}, pain:{bank:0,armor:false,aura:false,sun:false}, jin:{charges:0,domain:false}, miracle:{pool:0,blindUsed:false,domain:false}, visitors:{mischief:0,swarm:false,swarmHp:null,dispersed:false,freeReformUsed:false,pileFreeUsed:false,maxActive:false}, hakoware:{loans:[],bailoutUsed:false}, style:{style:'Swordmaster',rankIdx:0,riseUsed:false,aIgnoreUsed:false,guards:0,secondStyle:'',trigger:false,danteUsed:false,gauge:false,sinTrigger:false,sinRounds:0,quadUsed:false}, kinetic:{objects:[]}, overdue:{books:[],deniedUsed:false,specialUsed:false}, hunter:{pages:[],invoked:0}, game:{pieces:[],blocked:[],moves:0,tempoUsed:false,domain:false}, ten:{roster:{dogW:{tamed:true},dogB:{tamed:true}},manifested:[],fusions:[],worn:null,wheel:{active:false,used:false,tracks:[],advanceUsed:false,edgeUsed:false,quickUsed:0},domain:{active:false,clones:0,copyUsed:false},storage:[],mahoragaLR:0,rabbitFreeUsed:false} };
   try{
     var raw=localStorage.getItem(trackerKey());
     if(raw) d=Object.assign(d, JSON.parse(raw));
@@ -5456,6 +5456,10 @@ function trackerHTML(hpMaxV, ceMaxV){
   /* Immortal Game board (e559) — e559 characters only */
   if(hasGame()){
     html+='<div class="tracker-card"><div id="trkGameBody">'+gameCardHTML(st)+'</div></div>';
+  }
+  /* Ten Shadows roster + Wheel (e035) — e035 characters only */
+  if(hasTen()){
+    html+='<div class="tracker-card"><div id="trkTenBody">'+tenCardHTML(st)+'</div></div>';
   }
   /* custom use-trackers */
   html+='<div class="tracker-card"><div class="tracker-title"><span>Limited Uses</span><span>Mark when expended</span></div>'+
@@ -6540,6 +6544,162 @@ function gameCardHTML(st){
   h+='<div class="small" style="margin-top:6px">The Move (bonus action or action): command one piece to move along its pattern and strike; one Move per turn. Check (L6): a creature that starts its turn on a square one of your pieces could capture to is in check — disadvantage on attack rolls against any creature other than a piece giving it check. Promotion (L6): when your pawn reduces a creature to 0 HP with its strike, or ends its Move at least 60 ft from where it was summoned, pay the CE difference to transform it (it regains HP equal to the difference between the two pieces\' maximum HP). Combination (L11): when you summon the queen, each other piece may immediately move along its pattern without striking. A destroyed piece\'s type cannot be summoned again until a long rest; dismissed pieces are exempt.</div>';
   return h;
 }
+/* ── Ten Shadows roster + Wheel (e035) ── */
+var TEN_SHIKIGAMI=[
+  {key:'dogW', name:'Divine Dog (White)', cost:1, hp:function(l,pb){ return 11+4*l; }, ac:'13 + PB', note:'Tracking · Bite 2d4 + CE mod piercing, Str save or prone. Paired with Black: one manifestation, shared action/reaction.'},
+  {key:'dogB', name:'Divine Dog (Black)', cost:1, hp:function(l,pb){ return 11+4*l; }, ac:'13 + PB', note:'Tracking · Bite 2d4 + CE mod piercing, Str save or prone. Paired with White: one manifestation, shared action/reaction.'},
+  {key:'gama', name:'Gama (Toad)', cost:1, hp:function(l,pb){ return 22+4*l; }, ac:'11 + PB', note:'Control · Rescue · Tongue 15 ft, 1d6 + CE mod bludgeoning + grapple; Swallow. Up to 4 active, collectively one manifestation.'},
+  {key:'nue', name:'Nue', cost:3, hp:function(l,pb){ return 26+4*l; }, ac:'13 + PB', note:'Aerial Striker · Fly 80 ft, Shock 2d4 + 3 lightning, Flyby. Cursed Energy Boost: up to PB CE for +1d8 lightning per CE.'},
+  {key:'rabbit', name:'Rabbit Escape', cost:2, hp:function(l,pb){ return Math.max(66+5*pb, 20+4*l); }, ac:'10 + PB', note:'Defense · Escape · Swarm, 45 ft + burrow 15 ft. Cannot regain HP. Cannot take part in Totality.'},
+  {key:'serpent', name:'Great Serpent', cost:6, hp:function(l,pb){ return Math.max(92+2*pb, 45+6*l); }, ac:'12 + PB', note:'Grappler · Tank · Bite 2d6 + 4 piercing; Constrict 2d8 + 4 bludgeoning + grapple/restrain.'},
+  {key:'deer', name:'Round Deer', cost:7, hp:function(l,pb){ return Math.max(138+2*pb, 90+5*l); }, ac:'10 + PB', note:'Healing · Nullification · RCT Aura (allies within 15 ft regain 2×PB at start of its turn); Purifying Field; RCT reaction on self.'},
+  {key:'ox', name:'Piercing Ox', cost:8, hp:function(l,pb){ return Math.max(85+2*pb, 45+6*l); }, ac:'12 + PB', note:'Charge Finisher · Gore 1d12 + 6 piercing + Unrelenting Charge (+1d12 per 10 ft moved, capped at PB dice).'},
+  {key:'tiger', name:'Mourn Tiger', cost:9, hp:function(l,pb){ return Math.max(60+2*pb, 35+6*l); }, ac:'12 + PB', note:'Predator · Disruption · Incorporeal; Mournful Roar (Recharge 6): 5d6 psychic + paralyzed on failed Con save.'},
+  {key:'elephant', name:'Max Elephant', cost:10, hp:function(l,pb){ return Math.max(76+5*pb, 50+7*l); }, ac:'12 + PB', note:'Bulwark · Area Damage · Gore 3d8 + 6 piercing; Flood cone (6d6/8d6/10d6 by level, Recharge 6).'},
+  {key:'mahoraga', name:'Mahoraga — Eight-Handled Sword Divergent Sila Divine General', cost:20, hp:function(l,pb){ return 400+5*pb; }, ac:'20 + PB', note:'Calamity Benchmark · CR 25 full stat block · Regen 40/turn · Legendary Resistance 3/day · Consumes ALL manifestation slots · Cannot take part in Totality.'}
+];
+function hasTen(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e035'; });
+}
+function tenState(st){
+  if(!st.ten) st.ten={roster:{dogW:{tamed:true},dogB:{tamed:true}}, manifested:[], fusions:[], worn:null, wheel:{active:false,used:false,tracks:[],advanceUsed:false,edgeUsed:false,quickUsed:0}, domain:{active:false,clones:0,copyUsed:false}, storage:[], mahoragaLR:0, rabbitFreeUsed:false};
+  if(!st.ten.roster) st.ten.roster={dogW:{tamed:true},dogB:{tamed:true}};
+  if(!st.ten.wheel) st.ten.wheel={active:false,used:false,tracks:[],advanceUsed:false,edgeUsed:false,quickUsed:0};
+  if(!st.ten.domain) st.ten.domain={active:false,clones:0,copyUsed:false};
+  return st.ten;
+}
+function tenRosterEntry(f, key){
+  if(!f.roster[key]) f.roster[key]={};
+  return f.roster[key];
+}
+function tenSpec(key){
+  for(var i=0;i<TEN_SHIKIGAMI.length;i++) if(TEN_SHIKIGAMI[i].key===key) return TEN_SHIKIGAMI[i];
+  return null;
+}
+function tenMaxHp(f, key, lvl, pb){
+  var r=tenRosterEntry(f, key);
+  if(r.totality && r.totalityMax) return r.totalityMax;
+  var spec=tenSpec(key);
+  return spec?spec.hp(lvl, pb):0;
+}
+function tenCost(f, key){
+  var r=tenRosterEntry(f, key);
+  if(r.totality && r.totalityCost) return r.totalityCost;
+  var spec=tenSpec(key);
+  return spec?spec.cost:0;
+}
+function tenCapacity(lvl){ return lvl>=11?3:lvl>=3?2:1; }
+function tenSlotsUsed(f){
+  var m=f.manifested.filter(function(e){ return !e.copy; }), slots=0;
+  var hasDog=m.some(function(e){ return e.key==='dogW'||e.key==='dogB'; });
+  var hasGama=m.some(function(e){ return e.key==='gama'; });
+  if(hasDog) slots++;
+  if(hasGama) slots++;
+  m.forEach(function(e){ if(e.key!=='dogW'&&e.key!=='dogB'&&e.key!=='gama'&&e.key!=='mahoraga') slots++; });
+  if(m.some(function(e){ return e.key==='mahoraga'; })) slots=tenCapacity(char.level||1);
+  return slots+f.fusions.length;
+}
+function tenIsFused(f, key){
+  if(key==='gama') return false;
+  return f.fusions.some(function(fu){ return fu.compA.key===key || fu.compB.key===key; });
+}
+function tenCardHTML(st){
+  var f=tenState(st);
+  var lvl=char.level||1, pb=pbFor(lvl), cem=ceModEff();
+  var cap=tenCapacity(lvl);
+  var used=tenSlotsUsed(f);
+  var h='<div class="tracker-title">Ten Shadows · Roster &amp; Wheel</div>';
+  h+='<div class="small">Manifestations: '+used+' / '+cap+' (1 at L1, 2 at L3, 3 at L11). Divine Dogs pair = 1 slot; all Gama = 1 slot; Mahoraga consumes ALL slots; each fusion = 1 slot. A shikigami at 0 HP dies permanently — no long-rest recovery.</div>';
+  TEN_SHIKIGAMI.forEach(function(spec){
+    var r=tenRosterEntry(f, spec.key);
+    var maxHp=tenMaxHp(f, spec.key, lvl, pb);
+    var cost=tenCost(f, spec.key);
+    var manCount=f.manifested.filter(function(e){ return e.key===spec.key; }).length;
+    var status=r.passedOn?('Passed into '+(tenSpec(r.passedInto)?tenSpec(r.passedInto).name:r.passedInto)+' (Totality)'):r.destroyed?('DESTROYED'+((spec.key==='rabbit'||spec.key==='mahoraga')?' (permanent)':' — qualifies for Totality')):(r.totality?'Totality · ':'')+(f.worn===spec.key?'Worn · ':'')+(manCount>0?('Manifested ×'+manCount+' · '):'')+(r.tamed?'Tamed':'Untamed');
+    var canManifest=r.tamed && !r.destroyed && !r.passedOn && f.worn!==spec.key && !tenIsFused(f, spec.key);
+    var mahoragaBlocked=spec.key==='mahoraga' && used>0;
+    var slotBlocked=spec.key!=='mahoraga' && f.manifested.some(function(e){ return e.key==='mahoraga'; });
+    var pairFree=(spec.key==='dogW'||spec.key==='dogB') && f.manifested.some(function(e){ return e.key==='dogW'||e.key==='dogB'; });
+    var gamaFree=spec.key==='gama' && f.manifested.some(function(e){ return e.key==='gama'; });
+    var manifestOk=canManifest && !mahoragaBlocked && !slotBlocked && (used<cap || pairFree || gamaFree);
+    h+='<div class="adapt-slot"><b>'+spec.name+'</b> — '+cost+' CE · HP '+maxHp+' · AC '+spec.ac+' · '+status;
+    h+='<div class="small">'+spec.note+'</div>';
+    h+='<div style="margin-top:4px">';
+    if(!r.tamed && !r.destroyed && !r.passedOn) h+='<button data-ten-tame="'+spec.key+'">Mark tamed (ritual succeeded)</button> ';
+    if(canManifest){
+      if(spec.key==='gama') h+='Manifest <input data-ten-gama-count type="number" min="1" max="4" value="1" style="width:45px"> toads ';
+      h+='<button data-ten-manifest="'+spec.key+'"'+(manifestOk?'':' disabled')+'>Manifest ('+(f.domain.active?'0':(spec.key==='gama'?'1 CE each':cost+' CE'))+')</button> ';
+    }
+    if(lvl>=8 && r.tamed && !r.destroyed && !r.passedOn && manCount===0 && !tenIsFused(f, spec.key)) h+='<button data-ten-wear="'+spec.key+'">Wear shadow ('+Math.max(1, Math.ceil(cost/2))+' CE, 1 min)</button>';
+    if(spec.key==='rabbit' && r.tamed && !r.destroyed && !r.passedOn) h+=' <button data-ten-rabbit="'+spec.key+'">Singular rabbit (1 CE / free 1/long rest)</button>';
+    h+='</div></div>';
+  });
+  if(f.manifested.length>0 || f.fusions.length>0){
+    h+='<div class="small" style="margin-top:10px"><b>Manifested</b></div>';
+    f.manifested.forEach(function(e, idx){
+      var spec=tenSpec(e.key);
+      h+='<div class="adapt-slot"><b>'+spec.name+'</b>'+(e.copy?' (COPY — vanishes when the Domain ends)':'')+(e.totality?' (Totality)':'')+' — HP '+e.hp+' / '+e.maxHp+(e.duringDomain?' · Manifested in the Domain (free, vanishes at Domain end)':'')+'</div>';
+      h+='<div style="margin-top:4px">Damage: <input data-ten-dmg="'+idx+'" type="number" min="0" value="" placeholder="0" style="width:70px"> <button data-ten-hit="'+idx+'">Damage</button> <button data-ten-dismiss="'+idx+'">Dismiss</button>';
+      if(e.key==='nue') h+=' <span style="white-space:nowrap">Boost <input data-ten-boost="'+idx+'" type="number" min="1" max="'+pb+'" value="1" style="width:45px"> <button data-ten-boost-btn="'+idx+'">Cursed Energy Boost</button></span>';
+      if(e.key==='mahoraga'){
+        h+=' <button data-ten-regen="'+idx+'">Regenerate +40 (start of turn)</button> <button data-ten-lr="'+idx+'"'+(f.mahoragaLR>=3?' disabled':'')+'>Legendary Resistance ('+(3-f.mahoragaLR)+' left)</button>';
+      }
+      if(f.domain.active && e.key!=='mahoraga' && !e.copy) h+=' <button data-ten-copy="'+idx+'"'+(f.domain.copyUsed?' disabled':'')+'>Copy (free, 1/round)</button>';
+      h+='</div>';
+    });
+    f.fusions.forEach(function(fu, idx){
+      h+='<div class="adapt-slot"><b>'+fu.name+' (Fusion)</b> — HP '+fu.hp+' / '+fu.maxHp+' · From: '+tenSpec(fu.compA.key).name+' + '+tenSpec(fu.compB.key).name+'</div>';
+      h+='<div style="margin-top:4px">Damage: <input data-ten-fdmg="'+idx+'" type="number" min="0" value="" placeholder="0" style="width:70px"> <button data-ten-fhit="'+idx+'">Damage fusion</button> <button data-ten-fundo="'+idx+'">Undo fusion (bonus action)</button></div>';
+    });
+  }
+  if(f.worn){
+    var wspec=tenSpec(f.worn);
+    h+='<div class="fifty-panel"><b>Shadow Wearing: '+wspec.name+' (1 min)</b><div class="small">Attacks use your CE attack bonus; saves use your CE save DC; uses your action economy. An expended once-per-activation ability returns only on a new activation. Not a second creature or separate HP pool. Ends early: unconscious, dismissed, or another form.</div><div style="margin-top:6px"><button id="ten-worn-end">End wearing</button></div></div>';
+  }
+  if(lvl>=11 && f.manifested.filter(function(e){ return !e.copy; }).length>=2){
+    h+='<div style="margin-top:8px">Fuse (action, no extra CE): <select id="ten-fuse-a">'+f.manifested.filter(function(e){ return !e.copy; }).map(function(e, i){ return '<option value="'+i+'">'+tenSpec(e.key).name+'</option>'; }).join('')+'</select> + <select id="ten-fuse-b">'+f.manifested.filter(function(e){ return !e.copy; }).map(function(e, i){ return '<option value="'+i+'">'+tenSpec(e.key).name+'</option>'; }).join('')+'</select> as <input id="ten-fuse-name" type="text" placeholder="Fusion name (from the catalog)" style="width:150px"> HP <input id="ten-fuse-hp" type="number" min="1" value="" placeholder="0" style="width:70px"> <button id="ten-fuse">Fuse</button></div>';
+    h+='<div class="small">Wells Unknown Abyss: one of fifteen predetermined recipes. Fusion occupies one slot; components can\'t exist separately. Undo as a bonus action (no HP regained). If the fusion reaches 0 HP, both components die permanently and qualify for Totality.</div>';
+  }
+  var donors=TEN_SHIKIGAMI.filter(function(s){ var r=tenRosterEntry(f, s.key); return r.destroyed && !r.passedOn && s.key!=='rabbit' && s.key!=='mahoraga'; });
+  var recipients=TEN_SHIKIGAMI.filter(function(s){ var r=tenRosterEntry(f, s.key); return r.tamed && !r.destroyed && !r.passedOn && !r.totality && s.key!=='rabbit' && s.key!=='mahoraga'; });
+  if(donors.length>0 && recipients.length>0){
+    h+='<div style="margin-top:8px">Totality (1 hour ritual, during a rest): <select id="ten-donor">'+donors.map(function(s){ return '<option value="'+s.key+'">'+s.name+'</option>'; }).join('')+'</select> into <select id="ten-recipient">'+recipients.map(function(s){ return '<option value="'+s.key+'">'+s.name+'</option>'; }).join('')+'</select> <button id="ten-totality">Perform Totality</button></div>';
+    h+='<div class="small">The recipient gains all features of both; HP maximums add; cost = higher + half the lower. A Totality cannot receive another Totality. Rabbit Escape and Mahoraga cannot take part either way.</div>';
+  }
+  if(lvl>=17){
+    var mah=tenRosterEntry(f, 'mahoraga');
+    if(!f.wheel.active){
+      h+='<div style="margin-top:8px"><button id="ten-wheel"'+(mah.tamed && !mah.destroyed && !mah.passedOn && !f.wheel.used?'':' disabled')+'>Wheel Wearing — wear Mahoraga\'s shadow (bonus action, 10 CE, 1/long rest)</button></div>';
+      h+='<div class="small">Prerequisite: Mahoraga tamed and available. 1 minute. Locks Mahoraga as source.</div>';
+    } else {
+      h+='<div class="fifty-panel"><b>Wheel Wearing active (1 min)</b><div class="small">Tracks maintained: '+f.wheel.tracks.length+' / '+pb+'. At end of your turn, advance one exposed track one turn (max once per round). 1 turn: advantage on saves/checks vs that effect. 2 turns: resistance, or advantage + limited removal. 3 turns: immunity (or ignore/counter) for the rest of Wheel Wearing. Quick Adaptation: reaction, 3 CE, advance one existing track immediately ('+pb+' per long rest).</div>';
+      h+='<div style="margin-top:6px">Phenomenon: <input id="ten-track-name" type="text" placeholder="Damage type or phenomenon" style="width:160px"> <button id="ten-track-open">Open track (on damage / failed save)</button></div>';
+      f.wheel.tracks.forEach(function(t, idx){
+        var stage=t.turns===0?'Exposed':t.turns===1?'Advantage':t.turns===2?'Resistance':'Immunity';
+        h+='<div style="margin-top:4px"><b>'+t.name+'</b> — '+t.turns+' turn'+(t.turns!==1?'s':'')+' ('+stage+') <button data-ten-advance="'+idx+'"'+(f.wheel.advanceUsed?' disabled':'')+'>Advance (end of turn)</button> <button data-ten-quick="'+idx+'"'+(f.wheel.quickUsed>=pb?' disabled':'')+'>Quick Adapt (reaction, 3 CE)</button></div>';
+      });
+      h+='<div style="margin-top:6px"><button id="ten-recovery">General\'s Recovery (start of turn: regain '+(pb+cem)+' HP)</button> <button id="ten-edge"'+(f.wheel.edgeUsed?' disabled':'')+'>Executioner\'s Edge (once/turn: +3d12 radiant vs cursed spirit/undead)</button> <button data-ten-round>New round</button> <button id="ten-wheel-end">End Wheel Wearing</button></div></div>';
+    }
+  }
+  if(lvl>=18){
+    if(!f.domain.active){
+      h+='<div style="margin-top:8px"><button id="ten-domain">Chimera Shadow Garden — Domain</button></div>';
+      h+='<div class="small">Interior becomes a fluid-shadow garden: difficult terrain for creatures of your choice; you gain freedom of movement benefits. Sure-hit: at initiative 20, chosen hostile creatures touching the Domain\'s surfaces are automatically restrained until the next initiative 20 (protected creature: Strength save; restrained creature may use its action for a Strength check vs your CE save DC to end early).</div>';
+    } else {
+      h+='<div class="fifty-panel"><b>Chimera Shadow Garden active</b><div class="small">Shikigami manifest for 0 CE; once per round when manifesting a non-Mahoraga shikigami, create one perfect temporary copy free. Free manifestations and copies vanish when the Domain ends. Shadow Clones: bonus action, spend up to CE modifier ('+cem+') CE for that many clones (your AC, 1 HP, your speed, no attacks or class features). Reaction before damage: swap with a clone within 60 ft, making it the target.</div>';
+      h+='<div style="margin-top:6px">Clones: <b>'+f.domain.clones+'</b> · Spend <input id="ten-clone-amt" type="number" min="1" max="'+cem+'" value="1" style="width:50px"> <button id="ten-clone">Create clones (bonus action, CE = clones)</button> <button id="ten-swap"'+(f.domain.clones<=0?' disabled':'')+'>Swap with clone (reaction)</button> <button data-ten-round>New round</button> <button id="ten-domain-end">End Domain</button></div></div>';
+    }
+  }
+  if(lvl>=6){
+    h+='<div style="margin-top:8px">Shadow Storage: <input id="ten-store-name" type="text" placeholder="Object you carry" style="width:150px"> <button id="ten-store">Store (object interaction)</button></div>';
+    f.storage.forEach(function(name, idx){
+      h+='<div style="margin-top:4px">'+name+' <button data-ten-retrieve="'+idx+'">Retrieve (1 CE)</button></div>';
+    });
+    h+='<div class="small">Store or retrieve one carried object (weight still counts; must fit a 5-ft opening; can\'t be worn/carried by an unwilling creature). Retrieve as a reaction for 1 CE, or emerge it from a visible shadow within 30 ft.</div>';
+  }
+  h+='<div class="small" style="margin-top:8px">Taming ritual (L3+): challenge any untamed shadow on the roster (no higher level gate; listed CE cost, no-outside-aid rule, and the waiting creature are the gates). It appears at full HP within 30 ft, treats you as its primary enemy; reduce it to 0 HP without outside aid to tame it permanently. CE is spent even if the ritual fails. Mahoraga uses its complete CR 25 stat block during and after taming.</div>';
+  return h;
+}
 function siphonCardHTML(st){
   var sp=siphonState(st), th=siphonThreshold(), cap=siphonTempCap(), P=pb(char.level);
   var fav=siphonFavor(sp.pool);
@@ -6813,7 +6973,8 @@ function bindTrackers(hpMaxV, ceMaxV){
     if(st.overdue){ st.overdue.books=[]; st.overdue.deniedUsed=false; st.overdue.specialUsed=false; }
     if(st.hunter) st.hunter.invoked=0;
     if(st.game){ var gm=st.game; gm.blocked=[]; gm.moves=0; gm.tempoUsed=false; gm.domain=false; }
-    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive(); renderRevenge(); renderPain(); renderJin(); renderMiracle(); renderVisitors(); renderHakoware(); renderStyle(); renderKinetic(); renderOverdue(); renderHunter(); renderGame();
+    if(st.ten){ var tn=st.ten; tn.worn=null; tn.wheel.active=false; tn.wheel.used=false; tn.wheel.tracks=[]; tn.wheel.advanceUsed=false; tn.wheel.edgeUsed=false; tn.wheel.quickUsed=0; tn.domain.active=false; tn.domain.clones=0; tn.domain.copyUsed=false; tn.manifested=tn.manifested.filter(function(e){ return !e.duringDomain && !e.copy; }); tn.mahoragaLR=0; tn.rabbitFreeUsed=false; }
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive(); renderRevenge(); renderPain(); renderJin(); renderMiracle(); renderVisitors(); renderHakoware(); renderStyle(); renderKinetic(); renderOverdue(); renderHunter(); renderGame(); renderTen();
     var _ri=$('trkRct'); if(_ri&&_rm!=null) _ri.value=_rm;
     toast('Long rest — HP, CE, RCT pool, and uses restored; \u22121 exhaustion.');
   });
@@ -6834,7 +6995,7 @@ function bindTrackers(hpMaxV, ceMaxV){
     st=trackerState(); st.hp=hpMaxV; if(ceMaxV!=null) st.ce=ceMaxV;
     $('trkHp').value=hpMaxV; $('trkTemp').value=0;
     if(ceMaxV!=null) $('trkCe').value=ceMaxV;
-    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive(); renderRevenge(); renderPain(); renderJin(); renderMiracle(); renderVisitors(); renderHakoware(); renderStyle(); renderKinetic(); renderOverdue(); renderHunter(); renderGame(); toast('Trackers reset.');
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive(); renderRevenge(); renderPain(); renderJin(); renderMiracle(); renderVisitors(); renderHakoware(); renderStyle(); renderKinetic(); renderOverdue(); renderHunter(); renderGame(); renderTen(); toast('Trackers reset.');
   });
 
   /* ── shared mini-helpers for the new cards ── */
@@ -8690,6 +8851,323 @@ function bindTrackers(hpMaxV, ceMaxV){
     if(de) de.addEventListener('click',function(){ f.domain=false; refresh(); });
   }
   bindGame();
+  /* ── Ten Shadows roster + Wheel (e035) ── */
+  function renderTen(){ var b=$('trkTenBody'); if(!b) return; b.innerHTML=tenCardHTML(st); bindTen(); }
+  function bindTen(){
+    var b=$('trkTenBody'); if(!b) return;
+    var f=tenState(st);
+    var lvl=char.level||1, pb=pbFor(lvl), cem=ceModEff();
+    var cap=tenCapacity(lvl);
+    function refresh(){ save(); renderTen(); }
+    function spendOrToast(cost){
+      if(cost<=0) return true;
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    function destroyEntry(idx){
+      var e=f.manifested[idx];
+      if(!e) return;
+      var r=tenRosterEntry(f, e.key);
+      f.manifested.splice(idx, 1);
+      if(!e.copy){
+        r.destroyed=true;
+        toast(tenSpec(e.key).name+' destroyed — permanent. It qualifies for the Totality ritual.');
+      }
+      refresh();
+    }
+    b.querySelectorAll('[data-ten-tame]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var r=tenRosterEntry(f, el.getAttribute('data-ten-tame'));
+        r.tamed=true;
+        refresh(); toast('Tamed (ritual succeeded; CE was spent at the table).');
+      });
+    });
+    b.querySelectorAll('[data-ten-manifest]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var key=el.getAttribute('data-ten-manifest');
+        var r=tenRosterEntry(f, key);
+        if(!r.tamed || r.destroyed || r.passedOn || f.worn===key || tenIsFused(f, key)) return;
+        if(f.manifested.some(function(e){ return e.key==='mahoraga'; })) return;
+        var used=tenSlotsUsed(f);
+        var pairFree=(key==='dogW'||key==='dogB') && f.manifested.some(function(e){ return e.key==='dogW'||e.key==='dogB'; });
+        var gamaFree=key==='gama' && f.manifested.some(function(e){ return e.key==='gama'; });
+        if(key==='mahoraga' && used>0){ toast('Mahoraga consumes all manifestation slots — dismiss everything first.'); return; }
+        if(key!=='mahoraga' && used>=cap && !pairFree && !gamaFree){ toast('Manifestation capacity reached ('+cap+').'); return; }
+        var count=1;
+        if(key==='gama'){
+          var countEl=b.querySelector('[data-ten-gama-count]');
+          count=countEl?parseInt(countEl.value,10):1;
+          if(isNaN(count) || count<1) count=1;
+          if(count>4) count=4;
+        }
+        var unitCost=f.domain.active?0:tenCost(f, key);
+        var totalCost=key==='gama'?unitCost*count:unitCost;
+        if(!spendOrToast(totalCost)) return;
+        var maxHp=tenMaxHp(f, key, lvl, pb);
+        for(var i=0;i<count;i++) f.manifested.push({key:key, hp:maxHp, maxHp:maxHp, copy:false, duringDomain:f.domain.active, totality:!!r.totality});
+        refresh(); toast('Manifested '+tenSpec(key).name+(key==='gama'?' ×'+count:'')+'.');
+      });
+    });
+    b.querySelectorAll('[data-ten-wear]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var key=el.getAttribute('data-ten-wear');
+        var cost=Math.max(1, Math.ceil(tenCost(f, key)/2));
+        if(!spendOrToast(cost)) return;
+        var prev=f.worn;
+        f.worn=key;
+        refresh(); toast('Wearing '+tenSpec(key).name+'\'s shadow (1 min).'+(prev && prev!==key?' Previous wearing ended.':''));
+      });
+    });
+    var we=$('ten-worn-end');
+    if(we) we.addEventListener('click',function(){ f.worn=null; refresh(); });
+    b.querySelectorAll('[data-ten-rabbit]').forEach(function(el){
+      el.addEventListener('click',function(){
+        if(f.rabbitFreeUsed){
+          if(!spendOrToast(1)) return;
+        } else f.rabbitFreeUsed=true;
+        refresh(); toast('Singular rabbit summoned (Find Familiar, 8 hours).');
+      });
+    });
+    b.querySelectorAll('[data-ten-hit]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var idx=+el.getAttribute('data-ten-hit');
+        var e=f.manifested[idx];
+        if(!e) return;
+        var dmgEl=b.querySelector('[data-ten-dmg="'+idx+'"]');
+        var amt=dmgEl?parseInt(dmgEl.value,10):NaN;
+        if(isNaN(amt) || amt<=0){ toast('Enter damage.'); return; }
+        e.hp-=amt;
+        if(e.hp<=0) destroyEntry(idx);
+        else refresh();
+      });
+    });
+    b.querySelectorAll('[data-ten-dismiss]').forEach(function(el){
+      el.addEventListener('click',function(){
+        f.manifested.splice(+el.getAttribute('data-ten-dismiss'), 1);
+        refresh();
+      });
+    });
+    b.querySelectorAll('[data-ten-boost-btn]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var idx=+el.getAttribute('data-ten-boost-btn');
+        var e=f.manifested[idx];
+        if(!e || e.key!=='nue') return;
+        var amtEl=b.querySelector('[data-ten-boost="'+idx+'"]');
+        var amt=amtEl?parseInt(amtEl.value,10):NaN;
+        if(isNaN(amt) || amt<1) amt=1;
+        if(amt>pb) amt=pb;
+        if(!spendOrToast(amt)) return;
+        refresh(); toast('Nue Cursed Energy Boost: +'+amt+'d8 lightning, save DC +'+amt+(amt>=3?' (failed save: also stunned until the start of Nue\'s next turn)':'')+'.');
+      });
+    });
+    b.querySelectorAll('[data-ten-regen]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var e=f.manifested[+el.getAttribute('data-ten-regen')];
+        if(!e || e.key!=='mahoraga') return;
+        e.hp=Math.min(e.maxHp, e.hp+40);
+        refresh(); toast('Mahoraga regenerates +40 HP (now '+e.hp+' / '+e.maxHp+').');
+      });
+    });
+    b.querySelectorAll('[data-ten-lr]').forEach(function(el){
+      el.addEventListener('click',function(){
+        if(f.mahoragaLR>=3) return;
+        f.mahoragaLR++;
+        refresh(); toast('Mahoraga uses Legendary Resistance ('+(3-f.mahoragaLR)+' left today).');
+      });
+    });
+    b.querySelectorAll('[data-ten-copy]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var idx=+el.getAttribute('data-ten-copy');
+        var e=f.manifested[idx];
+        if(!e || e.key==='mahoraga' || e.copy || f.domain.copyUsed) return;
+        f.domain.copyUsed=true;
+        f.manifested.push({key:e.key, hp:e.maxHp, maxHp:e.maxHp, copy:true, duringDomain:true, totality:!!e.totality});
+        refresh(); toast('Perfect temporary copy of '+tenSpec(e.key).name+' created (free; vanishes when the Domain ends).');
+      });
+    });
+    b.querySelectorAll('[data-ten-fhit]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var idx=+el.getAttribute('data-ten-fhit');
+        var fu=f.fusions[idx];
+        if(!fu) return;
+        var dmgEl=b.querySelector('[data-ten-fdmg="'+idx+'"]');
+        var amt=dmgEl?parseInt(dmgEl.value,10):NaN;
+        if(isNaN(amt) || amt<=0){ toast('Enter damage.'); return; }
+        fu.hp-=amt;
+        if(fu.hp<=0){
+          [fu.compA, fu.compB].forEach(function(c){
+            var r=tenRosterEntry(f, c.key);
+            r.destroyed=true;
+          });
+          f.fusions.splice(idx, 1);
+          refresh(); toast('Fusion destroyed — both components die permanently and qualify for Totality.');
+        } else refresh();
+      });
+    });
+    b.querySelectorAll('[data-ten-fundo]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var idx=+el.getAttribute('data-ten-fundo');
+        var fu=f.fusions[idx];
+        if(!fu) return;
+        f.fusions.splice(idx, 1);
+        [fu.compA, fu.compB].forEach(function(c){
+          f.manifested.push({key:c.key, hp:c.hp, maxHp:c.maxHp, copy:false, duringDomain:false, totality:!!c.totality});
+        });
+        refresh();
+        var over=tenSlotsUsed(f)>cap;
+        toast('Fusion undone — components return at their pre-fusion HP (no HP regained).'+(over?' Slots over capacity — dismiss something.':''));
+      });
+    });
+    var fs=$('ten-fuse');
+    if(fs) fs.addEventListener('click',function(){
+      var aEl=$('ten-fuse-a'), bEl=$('ten-fuse-b');
+      var avail=f.manifested.filter(function(e){ return !e.copy; });
+      var a=avail[aEl?parseInt(aEl.value,10):0], b2=avail[bEl?parseInt(bEl.value,10):0];
+      if(!a || !b2 || a===b2){ toast('Choose two different manifested shikigami.'); return; }
+      var nameEl=$('ten-fuse-name');
+      var name=nameEl?nameEl.value.trim():'';
+      var hpEl=$('ten-fuse-hp');
+      var hp=hpEl?parseInt(hpEl.value,10):NaN;
+      if(!name){ toast('Enter the fusion\'s name (from the catalog).'); return; }
+      if(isNaN(hp) || hp<1){ toast('Enter the fusion\'s HP (from the catalog).'); return; }
+      f.manifested=f.manifested.filter(function(e){ return e!==a && e!==b2; });
+      f.fusions.push({name:name, hp:hp, maxHp:hp, compA:{key:a.key, hp:a.hp, maxHp:a.maxHp, totality:!!a.totality}, compB:{key:b2.key, hp:b2.hp, maxHp:b2.maxHp, totality:!!b2.totality}});
+      refresh(); toast('Fused into '+name+' (1 slot).');
+    });
+    var tt=$('ten-totality');
+    if(tt) tt.addEventListener('click',function(){
+      var donorEl=$('ten-donor'), recipEl=$('ten-recipient');
+      var donorKey=donorEl?donorEl.value:null, recipKey=recipEl?recipEl.value:null;
+      if(!donorKey || !recipKey || donorKey===recipKey) return;
+      var donor=tenRosterEntry(f, donorKey), recip=tenRosterEntry(f, recipKey);
+      if(!donor.destroyed || donor.passedOn || recip.destroyed || recip.passedOn || recip.totality) return;
+      var donorMax=tenMaxHp(f, donorKey, lvl, pb);
+      var recipMax=tenMaxHp(f, recipKey, lvl, pb);
+      var donorCost=tenCost(f, donorKey), recipCost=tenCost(f, recipKey);
+      recip.totality=true;
+      recip.totalityMax=recipMax+donorMax;
+      recip.totalityCost=Math.max(donorCost, recipCost)+Math.floor(Math.min(donorCost, recipCost)/2);
+      donor.passedOn=true;
+      donor.passedInto=recipKey;
+      f.manifested.forEach(function(e){
+        if(e.key===recipKey){ e.maxHp=recip.totalityMax; e.hp+=donorMax; e.totality=true; }
+      });
+      refresh(); toast('Totality: '+tenSpec(recipKey).name+' inherits '+tenSpec(donorKey).name+' (max HP '+recip.totalityMax+', cost '+recip.totalityCost+' CE).');
+    });
+    var wh=$('ten-wheel');
+    if(wh) wh.addEventListener('click',function(){
+      var mah=tenRosterEntry(f, 'mahoraga');
+      if(!mah.tamed || mah.destroyed || mah.passedOn || f.wheel.used) return;
+      if(!spendOrToast(10)) return;
+      f.wheel.active=true; f.wheel.used=true; f.wheel.tracks=[]; f.wheel.advanceUsed=false; f.wheel.edgeUsed=false; f.wheel.quickUsed=0;
+      refresh(); toast('Wheel Wearing: Mahoraga\'s shadow worn (1 min).');
+    });
+    var to=$('ten-track-open');
+    if(to) to.addEventListener('click',function(){
+      var nameEl=$('ten-track-name');
+      var name=nameEl?nameEl.value.trim():'';
+      if(!name){ toast('Enter the phenomenon.'); return; }
+      if(f.wheel.tracks.length>=pb){ toast('Track capacity reached (PB).'); return; }
+      f.wheel.tracks.push({name:name, turns:0});
+      refresh(); toast('Adaptation track opened: '+name+'.');
+    });
+    b.querySelectorAll('[data-ten-advance]').forEach(function(el){
+      el.addEventListener('click',function(){
+        if(f.wheel.advanceUsed) return;
+        var t=f.wheel.tracks[+el.getAttribute('data-ten-advance')];
+        if(!t) return;
+        t.turns=Math.min(3, t.turns+1);
+        f.wheel.advanceUsed=true;
+        refresh(); toast(t.name+' advanced to '+(t.turns===1?'Advantage':t.turns===2?'Resistance':'Immunity')+'.');
+      });
+    });
+    b.querySelectorAll('[data-ten-quick]').forEach(function(el){
+      el.addEventListener('click',function(){
+        if(f.wheel.quickUsed>=pb) return;
+        var t=f.wheel.tracks[+el.getAttribute('data-ten-quick')];
+        if(!t) return;
+        if(!spendOrToast(3)) return;
+        t.turns=Math.min(3, t.turns+1);
+        f.wheel.quickUsed++;
+        refresh(); toast('Quick Adaptation: '+t.name+' advanced immediately.');
+      });
+    });
+    var rc=$('ten-recovery');
+    if(rc) rc.addEventListener('click',function(){
+      refresh(); toast('General\'s Recovery: regain '+(pb+cem)+' HP at the start of your turn (mark it).');
+    });
+    var eg=$('ten-edge');
+    if(eg) eg.addEventListener('click',function(){
+      if(f.wheel.edgeUsed) return;
+      f.wheel.edgeUsed=true;
+      refresh(); toast('Executioner\'s Edge: +3d12 radiant on a melee hit vs a cursed spirit or undead.');
+    });
+    b.querySelectorAll('[data-ten-round]').forEach(function(el){
+      el.addEventListener('click',function(){
+        f.wheel.advanceUsed=false; f.wheel.edgeUsed=false; f.domain.copyUsed=false;
+        refresh();
+      });
+    });
+    var wend=$('ten-wheel-end');
+    if(wend) wend.addEventListener('click',function(){
+      var completed=f.wheel.tracks.filter(function(t){ return t.turns>=3; }).length;
+      f.wheel.active=false; f.wheel.tracks=[];
+      var exh='';
+      if(completed>=3){
+        st.exhaustion=(st.exhaustion||0)+1;
+        exh=' 3+ completed tracks: +1 exhaustion applied.';
+        save(); renderExh();
+      }
+      refresh(); toast('Wheel Wearing ends. No Shadow Wearing, Mahoraga, or fusions until the end of your next turn.'+exh);
+    });
+    var dm=$('ten-domain');
+    if(dm) dm.addEventListener('click',function(){
+      f.domain.active=true;
+      refresh(); toast('Chimera Shadow Garden expanded.');
+    });
+    var cl=$('ten-clone');
+    if(cl) cl.addEventListener('click',function(){
+      var amtEl=$('ten-clone-amt');
+      var amt=amtEl?parseInt(amtEl.value,10):NaN;
+      if(isNaN(amt) || amt<1) amt=1;
+      if(amt>cem){ toast('At most CE modifier ('+cem+') clones.'); return; }
+      if(!spendOrToast(amt)) return;
+      f.domain.clones+=amt;
+      refresh(); toast('Created '+amt+' shadow clone'+(amt>1?'s':'')+' (total '+f.domain.clones+').');
+    });
+    var sw=$('ten-swap');
+    if(sw) sw.addEventListener('click',function(){
+      if(f.domain.clones<=0) return;
+      f.domain.clones--;
+      refresh(); toast('Swapped with a clone — the clone becomes the target.');
+    });
+    var dend=$('ten-domain-end');
+    if(dend) dend.addEventListener('click',function(){
+      f.manifested=f.manifested.filter(function(e){ return !e.duringDomain && !e.copy; });
+      f.domain.active=false; f.domain.clones=0; f.domain.copyUsed=false;
+      refresh(); toast('Domain ends — free manifestations and copies vanish.');
+    });
+    var st1=$('ten-store');
+    if(st1) st1.addEventListener('click',function(){
+      var nameEl=$('ten-store-name');
+      var name=nameEl?nameEl.value.trim():'';
+      if(!name){ toast('Enter the object.'); return; }
+      f.storage.push(name);
+      refresh(); toast('Stored '+name+' in shadow.');
+    });
+    b.querySelectorAll('[data-ten-retrieve]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var idx=+el.getAttribute('data-ten-retrieve');
+        var name=f.storage[idx];
+        if(!spendOrToast(1)) return;
+        f.storage.splice(idx, 1);
+        refresh(); toast('Retrieved '+name+' from shadow.');
+      });
+    });
+  }
+  bindTen();
   function renderExh(){ var b=$('trkExhBody'); if(!b) return; b.innerHTML=exhCardHTML(st); bindExh(); }
   function bindExh(){
     var b=$('trkExhBody'); if(!b) return;
