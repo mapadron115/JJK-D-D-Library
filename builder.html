@@ -5605,7 +5605,118 @@ function siphonCardHTML(st){
   }
   html+='<button type="button" class="btn" id="trkSiphSpoilClear">Clear</button></div>';
   html+='<p class="small" style="margin:6px 0 0;opacity:.7">Marked prey: threshold −1 (min 1) vs. the marked target. Temp CE lasts until spent or long rest.</p>';
+  html+=siphonWheelHTML(sp);
   return html;
+}
+/* ── Siphon Spoil Wheel (e036) ──────────────────────────────────────
+   Spinning-wheel randomizer for the Colosseum Spoil roll (dossier
+   Trophy manifestation table, d20). Technique-specific: renders only
+   inside the Siphon tracker card (hasSiphon), and writes the same
+   tracker state (sp.spoil) as the plain Roll button — no new state keys,
+   so long-rest reset and persistence behave exactly as before.
+   SIPHON_WHEEL_SPOILS carries the dossier-verbatim Trophy texts; the
+   tracker's SIPHON_SPOILS array is the condensed display version. */
+var SIPHON_WHEEL_SPOILS = [
+ {n:'Gladius of the First Cut', y:'Weapon', t:'Shortsword base (1d6 piercing, finesse, light). Once per turn when you hit a creature at full HP or Gladiator HP, add 1d6 damage. The hit counts as two hits for the Siphon Counter.'},
+ {n:'Scutum of the Dead Legion', y:'Weapon / Shield', t:'Shield base (+2 AC). As a reaction when hit, reduce damage by PB; inside the Domain, add 1 CE to the Pool.'},
+ {n:'Pilum of the Pinned Offering', y:'Weapon', t:'Javelin base (1d6 piercing, thrown 30/120 ft.). On hit, reduce speed by 10 feet until your next turn. Inside the Domain, the target also loses 1 Gladiator HP at the start of its turn.'},
+ {n:'Net and Trident of the Retiarius', y:'Weapon Pair', t:'Net + trident base (trident: 1d6 piercing, thrown 20/60 ft., versatile 1d8; net restrains per its normal rules). On a trident hit, force a Strength save. Failure restrains until the end of your next turn. A restrained target hit by you immediately loses 1 CE.'},
+ {n:'Cestus of the Pit Fighter', y:'Weapon', t:'Worn hand-wraps (unarmed strike base). Unarmed strikes count as cursed tools and add 1d4 damage. If every hit in a completed Siphon chain is unarmed, drain 1 additional CE.'},
+ {n:'Sica of the Shieldbreaker', y:'Weapon', t:'Dagger base (1d4 piercing, finesse, light, thrown 20/60 ft.). Against a target benefiting from a shield or cover, ignore up to 2 points of that AC bonus. On hit, it cannot react until its next turn.'},
+ {n:"Executioner's Axe of the Final Roar", y:'Weapon', t:'Greataxe base (1d12 slashing, heavy, two-handed). When you reduce HP or Gladiator HP to 0, gain temporary HP equal to PB + Strength modifier. Inside the Domain, add 2 CE to the Pool.'},
+ {n:"Champion's Spear", y:'Weapon', t:'Spear base (1d6 piercing, versatile 1d8, thrown 20/60 ft.) with reach (10 ft.). Once per round when a creature enters that reach, make one opportunity attack without using your reaction. A hit advances Siphon.'},
+ {n:'Murmillo Armor Fragment', y:'Armor', t:'Resist the first bludgeoning, piercing, or slashing damage instance each round. Inside the Domain, preventing damage this way adds 1 CE to the Pool.'},
+ {n:'Laurel of the Victor', y:'Regalia', t:'Advantage on Intimidation and saves against fear. Once per duration, chosen enemies in the Domain make a Wisdom save or lose 2 Gladiator HP.'},
+ {n:'Lion Shikigami', y:'Arena Beast', t:'A commanding pouncer that knocks prey prone, advances Siphon, frightens enemies, and intercepts attacks. See the full Arena Bestiary stat block.'},
+ {n:'Bull Shikigami', y:'Arena Beast', t:'A recurring line charger that breaks formations, shoves enemies, demolishes barriers, and feeds the Colosseum Pool. See the full Arena Bestiary stat block.'},
+ {n:'Wolf Pack Shikigami', y:'Arena Beast', t:'A mobile swarm that shares spaces, hunts wounded prey, and creates advantaged double advances for Siphon. See the full Arena Bestiary stat block.'},
+ {n:'Bear Shikigami', y:'Arena Beast', t:'A massive guardian that grapples and crushes enemies or physically takes an attack meant for an ally. See the full Arena Bestiary stat block.'},
+ {n:'Serpent Shikigami', y:'Arena Beast', t:'A long-reach constrictor whose venom taxes CE expenditure or spoils CE recovery. See the full Arena Bestiary stat block.'},
+ {n:'Boar Shikigami', y:'Arena Beast', t:'A relentless juggernaut with a one-use Rampage, demolition damage, thick hide, and kill-driven follow-through. See the full Arena Bestiary stat block.'},
+ {n:'Eagle Shikigami', y:'Arena Beast', t:'A fast flying scout that dives, carries prey, grants ranged Help, and spoils incoming ranged attacks. See the full Arena Bestiary stat block.'},
+ {n:'Crocodile Shikigami', y:'Arena Beast', t:'An amphibious ambusher that restrains prey in locked jaws, drains CE, and executes a death roll. See the full Arena Bestiary stat block.'},
+ {n:'Tiger Shikigami', y:'Arena Beast', t:'An executioner that pursues wounded prey and empowers your attacks against creatures below half HP or Gladiator HP. See the full Arena Bestiary stat block.'},
+ {n:"The Emperor's Favor", y:'Special', t:'Choose any other Spoil. The selected Spoil lasts 10 minutes instead of 1 minute.'}
+];
+var SIPHON_WHEEL_SPIN_MS = 2800;
+function siphonWheelEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function siphonWheelResultHTML(sp){
+  var out = '';
+  if (sp.spoil > 0) {
+    var s1 = SIPHON_WHEEL_SPOILS[sp.spoil - 1];
+    out += '<p class="small" style="margin:4px 0 0"><b>' + sp.spoil + ' — ' + siphonWheelEsc(s1.n) + '</b> <span style="opacity:.7">(' + siphonWheelEsc(s1.y) + ')</span> — ' + siphonWheelEsc(s1.t) + '</p>';
+  }
+  if (sp.spoil2 > 0) {
+    var s2 = SIPHON_WHEEL_SPOILS[sp.spoil2 - 1];
+    out += '<p class="small" style="margin:4px 0 0"><b>' + sp.spoil2 + ' — ' + siphonWheelEsc(s2.n) + '</b> <span style="opacity:.7">(' + siphonWheelEsc(s2.y) + ')</span> — ' + siphonWheelEsc(s2.t) + '</p>';
+  }
+  if (!out) out = '<p class="small" style="margin:4px 0 0;opacity:.7">No Spoil held. Spin the wheel after a Victory Cashout to roll your Spoil (d20 Trophy table).</p>';
+  return out;
+}
+function siphonWheelHTML(sp){
+  return '<div class="tracker-title" style="margin-top:8px"><span>Spoil Wheel</span><span>d20 Trophy table</span></div>' +
+    '<div id="siphon-wheel-wrap">' +
+    '<div id="siphon-wheel-pointer" aria-hidden="true"></div>' +
+    '<div id="siphon-wheel" role="img" aria-label="Spoil wheel with 20 numbered segments"></div>' +
+    '<div id="siphon-wheel-result" aria-live="polite">' + siphonWheelResultHTML(sp) + '</div>' +
+    '<div class="tracker-controls"><button type="button" class="btn" id="siphon-wheel-spin">Spin the Wheel</button></div>' +
+    '<p class="small" style="margin:4px 0 0;opacity:.7">Tap a wheel number to preview that Spoil. A Spoil lasts 1 minute, until dismissed, or until you are unconscious.</p>' +
+    '</div>';
+}
+function siphonWheelCSS(){
+  return '#siphon-wheel-wrap{text-align:center}' +
+  '#siphon-wheel-pointer{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:16px solid var(--ink,#222);margin:6px auto 2px}' +
+  '#siphon-wheel{position:relative;width:220px;height:220px;border-radius:50%;margin:0 auto;border:2px solid var(--line2,#888);background:conic-gradient(#7a3b2e 0deg 18deg,#b98a2f 18deg 36deg,#7a3b2e 36deg 54deg,#b98a2f 54deg 72deg,#7a3b2e 72deg 90deg,#b98a2f 90deg 108deg,#7a3b2e 108deg 126deg,#b98a2f 126deg 144deg,#7a3b2e 144deg 162deg,#b98a2f 162deg 180deg,#7a3b2e 180deg 198deg,#b98a2f 198deg 216deg,#7a3b2e 216deg 234deg,#b98a2f 234deg 252deg,#7a3b2e 252deg 270deg,#b98a2f 270deg 288deg,#7a3b2e 288deg 306deg,#b98a2f 306deg 324deg,#7a3b2e 324deg 342deg,#b98a2f 342deg 360deg)}' +
+  '.siphon-wheel-label{position:absolute;left:50%;top:50%;width:24px;height:24px;margin:-12px 0 0 -12px;text-align:center;cursor:pointer;font-size:.8rem;font-weight:bold;color:#fff;text-shadow:0 1px 2px #000}' +
+  '.siphon-wheel-label span{display:block}';
+}
+function bindSiphonWheel(ctx){
+  var sp = ctx.sp, refresh = ctx.refresh, toast = ctx.toast;
+  var wheel = document.getElementById('siphon-wheel');
+  if (!wheel) return;
+  if (!document.getElementById('siphon-wheel-style')) {
+    var st = document.createElement('style');
+    st.id = 'siphon-wheel-style';
+    st.textContent = siphonWheelCSS();
+    document.head.appendChild(st);
+  }
+  /* Build the 20 numbered labels, one per segment, centered at (i-0.5)*18 deg. */
+  var labels = '';
+  for (var i = 1; i <= 20; i++) {
+    var a = (i - 0.5) * 18;
+    labels += '<span class="siphon-wheel-label" data-siphon-wheel-seg="' + i + '" style="transform:rotate(' + a + 'deg) translateY(-88px)"><span style="transform:rotate(' + (-a) + 'deg)">' + i + '</span></span>';
+  }
+  wheel.innerHTML = labels;
+  wheel.querySelectorAll('[data-siphon-wheel-seg]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      if (wheel._spinning) return;
+      var idx = parseInt(el.getAttribute('data-siphon-wheel-seg'), 10);
+      var s = SIPHON_WHEEL_SPOILS[idx - 1];
+      var res = document.getElementById('siphon-wheel-result');
+      if (res) res.innerHTML = '<p class="small" style="margin:4px 0 0"><b>Preview — ' + idx + ' — ' + siphonWheelEsc(s.n) + '</b> <span style="opacity:.7">(' + siphonWheelEsc(s.y) + ', not yet won)</span> — ' + siphonWheelEsc(s.t) + '</p>';
+    });
+  });
+  var btn = document.getElementById('siphon-wheel-spin');
+  if (btn) btn.addEventListener('click', function () {
+    if (wheel._spinning) return;
+    wheel._spinning = true;
+    btn.disabled = true;
+    var res = document.getElementById('siphon-wheel-result');
+    if (res) res.innerHTML = '<p class="small" style="margin:4px 0 0">Spinning…</p>';
+    /* Roll first (stub-testable via Math.random), then animate to land on it. */
+    var r = Math.floor(Math.random() * 20) + 1;
+    var target = 360 * 5 + ((360 - (((r - 0.5) * 18) % 360)) % 360);
+    wheel.style.transition = 'transform ' + SIPHON_WHEEL_SPIN_MS + 'ms cubic-bezier(.15,.9,.25,1)';
+    wheel.style.transform = 'rotate(' + target + 'deg)';
+    var done = false;
+    setTimeout(function () {
+      if (done) return;
+      done = true;
+      sp.spoil = r; sp.spoil2 = 0;
+      refresh();
+      toast('Spoil: ' + r + ' — ' + SIPHON_WHEEL_SPOILS[r - 1].n + '.');
+    }, SIPHON_WHEEL_SPIN_MS + 50);
+  });
 }
 /* Combat Quick Reference: fixed-cost CE spend buttons (screen only, hidden on print).
    Top-level for testability; called from bindTrackers which owns st/spendCe/save/toast. */
@@ -5927,6 +6038,7 @@ function bindTrackers(hpMaxV, ceMaxV){
     });
     var sc=$('trkSiphSpoilClear');
     if(sc) sc.addEventListener('click',function(){ sp.spoil=0; sp.spoil2=0; refresh(); toast('Spoil cleared.'); });
+    bindSiphonWheel({sp:sp, refresh:refresh, toast:toast});
   }
   bindSiphon();
   /* ── Guanyin matrix (e042) ── */
