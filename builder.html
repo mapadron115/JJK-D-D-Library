@@ -253,6 +253,12 @@ h1 .amp{color:var(--red)}
 .use-pip.is-used{background:var(--ink);border-color:var(--ink)}
 .trk-toast{margin-top:8px;min-height:1.4em;font-size:.85rem;opacity:0;transition:opacity .3s}
 .trk-toast.show{opacity:1}
+.guanyin-grid{border-collapse:collapse;font-size:.82rem}
+.guanyin-grid th,.guanyin-grid td{padding:2px;text-align:center}
+.guanyin-grid th{font-weight:600}
+.guanyin-cell{min-width:38px;min-height:34px;border:1px solid var(--line2);background:transparent;border-radius:4px;cursor:pointer;font:inherit;font-size:.78rem;font-weight:600;color:inherit}
+.guanyin-cell:hover{background:rgba(201,151,47,.18)}
+.guanyin-cell.sel{background:#dcb04a;color:#1d150a;border-color:#a5761f}
 .cond-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .cond-chip{border:1px solid var(--line2);border-radius:20px;padding:6px 12px;font-size:.8rem;background:transparent;color:var(--ink);cursor:pointer;min-height:44px}
 .cond-chip.is-on{background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:bold}
@@ -5252,7 +5258,7 @@ function quickRefHTML(){
    Persisted per character in localStorage; hidden on print. */
 function trackerKey(){ return 'ra_trackers_'+(char.id||'noid'); }
 function trackerState(){
-  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null, siphon:{counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false} };
+  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null, siphon:{counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false}, guanyin:{vector:null,intention:null,second:null,names:{},reactions:0} };
   try{
     var raw=localStorage.getItem(trackerKey());
     if(raw) d=Object.assign(d, JSON.parse(raw));
@@ -5375,6 +5381,10 @@ function trackerHTML(hpMaxV, ceMaxV){
   if(hasSiphon()){
     html+='<div class="tracker-card"><div id="trkSiphonBody">'+siphonCardHTML(st)+'</div></div>';
   }
+  /* Guanyin matrix (e042) — e042 characters only */
+  if(hasGuanyin()){
+    html+='<div class="tracker-card"><div id="trkGuanyinBody">'+guanyinCardHTML(st)+'</div></div>';
+  }
   /* custom use-trackers */
   html+='<div class="tracker-card"><div class="tracker-title"><span>Limited Uses</span><span>Mark when expended</span></div>'+
     '<div id="trkUses">'+trackerUsesHTML(st)+'</div>'+
@@ -5452,6 +5462,105 @@ function siphonTempCap(){ return 5*char.level; }
 function siphonFavor(pool){ return Math.min(pb(char.level), Math.floor((pool||0)/5)); }
 function siphonState(st){ if(!st.siphon) st.siphon={counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false}; return st.siphon; }
 function siphonMomentumFor(score){ for(var i=0;i<SIPHON_MOMENTUM.length;i++){ var m=SIPHON_MOMENTUM[i]; if(score>=m.min&&score<=m.max) return i; } return -1; }
+/* ── Guanyin matrix (e042) ──
+   Renders only for characters with e042 (hasGuanyin gate at the call
+   site, same pattern as the Siphon tracker). The hundredfold matrix:
+   ten approach vectors × ten intentions. The dossier names six vectors
+   plus "four diagonals" without naming them; the card uses the four
+   horizontal diagonals (Forward/Return × Left/Right). */
+function hasGuanyin(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e042'; });
+}
+var GUANYIN_VECTORS=['Zenith','Nadir','Forward','Return','Left','Right','Forward-Left','Forward-Right','Return-Left','Return-Right'];
+var GUANYIN_INTENTIONS=[
+  {code:'OPN', name:'Open', effect:'Damage + 10-ft move along the vector.'},
+  {code:'FOC', name:'Focused', effect:'Heavier damage, no move. (The dossier fixes no bonus — table call.)'},
+  {code:'DRV', name:'Driving', effect:'Hurl the target 30 ft along the vector.'},
+  {code:'GRD', name:'Guarding', effect:'Reaction: reduce damage by Prayer Dice + CE modifier.'},
+  {code:'PRS', name:'Pressing', effect:'Prone, and speed 0 while against a wall.'},
+  {code:'GRP', name:'Grasping', effect:'Grapple the target.'},
+  {code:'PRC', name:'Piercing', effect:'Prayer Dice are maximized vs objects and structures.'},
+  {code:'SWP', name:'Sweeping', effect:'Cone or line, Dexterity save.'},
+  {code:'CRS', name:'Crossing', effect:'Strikes two targets.'},
+  {code:'MRC', name:'Merciful', effect:'Move a willing creature along the vector, no damage.'}
+];
+function guanyinDie(){ var l=char.level||1; return l>=20?'d12':l>=11?'d10':l>=6?'d8':'d6'; }
+function guanyinReach(){ var l=char.level||1; return l>=20?600:l>=11?300:l>=6?120:60; }
+function guanyinState(st){ if(!st.guanyin) st.guanyin={vector:null,intention:null,second:null,names:{},reactions:0}; return st.guanyin; }
+function guanyinCardHTML(st){
+  var g=guanyinState(st);
+  var die=guanyinDie(), reach=guanyinReach();
+  var cem=ceModNow()+(typeof hrCEModBonus==='function'?(hrCEModBonus()||0):0);
+  var dc=8+pb(char.level)+cem;
+  var maxR=(char.level||1)>=18?pb(char.level):1;
+  var html='<div class="tracker-title"><span>Hundredfold Matrix</span><span>100-Type Guanyin Bodhisattva</span></div>';
+  html+='<p class="small">Prayer Die <b>'+die+'</b> · Palm Reach <b>'+reach+' ft</b> · CE mod <b>'+(cem>=0?'+':'')+cem+'</b> · Technique DC <b>'+dc+'</b></p>';
+  html+='<p class="small">Reactions this round: <b>'+(g.reactions||0)+' / '+maxR+'</b> <button type="button" class="btn" id="trkGuaReact">Use reaction</button> <button type="button" class="btn" id="trkGuaRound">New round</button></p>';
+  html+='<div style="overflow-x:auto"><table class="guanyin-grid"><thead><tr><th></th>'+GUANYIN_INTENTIONS.map(function(it){ return '<th title="'+esc(it.name)+'">'+it.code+'</th>'; }).join('')+'</tr></thead><tbody>';
+  GUANYIN_VECTORS.forEach(function(v){
+    html+='<tr><th>'+esc(v)+'</th>';
+    GUANYIN_INTENTIONS.forEach(function(it){
+      var sel=(g.vector===v && g.intention===it.name);
+      html+='<td><button type="button" class="guanyin-cell'+(sel?' sel':'')+'" data-guanyin-v="'+esc(v)+'" data-guanyin-i="'+esc(it.name)+'" title="'+esc(v)+' '+esc(it.name)+'">'+it.code+'</button></td>';
+    });
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+  html+='<p class="small">Rows: approach vectors · Columns: intentions — '+GUANYIN_INTENTIONS.map(function(it){ return it.code+' '+it.name; }).join(' · ')+'</p>';
+  html+=guanyinDetailHTML(st, die, reach, cem);
+  html+=guanyinNamedHTML();
+  return html;
+}
+function guanyinDetailHTML(st, die, reach, cem){
+  var g=guanyinState(st);
+  if(!g.vector || !g.intention) return '<div id="trkGuaDetail"><p class="small">Pick a vector and an intention above — the hand\'s cost, damage, and effect appear here.</p></div>';
+  var it=null, second=null;
+  for(var i=0;i<GUANYIN_INTENTIONS.length;i++){ if(GUANYIN_INTENTIONS[i].name===g.intention) it=GUANYIN_INTENTIONS[i]; }
+  if(g.second){ for(var j=0;j<GUANYIN_INTENTIONS.length;j++){ if(GUANYIN_INTENTIONS[j].name===g.second) second=GUANYIN_INTENTIONS[j]; } }
+  var key=g.vector+'|'+g.intention;
+  var name=((g.names||{})[key])||'';
+  var isGuard=g.intention==='Guarding' || (second && second.name==='Guarding');
+  var firstIsGuard=g.intention==='Guarding';
+  var merciful=g.intention==='Merciful' || (second && second.name==='Merciful');
+  var cost=second?2:1;
+  var lvl=char.level||1;
+  var h='<div id="trkGuaDetail"><h4 id="trkGuaTitle">'+esc(g.vector+' '+g.intention+' Palm'+(name?' — “'+name+'”':''))+'</h4>';
+  h+='<p>'+(firstIsGuard?'Reaction · '+cost+' CE · when you or a creature in Reach takes damage.':'Attack action (replace one attack) · '+cost+' CE · ranged CE attack within '+reach+' ft.')+'</p>';
+  if(firstIsGuard){
+    h+='<p>Reduction: <b>'+die+' + '+(cem>=0?'+':'')+cem+'</b>'+(lvl>=18?'. Then move a willing protected creature 10 ft along a vector; reduction minimum 0.':'.')+'</p>';
+  } else if(!merciful){
+    h+='<p>Damage: <b>'+die+' + '+(cem>=0?'+':'')+cem+'</b> force/radiant.</p>';
+  } else if(second){
+    h+='<p>No damage (Merciful in the combination).</p>';
+  }
+  h+='<p>Effect: '+esc(it.effect)+'</p>';
+  if(second) h+='<p>Combined (Hundredth Name): '+esc(second.effect)+'</p>';
+  var moves=['Open','Driving','Merciful'];
+  if(moves.indexOf(g.intention)>=0 || (second && moves.indexOf(second.name)>=0) || (isGuard && lvl>=18)){
+    h+='<p class="small">Forced movement follows the vector in a straight legal path, no opportunity attacks; if blocked, ends at the nearest legal space; each 10 ft prevented by solid terrain deals 1d6 bludgeoning (max PBd6).</p>';
+  }
+  h+='<label class="small"><input type="checkbox" id="trkGuaCombine"'+(second?' checked':'')+'> Combine (Hundredth Name feat, 1 CE per intention)</label> '+
+    '<select id="trkGuaSecond" aria-label="Second intention"'+(second?'':' disabled')+'>'+GUANYIN_INTENTIONS.map(function(x){ return '<option value="'+esc(x.name)+'"'+(g.second===x.name?' selected':'')+'>'+esc(x.name)+'</option>'; }).join('')+'</select>';
+  h+='<div class="tracker-controls" style="margin-top:8px"><label class="small">Name this hand: <input id="trkGuaName" type="text" value="'+esc(name)+'" placeholder="Your tradition\'s record" style="flex:1"></label> '+
+    '<button type="button" class="btn" id="trkGuaPalm">'+(firstIsGuard?'Guard — spend '+cost+' CE':'Palm — spend '+cost+' CE')+'</button></div>';
+  h+='</div>';
+  return h;
+}
+function guanyinNamedHTML(){
+  return '<div style="margin-top:12px"><h4>Named hands</h4><ul class="small" style="line-height:1.5">'+
+  '<li><b>First Hand: Heaven\'s Descent</b> — 2 CE, replaces one attack: manifest above a creature in Reach; on hit 2 Prayer Dice + CE mod, driven 20 ft straight down; grounded target falls prone, no reactions until start of its next turn.</li>'+
+  '<li><b>Third Hand: Converging Mercy</b> — action, 3 CE: two ranged CE attacks vs one creature; each hit Prayer Dice + move 10 ft; both hit: restrained until start of your next turn (escape: action, Athletics/Acrobatics/CE-ability vs CE save DC).</li>'+
+  '<li><b>Ninety-Ninth Hand: Endless Litany</b> — action, CE = PB: 2×PB ranged CE attacks in Reach, distributable; each hit 2 Prayer Dice + move target 5 ft along any vector.</li>'+
+  '<li><b>Hundred-and-First Hand: Lotus Prison</b> (feat) — action, 4 CE: three ranged CE attacks vs one creature; each hit 2 Prayer Dice; CE mod to one hit only; ≥2 hits: restrained until end of your next turn (prison AC = CE save DC, HP = 10×PB).</li>'+
+  '<li><b>Zero Hand: Final Gratitude</b> (Maximum) — full-turn, spend all CE (min 15): one perceived creature within 600 ft, Dex save vs CE save DC: (CE spent + 2×PB)d12 + CE mod force/radiant, half on success; ignores resistance/immunity; 20-ft sphere of unattended objects/structures/barriers takes max damage. Afterwards: CE 0, 2 exhaustion. Can\'t crit or Black Flash.</li>'+
+  '<li><b>Domain: Temple of Ten Thousand Gratitudes</b> — full turn, 20 CE, 120 ft, 3 min, 1000 clash, 3-round burnout: sure-hit at initiative 20, each chosen hostile, no roll: 2×PB Prayer Dice + CE mod, grasped (restrained until next initiative 20; grasping hand AC = CE save DC, HP = 5×PB; destroying it ends that restraint); once per turn one ordinary Palm for 1 CE, no action; Palm Reach covers the whole domain, origins ignore cover, no hand or audible prayer needed.</li>'+
+  '</ul><h4>Feats</h4><ul class="small" style="line-height:1.5">'+
+  '<li><b>Unbroken Mudra</b> — when a Palm misses, make a second Palm vs a different creature within 15 ft of the original target as part of the same Palm, 1 CE for the echo; if the echo misses, the gesture ends.</li>'+
+  '<li><b>Great Compassion</b> — when Merciful Palm moves a willing creature, spend 1 CE to move a second willing creature within 15 ft of the first the same distance along the same vector; when Guarding Palm shields a willing creature, spend 1 CE to extend its reduction to a second willing creature adjacent to the first.</li>'+
+  '<li><b>Opening Salutation</b> — immediately after initiative is rolled, once per combat, one Merciful Palm on yourself or a willing creature in Reach for 1 CE, no action or reaction, resolved before the first turn; cannot target an unwilling creature.</li>'+
+  '<li><b>The Hundredth Name</b> — combine two intentions into a single Palm, 1 CE per intention (use the Combine control above).</li>'+
+  '</ul><p class="small">Table calls (dossier leaves open): Focused\'s damage bonus · Sweeping\'s save resolution · Crossing\'s roll count.</p></div>';
+}
 function siphonCardHTML(st){
   var sp=siphonState(st), th=siphonThreshold(), cap=siphonTempCap(), P=pb(char.level);
   var fav=siphonFavor(sp.pool);
@@ -5597,7 +5706,8 @@ function bindTrackers(hpMaxV, ceMaxV){
     st.exhaustion=Math.max(0,(st.exhaustion||0)-1);
     st.zoneRounds=0; st.zoneStacks=0; st.jugReinf=0; st.warStrike=0; st.posPool=null;
     st.siphon={counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false};
-    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderSiphon();
+    if(st.guanyin) st.guanyin.reactions=0;
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderSiphon(); renderGuanyin();
     var _ri=$('trkRct'); if(_ri&&_rm!=null) _ri.value=_rm;
     toast('Long rest — HP, CE, RCT pool, and uses restored; \u22121 exhaustion.');
   });
@@ -5618,7 +5728,7 @@ function bindTrackers(hpMaxV, ceMaxV){
     st=trackerState(); st.hp=hpMaxV; if(ceMaxV!=null) st.ce=ceMaxV;
     $('trkHp').value=hpMaxV; $('trkTemp').value=0;
     if(ceMaxV!=null) $('trkCe').value=ceMaxV;
-    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); renderSiphon(); toast('Trackers reset.');
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); renderSiphon(); renderGuanyin(); toast('Trackers reset.');
   });
 
   /* ── shared mini-helpers for the new cards ── */
@@ -5819,6 +5929,62 @@ function bindTrackers(hpMaxV, ceMaxV){
     if(sc) sc.addEventListener('click',function(){ sp.spoil=0; sp.spoil2=0; refresh(); toast('Spoil cleared.'); });
   }
   bindSiphon();
+  /* ── Guanyin matrix (e042) ── */
+  function renderGuanyin(){ var b=$('trkGuanyinBody'); if(!b) return; b.innerHTML=guanyinCardHTML(st); bindGuanyin(); }
+  function bindGuanyin(){
+    var b=$('trkGuanyinBody'); if(!b) return;
+    var g=guanyinState(st);
+    function refresh(){ save(); renderGuanyin(); }
+    b.querySelectorAll('[data-guanyin-v]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        g.vector=btn.getAttribute('data-guanyin-v');
+        g.intention=btn.getAttribute('data-guanyin-i');
+        refresh();
+      });
+    });
+    var ru=$('trkGuaReact');
+    if(ru) ru.addEventListener('click',function(){
+      var maxR=(char.level||1)>=18?pb(char.level):1;
+      if((g.reactions||0)<maxR){ g.reactions=(g.reactions||0)+1; refresh(); toast('Guanyin reaction used ('+g.reactions+' / '+maxR+').'); }
+      else toast('No Guanyin reactions left this round.');
+    });
+    var nr=$('trkGuaRound');
+    if(nr) nr.addEventListener('click',function(){ g.reactions=0; refresh(); toast('New round — Guanyin reactions reset.'); });
+    var cb=$('trkGuaCombine');
+    if(cb) cb.addEventListener('change',function(){
+      if(cb.checked){
+        var sel=$('trkGuaSecond');
+        var v=sel?sel.value:null;
+        if(!v || v===g.intention){
+          for(var k=0;k<GUANYIN_INTENTIONS.length;k++){ if(GUANYIN_INTENTIONS[k].name!==g.intention){ v=GUANYIN_INTENTIONS[k].name; break; } }
+        }
+        g.second=v;
+      } else g.second=null;
+      refresh();
+    });
+    var sel2=$('trkGuaSecond');
+    if(sel2) sel2.addEventListener('change',function(){ if(g.second!=null){ g.second=sel2.value; refresh(); } });
+    var nm=$('trkGuaName');
+    if(nm) nm.addEventListener('change',function(){
+      var key=g.vector+'|'+g.intention;
+      if(!g.names) g.names={};
+      var v=nm.value.trim();
+      if(v) g.names[key]=v; else delete g.names[key];
+      save();
+      var t=$('trkGuaTitle');
+      if(t) t.textContent=g.vector+' '+g.intention+' Palm'+(v?' — “'+v+'”':'');
+    });
+    var palm=$('trkGuaPalm');
+    if(palm) palm.addEventListener('click',function(){
+      if(ceMaxV==null){ toast('No CE pool.'); return; }
+      var cost=g.second?2:1;
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return; }
+      spendCe(cost); save();
+      toast('Palm spent '+cost+' CE.');
+    });
+  }
+  bindGuanyin();
   function renderExh(){ var b=$('trkExhBody'); if(!b) return; b.innerHTML=exhCardHTML(st); bindExh(); }
   function bindExh(){
     var b=$('trkExhBody'); if(!b) return;
