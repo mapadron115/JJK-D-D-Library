@@ -5599,9 +5599,11 @@ function siphonCardHTML(st){
     html+='<p class="small" style="margin:4px 0 0"><b>🎲 '+sp.spoil2+' — '+esc(s2.n)+'</b> — '+esc(s2.t)+'</p>'; }
   html+='<div class="tracker-controls"><button type="button" class="btn" id="trkSiphRoll">🎲 Roll d20 Spoil</button>';
   if(char.level>=18){
-    html+='<button type="button" class="btn" id="trkSiphRoll2">Roll Twice (L18)</button>'+
-    '<select id="trkSiphPick">'+SIPHON_SPOILS.map(function(x,i){return '<option value="'+(i+1)+'">'+(i+1)+' — '+esc(x.n)+'</option>';}).join('')+'</select>'+
-    '<button type="button" class="btn" id="trkSiphPickBtn">Choose (L18)</button>';
+    html+='<button type="button" class="btn" id="trkSiphRoll2">Roll Twice (L18)</button>';
+  }
+  if(char.level>=18 || sp.spoil===20 || sp.spoil2===20){
+    html+='<select id="trkSiphPick">'+SIPHON_SPOILS.map(function(x,i){return '<option value="'+(i+1)+'">'+(i+1)+' — '+esc(x.n)+'</option>';}).join('')+'</select>'+
+    '<button type="button" class="btn" id="trkSiphPickBtn">Choose'+(char.level>=18?' (L18)':'')+'</button>';
   }
   html+='<button type="button" class="btn" id="trkSiphSpoilClear">Clear</button></div>';
   html+='<p class="small" style="margin:6px 0 0;opacity:.7">Marked prey: threshold −1 (min 1) vs. the marked target. Temp CE lasts until spent or long rest.</p>';
