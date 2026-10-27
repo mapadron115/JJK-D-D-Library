@@ -4042,9 +4042,9 @@ function manuscriptSectionHTML(){
       (studied?'✓ Studied — click to remove':'Mark as studied')+'</label></div>'+
       '</div></div></div>';
   }).join('');
-  return '<h2 style="margin-top:28px">CE Applications — Manuscripts</h2>'+
+  return '<div id="manuscriptSection"><h2 style="margin-top:28px">CE Applications — Manuscripts</h2>'+
     '<p class="small">Learnable applications of cursed energy, taught by manuscript. <b>Not techniques</b> — they never count against the two-technique limit and have no level progression. Study the text, meet the requirements, mark it studied; the application lands on your sheet\'s quick reference.</p>'+
-    '<div id="manuscriptResults">'+cards+'</div>';
+    '<div id="manuscriptResults">'+cards+'</div></div>';
 }
 function bindManuscriptSection(body){
   var boxes=body.querySelectorAll('[data-manuscript]');
@@ -4314,6 +4314,15 @@ function renderTechResults(){
   html+=list.map(function(e){ return techCard(e, tIsFigure(e)?'figures':'originals'); }).join('')||
     '<p class="small">No techniques match the current filters.</p>';
   res.innerHTML=html;
+  /* Manuscripts are learned CE applications, not techniques — they sit on
+     the picker only as a browse-state convenience and must never linger
+     under a technique search. Hide the whole section while any search or
+     filter is active; it returns when the filters clear. */
+  var ms=$('manuscriptSection');
+  if(ms){
+    var filtering=(techQ.trim()!=='')||techGrade!==''||techGroup!==''||techRole!==''||techFranchise!==''||techOrigin!=='all';
+    ms.style.display=filtering?'none':'';
+  }
   res.querySelectorAll('[data-inspect]').forEach(function(b){
     b.addEventListener('click',function(){
       var card=b.closest('.tech-card'); card.classList.toggle('open');
