@@ -259,6 +259,12 @@ h1 .amp{color:var(--red)}
 .guanyin-cell{min-width:38px;min-height:34px;border:1px solid var(--line2);background:transparent;border-radius:4px;cursor:pointer;font:inherit;font-size:.78rem;font-weight:600;color:inherit}
 .guanyin-cell:hover{background:rgba(201,151,47,.18)}
 .guanyin-cell.sel{background:#dcb04a;color:#1d150a;border-color:#a5761f}
+.crazy-wheel-wrap{text-align:center}
+.crazy-wheel-pointer{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:16px solid #34d399;margin:6px auto 2px}
+.crazy-wheel{position:relative;width:220px;height:220px;border-radius:50%;margin:0 auto;border:2px solid var(--line2);background:conic-gradient(#34d399 0deg 45deg,#1f2937 45deg 90deg,#34d399 90deg 135deg,#1f2937 135deg 180deg,#34d399 180deg 225deg,#1f2937 225deg 270deg,#34d399 270deg 315deg,#1f2937 315deg 360deg)}
+.crazy-wheel-label{position:absolute;left:50%;top:50%;width:24px;height:24px;margin:-12px 0 0 -12px;text-align:center;font-size:.9rem;font-weight:bold;color:#fff;text-shadow:0 1px 2px #000}
+.crazy-wheel-label span{display:block}
+.crazy-held{border:1px solid var(--line2);border-radius:6px;padding:8px 10px;margin-top:8px}
 .cond-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .cond-chip{border:1px solid var(--line2);border-radius:20px;padding:6px 12px;font-size:.8rem;background:transparent;color:var(--ink);cursor:pointer;min-height:44px}
 .cond-chip.is-on{background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:bold}
@@ -5258,7 +5264,7 @@ function quickRefHTML(){
    Persisted per character in localStorage; hidden on print. */
 function trackerKey(){ return 'ra_trackers_'+(char.id||'noid'); }
 function trackerState(){
-  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null, siphon:{counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false}, guanyin:{vector:null,intention:null,second:null,names:{},reactions:0} };
+  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null, siphon:{counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false}, guanyin:{vector:null,intention:null,second:null,names:{},reactions:0}, crazy:{held:[],secondSpin:false,encore:false,encoreReady:false,double:false,survivor:false,survivorHeld:false,fullHouse:false,lastRolls:[],lastMode:'',lastTake:0,lastKind:'',lastPrice:'',lastTie:false} };
   try{
     var raw=localStorage.getItem(trackerKey());
     if(raw) d=Object.assign(d, JSON.parse(raw));
@@ -5384,6 +5390,10 @@ function trackerHTML(hpMaxV, ceMaxV){
   /* Guanyin matrix (e042) — e042 characters only */
   if(hasGuanyin()){
     html+='<div class="tracker-card"><div id="trkGuanyinBody">'+guanyinCardHTML(st)+'</div></div>';
+  }
+  /* Crazy Slots wheel (e514) — e514 characters only */
+  if(hasCrazy()){
+    html+='<div class="tracker-card"><div id="trkCrazyBody">'+crazyCardHTML(st)+'</div></div>';
   }
   /* custom use-trackers */
   html+='<div class="tracker-card"><div class="tracker-title"><span>Limited Uses</span><span>Mark when expended</span></div>'+
@@ -5560,6 +5570,127 @@ function guanyinNamedHTML(){
   '<li><b>Opening Salutation</b> — immediately after initiative is rolled, once per combat, one Merciful Palm on yourself or a willing creature in Reach for 1 CE, no action or reaction, resolved before the first turn; cannot target an unwilling creature.</li>'+
   '<li><b>The Hundredth Name</b> — combine two intentions into a single Palm, 1 CE per intention (use the Combine control above).</li>'+
   '</ul><p class="small">Table calls (dossier leaves open): Focused\'s damage bonus · Sweeping\'s save resolution · Crossing\'s roll count.</p></div>';
+}
+/* ── Crazy Slots wheel (e514) ──
+   Renders only for characters with e514 (hasCrazy gate at the call
+   site, same pattern as the Siphon/Guanyin trackers). The wheel deals
+   1–8 on a spin: the dossier's 9 is the hidden number, never dealt by
+   a spin — it arrives only via L20 The Number You Never Rolled.
+   Held weapons persist through a long rest (dossier-explicit: the
+   clown waits); only the once-per-long-rest flags reset. */
+function hasCrazy(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e514'; });
+}
+var CRAZY_WEAPONS=[
+  {n:1, name:'The Daggers', line:'Pair of returning throwing daggers · light, finesse, thrown 60 ft · 1d6 + mod each', use:'Each dagger drew blood', pips:2},
+  {n:2, name:'The Scythe', line:'Two-handed, heavy, reach 10 ft · 2d10 slashing · utterly silent', use:'Reap (a creature to 0 HP) or 3 hits', pips:3, instant:'Reaped a creature'},
+  {n:3, name:'The Bow', line:'Longbow, conjures its own arrows · two-handed, ammunition · 1d8 piercing · 150/600', use:'3 arrows loosed', pips:3},
+  {n:4, name:'The Hammer', line:'Two-handed · 2d6 bludgeoning', use:'Sunder or 2 hits on a creature', pips:2, instant:'Sundered an object or shield'},
+  {n:5, name:'The Gun', line:'Rifle, 3 shots · two-handed · 3d10 piercing · 100/300 · thunderously loud', use:'All 3 shots fired', pips:3},
+  {n:6, name:'The Shield', line:'Tower shield · +3 AC while wielded', use:'Interpose, then it shatters', pips:0, instant:'Interposed'},
+  {n:7, name:'The Whip', line:'Chain whip · one-handed, 15-ft reach · 1d8 slashing · on hit, may grapple as part of the attack (escape DC = CE save DC)', use:'Bind (grapple or disarm)', pips:0, instant:'Bound a creature'},
+  {n:8, name:'The Mace', line:'One-handed · 2d8 bludgeoning · on hit, may push 10 ft + prone (Str save vs CE save DC negates prone)', use:'2 solid hits', pips:2}
+];
+var CRAZY_KINDS={melee:[1,2,4,7,8], ranged:[3,5], defensive:[6]};
+var CRAZY_SPIN_MS=2800;
+function crazyWeapon(n){ for(var i=0;i<CRAZY_WEAPONS.length;i++){ if(CRAZY_WEAPONS[i].n===n) return CRAZY_WEAPONS[i]; } return null; }
+function crazyState(st){
+  if(!st.crazy) st.crazy={held:[], secondSpin:false, encore:false, encoreReady:false, double:false, survivor:false, survivorHeld:false, fullHouse:false, lastRolls:[], lastMode:'', lastTake:0, lastKind:'', lastPrice:'', lastTie:false};
+  return st.crazy;
+}
+function crazyHeldUsed(h){
+  var w=crazyWeapon(h.n);
+  return !!h.used || (w.pips>0 && h.progress>=w.pips);
+}
+function crazyCanSpin(c){
+  return !c.fullHouse && !c.survivorHeld && c.held.length===0;
+}
+function crazyCardHTML(st){
+  var c=crazyState(st);
+  var cem=ceModNow()+(typeof hrCEModBonus==='function'?(hrCEModBonus()||0):0);
+  var dc=8+pb(char.level)+cem;
+  var lvl=char.level||1;
+  var html='<div class="tracker-title"><span>Crazy Slots</span><span>The clown deals</span></div>';
+  html+='<p class="small">CE mod <b>'+(cem>=0?'+':'')+cem+'</b> · Technique DC <b>'+dc+'</b> · Conjured weapons use your CE ability modifier.</p>';
+  html+=crazyWheelHTML(c);
+  if(c.fullHouse){
+    html+='<div class="crazy-held"><b>Full House (Maximum)</b><br><span class="small">All nine at your command, interchangeable as part of your Attack action. The can\'t-dismiss restriction is suspended.</span><br><span class="small">1 Daggers · 2 Scythe · 3 Bow · 4 Hammer · 5 Gun · 6 Shield · 7 Whip · 8 Mace · 9 Survivor</span><div class="tracker-controls" style="margin-top:6px"><button type="button" class="btn" id="crazy-fullhouse-end">End Full House (+1 exhaustion)</button></div></div>';
+  } else if(c.survivorHeld){
+    html+='<div class="crazy-held"><b>9 — The Survivor</b><br><span class="small">One-handed, 2d8 slashing, CE mod · double damage dice vs the creature that brought you down (laughing skull, only you see).</span><br><span class="small">Cannot be dismissed until that creature falls or you finish a short rest.</span><div class="tracker-controls" style="margin-top:6px"><button type="button" class="btn" id="crazy-survivor-fell">Bringer fell — dismiss</button><button type="button" class="btn" id="crazy-survivor-rest">Short rest — dismiss</button></div></div>';
+  } else {
+    html+=crazyHeldHTML(c);
+  }
+  if(crazyCanSpin(c)){
+    html+=crazyModesHTML(c, lvl);
+  } else if(!c.fullHouse && !c.survivorHeld && c.held.length>0){
+    var allUsed=c.held.every(function(h){ return crazyHeldUsed(h); });
+    html+='<p class="small">'+(allUsed?'Weapon used — dismiss it to spin again.':'A weapon is drawn — use it, then dismiss it, before the clown deals again.')+'</p>';
+  }
+  if(lvl>=18){
+    html+='<div class="tracker-controls" style="margin-top:8px"><button type="button" class="btn" id="crazy-domain-deal">Deal to a hostile (Domain)</button></div><p class="small">Domain deal: d9, a 9 deals the Mace — the house never deals the hidden number.</p>';
+  }
+  return html;
+}
+function crazyWheelHTML(c){
+  var labels='';
+  for(var i=1;i<=8;i++){
+    var a=(i-0.5)*45;
+    labels+='<span class="crazy-wheel-label" style="transform:rotate('+a+'deg) translateY(-88px)"><span style="transform:rotate('+(-a)+'deg)">'+i+'</span></span>';
+  }
+  return '<div class="crazy-wheel-wrap"><div class="crazy-wheel-pointer" aria-hidden="true"></div>'+
+    '<div id="crazy-wheel" role="img" aria-label="Crazy Slots wheel, numbers 1 to 8">'+labels+'</div>'+
+    '<div id="crazy-wheel-result" aria-live="polite">'+crazyResultHTML(c)+'</div></div>';
+}
+function crazyResultHTML(c){
+  if(!c.lastMode) return '<p class="small">Spin the wheel — action, 2 CE. Whatever the clown deals is what you fight with.</p>';
+  if(c.lastMode==='number') return '<p class="small"><b>The Number You Never Rolled.</b> The Survivor is yours — regain half your max HP.</p>';
+  if(c.lastMode==='fullhouse') return '<p class="small"><b>Full House.</b> All nine at your command.</p>';
+  if(c.lastMode==='domain'){
+    var w=crazyWeapon(c.lastTake);
+    return '<p class="small"><b>Domain deal: rolled '+c.lastRolls[0]+' → '+c.lastTake+' — '+esc(w.name)+ '.</b> It cannot be dismissed until used for at least one attack; while held unused, disadvantage on attacks not made with it.</p>';
+  }
+  if(c.lastMode==='double'){
+    var names=c.held.map(function(h){ var w=crazyWeapon(h.n); return w?w.name:'?'; }).join(' and ');
+    var out='<p class="small"><b>Double Feature: rolls '+c.lastRolls.join(', ')+' — the clown deals both: '+esc(names)+'.</b>';
+    if(c.lastRolls.length>2) out+=' Doubles! The clown laughs and rolls a third time.';
+    return out+'</p>';
+  }
+  var w2=crazyWeapon(c.lastTake);
+  if(c.lastMode==='second') return '<p class="small"><b>Second Spin: first roll '+c.lastRolls[0]+' — the clown\'s mulligan. You must take the second: '+c.lastTake+' — '+esc(w2.name)+'.</b> '+esc(w2.line)+'</p>';
+  if(c.lastMode==='encore') return '<p class="small"><b>Encore!</b> The clown deals '+c.lastTake+' — '+esc(w2.name)+'.</b> '+esc(w2.line)+'</p>';
+  if(c.lastMode==='contract') return '<p class="small"><b>Contract ('+esc(c.lastKind)+', '+esc(c.lastPrice)+'): rolls '+c.lastRolls.join(' and ')+' — takes '+c.lastTake+' — '+esc(w2.name)+ (c.lastTie?' (both fit the kind alike, or neither did — the clown keeps the first).':'.')+'</b> '+esc(w2.line)+'</p>';
+  return '<p class="small"><b>The clown deals '+c.lastTake+' — '+esc(w2.name)+'.</b> '+esc(w2.line)+'</p>';
+}
+function crazyHeldHTML(c){
+  if(!c.held.length) return '';
+  var html='';
+  c.held.forEach(function(h, idx){
+    var w=crazyWeapon(h.n);
+    var used=crazyHeldUsed(h);
+    html+='<div class="crazy-held"><b>'+w.n+' — '+esc(w.name)+'</b><br><span class="small">'+esc(w.line)+'</span><br><span class="small">Use: '+esc(w.use)+'</span>';
+    if(w.pips>0) html+=' <span class="small">Progress: '+(h.progress||0)+' / '+w.pips+'</span> <button type="button" class="btn" data-crazy-hit="'+idx+'">Mark hit/use</button>';
+    if(w.instant && !used) html+=' <button type="button" class="btn" data-crazy-instant="'+idx+'">'+esc(w.instant)+'</button>';
+    if(used) html+=' <button type="button" class="btn" data-crazy-dismiss="'+idx+'">Dismiss weapon</button>';
+    else html+=' <span class="small">Not used yet — the clown waits.</span>';
+    html+='</div>';
+  });
+  return html;
+}
+function crazyModesHTML(c, lvl){
+  var html='<div class="tracker-controls"><button type="button" class="btn" id="crazy-spin-normal">Spin (action, 2 CE)</button>';
+  if(lvl>=3 && !c.secondSpin) html+='<button type="button" class="btn" id="crazy-spin-second">Second Spin (L3, 2 CE)</button>';
+  if(lvl>=6 && c.encoreReady && !c.encore) html+='<button type="button" class="btn" id="crazy-spin-encore">Encore Spin (bonus action, 2 CE)</button>';
+  if(lvl>=11 && !c.double) html+='<button type="button" class="btn" id="crazy-spin-double">Double Feature (L11, 2 CE)</button>';
+  html+='</div>';
+  if(lvl>=18){
+    html+='<div class="tracker-controls" style="margin-top:6px"><label class="small">Contract price: <select id="crazy-contract-price"><option value="reaction">Forfeit reaction</option><option value="psychic">2d6 psychic</option></select></label> '+
+    '<label class="small">Kind: <select id="crazy-contract-kind"><option value="melee">Melee</option><option value="ranged">Ranged</option><option value="defensive">Defensive</option></select></label> '+
+    '<button type="button" class="btn" id="crazy-spin-contract">Spin under Contract (2 CE)</button></div>';
+  }
+  if(lvl>=20 && !c.survivor) html+='<div class="tracker-controls" style="margin-top:6px"><button type="button" class="btn" id="crazy-number">The Number You Never Rolled (L20, 3 CE)</button></div>';
+  if(lvl>=18 && !c.fullHouse) html+='<div class="tracker-controls" style="margin-top:6px"><button type="button" class="btn" id="crazy-fullhouse">Full House (Maximum, 5 CE)</button></div>';
+  html+='<p class="small">The clown never deals 9 on a spin — the hidden number comes only at 0 HP (L20).</p>';
+  return html;
 }
 function siphonCardHTML(st){
   var sp=siphonState(st), th=siphonThreshold(), cap=siphonTempCap(), P=pb(char.level);
@@ -5820,7 +5951,8 @@ function bindTrackers(hpMaxV, ceMaxV){
     st.zoneRounds=0; st.zoneStacks=0; st.jugReinf=0; st.warStrike=0; st.posPool=null;
     st.siphon={counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false};
     if(st.guanyin) st.guanyin.reactions=0;
-    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderSiphon(); renderGuanyin();
+    if(st.crazy){ var cz=st.crazy; cz.secondSpin=false; cz.encore=false; cz.encoreReady=false; cz.double=false; cz.survivor=false; cz.fullHouse=false; }
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderSiphon(); renderGuanyin(); renderCrazy();
     var _ri=$('trkRct'); if(_ri&&_rm!=null) _ri.value=_rm;
     toast('Long rest — HP, CE, RCT pool, and uses restored; \u22121 exhaustion.');
   });
@@ -5841,7 +5973,7 @@ function bindTrackers(hpMaxV, ceMaxV){
     st=trackerState(); st.hp=hpMaxV; if(ceMaxV!=null) st.ce=ceMaxV;
     $('trkHp').value=hpMaxV; $('trkTemp').value=0;
     if(ceMaxV!=null) $('trkCe').value=ceMaxV;
-    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); renderSiphon(); renderGuanyin(); toast('Trackers reset.');
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); renderSiphon(); renderGuanyin(); renderCrazy(); toast('Trackers reset.');
   });
 
   /* ── shared mini-helpers for the new cards ── */
@@ -6099,6 +6231,159 @@ function bindTrackers(hpMaxV, ceMaxV){
     });
   }
   bindGuanyin();
+  /* ── Crazy Slots wheel (e514) ── */
+  function renderCrazy(){ var b=$('trkCrazyBody'); if(!b) return; b.innerHTML=crazyCardHTML(st); bindCrazy(); }
+  function bindCrazy(){
+    var b=$('trkCrazyBody'); if(!b) return;
+    var c=crazyState(st);
+    function refresh(){ save(); renderCrazy(); }
+    function spinning(){ var wheel=$('crazy-wheel'); return !!(wheel && wheel._spinning); }
+    function animate(take){
+      var wheel=$('crazy-wheel'); if(!wheel) return;
+      wheel._spinning=true;
+      wheel.style.transition='transform '+CRAZY_SPIN_MS+'ms cubic-bezier(.15,.9,.25,1)';
+      wheel.style.transform='rotate('+(360*5+((360-(((take-0.5)*45)%360))%360))+'deg)';
+    }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    function doSpin(mode){
+      if(spinning()) return;
+      if(!spendOrToast(2)) return;
+      var r1=Math.floor(Math.random()*8)+1, r2=r1;
+      if(mode==='second') r2=Math.floor(Math.random()*8)+1;
+      var take=(mode==='second')?r2:r1;
+      animate(take);
+      setTimeout(function(){
+        c.held=[{n:take,progress:0,used:false}];
+        c.lastRolls=(mode==='second')?[r1,r2]:[r1];
+        c.lastMode=mode; c.lastTake=take;
+        if(mode==='second') c.secondSpin=true;
+        if(mode==='encore') c.encore=true;
+        c.encoreReady=false;
+        refresh();
+        toast('The clown deals '+take+' — '+crazyWeapon(take).name+'.');
+      }, CRAZY_SPIN_MS+50);
+    }
+    function doDouble(){
+      if(spinning()) return;
+      if(!spendOrToast(2)) return;
+      var r1=Math.floor(Math.random()*8)+1, r2=Math.floor(Math.random()*8)+1, rolls=[r1,r2], held=[];
+      if(r1!==r2){ held=[{n:r1,progress:0,used:false},{n:r2,progress:0,used:false}]; }
+      else {
+        var r3=Math.floor(Math.random()*8)+1; rolls.push(r3);
+        held=(r3===r1)?[{n:r1,progress:0,used:false}]:[{n:r1,progress:0,used:false},{n:r3,progress:0,used:false}];
+      }
+      var take=rolls[rolls.length-1];
+      animate(take);
+      setTimeout(function(){
+        c.held=held; c.lastRolls=rolls; c.lastMode='double'; c.lastTake=take; c.double=true; c.encoreReady=false;
+        refresh();
+        toast('Double Feature: '+held.map(function(h){ return crazyWeapon(h.n).name; }).join(' and ')+'.');
+      }, CRAZY_SPIN_MS+50);
+    }
+    function doContract(){
+      if(spinning()) return;
+      if(!spendOrToast(2)) return;
+      var kindEl=$('crazy-contract-kind'), priceEl=$('crazy-contract-price');
+      var kind=kindEl?kindEl.value:'melee', price=priceEl?priceEl.value:'reaction';
+      var r1=Math.floor(Math.random()*8)+1, r2=Math.floor(Math.random()*8)+1;
+      var fits=CRAZY_KINDS[kind]||[];
+      var f1=fits.indexOf(r1)>=0, f2=fits.indexOf(r2)>=0;
+      var take=(f1&&!f2)?r1:(f2&&!f1)?r2:r1;
+      var tie=(f1===f2);
+      var cutMsg='';
+      if(price==='psychic'){
+        var d1=Math.floor(Math.random()*6)+1, d2=Math.floor(Math.random()*6)+1;
+        cutMsg=' The clown takes its cut: '+(d1+d2)+' psychic damage (mark it in the HP tracker).';
+      } else {
+        cutMsg=' Reaction forfeited until the start of your next turn.';
+      }
+      animate(take);
+      setTimeout(function(){
+        c.held=[{n:take,progress:0,used:false}]; c.lastRolls=[r1,r2]; c.lastMode='contract'; c.lastTake=take; c.lastKind=kind; c.lastPrice=(price==='psychic'?'2d6 psychic':'forfeit reaction'); c.lastTie=tie; c.encoreReady=false;
+        refresh();
+        toast('Contract deals '+take+' — '+crazyWeapon(take).name+'.'+cutMsg);
+      }, CRAZY_SPIN_MS+50);
+    }
+    var spN=$('crazy-spin-normal');
+    if(spN) spN.addEventListener('click',function(){ doSpin('normal'); });
+    var spS=$('crazy-spin-second');
+    if(spS) spS.addEventListener('click',function(){ doSpin('second'); });
+    var spE=$('crazy-spin-encore');
+    if(spE) spE.addEventListener('click',function(){ doSpin('encore'); });
+    var spD=$('crazy-spin-double');
+    if(spD) spD.addEventListener('click',function(){ doDouble(); });
+    var spC=$('crazy-spin-contract');
+    if(spC) spC.addEventListener('click',function(){ doContract(); });
+    var num=$('crazy-number');
+    if(num) num.addEventListener('click',function(){
+      if(!spendOrToast(3)) return;
+      c.survivor=true; c.survivorHeld=true; c.lastMode='number'; c.lastRolls=[]; c.lastTake=9; c.encoreReady=false;
+      refresh();
+      toast('The Number You Never Rolled — regain half your max HP. The Survivor is yours until the bringer falls or you finish a short rest.');
+    });
+    var fh=$('crazy-fullhouse');
+    if(fh) fh.addEventListener('click',function(){
+      if(!spendOrToast(5)) return;
+      c.fullHouse=true; c.held=[]; c.lastMode='fullhouse'; c.encoreReady=false;
+      refresh();
+      toast('Full House — all nine at your command for 1 minute.');
+    });
+    var fhEnd=$('crazy-fullhouse-end');
+    if(fhEnd) fhEnd.addEventListener('click',function(){
+      c.fullHouse=false;
+      st.exhaustion=(st.exhaustion||0)+1;
+      save(); renderCrazy(); renderExh();
+      toast('Full House ends — every weapon vanishes. +1 exhaustion.');
+    });
+    var svF=$('crazy-survivor-fell');
+    if(svF) svF.addEventListener('click',function(){ c.survivorHeld=false; refresh(); toast('The bringer fell — the Survivor is dismissed.'); });
+    var svR=$('crazy-survivor-rest');
+    if(svR) svR.addEventListener('click',function(){ c.survivorHeld=false; refresh(); toast('Short rest — the Survivor is dismissed.'); });
+    var dom=$('crazy-domain-deal');
+    if(dom) dom.addEventListener('click',function(){
+      if(spinning()) return;
+      var r=Math.floor(Math.random()*9)+1, dealt=(r===9)?8:r;
+      animate(dealt);
+      setTimeout(function(){
+        c.lastRolls=[r]; c.lastMode='domain'; c.lastTake=dealt;
+        refresh();
+        toast('Domain deal: '+dealt+' — '+crazyWeapon(dealt).name+'.');
+      }, CRAZY_SPIN_MS+50);
+    });
+    b.querySelectorAll('[data-crazy-hit]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var h=c.held[parseInt(btn.getAttribute('data-crazy-hit'),10)];
+        if(!h) return;
+        var w=crazyWeapon(h.n);
+        h.progress=Math.min(w.pips,(h.progress||0)+1);
+        refresh();
+      });
+    });
+    b.querySelectorAll('[data-crazy-instant]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var h=c.held[parseInt(btn.getAttribute('data-crazy-instant'),10)];
+        if(!h) return;
+        h.used=true; refresh(); toast(crazyWeapon(h.n).name+' used.');
+      });
+    });
+    b.querySelectorAll('[data-crazy-dismiss]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var idx=parseInt(btn.getAttribute('data-crazy-dismiss'),10);
+        var h=c.held[idx];
+        if(!h) return;
+        var nm=crazyWeapon(h.n).name;
+        c.held.splice(idx,1);
+        if(!c.held.length && (char.level||1)>=6 && !c.encore) c.encoreReady=true;
+        refresh(); toast(nm+' dismissed — the clown waits.');
+      });
+    });
+  }
+  bindCrazy();
   function renderExh(){ var b=$('trkExhBody'); if(!b) return; b.innerHTML=exhCardHTML(st); bindExh(); }
   function bindExh(){
     var b=$('trkExhBody'); if(!b) return;
