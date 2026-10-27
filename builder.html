@@ -274,6 +274,7 @@ h1 .amp{color:var(--red)}
 .fifty-panel{border:1px solid var(--line2);border-radius:6px;padding:8px 10px;margin-top:8px}
 .adapt-tag{border:1px solid var(--line2);border-radius:6px;padding:6px 8px;margin-top:6px}
 .adapt-slot{border:1px solid var(--line2);border-radius:6px;padding:8px 10px;margin-top:6px}
+.bank-num{font-size:1.6rem;font-weight:bold;line-height:1.2}
 .cond-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .cond-chip{border:1px solid var(--line2);border-radius:20px;padding:6px 12px;font-size:.8rem;background:transparent;color:var(--ink);cursor:pointer;min-height:44px}
 .cond-chip.is-on{background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:bold}
@@ -5273,7 +5274,7 @@ function quickRefHTML(){
    Persisted per character in localStorage; hidden on print. */
 function trackerKey(){ return 'ra_trackers_'+(char.id||'noid'); }
 function trackerState(){
-  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null, siphon:{counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false}, guanyin:{vector:null,intention:null,second:null,names:{},reactions:0}, crazy:{held:[],secondSpin:false,encore:false,encoreReady:false,double:false,survivor:false,survivorHeld:false,fullHouse:false,lastRolls:[],lastMode:'',lastTake:0,lastKind:'',lastPrice:'',lastTie:false}, fiftytwo:{deck:[],hand:[],discard:[],decl:null,coldDeck:false,marked:false,river:false,sleight:false,domain:false,feats:{counter:false,marked:false,sleight:false,river:false,redblack:false},mode:'normal',sel:[],keepSel:[],drawPending:0,drawPurpose:'',peek:null,pickN:0,endArmed:false,newArmed:false,newArmedTok:0}, adaptive:{tags:[],slots:[],tempSlots:[],encounterInstall:null,round:1,regenRound:0,lentRound:0,hostileRound:0,keterRound:0,termination:false,maximum:false,recordBlocked:false,keterArmed:null,replaceTarget:null,feats:{lent:false,hostile:false,keter:false,rebuild:false}} };
+  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null, siphon:{counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false}, guanyin:{vector:null,intention:null,second:null,names:{},reactions:0}, crazy:{held:[],secondSpin:false,encore:false,encoreReady:false,double:false,survivor:false,survivorHeld:false,fullHouse:false,lastRolls:[],lastMode:'',lastTake:0,lastKind:'',lastPrice:'',lastTie:false}, fiftytwo:{deck:[],hand:[],discard:[],decl:null,coldDeck:false,marked:false,river:false,sleight:false,domain:false,feats:{counter:false,marked:false,sleight:false,river:false,redblack:false},mode:'normal',sel:[],keepSel:[],drawPending:0,drawPurpose:'',peek:null,pickN:0,endArmed:false,newArmed:false,newArmedTok:0}, adaptive:{tags:[],slots:[],tempSlots:[],encounterInstall:null,round:1,regenRound:0,lentRound:0,hostileRound:0,keterRound:0,termination:false,maximum:false,recordBlocked:false,keterArmed:null,replaceTarget:null,feats:{lent:false,hostile:false,keter:false,rebuild:false}}, revenge:{total:0,interest:false}, pain:{bank:0,armor:false,aura:false,sun:false}, jin:{charges:0,domain:false}, miracle:{pool:0,blindUsed:false,domain:false}, visitors:{mischief:0,swarm:false,swarmHp:null,dispersed:false,freeReformUsed:false,pileFreeUsed:false,maxActive:false} };
   try{
     var raw=localStorage.getItem(trackerKey());
     if(raw) d=Object.assign(d, JSON.parse(raw));
@@ -5411,6 +5412,26 @@ function trackerHTML(hpMaxV, ceMaxV){
   /* Adaptive Hatred ledger (e159) — e159 characters only */
   if(hasAdaptive()){
     html+='<div class="tracker-card"><div id="trkAdaptBody">'+adaptiveCardHTML(st)+'</div></div>';
+  }
+  /* Full Counter revenge bank (e560) — e560 characters only */
+  if(hasRevenge()){
+    html+='<div class="tracker-card"><div id="trkRevengeBody">'+revengeCardHTML(st)+'</div></div>';
+  }
+  /* Pain Packer heat bank (e512) — e512 characters only */
+  if(hasPain()){
+    html+='<div class="tracker-card"><div id="trkPainBody">'+painCardHTML(st)+'</div></div>';
+  }
+  /* Fa Jin charge pool (e266) — e266 characters only */
+  if(hasJin()){
+    html+='<div class="tracker-card"><div id="trkJinBody">'+jinCardHTML(st)+'</div></div>';
+  }
+  /* Miracle pool (e274) — e274 characters only */
+  if(hasMiracle()){
+    html+='<div class="tracker-card"><div id="trkMiracleBody">'+miracleCardHTML(st)+'</div></div>';
+  }
+  /* Visitors mischief bank + swarm (e172) — e172 characters only */
+  if(hasVisitors()){
+    html+='<div class="tracker-card"><div id="trkVisitorsBody">'+visitorsCardHTML(st)+'</div></div>';
   }
   /* custom use-trackers */
   html+='<div class="tracker-card"><div class="tracker-title"><span>Limited Uses</span><span>Mark when expended</span></div>'+
@@ -6055,6 +6076,182 @@ function adaptiveCardHTML(st){
   h+='<div class="small" style="margin-top:8px">Feats: <label><input type="checkbox" id="adapt-feat-lent"'+(f.feats.lent?' checked':'')+'> Lent Loathing</label> <label><input type="checkbox" id="adapt-feat-hostile"'+(f.feats.hostile?' checked':'')+'> Hostile Evolution</label> <label><input type="checkbox" id="adapt-feat-keter"'+(f.feats.keter?' checked':'')+'> Keter Genome</label> <label><input type="checkbox" id="adapt-feat-rebuild"'+(f.feats.rebuild?' checked':'')+'> Consume and Rebuild</label></div>';
   return h;
 }
+/* ── Shared small-meter helpers ── */
+function pbFor(lvl){ return Math.floor(((lvl||1)-1)/4)+2; }
+function ceModEff(){ return ceModNow()+hrCEModBonus(); }
+/* ── Full Counter revenge bank (e560) ── */
+function hasRevenge(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e560'; });
+}
+function revengeState(st){
+  if(!st.revenge) st.revenge={total:0, interest:false};
+  return st.revenge;
+}
+function revengeCardHTML(st){
+  var f=revengeState(st);
+  var lvl=char.level||1;
+  var threshold=lvl*(f.interest?15:10);
+  var over=Math.max(0, f.total-threshold);
+  var backlash=Math.floor(over/2);
+  var h='<div class="tracker-title">Full Counter · Revenge</div>';
+  h+='<div class="bank-num">'+f.total+'</div><div class="small">Revenge total · Threshold '+threshold+' (level × '+(f.interest?'15 (Interest on Pain)':'10')+')'+(f.total>=50 && f.interest?' · Speed +10 ft (total 50+)':'')+'</div>';
+  if(backlash>0) h+='<div class="small">Release backlash: '+backlash+' force damage (half the excess)'+(backlash>=30?' — <b>THE ARM BREAKS</b>: disadvantage with that arm, no Full Counter or Counter Vanish until RCT Output or a long rest.':'')+'</div>';
+  h+='<div style="margin-top:8px">Damage taken: <input id="revenge-amt" type="number" min="0" value="" placeholder="0" style="width:80px"> <button id="revenge-bank">Bank it</button></div>';
+  h+='<div class="small">Whenever you take damage from a hostile creature\'s attack or effect you could perceive. No Revenge from your own attacks, returned attacks, effects, or backlash damage. No maximum.</div>';
+  h+='<div style="margin-top:8px"><button id="revenge-release">Release (action, '+(f.interest?'2':'3')+' CE)</button> <label><input type="checkbox" id="revenge-interest"'+(f.interest?' checked':'')+'> Interest on Pain (feat)</label></div>';
+  h+='<div class="small">Release: melee weapon or melee CE attack in reach; on a hit, normal damage + force equal to the Revenge total. Hit or miss, the total becomes 0. With Interest on Pain, release costs 1 less CE (minimum 1).</div>';
+  h+='<div class="small" style="margin-top:6px">Second Helping (L3): once per round (twice at L11), Full Counter again without the reaction. Captain\'s Counter (L11): counter for allies within 30 ft; amplification 1d12; beat-by-10 doubles the return. Absolute Counter (L18, 15 CE, 1/long rest, 1 min): Full Counter 1 CE, no reaction needed, advantage, amplification threshold 2×PB, Counter Vanish 1 CE.</div>';
+  return h;
+}
+/* ── Pain Packer heat bank (e512) ── */
+function hasPain(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e512'; });
+}
+function painState(st){
+  if(!st.pain) st.pain={bank:0, armor:false, aura:false, sun:false};
+  return st.pain;
+}
+function painCardHTML(st){
+  var f=painState(st);
+  var lvl=char.level||1;
+  var cap=lvl*(lvl>=18?10:5);
+  var h='<div class="tracker-title">Pain Packer · Heat Bank</div>';
+  h+='<div class="bank-num">'+f.bank+' <span class="small">/ '+cap+'</span></div><div class="small">Pain banked · Capacity '+(lvl>=18?'10':'5')+' × level'+(f.armor?' · Armor conjured (fire immune)':' · Armor not conjured')+(f.aura?' · Slow Burn aura active':'')+(f.sun?' · Rising Sun lingering':'')+'</div>';
+  if(!f.armor){
+    h+='<div style="margin-top:8px"><button id="pain-conjure">Conjure armor (action, 1 CE)</button></div>';
+  } else {
+    h+='<div style="margin-top:8px">Damage taken: <input id="pain-amt" type="number" min="0" value="" placeholder="0" style="width:80px"> <button id="pain-bank">Bank it</button>';
+    if(lvl>=20) h+=' <button id="pain-bank2">Bank ×2 (Solar Core, first damage this round)</button>';
+    h+=' <button id="pain-dismiss">Dismiss armor</button></div>';
+    h+='<div class="small">While armored you are immune to fire and bank every point of damage taken (after reductions).</div>';
+  }
+  h+='<div style="margin-top:8px"><button id="pain-vent">Vent burst ('+(lvl>=18?'bonus action':'action')+', 2 CE)</button>';
+  if(lvl>=6) h+=' <span style="white-space:nowrap">Vent <input id="pain-back-amt" type="number" min="0" max="30" value="30" style="width:60px"> <button id="pain-backdraft">Backdraft (reaction, 1 CE)</button></span>';
+  if(lvl>=11 && !f.aura) h+=' <button id="pain-aura">Slow Burn aura (2 CE, 1 min)</button>';
+  h+='</div>';
+  h+='<div class="small">Burst: 15-ft radius, Dex save, 1d8 fire per 10 Pain banked (rounded down, minimum 1d8), half on success; bank empties. Backdraft (L6): on a melee hit against you, vent up to 30 Pain: attacker takes 1d6 fire per 10 vented (Dex save for half).</div>';
+  if(f.aura){
+    h+='<div class="fifty-panel"><b>Slow Burn aura active (1 min, no concentration)</b><div class="small">At the start of each of your turns, hostiles within 10 ft take 1d6 fire per 20 Pain remaining (minimum 1d6, no save); bank drains by 20. Aura ends when the bank drops below 20.</div><div style="margin-top:6px"><button id="pain-tick">Start-of-turn tick</button> <button id="pain-aura-end">End aura</button></div></div>';
+  }
+  if(lvl>=18 && !f.sun){
+    h+='<div style="margin-top:8px"><button id="pain-sun">Rising Sun Maximum (action, 5 CE)</button></div>';
+    h+='<div class="small">Bank becomes a miniature sun, 60-ft radius: Dex save, 1d10 fire per 10 Pain banked (rounded down, minimum 3d10) on failure, half on success; lingers 1 minute, creatures inside take 2d10 fire (Dex save for half) at the start of each of your turns. Bank empties. You are immune.</div>';
+  }
+  if(f.sun){
+    h+='<div class="fifty-panel"><b>Rising Sun lingering (1 min)</b><div class="small">Creatures inside the 60-ft sun take 2d10 fire (Dex save for half) at the start of each of your turns. You are immune.</div><div style="margin-top:6px"><button id="pain-sun-end">End sun</button></div></div>';
+  }
+  if(lvl>=3) h+='<div class="small" style="margin-top:6px">Heat Sense (L3): action, no CE — sense how much damage any creature within 30 ft has taken since its last rest.</div>';
+  return h;
+}
+/* ── Fa Jin charge pool (e266) ── */
+function hasJin(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e266'; });
+}
+function jinState(st){
+  if(!st.jin) st.jin={charges:0, domain:false};
+  return st.jin;
+}
+function jinCardHTML(st){
+  var f=jinState(st);
+  var lvl=char.level||1, pb=pbFor(lvl);
+  var cap=pb+lvl;
+  var h='<div class="tracker-title">Fa Jin · Jin Charges</div>';
+  if(f.domain){
+    h+='<div class="bank-num">∞</div><div class="small">Hall of Divine Bagua active — unlimited Jin charges. Initiative 20: all creatures gain a permanent negative Jin charge (−1d6 damage on their next attack or technique per charge; gone when the Domain ends).</div><div style="margin-top:8px"><button id="jin-domain-end">End Domain</button></div>';
+    return h;
+  }
+  h+='<div class="bank-num">'+f.charges+' <span class="small">/ '+cap+'</span></div><div class="small">Jin charges · Cap PB + level ('+pb+' + '+lvl+') · Spend up to PB ('+pb+') at once, declared before the roll; spent charges lost on a miss; all charges lost on a long rest.</div>';
+  h+='<div style="margin-top:8px"><button id="jin-miss">Missed a melee attack (+1)</button>';
+  if(lvl>=3) h+=' <button id="jin-forgo">Start of turn: forgo movement (+1)</button> <button id="jin-buy">Spend 1 CE for '+(lvl>=11?'2 charges':'1 charge')+'</button>';
+  h+='</div>';
+  h+='<div style="margin-top:8px">Spend <input id="jin-amt" type="number" min="1" value="1" style="width:60px"> charges: <button id="jin-roll">+2/charge to a melee or CE attack roll</button> <button id="jin-die">+1 damage die/charge</button>';
+  if(lvl>=3) h+=' <button id="jin-stride">Stride (1 charge: +10 speed, triple jump)</button> <button id="jin-blink">Blink (10 ft/charge, reaction)</button>';
+  h+='</div>';
+  if(lvl>=6){
+    h+='<div style="margin-top:8px">Fist of Explosive Power (action, 3 CE): <select id="jin-blast-form"><option value="bludgeoning">Unarmed/bludgeoning — 15-ft cone, Con save</option><option value="slashing">Slashing/piercing — 30-ft line, Dex save</option></select> with <input id="jin-blast-amt" type="number" min="1" value="1" style="width:60px"> charges <button id="jin-blast">Blast</button></div>';
+    h+='<div class="small">2d6 bludgeoning per charge (prone on fail) or 2d10 slashing per charge.'+(lvl>=11?' With ≥3 charges: range +30 ft, deals thunder.':'')+'</div>';
+  }
+  if(lvl>=11){
+    h+='<div style="margin-top:8px">Give <input id="jin-give-amt" type="number" min="1" value="1" style="width:60px"> charges to a touched creature (up to CE mod '+ceModEff()+') <button id="jin-give">Give charges</button></div>';
+    h+='<div class="small">Keep up to CE mod charges when you miss an enhanced attack. CE spent for a charge now grants 2 charges.</div>';
+  }
+  if(lvl>=18) h+='<div style="margin-top:8px"><button id="jin-domain">Hall of Divine Bagua — Domain (18th level)</button></div>';
+  return h;
+}
+/* ── Miracle pool (e274) ── */
+function hasMiracle(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e274'; });
+}
+function miracleState(st){
+  if(!st.miracle) st.miracle={pool:0, blindUsed:false, domain:false};
+  return st.miracle;
+}
+function miracleCardHTML(st){
+  var f=miracleState(st);
+  var lvl=char.level||1, pb=pbFor(lvl), cem=ceModEff();
+  var perWitness=lvl>=18?3:lvl>=11?2:1;
+  var h='<div class="tracker-title">Miracle · Stored Luck</div>';
+  h+='<div class="bank-num">'+f.pool+' <span class="small">/ 6</span></div><div class="small">Miracles · Witness good fortune to mint (+'+perWitness+' per witness'+(lvl>=11?' at L'+lvl:'')+'; max 6)'+(f.domain?' · Luck of the Draw Domain active (no maximum inside)':'')+'</div>';
+  h+='<div style="margin-top:8px">Witnessed: <button id="mir-max">Rolled maximum</button> <button id="mir-equal">Equal numbers twice running</button> <button id="mir-treasure">$1,000 treasure</button> <button id="mir-hardship">Hardship overcome</button></div>';
+  h+='<div class="small">Four fortunes mint a Miracle: a rolled maximum (damage rolls and saves count, not just d20s), two consecutive rolls by the same roller showing the same face, treasure found, hardship overcome.</div>';
+  h+='<div style="margin-top:8px"><button id="mir-blind"'+(f.pool>=1 && !f.blindUsed?'':' disabled')+'>Blind Luck (free, 1 Miracle)</button> <button id="mir-blind-react"'+(f.pool>=1 && !f.blindUsed?'':' disabled')+'>Blind Luck (reaction, 1 Miracle + 1 CE)</button> <button id="mir-round">New round</button></div>';
+  h+='<div class="small">Blind Luck (once per round when damaged): free — reduce damage by '+cem+'d4 + '+pb+'; reaction — '+cem+'d6 + '+(2*pb)+' instead. Rolled and reported; mark the reduced damage.</div>';
+  if(lvl>=3){
+    var die=lvl>=11?'d10':lvl>=6?'d8':'d6';
+    h+='<div style="margin-top:8px"><button id="mir-outcome"'+(f.pool>=1?'':' disabled')+'>Miraculous Outcome (reaction, 1 Miracle + 1 CE)</button></div>';
+    h+='<div class="small">When you fail a roll: add '+die+' to the roll, potentially turning failure into success.'+(lvl>=11?' A 20+ on the die counts as a critical success (natural 20) — but no Black Flash rolls and no Miracle gained.':'')+'</div>';
+  }
+  if(lvl>=6){
+    h+='<div style="margin-top:8px"><button id="mir-deadly"'+(f.pool>=2?'':' disabled')+'>Deadly Miracle (2 Miracles + 2 CE)</button></div>';
+    h+='<div class="small">Trigger (hit or failed save that would drop you to 0 HP or kill you): succeed the save or survive with no damage/effects. Death saves at advantage while holding ≥1 Miracle.'+(lvl>=11?' Also works vs effects that would drop you to half HP or below.':'')+'</div>';
+  }
+  h+='<div style="margin-top:8px"><button id="mir-blessing"'+(f.pool>=1?'':' disabled')+'>Blessing of Fortune (reaction, 1 Miracle + 1 CE)</button></div>';
+  h+='<div class="small">When you or a creature you can see fails a death saving throw: the roll is now considered a natural 20. No breakthrough, no Miracle gained this way.</div>';
+  if(lvl>=18){
+    if(!f.domain){
+      h+='<div style="margin-top:8px"><button id="mir-domain">Luck of the Draw — Domain (2d20 CE)</button> <button id="mir-domain-react">Expand, reaction (20 CE)</button></div>';
+      h+='<div class="small">Lasts 1d4 minutes. Initiative 20: gain 3 Miracles with no maximum. Inside: spend a Miracle on yourself or another creature attacking/using a technique to grant the guaranteed hit.</div>';
+    } else {
+      h+='<div class="fifty-panel"><b>Luck of the Draw active</b><div class="small">Initiative 20: gain 3 Miracles with no maximum. Inside: spend a Miracle to grant a guaranteed hit.</div><div style="margin-top:6px"><button id="mir-init20">Initiative 20 (+3 Miracles)</button> <button id="mir-hit"'+(f.pool>=1?'':' disabled')+'>Guaranteed hit (1 Miracle)</button> <button id="mir-domain-end">End Domain</button></div></div>';
+    }
+  }
+  return h;
+}
+/* ── Visitors mischief bank + swarm (e172) ── */
+function hasVisitors(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e172'; });
+}
+function visitorsState(st){
+  if(!st.visitors) st.visitors={mischief:0, swarm:false, swarmHp:null, dispersed:false, freeReformUsed:false, pileFreeUsed:false, maxActive:false};
+  return st.visitors;
+}
+function visitorsCardHTML(st){
+  var f=visitorsState(st);
+  var lvl=char.level||1, pb=pbFor(lvl);
+  var cap=f.maxActive?null:(lvl>=11?2*pb:lvl>=6?pb+2:pb);
+  var h='<div class="tracker-title">Visitors at the Window · Mischief &amp; Swarm</div>';
+  h+='<div class="bank-num">'+f.mischief+(cap==null?' <span class="small">/ ∞ (Maximum)</span>':' <span class="small">/ '+cap+'</span>')+'</div><div class="small">Mischief banked · Cap '+(cap==null?'uncapped during the Maximum':(lvl>=11?'2×PB':lvl>=6?'PB + 2':'PB'))+(f.swarm?' · Swarm manifested (HP '+f.swarmHp+' / '+(5*lvl)+', '+(lvl>=11?'15':'10')+'-ft space)':f.dispersed?' · Swarm dispersed':' · Swarm not manifested')+(f.maxActive?' · Siege at Kelly-Hopkinsville active (30-ft Perimeter)':'')+'</div>';
+  h+='<div style="margin-top:8px"><button id="vis-bank">Bank 1 Mischief</button> <span style="white-space:nowrap">Pile On: spend <input id="vis-pile-amt" type="number" min="1" value="2" style="width:60px"> Mischief <button id="vis-pile">Pile On (bonus action'+(lvl>=6 && !f.pileFreeUsed?', first trick this turn free':'')+')</button></span> <button id="vis-turn">New turn</button></div>';
+  h+='<div class="small">Bank 1 whenever a hostile fails a save against a Swarm Trick, or spends an action removing, repairing, securing, or identifying a Visitor effect. Pile On (bonus action, 1 CE): for every 2 Mischief spent (round up, minimum 1 trick), command one additional Trick against another target.'+(lvl>=6?' First extra trick each turn costs no CE.':'')+(lvl>=11?' Two tricks per bonus action; Pile On tricks stack on top.':'')+'</div>';
+  if(!f.swarm && !f.dispersed){
+    h+='<div style="margin-top:8px"><button id="vis-manifest">Manifest swarm (action, 2 CE, 1 min)</button></div>';
+  } else if(f.swarm){
+    h+='<div style="margin-top:8px">Swarm damage: <input id="vis-dmg" type="number" min="0" value="" placeholder="0" style="width:80px"> <button id="vis-damage">Damage swarm</button> <button id="vis-dismiss">Dismiss swarm</button> <button id="vis-shortrest">Short rest</button></div>';
+  } else if(f.dispersed){
+    h+='<div style="margin-top:8px"><button id="vis-reform">Reform swarm (2 CE, half HP)</button> <button id="vis-reform-free"'+(f.freeReformUsed?' disabled':'')+'>Reform free (1/short rest)</button> <button id="vis-shortrest">Short rest</button></div>';
+    h+='<div class="small">The swarm disperses instead of dying; reform at the start of your next turn with half HP in a space within 30 ft.</div>';
+  }
+  h+='<div class="small" style="margin-top:6px">Swarm Tricks — Rattle: creature in the swarm space Wis save or no reactions until the start of your next turn. Grab: CE ability vs Athletics/Acrobatics; pull a non-heavy held object 10 ft and drop it'+(lvl>=11?' (hand it to yourself or an ally within 15 ft instead)':'')+'. Cling: creature\'s speed −10 until it leaves the swarm space. Hurl Clutter: ranged CE attack, 30 ft; disadvantage on the target\'s next attack or check, Con save to maintain concentration as if damaged.</div>';
+  if(lvl>=3) h+='<div class="small">Night Siege (L3): when the swarm shares a space with a door, window, light, vehicle, turret, or unattended object, command Sabotage — mundane objects unusable until a creature spends an action repairing/clearing; cursed/magical objects suppressed one round on a failed check.</div>';
+  if(lvl>=18 && !f.maxActive){
+    h+='<div style="margin-top:8px"><button id="vis-max">Siege at Kelly-Hopkinsville — Maximum (action, 8 CE)</button></div>';
+    h+='<div class="small">1 minute: the swarm becomes a 30-ft-radius Visitor Perimeter (no HP, indestructible; moving 60 ft from the center ends it). End of each of your turns: up to PB Tricks vs different targets/objects; Hurl Clutter up to three creatures. Mischief uncapped. Once per round, an enemy action spent on a Visitor effect gives an ally advantage on its next attack or check.</div>';
+  }
+  if(f.maxActive){
+    h+='<div class="fifty-panel"><b>Siege at Kelly-Hopkinsville active (1 min)</b><div class="small">30-ft Perimeter, no HP, indestructible. End of each of your turns: up to PB Tricks vs different targets/objects; Hurl Clutter up to three creatures. Mischief uncapped.</div><div style="margin-top:6px"><button id="vis-max-end">End Maximum</button></div></div>';
+  }
+  return h;
+}
 function siphonCardHTML(st){
   var sp=siphonState(st), th=siphonThreshold(), cap=siphonTempCap(), P=pb(char.level);
   var fav=siphonFavor(sp.pool);
@@ -6317,7 +6514,12 @@ function bindTrackers(hpMaxV, ceMaxV){
     if(st.crazy){ var cz=st.crazy; cz.secondSpin=false; cz.encore=false; cz.encoreReady=false; cz.double=false; cz.survivor=false; cz.fullHouse=false; }
     if(st.fiftytwo){ st.fiftytwo.river=false; st.fiftytwo.sleight=false; st.fiftytwo.endArmed=false; }
     if(st.adaptive){ var ad=st.adaptive; ad.tags=[]; ad.slots=[]; ad.tempSlots=[]; ad.encounterInstall=null; ad.round=1; ad.regenRound=0; ad.lentRound=0; ad.hostileRound=0; ad.keterRound=0; ad.termination=false; ad.maximum=false; ad.recordBlocked=false; ad.keterArmed=null; ad.replaceTarget=null; ad.maxSel=[]; }
-    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive();
+    if(st.revenge) st.revenge.total=0;
+    if(st.pain){ st.pain.armor=false; st.pain.aura=false; st.pain.sun=false; }
+    if(st.jin){ st.jin.charges=0; st.jin.domain=false; }
+    if(st.miracle){ st.miracle.blindUsed=false; st.miracle.domain=false; }
+    if(st.visitors){ var vs=st.visitors; vs.swarm=false; vs.swarmHp=null; vs.dispersed=false; vs.freeReformUsed=false; vs.pileFreeUsed=false; vs.maxActive=false; }
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive(); renderRevenge(); renderPain(); renderJin(); renderMiracle(); renderVisitors();
     var _ri=$('trkRct'); if(_ri&&_rm!=null) _ri.value=_rm;
     toast('Long rest — HP, CE, RCT pool, and uses restored; \u22121 exhaustion.');
   });
@@ -6338,7 +6540,7 @@ function bindTrackers(hpMaxV, ceMaxV){
     st=trackerState(); st.hp=hpMaxV; if(ceMaxV!=null) st.ce=ceMaxV;
     $('trkHp').value=hpMaxV; $('trkTemp').value=0;
     if(ceMaxV!=null) $('trkCe').value=ceMaxV;
-    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive(); toast('Trackers reset.');
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive(); renderRevenge(); renderPain(); renderJin(); renderMiracle(); renderVisitors(); toast('Trackers reset.');
   });
 
   /* ── shared mini-helpers for the new cards ── */
@@ -7210,6 +7412,387 @@ function bindTrackers(hpMaxV, ceMaxV){
     });
   }
   bindAdaptive();
+  /* ── Full Counter revenge bank (e560) ── */
+  function renderRevenge(){ var b=$('trkRevengeBody'); if(!b) return; b.innerHTML=revengeCardHTML(st); bindRevenge(); }
+  function bindRevenge(){
+    var b=$('trkRevengeBody'); if(!b) return;
+    var f=revengeState(st);
+    var lvl=char.level||1;
+    function refresh(){ save(); renderRevenge(); }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    var bk=$('revenge-bank');
+    if(bk) bk.addEventListener('click',function(){
+      var amtEl=$('revenge-amt');
+      var amt=amtEl?parseInt(amtEl.value,10):NaN;
+      if(isNaN(amt) || amt<=0){ toast('Enter the damage taken.'); return; }
+      f.total+=amt; refresh(); toast('Banked '+amt+' Revenge (total '+f.total+').');
+    });
+    var rl=$('revenge-release');
+    if(rl) rl.addEventListener('click',function(){
+      var cost=f.interest?2:3;
+      if(f.total<=0){ toast('Revenge total is 0.'); return; }
+      if(!spendOrToast(cost)) return;
+      var threshold=lvl*(f.interest?15:10);
+      var over=Math.max(0, f.total-threshold);
+      var backlash=Math.floor(over/2);
+      var total=f.total;
+      f.total=0;
+      refresh();
+      toast('Revenge released: '+total+' force damage on a hit.'+(backlash>0?' Backlash '+backlash+' force damage (mark it).':'')+(backlash>=30?' THE ARM BREAKS — disadvantage with that arm, no Full Counter or Counter Vanish until RCT Output or a long rest.':''));
+    });
+    var it=$('revenge-interest');
+    if(it) it.addEventListener('change',function(){ f.interest=it.checked; refresh(); });
+  }
+  bindRevenge();
+  /* ── Pain Packer heat bank (e512) ── */
+  function renderPain(){ var b=$('trkPainBody'); if(!b) return; b.innerHTML=painCardHTML(st); bindPain(); }
+  function bindPain(){
+    var b=$('trkPainBody'); if(!b) return;
+    var f=painState(st);
+    var lvl=char.level||1;
+    var cap=lvl*(lvl>=18?10:5);
+    function refresh(){ save(); renderPain(); }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    function bankAmt(mult){
+      var amtEl=$('pain-amt');
+      var amt=amtEl?parseInt(amtEl.value,10):NaN;
+      if(isNaN(amt) || amt<=0){ toast('Enter the damage taken.'); return; }
+      var add=Math.min(amt*mult, cap-f.bank);
+      if(add<=0){ toast('Bank full at '+cap+'.'); return; }
+      f.bank+=add;
+      refresh();
+      toast('Banked '+add+' Pain (bank '+f.bank+' / '+cap+').'+(add<amt*mult?' Excess pain lost to the cap.':''));
+    }
+    var cj=$('pain-conjure');
+    if(cj) cj.addEventListener('click',function(){
+      if(!spendOrToast(1)) return;
+      f.armor=true; refresh(); toast('Heat-proof armor conjured (fire immune).');
+    });
+    var dm=$('pain-dismiss');
+    if(dm) dm.addEventListener('click',function(){ f.armor=false; refresh(); });
+    var pb=$('pain-bank');
+    if(pb) pb.addEventListener('click',function(){ bankAmt(1); });
+    var pb2=$('pain-bank2');
+    if(pb2) pb2.addEventListener('click',function(){ bankAmt(2); });
+    var vt=$('pain-vent');
+    if(vt) vt.addEventListener('click',function(){
+      if(f.bank<=0){ toast('Bank empty.'); return; }
+      if(!spendOrToast(2)) return;
+      var dice=Math.max(1, Math.floor(f.bank/10));
+      f.bank=0;
+      refresh(); toast('Vent burst: '+dice+'d8 fire (Dex save for half) in 15 ft. Bank emptied.');
+    });
+    var bd=$('pain-backdraft');
+    if(bd) bd.addEventListener('click',function(){
+      if(f.bank<=0){ toast('Bank empty.'); return; }
+      if(!spendOrToast(1)) return;
+      var amtEl=$('pain-back-amt');
+      var want=amtEl?parseInt(amtEl.value,10):30;
+      if(isNaN(want) || want<=0) want=30;
+      var vented=Math.min(want, 30, f.bank);
+      var dice=Math.max(0, Math.floor(vented/10));
+      f.bank-=vented;
+      refresh(); toast('Backdraft: vented '+vented+' Pain → '+dice+'d6 fire (Dex save for half). Bank '+f.bank+'.');
+    });
+    var au=$('pain-aura');
+    if(au) au.addEventListener('click',function(){
+      if(f.bank<=0){ toast('Bank empty.'); return; }
+      if(!spendOrToast(2)) return;
+      f.aura=true; refresh(); toast('Slow Burn aura released (1 min, no concentration).');
+    });
+    var tk=$('pain-tick');
+    if(tk) tk.addEventListener('click',function(){
+      var dice=Math.max(1, Math.floor(f.bank/20));
+      f.bank=Math.max(0, f.bank-20);
+      if(f.bank<20) f.aura=false;
+      refresh(); toast('Slow Burn tick: '+dice+'d6 fire to hostiles within 10 ft (no save). Bank '+f.bank+'.'+(f.aura?'':' Aura ends.'));
+    });
+    var ae=$('pain-aura-end');
+    if(ae) ae.addEventListener('click',function(){ f.aura=false; refresh(); });
+    var sn=$('pain-sun');
+    if(sn) sn.addEventListener('click',function(){
+      if(!spendOrToast(5)) return;
+      var dice=Math.max(3, Math.floor(f.bank/10));
+      f.bank=0; f.sun=true;
+      refresh(); toast('Rising Sun: '+dice+'d10 fire (Dex save for half) in 60 ft; sun lingers 1 minute (2d10 per turn inside). Bank emptied.');
+    });
+    var se=$('pain-sun-end');
+    if(se) se.addEventListener('click',function(){ f.sun=false; refresh(); });
+  }
+  bindPain();
+  /* ── Fa Jin charge pool (e266) ── */
+  function renderJin(){ var b=$('trkJinBody'); if(!b) return; b.innerHTML=jinCardHTML(st); bindJin(); }
+  function bindJin(){
+    var b=$('trkJinBody'); if(!b) return;
+    var f=jinState(st);
+    var lvl=char.level||1, pb=pbFor(lvl), cap=pb+lvl;
+    function refresh(){ save(); renderJin(); }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    function gain(n){
+      var add=Math.min(n, cap-f.charges);
+      if(add<=0){ toast('Jin pool full at '+cap+'.'); return; }
+      f.charges+=add; refresh(); toast('+'+add+' Jin charge'+(add>1?'s':'')+' ('+f.charges+' / '+cap+').');
+    }
+    function spendAmt(){
+      var el=$('jin-amt');
+      var n=el?parseInt(el.value,10):NaN;
+      if(isNaN(n) || n<=0){ toast('Enter charges to spend.'); return 0; }
+      if(n>f.charges){ toast('Only '+f.charges+' charges held.'); return 0; }
+      return n;
+    }
+    var ms=$('jin-miss');
+    if(ms) ms.addEventListener('click',function(){ gain(1); });
+    var fg=$('jin-forgo');
+    if(fg) fg.addEventListener('click',function(){ gain(1); });
+    var by=$('jin-buy');
+    if(by) by.addEventListener('click',function(){
+      if(!spendOrToast(1)) return;
+      gain(lvl>=11?2:1);
+    });
+    var rl=$('jin-roll');
+    if(rl) rl.addEventListener('click',function(){
+      var n=spendAmt(); if(!n) return;
+      if(n>pb){ toast('At most PB ('+pb+') charges at once.'); return; }
+      f.charges-=n; refresh(); toast('Spent '+n+' charges: +'+(2*n)+' to a melee or CE attack roll.');
+    });
+    var di=$('jin-die');
+    if(di) di.addEventListener('click',function(){
+      var n=spendAmt(); if(!n) return;
+      if(n>pb){ toast('At most PB ('+pb+') charges at once.'); return; }
+      f.charges-=n; refresh(); toast('Spent '+n+' charges: +'+n+' damage die (first damage die listed).');
+    });
+    var st1=$('jin-stride');
+    if(st1) st1.addEventListener('click',function(){
+      if(f.charges<1){ toast('No charges held.'); return; }
+      f.charges-=1; refresh(); toast('Stride: speed +10 ft, triple jump distance to end of turn.');
+    });
+    var bl=$('jin-blink');
+    if(bl) bl.addEventListener('click',function(){
+      var n=spendAmt(); if(!n) return;
+      f.charges-=n; refresh(); toast('Blink: instantly move '+(10*n)+' ft in any direction, no opportunity attacks.');
+    });
+    var bt=$('jin-blast');
+    if(bt) bt.addEventListener('click',function(){
+      var amtEl=$('jin-blast-amt');
+      var n=amtEl?parseInt(amtEl.value,10):NaN;
+      if(isNaN(n) || n<=0){ toast('Enter charges to fuel the blast.'); return; }
+      if(n>f.charges){ toast('Only '+f.charges+' charges held.'); return; }
+      if(!spendOrToast(3)) return;
+      var formEl=$('jin-blast-form');
+      var form=formEl?formEl.value:'bludgeoning';
+      f.charges-=n;
+      var extra=(lvl>=11 && n>=3)?' Range +30 ft, deals thunder.':'';
+      refresh();
+      if(form==='bludgeoning') toast('Explosive Power: 15-ft cone, Con save, '+(2*n)+'d6 bludgeoning per charge, prone on fail.'+extra);
+      else toast('Explosive Power: 30-ft line, Dex save, '+(2*n)+'d10 slashing per charge.'+extra);
+    });
+    var gv=$('jin-give');
+    if(gv) gv.addEventListener('click',function(){
+      var amtEl=$('jin-give-amt');
+      var n=amtEl?parseInt(amtEl.value,10):NaN;
+      var cem=ceModEff();
+      if(isNaN(n) || n<=0){ toast('Enter charges to give.'); return; }
+      if(n>cem){ toast('At most CE mod ('+cem+') charges.'); return; }
+      if(n>f.charges){ toast('Only '+f.charges+' charges held.'); return; }
+      f.charges-=n; refresh(); toast('Gave '+n+' Jin charges to a touched creature.');
+    });
+    var dm=$('jin-domain');
+    if(dm) dm.addEventListener('click',function(){ f.domain=true; refresh(); toast('Hall of Divine Bagua — unlimited Jin charges inside.'); });
+    var de=$('jin-domain-end');
+    if(de) de.addEventListener('click',function(){ f.domain=false; refresh(); });
+  }
+  bindJin();
+  /* ── Miracle pool (e274) ── */
+  function renderMiracle(){ var b=$('trkMiracleBody'); if(!b) return; b.innerHTML=miracleCardHTML(st); bindMiracle(); }
+  function bindMiracle(){
+    var b=$('trkMiracleBody'); if(!b) return;
+    var f=miracleState(st);
+    var lvl=char.level||1, pb=pbFor(lvl), cem=ceModEff();
+    var perWitness=lvl>=18?3:lvl>=11?2:1;
+    function refresh(){ save(); renderMiracle(); }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    function rollDice(n, sides){
+      var total=0;
+      for(var i=0;i<n;i++) total+=Math.floor(Math.random()*sides)+1;
+      return total;
+    }
+    function mint(label){
+      var add=Math.min(perWitness, 6-f.pool);
+      if(add<=0){ toast('Miracle pool full at 6.'); return; }
+      f.pool+=add; refresh(); toast('Witnessed '+label+': +'+add+' Miracle'+(add>1?'s':'')+' ('+f.pool+' / 6).');
+    }
+    var mx=$('mir-max');
+    if(mx) mx.addEventListener('click',function(){ mint('a rolled maximum'); });
+    var eq=$('mir-equal');
+    if(eq) eq.addEventListener('click',function(){ mint('equal numbers twice running'); });
+    var tr=$('mir-treasure');
+    if(tr) tr.addEventListener('click',function(){ mint('$1,000 treasure'); });
+    var hd=$('mir-hardship');
+    if(hd) hd.addEventListener('click',function(){ mint('hardship overcome'); });
+    var bl=$('mir-blind');
+    if(bl) bl.addEventListener('click',function(){
+      if(f.pool<1 || f.blindUsed) return;
+      f.pool--; f.blindUsed=true;
+      var red=rollDice(cem, 4)+pb;
+      refresh(); toast('Blind Luck: damage reduced by '+red+' ('+cem+'d4 + '+pb+').');
+    });
+    var br=$('mir-blind-react');
+    if(br) br.addEventListener('click',function(){
+      if(f.pool<1 || f.blindUsed) return;
+      if(!spendOrToast(1)) return;
+      f.pool--; f.blindUsed=true;
+      var red=rollDice(cem, 6)+2*pb;
+      refresh(); toast('Blind Luck (reaction): damage reduced by '+red+' ('+cem+'d6 + '+(2*pb)+').');
+    });
+    var nr=$('mir-round');
+    if(nr) nr.addEventListener('click',function(){ f.blindUsed=false; refresh(); });
+    var oc=$('mir-outcome');
+    if(oc) oc.addEventListener('click',function(){
+      if(f.pool<1) return;
+      if(!spendOrToast(1)) return;
+      f.pool--;
+      var die=lvl>=11?10:lvl>=6?8:6;
+      refresh(); toast('Miraculous Outcome: add d'+die+' to the failed roll.'+(lvl>=11?' A 20+ counts as a critical success (no Black Flash, no Miracle gained).':''));
+    });
+    var dd=$('mir-deadly');
+    if(dd) dd.addEventListener('click',function(){
+      if(f.pool<2) return;
+      if(!spendOrToast(2)) return;
+      f.pool-=2;
+      refresh(); toast('Deadly Miracle: succeed the save or survive with no damage/effects.');
+    });
+    var bf=$('mir-blessing');
+    if(bf) bf.addEventListener('click',function(){
+      if(f.pool<1) return;
+      if(!spendOrToast(1)) return;
+      f.pool--;
+      refresh(); toast('Blessing of Fortune: the failed death save is now a natural 20.');
+    });
+    var dm=$('mir-domain');
+    if(dm) dm.addEventListener('click',function(){
+      var cost=rollDice(2, 20);
+      if(!spendOrToast(cost)) return;
+      var dur=Math.floor(Math.random()*4)+1;
+      f.domain=true;
+      refresh(); toast('Luck of the Draw expands for '+cost+' CE, lasts '+dur+' minutes.');
+    });
+    var dr=$('mir-domain-react');
+    if(dr) dr.addEventListener('click',function(){
+      if(!spendOrToast(20)) return;
+      var dur=Math.floor(Math.random()*4)+1;
+      f.domain=true;
+      refresh(); toast('Luck of the Draw expands (reaction) for 20 CE, lasts '+dur+' minutes.');
+    });
+    var i20=$('mir-init20');
+    if(i20) i20.addEventListener('click',function(){
+      f.pool+=3; refresh(); toast('Initiative 20: +3 Miracles (no maximum inside the Domain). Pool '+f.pool+'.');
+    });
+    var ht=$('mir-hit');
+    if(ht) ht.addEventListener('click',function(){
+      if(f.pool<1) return;
+      f.pool--; refresh(); toast('Guaranteed hit granted (1 Miracle).');
+    });
+    var de=$('mir-domain-end');
+    if(de) de.addEventListener('click',function(){ f.domain=false; refresh(); });
+  }
+  bindMiracle();
+  /* ── Visitors mischief bank + swarm (e172) ── */
+  function renderVisitors(){ var b=$('trkVisitorsBody'); if(!b) return; b.innerHTML=visitorsCardHTML(st); bindVisitors(); }
+  function bindVisitors(){
+    var b=$('trkVisitorsBody'); if(!b) return;
+    var f=visitorsState(st);
+    var lvl=char.level||1, pb=pbFor(lvl);
+    var cap=f.maxActive?null:(lvl>=11?2*pb:lvl>=6?pb+2:pb);
+    function refresh(){ save(); renderVisitors(); }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    var bk=$('vis-bank');
+    if(bk) bk.addEventListener('click',function(){
+      if(cap!=null && f.mischief>=cap){ toast('Mischief bank full at '+cap+'.'); return; }
+      f.mischief++; refresh(); toast('Banked 1 Mischief ('+f.mischief+(cap==null?'':' / '+cap)+').');
+    });
+    var pl=$('vis-pile');
+    if(pl) pl.addEventListener('click',function(){
+      var amtEl=$('vis-pile-amt');
+      var amt=amtEl?parseInt(amtEl.value,10):NaN;
+      if(isNaN(amt) || amt<=0){ toast('Enter Mischief to spend.'); return; }
+      if(amt>f.mischief){ toast('Only '+f.mischief+' Mischief banked.'); return; }
+      var free=(lvl>=6 && !f.pileFreeUsed);
+      if(!free && !spendOrToast(1)) return;
+      if(free) f.pileFreeUsed=true;
+      var tricks=Math.max(1, Math.ceil(amt/2));
+      f.mischief-=amt;
+      refresh(); toast('Pile On: spent '+amt+' Mischief → '+tricks+' additional Trick'+(tricks>1?'s':'')+' against another target'+(free?' (first trick this turn free)':'')+'.');
+    });
+    var nt=$('vis-turn');
+    if(nt) nt.addEventListener('click',function(){ f.pileFreeUsed=false; refresh(); });
+    var mn=$('vis-manifest');
+    if(mn) mn.addEventListener('click',function(){
+      if(!spendOrToast(2)) return;
+      f.swarm=true; f.swarmHp=5*lvl; f.dispersed=false;
+      refresh(); toast('Swarm manifested (HP '+(5*lvl)+', '+(lvl>=11?'15':'10')+'-ft space, 1 min).');
+    });
+    var dm=$('vis-damage');
+    if(dm) dm.addEventListener('click',function(){
+      var amtEl=$('vis-dmg');
+      var amt=amtEl?parseInt(amtEl.value,10):NaN;
+      if(isNaN(amt) || amt<=0){ toast('Enter damage to the swarm.'); return; }
+      f.swarmHp=Math.max(0, (f.swarmHp==null?5*lvl:f.swarmHp)-amt);
+      if(f.swarmHp<=0){
+        if(lvl>=6){ f.swarm=false; f.dispersed=true; f.swarmHp=null; refresh(); toast('Swarm dispersed — reform it at the start of your next turn.'); }
+        else { f.swarm=false; f.swarmHp=null; refresh(); toast('Swarm destroyed.'); }
+      } else refresh();
+    });
+    var ds=$('vis-dismiss');
+    if(ds) ds.addEventListener('click',function(){ f.swarm=false; f.swarmHp=null; refresh(); });
+    var rf=$('vis-reform');
+    if(rf) rf.addEventListener('click',function(){
+      if(!spendOrToast(2)) return;
+      f.swarm=true; f.swarmHp=Math.floor(5*lvl/2); f.dispersed=false;
+      refresh(); toast('Swarm reformed with half HP ('+f.swarmHp+').');
+    });
+    var rff=$('vis-reform-free');
+    if(rff) rff.addEventListener('click',function(){
+      if(f.freeReformUsed) return;
+      f.freeReformUsed=true; f.swarm=true; f.swarmHp=Math.floor(5*lvl/2); f.dispersed=false;
+      refresh(); toast('Swarm reformed free (once per short rest) with half HP ('+f.swarmHp+').');
+    });
+    var sr=$('vis-shortrest');
+    if(sr) sr.addEventListener('click',function(){ f.freeReformUsed=false; refresh(); });
+    var mx=$('vis-max');
+    if(mx) mx.addEventListener('click',function(){
+      if(!spendOrToast(8)) return;
+      f.maxActive=true;
+      refresh(); toast('Siege at Kelly-Hopkinsville — 30-ft Visitor Perimeter for 1 minute.');
+    });
+    var me=$('vis-max-end');
+    if(me) me.addEventListener('click',function(){ f.maxActive=false; refresh(); });
+  }
+  bindVisitors();
   function renderExh(){ var b=$('trkExhBody'); if(!b) return; b.innerHTML=exhCardHTML(st); bindExh(); }
   function bindExh(){
     var b=$('trkExhBody'); if(!b) return;
