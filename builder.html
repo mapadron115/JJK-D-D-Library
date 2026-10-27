@@ -265,6 +265,15 @@ h1 .amp{color:var(--red)}
 .crazy-wheel-label{position:absolute;left:50%;top:50%;width:24px;height:24px;margin:-12px 0 0 -12px;text-align:center;font-size:.9rem;font-weight:bold;color:#fff;text-shadow:0 1px 2px #000}
 .crazy-wheel-label span{display:block}
 .crazy-held{border:1px solid var(--line2);border-radius:6px;padding:8px 10px;margin-top:8px}
+.fifty-hand{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.fifty-card{border:1px solid var(--line2);border-radius:6px;padding:6px 8px;text-align:center;cursor:pointer;min-width:64px}
+.fifty-card.sel{border-color:#dcb04a;box-shadow:0 0 0 1px #dcb04a inset}
+.fifty-card.keep{border-color:#34d399;box-shadow:0 0 0 1px #34d399 inset}
+.fifty-card-top{font-size:1.15rem;font-weight:bold}
+.fifty-red{color:#d64545}
+.fifty-panel{border:1px solid var(--line2);border-radius:6px;padding:8px 10px;margin-top:8px}
+.adapt-tag{border:1px solid var(--line2);border-radius:6px;padding:6px 8px;margin-top:6px}
+.adapt-slot{border:1px solid var(--line2);border-radius:6px;padding:8px 10px;margin-top:6px}
 .cond-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .cond-chip{border:1px solid var(--line2);border-radius:20px;padding:6px 12px;font-size:.8rem;background:transparent;color:var(--ink);cursor:pointer;min-height:44px}
 .cond-chip.is-on{background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:bold}
@@ -5264,7 +5273,7 @@ function quickRefHTML(){
    Persisted per character in localStorage; hidden on print. */
 function trackerKey(){ return 'ra_trackers_'+(char.id||'noid'); }
 function trackerState(){
-  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null, siphon:{counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false}, guanyin:{vector:null,intention:null,second:null,names:{},reactions:0}, crazy:{held:[],secondSpin:false,encore:false,encoreReady:false,double:false,survivor:false,survivorHeld:false,fullHouse:false,lastRolls:[],lastMode:'',lastTake:0,lastKind:'',lastPrice:'',lastTie:false} };
+  var d={ hp:null, tempHp:0, ce:null, uses:{}, rct:null, shikHp:null, exhaustion:0, conditions:[], injuries:[], sustained:[], zoneRounds:0, zoneStacks:0, jugReinf:0, warStrike:0, posPool:null, siphon:{counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false}, guanyin:{vector:null,intention:null,second:null,names:{},reactions:0}, crazy:{held:[],secondSpin:false,encore:false,encoreReady:false,double:false,survivor:false,survivorHeld:false,fullHouse:false,lastRolls:[],lastMode:'',lastTake:0,lastKind:'',lastPrice:'',lastTie:false}, fiftytwo:{deck:[],hand:[],discard:[],decl:null,coldDeck:false,marked:false,river:false,sleight:false,domain:false,feats:{counter:false,marked:false,sleight:false,river:false,redblack:false},mode:'normal',sel:[],keepSel:[],drawPending:0,drawPurpose:'',peek:null,pickN:0,endArmed:false,newArmed:false,newArmedTok:0}, adaptive:{tags:[],slots:[],tempSlots:[],encounterInstall:null,round:1,regenRound:0,lentRound:0,hostileRound:0,keterRound:0,termination:false,maximum:false,recordBlocked:false,keterArmed:null,replaceTarget:null,feats:{lent:false,hostile:false,keter:false,rebuild:false}} };
   try{
     var raw=localStorage.getItem(trackerKey());
     if(raw) d=Object.assign(d, JSON.parse(raw));
@@ -5394,6 +5403,14 @@ function trackerHTML(hpMaxV, ceMaxV){
   /* Crazy Slots wheel (e514) — e514 characters only */
   if(hasCrazy()){
     html+='<div class="tracker-card"><div id="trkCrazyBody">'+crazyCardHTML(st)+'</div></div>';
+  }
+  /* Fifty-Two deck (e541) — e541 characters only */
+  if(hasFiftytwo()){
+    html+='<div class="tracker-card"><div id="trkFiftyBody">'+fiftyCardHTML(st)+'</div></div>';
+  }
+  /* Adaptive Hatred ledger (e159) — e159 characters only */
+  if(hasAdaptive()){
+    html+='<div class="tracker-card"><div id="trkAdaptBody">'+adaptiveCardHTML(st)+'</div></div>';
   }
   /* custom use-trackers */
   html+='<div class="tracker-card"><div class="tracker-title"><span>Limited Uses</span><span>Mark when expended</span></div>'+
@@ -5692,6 +5709,352 @@ function crazyModesHTML(c, lvl){
   html+='<p class="small">The clown never deals 9 on a spin — the hidden number comes only at 0 HP (L20).</p>';
   return html;
 }
+/* ── Fifty-Two deck (e541) ──
+   Renders only for characters with e541 (hasFiftytwo gate at the call
+   site, same pattern as the other tracker cards). The deck is a real
+   52-card deck: shuffled draws are blind, stacked draws are picked.
+   Adjusted numbers follow the encounter declaration (Stacked: halved,
+   rounded down; Shuffled: +2; Domain Rigged Deck: shuffled +4, stacked
+   unpenalized). Royal Flush requires the five cards all drawn while
+   Shuffled, so each hand card remembers the declaration it was drawn
+   under. */
+function hasFiftytwo(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e541'; });
+}
+var FIFTY_SUITS=[
+  {id:'S', sym:'♠', name:'Spades', school:'sharpening', red:false},
+  {id:'H', sym:'♥', name:'Hearts', school:'mending', red:true},
+  {id:'C', sym:'♣', name:'Clubs', school:'control', red:false},
+  {id:'D', sym:'♦', name:'Diamonds', school:'warding', red:true}
+];
+function fiftySuit(id){ for(var i=0;i<FIFTY_SUITS.length;i++){ if(FIFTY_SUITS[i].id===id) return FIFTY_SUITS[i]; } return FIFTY_SUITS[0]; }
+function fiftyRankLabel(r){ return r===11?'J':r===12?'Q':r===13?'K':r===14?'A':String(r); }
+function fiftyNewDeck(){
+  var d=[];
+  FIFTY_SUITS.forEach(function(s){
+    for(var r=2;r<=14;r++) d.push({suit:s.id, rank:r});
+  });
+  return d;
+}
+function fiftyShuffle(deck){
+  for(var i=deck.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var t=deck[i]; deck[i]=deck[j]; deck[j]=t;
+  }
+  return deck;
+}
+function fiftyState(st){
+  if(!st.fiftytwo) st.fiftytwo={deck:[], hand:[], discard:[], decl:null, coldDeck:false, marked:false, river:false, sleight:false, domain:false, feats:{counter:false, marked:false, sleight:false, river:false, redblack:false}, mode:'normal', sel:[], keepSel:[], drawPending:0, drawPurpose:'', peek:null, pickN:0, endArmed:false, newArmed:false, newArmedTok:0};
+  return st.fiftytwo;
+}
+function fiftyAdjusted(card, f){
+  if(!f.decl) return card.rank;
+  if(f.decl==='stacked') return f.domain?card.rank:Math.floor(card.rank/2);
+  return card.rank+(f.domain?4:2);
+}
+function fiftyPlayText(card, f, lvl){
+  var s=fiftySuit(card.suit), n=fiftyAdjusted(card, f);
+  var doubled=(f.domain && card.suit==='S');
+  var out='';
+  if(card.suit==='S') out='Action · 60 ft: one creature gains a sharpened edge — next damage with an attack or technique before the end of their next turn deals +'+(doubled?n*2:n)+'. Multiple Spade bonuses stack.'+(doubled?' (Rigged Deck: doubled.)':'');
+  if(card.suit==='H') out='Action · 30 ft: one creature regains '+n+' HP.'+(n>=8?' Also end one condition on them.':'');
+  if(card.suit==='C') out='Action · 60 ft: one creature takes '+n+' bludgeoning + Strength save or restrained until the end of your next turn.';
+  if(card.suit==='D') out='Bonus action · 30 ft: one creature gains '+n+' temporary HP.';
+  if(lvl>=6){
+    if(card.rank===11) out+=' Rider (Jack): teleport up to 30 ft to a seen unoccupied space as part of the play.';
+    if(card.rank===12) out+=' Rider (Queen): one creature within 60 ft WIS save or obeys a one-word command until the end of your next turn.';
+    if(card.rank===13) out+=' Rider (King): one creature within 60 ft WIS save or frightened 1 min (save ends).';
+    if(card.rank===14) out+=' Rider (Ace): draw a replacement card immediately after playing.';
+  }
+  if(f.feats && f.feats.redblack){
+    out+=card.suit==='H'||card.suit==='D'?' Red or Black: on an ally, they may make one weapon attack as a reaction.':' Red or Black: on an ally, they gain +10 ft speed until the end of their next turn.';
+  }
+  return out;
+}
+function fiftyCombo(cards, f){
+  if(cards.length<2) return null;
+  var ranks=cards.map(function(c){ return c.rank; }).sort(function(a,b){ return a-b; });
+  var suits=cards.map(function(c){ return c.suit; });
+  var counts={};
+  ranks.forEach(function(r){ counts[r]=(counts[r]||0)+1; });
+  var groups=Object.keys(counts).map(function(k){ return counts[k]; }).sort(function(a,b){ return b-a; });
+  var flush=(cards.length===5 && suits.every(function(s){ return s===suits[0]; }));
+  var straight=false;
+  if(cards.length===5){
+    var seq=true;
+    for(var i=1;i<5;i++){ if(ranks[i]!==ranks[i-1]+1) seq=false; }
+    if(!seq && ranks.join(',')==='2,3,4,5,14') seq=true;
+    straight=seq;
+  }
+  var name=null, mult=0;
+  if(groups[0]===4){ name='Four of a kind'; mult=3; }
+  else if(groups[0]===3 && groups[1]===2){ name='Full house'; mult=2.5; }
+  else if(flush){ name='Flush'; mult=2; }
+  else if(straight){ name='Straight'; mult=1.5; }
+  else if(groups[0]===3){ name='Three of a kind'; mult=1.5; }
+  else if(groups[0]===2 && groups[1]===2){ name='Two pair'; mult=1.5; }
+  else if(groups[0]===2){ name='Pair'; mult=1; }
+  if(!name) return null;
+  var sum=0;
+  cards.forEach(function(c){ sum+=fiftyAdjusted(c, f); });
+  return {name:name, mult:mult, total:Math.floor(sum*mult), sum:sum};
+}
+function fiftyRoyal(hand, f){
+  if(f.decl!=='shuffled' || hand.length<5) return null;
+  var suits=['S','H','C','D'];
+  for(var si=0;si<suits.length;si++){
+    var need=[10,11,12,13,14], ok=true;
+    need.forEach(function(r){
+      var found=false;
+      hand.forEach(function(c){ if(c.suit===suits[si] && c.rank===r && c.decl==='shuffled') found=true; });
+      if(!found) ok=false;
+    });
+    if(ok) return suits[si];
+  }
+  return null;
+}
+function fiftyCardHTML(st){
+  var f=fiftyState(st);
+  var lvl=char.level||1;
+  var h='<div class="tracker-title">The Fifty-Two · Deck</div>';
+  var declTxt=!f.decl?'No declaration yet':(f.decl==='stacked'?'Stacked (numbers halved, rounded down)':'Shuffled (numbers +'+(f.domain?4:2)+')');
+  h+='<div class="small">Declaration: '+declTxt+' · Deck: '+f.deck.length+' · Discard: '+f.discard.length+' · Hand: '+f.hand.length+(f.domain?' · Domain active (Rigged Deck)':'')+'</div>';
+  if(!f.decl){
+    h+='<div style="margin-top:8px"><button id="fifty-declare-stacked">Declare Stacked — draw 5</button> <button id="fifty-declare-shuffled">Declare Shuffled — draw 5</button></div>';
+    h+='<div class="small" style="margin-top:6px">Stacked: you choose the cards, numbers halved (rounded down). Shuffled: blind draw, numbers +2. Once per encounter; L18 Cold Deck re-declares once per combat.</div>';
+  } else {
+    // Hand grid
+    h+='<div class="fifty-hand">';
+    f.hand.forEach(function(c, i){
+      var s=fiftySuit(c.suit);
+      var cls='fifty-card'+(s.red?' fifty-red':'');
+      if(f.mode==='normal' && f.selCard===i) cls+=' sel';
+      if(f.mode==='combo' && f.sel.indexOf(i)>=0) cls+=' sel';
+      if(f.mode==='keep' && f.keepSel.indexOf(i)>=0) cls+=' keep';
+      h+='<div class="'+cls+'" data-fifty-card="'+i+'"><div class="fifty-card-top">'+fiftyRankLabel(c.rank)+s.sym+'</div><div class="small">'+s.name+' · '+fiftyAdjusted(c, f)+'</div>';
+      if(f.mode==='normal'){
+        h+='<div style="margin-top:4px"><button data-fifty-discard="'+i+'">Discard</button>';
+        if(f.feats.sleight && !f.sleight) h+=' <button data-fifty-sleight="'+i+'">Sleight</button>';
+        h+='</div>';
+      }
+      h+='</div>';
+    });
+    if(!f.hand.length) h+='<div class="small">No cards in hand.</div>';
+    h+='</div>';
+    // Panels by mode
+    if(f.mode==='normal' && f.selCard!=null && f.hand[f.selCard]){
+      var c=f.hand[f.selCard];
+      h+='<div class="fifty-panel"><b>'+fiftyRankLabel(c.rank)+fiftySuit(c.suit).sym+' '+fiftySuit(c.suit).name+' — '+fiftyAdjusted(c, f)+'</b><div class="small">'+esc(fiftyPlayText(c, f, lvl))+'</div><div style="margin-top:6px"><button id="fifty-play">Play this card</button></div></div>';
+    }
+    if(f.mode==='combo'){
+      var selCards=f.sel.map(function(i){ return f.hand[i]; }).filter(Boolean);
+      var combo=fiftyCombo(selCards, f);
+      h+='<div class="fifty-panel"><b>Combination — click cards to select (2–5)</b>';
+      if(selCards.length<2) h+='<div class="small">Select at least two cards.</div>';
+      else if(!combo) h+='<div class="small">No combination in this selection — play singly.</div>';
+      else {
+        h+='<div class="small">'+combo.name+' ×'+combo.mult+' — sum '+combo.sum+' → total '+combo.total+'. Face-card riders do not trigger inside combinations.</div>';
+        h+='<div style="margin-top:6px">Suit: <select id="fifty-combo-suit">';
+        var seenSuits=[];
+        selCards.forEach(function(cc){ if(seenSuits.indexOf(cc.suit)<0) seenSuits.push(cc.suit); });
+        seenSuits.forEach(function(sid){ h+='<option value="'+sid+'">'+fiftySuit(sid).name+'</option>'; });
+        h+='</select> <button id="fifty-play-combo">Play combination</button></div>';
+      }
+      h+='<div style="margin-top:6px"><button id="fifty-combo-cancel">Cancel</button></div></div>';
+    }
+    if(f.mode==='keep'){
+      h+='<div class="fifty-panel"><b>The Turn — keep 5 of 7</b><div class="small">Kept '+f.keepSel.length+' / 5. Click cards to mark keep.</div><div style="margin-top:6px"><button id="fifty-keep-confirm"'+(f.keepSel.length===5?'':' disabled')+'>Confirm keep</button></div></div>';
+    }
+    if(f.peek){
+      h+='<div class="fifty-panel"><b>Card Counter — top two cards</b><div class="small">Pick one to take; the other goes to the bottom of the deck.</div><div style="margin-top:6px">';
+      f.peek.forEach(function(c, i){ h+='<button data-fifty-peek="'+i+'">'+fiftyRankLabel(c.rank)+fiftySuit(c.suit).sym+' '+fiftySuit(c.suit).name+'</button> '; });
+      h+='</div></div>';
+    }
+    if(f.pickN>0){
+      h+='<div class="fifty-panel"><b>Stacked draw — pick '+f.pickN+' more</b>';
+      if(!f.deck.length){
+        if(f.discard.length) h+='<div style="margin-top:6px"><button id="fifty-reshuffle">Reshuffle discard into deck</button></div>';
+        else h+='<div class="small">No cards left to draw.</div>';
+      } else {
+        FIFTY_SUITS.forEach(function(s){
+          var inDeck=f.deck.filter(function(c){ return c.suit===s.id; });
+          if(!inDeck.length) return;
+          h+='<div style="margin-top:6px"><b>'+s.name+':</b> ';
+          inDeck.forEach(function(c){ h+='<button data-fifty-pick="'+s.id+'-'+c.rank+'">'+fiftyRankLabel(c.rank)+s.sym+'</button> '; });
+          h+='</div>';
+        });
+      }
+      h+='</div>';
+    }
+    // Royal Flush
+    var royal=fiftyRoyal(f.hand, f);
+    if(royal){
+      h+='<div class="fifty-panel"><b>ROYAL FLUSH — '+fiftySuit(royal).name+'</b><div class="small">Action, 10 CE: each hostile within 60 ft takes 50 piercing (Dex save for half) and is restrained until the end of your next turn on a failed save; each ally within 60 ft regains 50 HP and gains 50 temporary HP. The hand is discarded afterward.</div><div style="margin-top:6px"><button id="fifty-royal">Royal Flush (10 CE)</button></div></div>';
+    }
+    // Action row (normal mode only)
+    if(f.mode==='normal' && !f.peek && f.pickN<=0){
+      h+='<div style="margin-top:8px"><button id="fifty-drawstep">Draw step</button> <button id="fifty-extra">Extra draw (2 CE)</button> <button id="fifty-mulligan">Mulligan (3 CE)</button> <button id="fifty-endturn">End turn</button> <button id="fifty-newenc">'+(f.newArmed?'Click again to confirm':'New encounter')+'</button>';
+      if(lvl>=3) h+=' <button id="fifty-combo-mode">Play combination</button>';
+      h+='</div>';
+      if(f.endArmed && f.hand.length>2 && lvl<18){
+        h+='<div class="small" style="margin-top:6px">Holding '+f.hand.length+' cards past the free two: <button id="fifty-payhold">Pay '+(f.hand.length-2)+' CE and end turn</button> — or discard down to 2 first.</div>';
+      }
+      // Marked / River row (shuffled only)
+      if(f.decl==='shuffled' && ((f.feats.marked && !f.marked) || (f.feats.river && !f.river))){
+        h+='<div style="margin-top:8px">Name a card: <select id="fifty-name-suit">';
+        FIFTY_SUITS.forEach(function(s){ h+='<option value="'+s.id+'">'+s.name+'</option>'; });
+        h+='</select> <select id="fifty-name-rank">';
+        for(var r=2;r<=14;r++) h+='<option value="'+r+'">'+fiftyRankLabel(r)+'</option>';
+        h+='</select>';
+        if(f.feats.marked && !f.marked) h+=' <button id="fifty-marked">Marked Cards — draw it</button>';
+        if(f.feats.river && !f.river) h+=' <button id="fifty-river">The River — draw it</button>';
+        h+='</div>';
+      }
+      // Cold Deck (L18, once per combat)
+      if(lvl>=18 && !f.coldDeck){
+        h+='<div style="margin-top:8px">Cold Deck (once per combat, bonus action): <button id="fifty-cold-stacked">Re-declare Stacked</button> <button id="fifty-cold-shuffled">Re-declare Shuffled</button></div>';
+      }
+      // Domain (L18)
+      if(lvl>=18){
+        if(!f.domain){
+          h+='<div style="margin-top:8px"><button id="fifty-domain">The House Always Wins — Domain (20 CE)</button></div>';
+        } else {
+          h+='<div class="fifty-panel"><b>Domain active — The House Always Wins (1 min, 90 ft)</b><div class="small">Rigged Deck: shuffled draws +4, stacked draws unpenalized, Spade bonuses doubled. At the start of each hostile turn inside: they draw (2–14), you reveal your house card; higher wins, ties go to the House.</div><div style="margin-top:6px"><button id="fifty-hostile-draw">Hostile draws</button> <button id="fifty-domain-end">End Domain</button></div></div>';
+        }
+      }
+      // Feats row
+      h+='<div class="small" style="margin-top:8px">Feats: <label><input type="checkbox" id="fifty-feat-counter"'+(f.feats.counter?' checked':'')+'> Card Counter</label> <label><input type="checkbox" id="fifty-feat-marked"'+(f.feats.marked?' checked':'')+'> Marked Cards</label> <label><input type="checkbox" id="fifty-feat-sleight"'+(f.feats.sleight?' checked':'')+'> Sleight of Hand</label> <label><input type="checkbox" id="fifty-feat-river"'+(f.feats.river?' checked':'')+'> The River</label> <label><input type="checkbox" id="fifty-feat-redblack"'+(f.feats.redblack?' checked':'')+'> Red or Black</label></div>';
+    }
+  }
+  return h;
+}
+/* ── Adaptive Hatred ledger (e159) ──
+   Renders only for characters with e159. Tags are exact: one damage
+   type, one named condition, or one environmental hazard. Data caps at
+   3 per Tag and 1 per Tag per round (tracked against the Round
+   counter). Slots grow with level (1/2/3/4 at L1/6/11/18); Hardened
+   installs (L11+, 2 Data) are damage/condition only, since the dossier
+   grants no hardened form for environmental Tags. Termination Failure
+   installs without using a Slot until the encounter ends; the Maximum
+   consumes exactly two Tags (the text's "at least two" would need more
+   temporary Slots than the two it grants for three or more). */
+function hasAdaptive(){
+  return (char.techniques||[]).some(function(t){ return t && t.id==='e159'; });
+}
+function adaptDie(lvl){ return lvl>=18?12:lvl>=11?10:lvl>=6?8:6; }
+function adaptSlotCount(lvl){ return lvl>=18?4:lvl>=11?3:lvl>=6?2:1; }
+function adaptiveState(st){
+  if(!st.adaptive) st.adaptive={tags:[], slots:[], tempSlots:[], encounterInstall:null, round:1, regenRound:0, lentRound:0, hostileRound:0, keterRound:0, termination:false, maximum:false, recordBlocked:false, keterArmed:null, replaceTarget:null, feats:{lent:false, hostile:false, keter:false, rebuild:false}};
+  var lvl=char.level||1, base=adaptSlotCount(lvl);
+  while(st.adaptive.slots.length<base) st.adaptive.slots.push(null);
+  return st.adaptive;
+}
+function adaptEffectText(tag, inst){
+  if(!tag) return '';
+  if(tag.kind==='damage'){
+    if(inst.hardened) return 'Hardened: immunity to '+tag.name+' (normal elemental/physical). Exotic damage (force, psychic, radiant, necrotic, soul, spatial, conceptual, Domain-derived) stays resistance — reduce one matching instance per round by PB Adaptation Dice.';
+    return 'Resistance to '+tag.name+'.';
+  }
+  if(tag.kind==='condition'){
+    if(inst.hardened) return 'Hardened: immunity to '+tag.name+' (except unconscious or incapacitated from 0 HP or a Domain\'s unique rule).';
+    return 'Advantage on saves vs '+tag.name+'; durations measured in rounds −1 (min 1).';
+  }
+  return 'Survival trait (GM approval): '+tag.name+'.';
+}
+var ADAPT_MORPHS=['+10 ft speed', 'Climb speed', 'Swim speed', '+5-ft melee reach', '+1 AC', '+1 Adaptation Die damage (1/turn, natural/unarmed)'];
+function adaptSlotHasTag(f, ti){
+  var found=false;
+  [f.slots, f.tempSlots].forEach(function(list){
+    (list||[]).forEach(function(s){ if(s && s.tag===ti) found=true; });
+  });
+  if(f.encounterInstall && f.encounterInstall.tag===ti) found=true;
+  return found;
+}
+function adaptMorphUsed(f, m, skipObj){
+  var used=false;
+  [f.slots, f.tempSlots].forEach(function(list){
+    (list||[]).forEach(function(s){ if(s && s!==skipObj && s.morph===m) used=true; });
+  });
+  if(f.encounterInstall && f.encounterInstall!==skipObj && f.encounterInstall.morph===m) used=true;
+  return used;
+}
+function adaptSlotCardHTML(f, s, label, ref, lvl, canReplace){
+  var h='<div class="adapt-slot">';
+  var t=f.tags[s.tag];
+  h+='<b>'+label+': '+(t?esc(t.name):'Unknown Tag')+'</b>'+(s.hardened?' (Hardened)':' (Basic)')+'<div class="small">'+esc(adaptEffectText(t, s))+'</div>';
+  if(lvl>=6){
+    h+='<div style="margin-top:4px">Morphology: <select data-adapt-morph="'+ref+'"><option value="">—</option>';
+    ADAPT_MORPHS.forEach(function(m){
+      if(m===s.morph || !adaptMorphUsed(f, m, s)) h+='<option value="'+esc(m)+'"'+(m===s.morph?' selected':'')+'>'+m+'</option>';
+    });
+    h+='</select></div>';
+  }
+  if(f.feats.lent && f.lentRound!==f.round && t && t.kind!=='environmental') h+=' <button data-adapt-lent="'+ref+'">Lend to ally (reaction, 1 CE)</button>';
+  if(f.feats.hostile && f.hostileRound!==f.round) h+=' <button data-adapt-hostile="'+ref+'">Retaliate (reaction, 1 CE)</button>';
+  if(canReplace) h+=' <button data-adapt-replace="'+ref+'">Replace</button>';
+  if(f.keterArmed!=null && canReplace) h+=' <button data-adapt-keter-slot="'+ref+'">Replace with Keter Tag (no Data)</button>';
+  h+='</div>';
+  return h;
+}
+function adaptiveCardHTML(st){
+  var f=adaptiveState(st);
+  var lvl=char.level||1, die=adaptDie(lvl);
+  var h='<div class="tracker-title">Adaptive Hatred · Ledger</div>';
+  h+='<div class="small">Adaptation Die: d'+die+' · Round: '+f.round+' <button id="adapt-next-round">Next round</button>'+(f.recordBlocked?' · Recording blocked until the next round (Maximum cost).':'')+'</div>';
+  h+='<div style="margin-top:8px">New Threat Tag: <input id="adapt-new-name" placeholder="e.g. Fire damage, Restrained, vacuum" size="24"> <select id="adapt-new-kind"><option value="damage">Damage type</option><option value="condition">Condition</option><option value="environmental">Environmental hazard</option></select> <button id="adapt-add-tag">Add Tag</button></div>';
+  h+='<div class="small">Tags must be exact — "Fire damage", "Restrained", "vacuum" are valid; "this enemy" is not. Data lasts until your next long rest.</div>';
+  if(f.replaceTarget!=null) h+='<div class="small" style="margin-top:6px">Replace armed for Slot '+(f.replaceTarget+1)+' — pick a Tag to install there. <button id="adapt-cancel-replace">Cancel</button></div>';
+  if(f.keterArmed!=null && f.tags[f.keterArmed]) h+='<div class="small" style="margin-top:6px">Keter Genome armed for "'+esc(f.tags[f.keterArmed].name)+'" — pick a Slot to replace (no Data spent). <button id="adapt-cancel-keter">Cancel</button></div>';
+  f.tags.forEach(function(t, ti){
+    var pips=''; for(var p=0;p<3;p++) pips+= p<t.data?'●':'○';
+    var canRecord=t.data<3 && t.lastRound!==f.round && !f.recordBlocked;
+    var slotFree=f.replaceTarget!=null || f.slots.some(function(s){ return !s; });
+    h+='<div class="adapt-tag"><b>'+esc(t.name)+'</b> <span class="small">('+t.kind+')</span> <span>'+pips+'</span> <span class="small">'+t.data+' Data</span>';
+    h+=' <button data-adapt-record="'+ti+'"'+(canRecord?'':' disabled')+'>Record exposure (1 CE)</button>';
+    h+=' <button data-adapt-install="'+ti+'"'+(t.data>=1 && slotFree?'':' disabled')+'>Install (1 Data, 1 CE)</button>';
+    if(lvl>=11 && t.kind!=='environmental') h+=' <button data-adapt-hardened="'+ti+'"'+(t.data>=2 && slotFree?'':' disabled')+'>Hardened (2 Data, 1 CE)</button>';
+    if(f.feats.keter && t.data>=1 && !adaptSlotHasTag(f, ti) && f.keterRound!==f.round) h+=' <button data-adapt-keter="'+ti+'">Keter swap (1 CE)</button>';
+    if(!f.maximum && lvl>=18 && t.data>0) h+=' <label><input type="checkbox" data-adapt-maxcheck="'+ti+'"'+((f.maxSel||[]).indexOf(ti)>=0?' checked':'')+'> Maximum</label>';
+    h+='</div>';
+  });
+  if(!f.tags.length) h+='<div class="small">No Threat Tags recorded yet.</div>';
+  if(!f.slots.some(function(s){ return !s; }) && f.replaceTarget==null) h+='<div class="small">All Slots filled — Replace one to install.</div>';
+  h+='<div style="margin-top:8px"><b>Adaptation Slots ('+adaptSlotCount(lvl)+')</b></div>';
+  f.slots.forEach(function(s, si){
+    if(!s) h+='<div class="adapt-slot"><span class="small">Slot '+(si+1)+' — empty</span></div>';
+    else h+=adaptSlotCardHTML(f, s, 'Slot '+(si+1), 's'+si, lvl, true);
+  });
+  f.tempSlots.forEach(function(s, si){
+    h+=adaptSlotCardHTML(f, s, 'Temporary Slot '+(si+1), 't'+si, lvl, false);
+  });
+  if(f.encounterInstall){
+    h+=adaptSlotCardHTML(f, f.encounterInstall, 'Termination install (no Slot, until encounter ends)', 'e', lvl, false);
+    h+='<div style="margin-top:4px"><button id="adapt-encounter-end">Encounter ended — clear install</button></div>';
+  }
+  if(lvl>=3){
+    var hasDmg=false;
+    [f.slots, f.tempSlots].forEach(function(list){ (list||[]).forEach(function(s){ if(s && f.tags[s.tag] && f.tags[s.tag].kind==='damage') hasDmg=true; }); });
+    if(f.encounterInstall && f.tags[f.encounterInstall.tag] && f.tags[f.encounterInstall.tag].kind==='damage') hasDmg=true;
+    h+='<div style="margin-top:8px"><b>Regenerative Hate</b> <span class="small">(once/round, below half HP, damage matching an installed damage Adaptation; healing marked in the HP tracker)</span> <button id="adapt-regen"'+(hasDmg && f.regenRound!==f.round?'':' disabled')+'>Regenerate (d'+die+' + CE mod)</button></div>';
+  }
+  if(lvl>=18 && !f.termination){
+    h+='<div style="margin-top:8px"><b>Termination Failure</b> <span class="small">(once/long rest, when damage would reduce you to 0 HP — remain at 1 HP, heal 4 Adaptation Dice + CE mod, gain 3 Data in the triggering Tag, Hardened install without a Slot)</span><div>Triggering Tag: <select id="adapt-term-tag"><option value="">— pick an existing Tag —</option>';
+    f.tags.forEach(function(t, ti){ h+='<option value="'+ti+'">'+esc(t.name)+'</option>'; });
+    h+='</select> or new: <input id="adapt-term-new" placeholder="Tag name" size="18"> <select id="adapt-term-kind"><option value="damage">Damage type</option><option value="condition">Condition</option><option value="environmental">Environmental hazard</option></select> <button id="adapt-term">Termination Failure</button></div></div>';
+  }
+  if(lvl>=18){
+    if(!f.maximum){
+      h+='<div style="margin-top:8px"><b>Maximum — Abhorrent Evolution</b> <span class="small">(bonus action, 10 CE, 1 min — consumes exactly two Tags\' Data; Large if space permits, +10 ft speed, unarmed strikes +1 Adaptation Die; when it ends, +1 exhaustion and no Data recording until the end of your next turn)</span><div style="margin-top:4px"><button id="adapt-max"'+((f.maxSel||[]).length===2?'':' disabled')+'>Consume &amp; Evolve (10 CE)</button></div></div>';
+    } else {
+      h+='<div class="adapt-slot"><b>Maximum active — Abhorrent Evolution</b><div class="small">Large if space permits, +10 ft speed, unarmed strikes +1 Adaptation Die. Two temporary Slots filled.</div><div style="margin-top:4px"><button id="adapt-max-end">End Maximum</button></div></div>';
+    }
+  }
+  if(f.feats.rebuild){
+    h+='<div style="margin-top:8px"><b>Consume and Rebuild</b> <span class="small">(during rest — regain PB Adaptation Dice HP, gain 1 Data for one environmental or material Tag the consumed matter demonstrates; GM adjudicates)</span><div>Tag: <input id="adapt-rebuild-name" placeholder="Tag name" size="18"> <select id="adapt-rebuild-kind"><option value="damage">Damage type</option><option value="condition">Condition</option><option value="environmental">Environmental hazard</option></select> <button id="adapt-rebuild">Consume &amp; Rebuild</button></div></div>';
+  }
+  h+='<div class="small" style="margin-top:8px">Feats: <label><input type="checkbox" id="adapt-feat-lent"'+(f.feats.lent?' checked':'')+'> Lent Loathing</label> <label><input type="checkbox" id="adapt-feat-hostile"'+(f.feats.hostile?' checked':'')+'> Hostile Evolution</label> <label><input type="checkbox" id="adapt-feat-keter"'+(f.feats.keter?' checked':'')+'> Keter Genome</label> <label><input type="checkbox" id="adapt-feat-rebuild"'+(f.feats.rebuild?' checked':'')+'> Consume and Rebuild</label></div>';
+  return h;
+}
 function siphonCardHTML(st){
   var sp=siphonState(st), th=siphonThreshold(), cap=siphonTempCap(), P=pb(char.level);
   var fav=siphonFavor(sp.pool);
@@ -5952,7 +6315,9 @@ function bindTrackers(hpMaxV, ceMaxV){
     st.siphon={counter:0,tempCE:0,pool:0,momentum:-1,spoil:0,spoil2:0,pendingDrain:false};
     if(st.guanyin) st.guanyin.reactions=0;
     if(st.crazy){ var cz=st.crazy; cz.secondSpin=false; cz.encore=false; cz.encoreReady=false; cz.double=false; cz.survivor=false; cz.fullHouse=false; }
-    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderSiphon(); renderGuanyin(); renderCrazy();
+    if(st.fiftytwo){ st.fiftytwo.river=false; st.fiftytwo.sleight=false; st.fiftytwo.endArmed=false; }
+    if(st.adaptive){ var ad=st.adaptive; ad.tags=[]; ad.slots=[]; ad.tempSlots=[]; ad.encounterInstall=null; ad.round=1; ad.regenRound=0; ad.lentRound=0; ad.hostileRound=0; ad.keterRound=0; ad.termination=false; ad.maximum=false; ad.recordBlocked=false; ad.keterArmed=null; ad.replaceTarget=null; ad.maxSel=[]; }
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive();
     var _ri=$('trkRct'); if(_ri&&_rm!=null) _ri.value=_rm;
     toast('Long rest — HP, CE, RCT pool, and uses restored; \u22121 exhaustion.');
   });
@@ -5973,7 +6338,7 @@ function bindTrackers(hpMaxV, ceMaxV){
     st=trackerState(); st.hp=hpMaxV; if(ceMaxV!=null) st.ce=ceMaxV;
     $('trkHp').value=hpMaxV; $('trkTemp').value=0;
     if(ceMaxV!=null) $('trkCe').value=ceMaxV;
-    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); renderSiphon(); renderGuanyin(); renderCrazy(); toast('Trackers reset.');
+    save(); refreshUses(); renderRct(); renderBt(); renderExh(); renderInj(); renderSus(); renderSiphon(); renderGuanyin(); renderCrazy(); renderFiftytwo(); renderAdaptive(); toast('Trackers reset.');
   });
 
   /* ── shared mini-helpers for the new cards ── */
@@ -6384,6 +6749,467 @@ function bindTrackers(hpMaxV, ceMaxV){
     });
   }
   bindCrazy();
+  /* ── Fifty-Two deck (e541) ── */
+  function renderFiftytwo(){ var b=$('trkFiftyBody'); if(!b) return; b.innerHTML=fiftyCardHTML(st); bindFiftytwo(); }
+  function bindFiftytwo(){
+    var b=$('trkFiftyBody'); if(!b) return;
+    var f=fiftyState(st);
+    var lvl=char.level||1;
+    function refresh(){ save(); renderFiftytwo(); }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    function reshuffle(){
+      if(!f.discard.length && !f.deck.length) return false;
+      f.deck=fiftyShuffle(f.discard.concat(f.deck)); f.discard=[];
+      return f.deck.length>0;
+    }
+    function drawBlindOne(){
+      if(!f.deck.length && !reshuffle()) return null;
+      var c=f.deck.shift(); c.decl=f.decl; return c;
+    }
+    function finishDraw(){
+      f.drawPending=0; f.pickN=0; f.peek=null;
+      if(f.drawPurpose==='drawstep' && lvl>=11 && f.hand.length>=7){ f.mode='keep'; f.keepSel=[]; }
+      else f.mode='normal';
+      f.drawPurpose=''; refresh();
+    }
+    function processDraw(){
+      if(f.drawPending<=0){ finishDraw(); return; }
+      if(f.decl==='shuffled' && f.feats.counter && !f.peek){
+        if(f.deck.length<2) reshuffle();
+        if(f.deck.length>=2){ f.peek=[f.deck[0], f.deck[1]]; refresh(); return; }
+      }
+      if(f.decl==='shuffled'){
+        while(f.drawPending>0){ var c=drawBlindOne(); if(!c) break; f.hand.push(c); f.drawPending--; }
+        finishDraw(); return;
+      }
+      if(!f.deck.length && !reshuffle()){ f.drawPending=0; finishDraw(); return; }
+      f.pickN=f.drawPending; refresh();
+    }
+    function startDraw(n, purpose){ f.drawPending=n; f.drawPurpose=purpose; processDraw(); }
+    function declare(decl){
+      f.decl=decl;
+      f.deck=(decl==='shuffled')?fiftyShuffle(fiftyNewDeck()):fiftyNewDeck();
+      f.hand=[]; f.discard=[];
+      startDraw(5, 'initial');
+    }
+    function adjustAfterRemove(idx){
+      if(f.selCard!=null){
+        if(f.selCard===idx) f.selCard=null;
+        else if(f.selCard>idx) f.selCard--;
+      }
+      f.sel=f.sel.filter(function(i){ return i!==idx; }).map(function(i){ return i>idx?i-1:i; });
+    }
+    function discardIdx(idx){
+      var c=f.hand[idx]; if(!c) return;
+      f.hand.splice(idx,1); f.discard.push(c); adjustAfterRemove(idx);
+    }
+    var dS=$('fifty-declare-stacked');
+    if(dS) dS.addEventListener('click',function(){ declare('stacked'); });
+    var dH=$('fifty-declare-shuffled');
+    if(dH) dH.addEventListener('click',function(){ declare('shuffled'); });
+    b.querySelectorAll('[data-fifty-card]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var i=parseInt(el.getAttribute('data-fifty-card'),10);
+        if(f.mode==='normal'){ f.selCard=(f.selCard===i?null:i); refresh(); }
+        else if(f.mode==='combo'){
+          var at=f.sel.indexOf(i);
+          if(at>=0) f.sel.splice(at,1);
+          else if(f.sel.length<5) f.sel.push(i);
+          else toast('Combinations play at most five cards.');
+          refresh();
+        }
+        else if(f.mode==='keep'){
+          var at2=f.keepSel.indexOf(i);
+          if(at2>=0) f.keepSel.splice(at2,1);
+          else if(f.keepSel.length<5) f.keepSel.push(i);
+          else toast('Keep exactly five.');
+          refresh();
+        }
+      });
+    });
+    b.querySelectorAll('[data-fifty-discard]').forEach(function(btn){
+      btn.addEventListener('click',function(e){
+        e.stopPropagation();
+        discardIdx(parseInt(btn.getAttribute('data-fifty-discard'),10)); refresh();
+      });
+    });
+    b.querySelectorAll('[data-fifty-sleight]').forEach(function(btn){
+      btn.addEventListener('click',function(e){
+        e.stopPropagation();
+        var idx=parseInt(btn.getAttribute('data-fifty-sleight'),10);
+        var c=f.hand[idx]; if(!c) return;
+        var s=fiftySuit(c.suit);
+        toast('Sleight of Hand: '+fiftyRankLabel(c.rank)+s.sym+' '+s.name+' '+fiftyAdjusted(c, f)+' — '+s.school+'.');
+        f.sleight=true; discardIdx(idx); refresh();
+      });
+    });
+    var play=$('fifty-play');
+    if(play) play.addEventListener('click',function(){
+      var idx=f.selCard; if(idx==null) return;
+      var c=f.hand[idx]; if(!c) return;
+      var label=fiftyRankLabel(c.rank)+fiftySuit(c.suit).sym;
+      discardIdx(idx); f.selCard=null;
+      if(lvl>=6 && c.rank===14) startDraw(1, 'ace');
+      else { refresh(); toast('Played '+label+'.'); }
+    });
+    var cm=$('fifty-combo-mode');
+    if(cm) cm.addEventListener('click',function(){ f.mode='combo'; f.sel=[]; f.selCard=null; refresh(); });
+    var cc=$('fifty-combo-cancel');
+    if(cc) cc.addEventListener('click',function(){ f.mode='normal'; f.sel=[]; refresh(); });
+    var pc=$('fifty-play-combo');
+    if(pc) pc.addEventListener('click',function(){
+      var selCards=f.sel.map(function(i){ return f.hand[i]; }).filter(Boolean);
+      var combo=fiftyCombo(selCards, f); if(!combo) return;
+      var suitEl=$('fifty-combo-suit');
+      var sid=suitEl?suitEl.value:selCards[0].suit;
+      var total=combo.total, txt='';
+      if(sid==='S') txt='sharpened edge +'+total;
+      if(sid==='H') txt='regain '+total+' HP'+(total>=8?' + end one condition':'');
+      if(sid==='C') txt=total+' bludgeoning + Strength save or restrained';
+      if(sid==='D') txt=total+' temporary HP';
+      var idxs=f.sel.slice().sort(function(a,b){ return b-a; });
+      idxs.forEach(function(i){ f.hand.splice(i,1); });
+      selCards.forEach(function(c){ f.discard.push(c); });
+      f.sel=[]; f.mode='normal'; f.selCard=null;
+      refresh(); toast(combo.name+' ×'+combo.mult+' — '+fiftySuit(sid).name+': '+txt+'.');
+    });
+    var kc=$('fifty-keep-confirm');
+    if(kc) kc.addEventListener('click',function(){
+      if(f.keepSel.length!==5) return;
+      var kept=f.keepSel.slice().sort(function(a,b){ return a-b; });
+      var newHand=kept.map(function(i){ return f.hand[i]; });
+      f.hand.forEach(function(c, i){ if(kept.indexOf(i)<0) f.discard.push(c); });
+      f.hand=newHand; f.keepSel=[]; f.mode='normal';
+      refresh(); toast('The Turn — kept 5, discarded 2.');
+    });
+    b.querySelectorAll('[data-fifty-peek]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var i=parseInt(btn.getAttribute('data-fifty-peek'),10);
+        var chosen=f.peek[i], other=f.peek[1-i];
+        f.deck.shift(); f.deck.shift();
+        chosen.decl=f.decl; f.hand.push(chosen); f.deck.push(other);
+        f.peek=null; f.drawPending--; processDraw();
+      });
+    });
+    b.querySelectorAll('[data-fifty-pick]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var parts=btn.getAttribute('data-fifty-pick').split('-');
+        var sid=parts[0], rank=parseInt(parts[1],10);
+        var di=-1;
+        for(var i=0;i<f.deck.length;i++){ if(f.deck[i].suit===sid && f.deck[i].rank===rank){ di=i; break; } }
+        if(di<0) return;
+        var c=f.deck.splice(di,1)[0]; c.decl='stacked'; f.hand.push(c);
+        f.pickN--; f.drawPending--;
+        if(f.pickN<=0) finishDraw(); else refresh();
+      });
+    });
+    var rs=$('fifty-reshuffle');
+    if(rs) rs.addEventListener('click',function(){ if(reshuffle()) refresh(); else finishDraw(); });
+    var ds=$('fifty-drawstep');
+    if(ds) ds.addEventListener('click',function(){ startDraw(Math.max(0,(lvl>=11?7:5)-f.hand.length), 'drawstep'); });
+    var ex=$('fifty-extra');
+    if(ex) ex.addEventListener('click',function(){ if(spendOrToast(2)) startDraw(1, 'extra'); });
+    var mu=$('fifty-mulligan');
+    if(mu) mu.addEventListener('click',function(){
+      if(!spendOrToast(3)) return;
+      f.hand.forEach(function(c){ f.discard.push(c); });
+      f.hand=[]; startDraw(5, 'mulligan');
+    });
+    var et=$('fifty-endturn');
+    if(et) et.addEventListener('click',function(){
+      if(lvl>=18 || f.hand.length<=2){
+        f.sleight=false; f.endArmed=false;
+        toast(lvl>=18?'Long Game — hand held free.':'Turn ended.');
+        refresh(); return;
+      }
+      if(!f.endArmed){ f.endArmed=true; refresh(); }
+    });
+    var ph=$('fifty-payhold');
+    if(ph) ph.addEventListener('click',function(){
+      var n=f.hand.length-2;
+      if(!spendOrToast(n)) return;
+      f.sleight=false; f.endArmed=false;
+      toast('Held for '+n+' CE — turn ended.'); refresh();
+    });
+    var ne=$('fifty-newenc');
+    if(ne) ne.addEventListener('click',function(){
+      if(!f.newArmed){
+        f.newArmed=true; f.newArmedTok=Date.now();
+        var tok=f.newArmedTok;
+        setTimeout(function(){ if(f.newArmedTok===tok){ f.newArmed=false; renderFiftytwo(); } }, 4000);
+        refresh(); return;
+      }
+      f.deck=[]; f.hand=[]; f.discard=[]; f.decl=null; f.coldDeck=false; f.marked=false; f.sleight=false; f.domain=false; f.mode='normal'; f.sel=[]; f.keepSel=[]; f.selCard=null; f.drawPending=0; f.peek=null; f.pickN=0; f.endArmed=false; f.newArmed=false; f.newArmedTok=0;
+      refresh(); toast('New encounter — deck reset.');
+    });
+    var ry=$('fifty-royal');
+    if(ry) ry.addEventListener('click',function(){
+      if(!spendOrToast(10)) return;
+      f.hand.forEach(function(c){ f.discard.push(c); });
+      f.hand=[];
+      refresh(); toast('Royal Flush! Hostiles within 60 ft: 50 piercing (Dex half) + restrained on a failed save. Allies within 60 ft: +50 HP, +50 temp HP. Hand discarded.');
+    });
+    function nameCard(){
+      var sEl=$('fifty-name-suit'), rEl=$('fifty-name-rank');
+      if(!sEl || !rEl) return null;
+      var sid=sEl.value, rank=parseInt(rEl.value,10), di=-1;
+      for(var i=0;i<f.deck.length;i++){ if(f.deck[i].suit===sid && f.deck[i].rank===rank){ di=i; break; } }
+      if(di<0) return null;
+      var c=f.deck.splice(di,1)[0]; c.decl='shuffled'; f.hand.push(c); return c;
+    }
+    var mk=$('fifty-marked');
+    if(mk) mk.addEventListener('click',function(){
+      var c=nameCard();
+      if(!c){ toast('That card is not in the deck — the use holds.'); return; }
+      f.marked=true; refresh(); toast('Marked Cards: drew '+fiftyRankLabel(c.rank)+fiftySuit(c.suit).sym+'.');
+    });
+    var rv=$('fifty-river');
+    if(rv) rv.addEventListener('click',function(){
+      var c=nameCard();
+      if(!c){ toast('That card is not in the deck — the use holds.'); return; }
+      f.river=true; refresh(); toast('The River: drew '+fiftyRankLabel(c.rank)+fiftySuit(c.suit).sym+'.');
+    });
+    var cs=$('fifty-cold-stacked');
+    if(cs) cs.addEventListener('click',function(){ f.decl='stacked'; f.coldDeck=true; refresh(); toast('Cold Deck — re-declared Stacked.'); });
+    var ch=$('fifty-cold-shuffled');
+    if(ch) ch.addEventListener('click',function(){ f.decl='shuffled'; f.coldDeck=true; refresh(); toast('Cold Deck — re-declared Shuffled.'); });
+    var dm=$('fifty-domain');
+    if(dm) dm.addEventListener('click',function(){
+      if(!spendOrToast(20)) return;
+      f.domain=true; refresh(); toast('The House Always Wins — the casino floor is yours.');
+    });
+    var de=$('fifty-domain-end');
+    if(de) de.addEventListener('click',function(){ f.domain=false; refresh(); });
+    var hd=$('fifty-hostile-draw');
+    if(hd) hd.addEventListener('click',function(){
+      var hostile=Math.floor(Math.random()*13)+2, house=Math.floor(Math.random()*13)+2;
+      if(house>=hostile){
+        toast('House collects: hostile drew '+hostile+', house '+house+' — stunted (action or bonus action, not both, movement halved).');
+      } else {
+        var cur=st.ce==null?ceMaxV:st.ce;
+        if(ceMaxV!=null){ st.ce=Math.min(ceMaxV, cur+3); save(); var ceEl=$('trkCe'); if(ceEl) ceEl.value=st.ce; }
+        toast('House rakes: hostile drew '+hostile+', house '+house+' — they act normally, you gain 3 CE.');
+      }
+    });
+    [['counter','fifty-feat-counter'],['marked','fifty-feat-marked'],['sleight','fifty-feat-sleight'],['river','fifty-feat-river'],['redblack','fifty-feat-redblack']].forEach(function(pair){
+      var el=$(pair[1]);
+      if(el) el.addEventListener('change',function(){ f.feats[pair[0]]=el.checked; refresh(); });
+    });
+  }
+  bindFiftytwo();
+  /* ── Adaptive Hatred ledger (e159) ── */
+  function renderAdaptive(){ var b=$('trkAdaptBody'); if(!b) return; b.innerHTML=adaptiveCardHTML(st); bindAdaptive(); }
+  function bindAdaptive(){
+    var b=$('trkAdaptBody'); if(!b) return;
+    var f=adaptiveState(st);
+    var lvl=char.level||1, die=adaptDie(lvl);
+    function refresh(){ save(); renderAdaptive(); }
+    function spendOrToast(cost){
+      if(ceMaxV==null){ toast('No CE pool.'); return false; }
+      var cur=st.ce==null?ceMaxV:st.ce;
+      if(cur<cost){ toast('Not enough CE.'); return false; }
+      spendCe(cost); return true;
+    }
+    function cem(){ return ceModNow()+hrCEModBonus(); }
+    function rollDie(){ return Math.floor(Math.random()*die)+1; }
+    function findTag(name){
+      name=name.trim().toLowerCase();
+      for(var i=0;i<f.tags.length;i++){ if(f.tags[i].name.trim().toLowerCase()===name) return i; }
+      return -1;
+    }
+    function resolveSlot(ref){
+      if(ref==='e') return f.encounterInstall;
+      if(ref[0]==='t') return f.tempSlots[parseInt(ref.slice(1),10)];
+      return f.slots[parseInt(ref.slice(1),10)];
+    }
+    function installInto(tagIdx, hardened, dataCost){
+      var idx=-1;
+      if(f.replaceTarget!=null){ idx=f.replaceTarget; f.replaceTarget=null; }
+      else { for(var i=0;i<f.slots.length;i++){ if(!f.slots[i]){ idx=i; break; } } }
+      if(idx<0) return false;
+      f.slots[idx]={tag:tagIdx, hardened:hardened, morph:null};
+      f.tags[tagIdx].data-=dataCost;
+      return true;
+    }
+    function slotFree(){ return f.replaceTarget!=null || f.slots.some(function(s){ return !s; }); }
+    var nr=$('adapt-next-round');
+    if(nr) nr.addEventListener('click',function(){ f.round++; f.recordBlocked=false; refresh(); });
+    var at=$('adapt-add-tag');
+    if(at) at.addEventListener('click',function(){
+      var nameEl=$('adapt-new-name'), kindEl=$('adapt-new-kind');
+      var name=nameEl?nameEl.value:'';
+      if(!name.trim()){ toast('Name the Threat Tag.'); return; }
+      if(findTag(name)>=0){ toast('Already in the ledger.'); return; }
+      f.tags.push({name:name.trim(), kind:kindEl?kindEl.value:'damage', data:0, lastRound:0});
+      refresh();
+    });
+    var cr=$('adapt-cancel-replace');
+    if(cr) cr.addEventListener('click',function(){ f.replaceTarget=null; refresh(); });
+    var ck=$('adapt-cancel-keter');
+    if(ck) ck.addEventListener('click',function(){ f.keterArmed=null; refresh(); });
+    b.querySelectorAll('[data-adapt-record]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var t=f.tags[parseInt(btn.getAttribute('data-adapt-record'),10)]; if(!t) return;
+        if(t.data>=3 || t.lastRound===f.round || f.recordBlocked) return;
+        if(!spendOrToast(1)) return;
+        t.data++; t.lastRound=f.round;
+        refresh(); toast('Recorded: '+t.name+' — '+t.data+' Data.');
+      });
+    });
+    b.querySelectorAll('[data-adapt-install]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var ti=parseInt(btn.getAttribute('data-adapt-install'),10);
+        var t=f.tags[ti]; if(!t || t.data<1 || !slotFree()) return;
+        if(!spendOrToast(1)) return;
+        installInto(ti, false, 1);
+        refresh(); toast('Installed Adaptation: '+t.name+'.');
+      });
+    });
+    b.querySelectorAll('[data-adapt-hardened]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var ti=parseInt(btn.getAttribute('data-adapt-hardened'),10);
+        var t=f.tags[ti]; if(!t || t.data<2 || t.kind==='environmental' || !slotFree()) return;
+        if(!spendOrToast(1)) return;
+        installInto(ti, true, 2);
+        refresh(); toast('Installed Hardened Adaptation: '+t.name+'.');
+      });
+    });
+    b.querySelectorAll('[data-adapt-keter]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var ti=parseInt(btn.getAttribute('data-adapt-keter'),10);
+        var t=f.tags[ti]; if(!t || t.data<1 || adaptSlotHasTag(f, ti) || f.keterRound===f.round) return;
+        f.keterArmed=ti; refresh();
+      });
+    });
+    b.querySelectorAll('[data-adapt-keter-slot]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var ref=btn.getAttribute('data-adapt-keter-slot');
+        var slot=resolveSlot(ref); if(!slot || f.keterArmed==null) return;
+        if(!spendOrToast(1)) return;
+        var ti=f.keterArmed;
+        slot.tag=ti; slot.hardened=false; slot.morph=null;
+        f.keterRound=f.round; f.keterArmed=null;
+        refresh(); toast('Keter Genome: Slot now answers '+f.tags[ti].name+'.');
+      });
+    });
+    b.querySelectorAll('[data-adapt-replace]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        f.replaceTarget=parseInt(btn.getAttribute('data-adapt-replace').slice(1),10); refresh();
+      });
+    });
+    b.querySelectorAll('[data-adapt-morph]').forEach(function(sel){
+      sel.addEventListener('change',function(){
+        var slot=resolveSlot(sel.getAttribute('data-adapt-morph'));
+        if(!slot) return;
+        slot.morph=sel.value||null; refresh();
+      });
+    });
+    b.querySelectorAll('[data-adapt-lent]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var slot=resolveSlot(btn.getAttribute('data-adapt-lent')); if(!slot) return;
+        var t=f.tags[slot.tag]; if(!t || t.kind==='environmental' || f.lentRound===f.round) return;
+        if(!spendOrToast(1)) return;
+        f.lentRound=f.round;
+        var benefit=t.kind==='damage'?'resistance to '+t.name:'advantage on saves vs '+t.name;
+        refresh(); toast('Lent: ally gains '+benefit+' until the start of your next turn.');
+      });
+    });
+    b.querySelectorAll('[data-adapt-hostile]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var slot=resolveSlot(btn.getAttribute('data-adapt-hostile')); if(!slot) return;
+        var t=f.tags[slot.tag]; if(!t || f.hostileRound===f.round) return;
+        if(!spendOrToast(1)) return;
+        var roll=rollDie();
+        var dtype=t.kind==='damage'?t.name:'force';
+        f.hostileRound=f.round;
+        refresh(); toast('Retaliation: unarmed strike, +'+roll+' '+dtype+' damage on a hit.');
+      });
+    });
+    b.querySelectorAll('[data-adapt-maxcheck]').forEach(function(el){
+      el.addEventListener('change',function(){
+        var ti=parseInt(el.getAttribute('data-adapt-maxcheck'),10);
+        var sel=f.maxSel||[];
+        if(el.checked){
+          if(sel.length>=2){ el.checked=false; toast('Maximum consumes exactly two Tags.'); return; }
+          sel.push(ti);
+        } else {
+          sel=sel.filter(function(i){ return i!==ti; });
+        }
+        f.maxSel=sel; refresh();
+      });
+    });
+    var ee=$('adapt-encounter-end');
+    if(ee) ee.addEventListener('click',function(){ f.encounterInstall=null; refresh(); });
+    var rg=$('adapt-regen');
+    if(rg) rg.addEventListener('click',function(){
+      if(f.regenRound===f.round) return;
+      var cur=st.hp==null?hpMaxV:st.hp;
+      if(hpMaxV==null || cur>=hpMaxV/2){ toast('Regenerative Hate needs you below half HP.'); return; }
+      var roll=rollDie(), heal=roll+cem();
+      f.regenRound=f.round;
+      refresh(); toast('Regenerative Hate: '+roll+' + '+cem()+' = '+heal+' HP (mark it in the HP tracker).');
+    });
+    var tm=$('adapt-term');
+    if(tm) tm.addEventListener('click',function(){
+      var newEl=$('adapt-term-new'), kindEl=$('adapt-term-kind'), selEl=$('adapt-term-tag');
+      var newName=newEl?newEl.value:'';
+      var ti=-1;
+      if(newName.trim()){
+        ti=findTag(newName);
+        if(ti<0){ f.tags.push({name:newName.trim(), kind:kindEl?kindEl.value:'damage', data:0, lastRound:0}); ti=f.tags.length-1; }
+      } else if(selEl && selEl.value!==''){
+        ti=parseInt(selEl.value,10);
+      } else {
+        toast('Pick or name a triggering Tag.'); return;
+      }
+      var rolls=0;
+      for(var i=0;i<4;i++) rolls+=rollDie();
+      var heal=rolls+cem();
+      f.tags[ti].data=3;
+      f.encounterInstall={tag:ti, hardened:true, morph:null};
+      f.termination=true;
+      refresh(); toast('Termination Failure: remain at 1 HP. Heal '+heal+' (mark it). 3 Data in '+f.tags[ti].name+'. Hardened Adaptation installed without a Slot until the encounter ends.');
+    });
+    var mx=$('adapt-max');
+    if(mx) mx.addEventListener('click',function(){
+      var sel=f.maxSel||[];
+      if(sel.length!==2) return;
+      if(!spendOrToast(10)) return;
+      sel.forEach(function(ti){ f.tags[ti].data=0; });
+      f.tempSlots=sel.map(function(ti){ return {tag:ti, hardened:false, morph:null}; });
+      f.maximum=true; f.maxSel=[];
+      refresh(); toast('Abhorrent Evolution: Large if space permits, +10 ft speed, unarmed strikes +1 Adaptation Die. Two temporary Slots filled.');
+    });
+    var me=$('adapt-max-end');
+    if(me) me.addEventListener('click',function(){
+      f.tempSlots=[]; f.maximum=false;
+      st.exhaustion=(st.exhaustion||0)+1; f.recordBlocked=true;
+      save(); renderAdaptive(); renderExh();
+      toast('Maximum ends: temporary Slots gone, +1 exhaustion, cannot record Data until the end of your next turn.');
+    });
+    var rb=$('adapt-rebuild');
+    if(rb) rb.addEventListener('click',function(){
+      var nameEl=$('adapt-rebuild-name'), kindEl=$('adapt-rebuild-kind');
+      var name=nameEl?nameEl.value:'';
+      if(!name.trim()){ toast('Name the Tag the matter demonstrates.'); return; }
+      var pb=Math.floor((lvl-1)/4)+2, total=0;
+      for(var i=0;i<pb;i++) total+=rollDie();
+      var ti=findTag(name);
+      if(ti<0) f.tags.push({name:name.trim(), kind:kindEl?kindEl.value:'environmental', data:1, lastRound:0});
+      else f.tags[ti].data=Math.min(3, f.tags[ti].data+1);
+      refresh(); toast('Consume and Rebuild: regain '+total+' HP (mark it) + 1 Data in '+name.trim()+'.');
+    });
+    [['lent','adapt-feat-lent'],['hostile','adapt-feat-hostile'],['keter','adapt-feat-keter'],['rebuild','adapt-feat-rebuild']].forEach(function(pair){
+      var el=$(pair[1]);
+      if(el) el.addEventListener('change',function(){ f.feats[pair[0]]=el.checked; refresh(); });
+    });
+  }
+  bindAdaptive();
   function renderExh(){ var b=$('trkExhBody'); if(!b) return; b.innerHTML=exhCardHTML(st); bindExh(); }
   function bindExh(){
     var b=$('trkExhBody'); if(!b) return;
