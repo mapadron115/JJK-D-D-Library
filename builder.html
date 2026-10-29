@@ -547,7 +547,7 @@ img{max-width:100%;height:auto}
 <div class="hero-art" aria-hidden="true"><img src="assets/img/hero-pagoda-battle.jpg" alt="" loading="eager"></div>
     <div class="eyebrow"><span class="orn">❖</span> Illustrated · IL-RA-02 · Character Builder <span class="orn">❖</span></div>
     <h1>Character <span class="amp">Builder</span></h1>
-    <p class="lede">Walk from concept to finished character sheet in eight steps — D&amp;D Beyond order, Ritual Archive canon. Roll your dice, pick any technique from the full codex, and the sheet builds itself.</p>
+    <p class="lede">Walk from concept to finished character sheet in nine steps — D&amp;D Beyond order, Ritual Archive canon. Roll your dice, pick any technique from the full codex, and the sheet builds itself.</p>
   </div>
   <div id="mgrError"></div>
   <div class="panel"><div class="panel-pad">
@@ -627,7 +627,7 @@ function isToolEntry(e){
   var k=(e&&e.kind)||'';
   return k==='Cursed Tool'||k==='Djinn / Metal Vessel'||k==='Sacred Treasure'||(e&&e.id==='e062');
 }
-var TECHNIQUES = ORIGINALS.filter(function(e){ return !isToolEntry(e) && (e.kind||'')!=='Subsystem primer'; });
+var TECHNIQUES = ORIGINALS.filter(function(e){ return !isToolEntry(e) && (e.kind||'')!=='Subsystem primer' && (e.kind||'')!=='Cursed Spirit'; });
 var TOTAL_TECH = FIGURES.length + TECHNIQUES.length;
 /* NPC-locked entries (e.g. Vlad III) are viewable but not selectable — count honestly */
 var PICKABLE_TECH = TOTAL_TECH - FIGURES.filter(function(e){ return e.visibility==='npc'; }).length;
@@ -848,7 +848,6 @@ var PRESET_FEATS = ['Beginner Cursed Energy'];
    dossiers: [{name, prereq, text}]. window.CODEX_FEATS (data/codex_feats.js)
    maps historical-figure codex id (e.g. 'miyamoto-musashi') to that figure's
    hand-authored Innate Technique Feats, same shape. */
-function chosenTechEntry(){ var all=chosenTechEntries(); return all.length?all[0]:null; }
 function techFeatsForAll(){
   var out=[], seen={};
   chosenTechEntries().forEach(function(entry){
@@ -1493,12 +1492,6 @@ function traitFlatHP(){
   if(t==='perfect-form') n+=(s==='awakened'?4:s==='stirring'?2:1)*L;
   if(t==='living-prison') n+=(s==='awakened'?6:s==='stirring'?4:2)*L;
   return n;
-}
-function traitMaxBonus(){
-  var t=char.specialTrait, s=traitStage();
-  if(t==='perfect-form') return s==='awakened'?8:s==='stirring'?4:0;
-  if(t==='living-prison') return s==='stirring'||s==='awakened'?4:2;
-  return 0;
 }
 function abilityCeilingAt(ability, level){
   /* V6: 20 standard; Heavenly Restriction raises to 25 at 1st, +1 per level after, max 40.
@@ -3098,12 +3091,12 @@ function renderManualUI(){
     $('man_'+a).addEventListener('input',function(e){
       var v=parseInt(e.target.value,10);
       char.abilityBase[a]=isNaN(v)?undefined:Math.max(3,Math.min(abilityCeiling(a),v));
-      applyAncestry(); renderFinal(); refreshNav();
+      applyAncestry(); renderFinal(); refreshNav(); renderStatsSidebar();
     });
     $('man_'+a).addEventListener('change',function(e){
       var v=parseInt(e.target.value,10);
       if(isNaN(v)) v=3; v=Math.max(3,Math.min(abilityCeiling(a),v));
-      e.target.value=v; char.abilityBase[a]=v; applyAncestry(); renderFinal(); refreshNav();
+      e.target.value=v; char.abilityBase[a]=v; applyAncestry(); renderFinal(); refreshNav(); renderStatsSidebar();
     });
   });
   renderFinal();
@@ -3130,17 +3123,17 @@ function renderAssignUI(){
     $('asg_'+a).addEventListener('change',function(e){
       var v=e.target.value===''?null:parseInt(e.target.value,10);
       diceAssign[a]=v; char.abilityBase[a]=v||undefined;
-      applyAncestry(); renderAssignUI(); renderFinal(); refreshNav();
+      applyAncestry(); renderAssignUI(); renderFinal(); refreshNav(); renderStatsSidebar();
     });
   });
   $('autoAssign').addEventListener('click',function(){
     var sorted=dicePool.slice().sort(function(a,b){return b-a;});
     ABILITIES.forEach(function(a,i){ diceAssign[a]=sorted[i]; char.abilityBase[a]=sorted[i]; });
-    applyAncestry(); renderAssignUI(); renderFinal(); refreshNav();
+    applyAncestry(); renderAssignUI(); renderFinal(); refreshNav(); renderStatsSidebar();
   });
   ABILITIES.forEach(function(a){
     var cell=$('fin_'+a);
-    if(cell && char.abilities[a]>0) cell.innerHTML=char.abilities[a]+' <small>('+modStr(char.abilities[a])+')</small>';
+    if(cell && char.abilities[a]>0) cell.innerHTML=char.abilities[a]+' <small>(mod '+modStr(char.abilities[a])+')</small>';
   });
   renderFinal();
 }
@@ -3234,7 +3227,7 @@ function renderFinal(){
     h.pick.counts.forEach(function(n,i){
       $('apick_'+i).addEventListener('change',function(e){
         char.ancestryPicks=char.ancestryPicks||{}; char.ancestryPicks['p'+i]=e.target.value;
-        applyAncestry(); renderFinal();
+        applyAncestry(); renderFinal(); renderStatsSidebar();
         if(char.abilityMethod!=='manual') renderAssignUI();
         refreshNav();
       });
@@ -3409,10 +3402,6 @@ function ccDefByKey(cls,key){
   return null;
 }
 /* character level L where cls reaches class level g (the row that grants it) */
-function grantRow(cls,g){
-  for(var L=1;L<=char.level;L++) if(clsAt(L)===cls&&classLevelCount(cls,L)===g) return L;
-  return 0;
-}
 function ccGet(cls,key){ var c=char.classChoices||{}; return (c[cls]||{})[key]||null; }
 function ccSet(cls,key,val){
   char.classChoices=char.classChoices||{};
@@ -5723,7 +5712,7 @@ function crazyResultHTML(c){
   }
   var w2=crazyWeapon(c.lastTake);
   if(c.lastMode==='second') return '<p class="small"><b>Second Spin: first roll '+c.lastRolls[0]+' — the clown\'s mulligan. You must take the second: '+c.lastTake+' — '+esc(w2.name)+'.</b> '+esc(w2.line)+'</p>';
-  if(c.lastMode==='encore') return '<p class="small"><b>Encore!</b> The clown deals '+c.lastTake+' — '+esc(w2.name)+'.</b> '+esc(w2.line)+'</p>';
+  if(c.lastMode==='encore') return '<p class="small"><b>Encore!</b> The clown deals '+c.lastTake+' — '+esc(w2.name)+'. '+esc(w2.line)+'</p>';
   if(c.lastMode==='contract') return '<p class="small"><b>Contract ('+esc(c.lastKind)+', '+esc(c.lastPrice)+'): rolls '+c.lastRolls.join(' and ')+' — takes '+c.lastTake+' — '+esc(w2.name)+ (c.lastTie?' (both fit the kind alike, or neither did — the clown keeps the first).':'.')+'</b> '+esc(w2.line)+'</p>';
   return '<p class="small"><b>The clown deals '+c.lastTake+' — '+esc(w2.name)+'.</b> '+esc(w2.line)+'</p>';
 }
@@ -6219,7 +6208,7 @@ function miracleCardHTML(st){
   var lvl=char.level||1, pb=pbFor(lvl), cem=ceModEff();
   var perWitness=lvl>=18?3:lvl>=11?2:1;
   var h='<div class="tracker-title">Miracle · Stored Luck</div>';
-  h+='<div class="bank-num">'+f.pool+' <span class="small">/ 6</span></div><div class="small">Miracles · Witness good fortune to mint (+'+perWitness+' per witness'+(lvl>=11?' at L'+lvl:'')+'; max 6)'+(f.domain?' · Luck of the Draw Domain active (no maximum inside)':'')+'</div>';
+  h+='<div class="bank-num">'+f.pool+' <span class="small">'+(f.domain?'/ ∞ (Domain)':'/ 6')+'</span></div><div class="small">Miracles · Witness good fortune to mint (+'+perWitness+' per witness'+(lvl>=11?' at L'+lvl:'')+'; max 6)'+(f.domain?' · Luck of the Draw Domain active (no maximum inside)':'')+'</div>';
   h+='<div style="margin-top:8px">Witnessed: <button id="mir-max">Rolled maximum</button> <button id="mir-equal">Equal numbers twice running</button> <button id="mir-treasure">$1,000 treasure</button> <button id="mir-hardship">Hardship overcome</button></div>';
   h+='<div class="small">Four fortunes mint a Miracle: a rolled maximum (damage rolls and saves count, not just d20s), two consecutive rolls by the same roller showing the same face, treasure found, hardship overcome.</div>';
   h+='<div style="margin-top:8px"><button id="mir-blind"'+(f.pool>=1 && !f.blindUsed?'':' disabled')+'>Blind Luck (free, 1 Miracle)</button> <button id="mir-blind-react"'+(f.pool>=1 && !f.blindUsed?'':' disabled')+'>Blind Luck (reaction, 1 Miracle + 1 CE)</button> <button id="mir-round">New round</button></div>';
@@ -6285,14 +6274,15 @@ function hasHakoware(){
   return (char.techniques||[]).some(function(t){ return t && t.id==='e058'; });
 }
 function hakowareState(st){
-  if(!st.hakoware) st.hakoware={loans:[], bailoutUsed:false, garnishRound:false};
+  if(!st.hakoware) st.hakoware={loans:[], bailoutUsed:false, predatory:false};
   return st.hakoware;
 }
-function roundsToBankruptcy(debt, maxCE){
+function roundsToBankruptcy(debt, maxCE, rate){
   if(debt<=0) return null;
   if(debt>maxCE) return 0;
+  var r=rate||1.10;
   var d=debt, n=0;
-  while(d<=maxCE && n<200){ d=Math.floor(d*1.10); n++; }
+  while(d<=maxCE && n<200){ d=Math.floor(d*r); n++; }
   return n>=200?null:n;
 }
 function hakowareCardHTML(st){
@@ -6303,6 +6293,7 @@ function hakowareCardHTML(st){
   var active=f.loans.filter(function(l){ return !l.bankrupt; }).length;
   var h='<div class="tracker-title">Hakoware · A.P.R. Ledger</div>';
   h+='<div class="small">Principal '+principal+' (2×level'+(lvl>=18?', 3× at L18':'')+') added to the debtor\'s current and max CE on latching. One loan at a time'+(lvl>=6?', two at L6+':'')+'. Potclean can\'t be damaged while a loan is active.</div>';
+  h+='<div style="margin-top:6px"><label><input type="checkbox" id="hak-pred"'+(f.predatory?' checked':'')+'> Predatory Lending feat — interest 15%/round (compounds on debt + pending)</label></div>';
   if(active<cap){
     h+='<div style="margin-top:8px">Debtor: <input id="hak-name" type="text" placeholder="Name" style="width:110px"> Max CE (after principal): <input id="hak-max" type="number" min="0" value="" placeholder="0" style="width:70px"> <button id="hak-new">Conjure Potclean (action, 2 CE)</button></div>';
   } else {
@@ -6310,10 +6301,11 @@ function hakowareCardHTML(st){
   }
   f.loans.forEach(function(l, idx){
     var eff=l.debt+l.pending;
-    var rtb=roundsToBankruptcy(l.debt, l.maxCE);
+    var rate=f.predatory?1.15:1.10;
+    var rtb=roundsToBankruptcy(l.debt+l.pending, l.maxCE, rate);
     h+='<div class="adapt-slot"><b>'+l.name+'</b>'+(l.bankrupt?' — <b>BANKRUPT</b>':(l.debt>l.maxCE?' — <b>BANKRUPT</b>':''));
     h+='<div class="bank-num">'+l.debt+' <span class="small">debt · Max CE '+l.maxCE+' · Pending damage '+l.pending+' · Effective '+(eff)+'</span></div>';
-    if(lvl>=3 && !l.bankrupt) h+='<div class="small">Audit: rounds until bankruptcy at the current rate (no new damage): '+(rtb==null?'—':rtb)+'</div>';
+    if(lvl>=3 && !l.bankrupt) h+='<div class="small">Audit: rounds until bankruptcy at '+(rate===1.15?'15% (Predatory Lending)':'10%')+'/round (no new damage): '+(rtb==null?'—':rtb)+'</div>';
     if(l.bankrupt){
       h+='<div class="small">Bankrupt: debtor can\'t spend CE until a long rest; Potclean has returned.</div>';
       h+='<div style="margin-top:6px"><button data-hak-clear="'+idx+'">Clear loan</button></div>';
@@ -6363,8 +6355,8 @@ function styleCardHTML(st){
     h+='<div style="margin-top:6px">Second Style (SS+, Quadruple Style): <select id="style-second"><option value="">— none —</option>'+['Swordmaster','Gunslinger','Trickster','Royalguard'].map(function(s){ return '<option value="'+s+'"'+(f.secondStyle===s?' selected':'')+'>'+s+'</option>'; }).join('')+'</select></div>';
     if(f.secondStyle) h+='<div class="small">'+f.secondStyle+': '+STYLE_INFO[f.secondStyle]+'</div>';
   }
-  h+='<div style="margin-top:8px">Guards: <b>'+f.guards+' / '+pb+'</b> <button id="style-guard">Royalguard reduction (reaction, 1 CE)</button> <span style="white-space:nowrap">Spend <input id="style-guard-amt" type="number" min="1" value="1" style="width:50px"> <button id="style-guard-ac">for +1 AC (reaction)</button> <button id="style-guard-hit">on a melee hit (+1d10 force each)</button></span></div>';
-  h+='<div class="small">Each Royalguard reduction stores 1 Guard (max PB). Spend 1 Guard as a reaction for +1 AC until the start of your next turn; on a melee hit, spend any Guard for +1d10 force each.</div>';
+  h+='<div style="margin-top:8px">Guards: <b>'+f.guards+' / '+pb+'</b> <button id="style-guard">Royalguard reduction (reaction, 1 CE)</button> <span style="white-space:nowrap">Spend <input id="style-guard-amt" type="number" min="1" value="1" style="width:50px"> <button id="style-guard-ac">for +AC (reaction)</button> <button id="style-guard-hit">on a melee hit (+1d10 force each)</button></span></div>';
+  h+='<div class="small">Each Royalguard reduction stores 1 Guard (max PB). Spend any Guard as a reaction: +1 AC per Guard (cap PB, 2×PB at L11+) until the start of your next turn; on a melee hit, spend any Guard for +1d10 force each.</div>';
   if(lvl>=9 && !f.trigger){
     h+='<div style="margin-top:8px"><button id="style-trigger">Devil Trigger (action, '+(f.rankIdx>=4?'3':'4')+' CE, 1 min)</button></div>';
     h+='<div class="small">30-ft fly, heal PB HP/turn, resistance to bludgeoning/piercing/slashing, attacks +1d8. Cost 3 CE at S rank.</div>';
@@ -6408,7 +6400,7 @@ function kineticCardHTML(st){
   var h='<div class="tracker-title">Kinetic Imbuement · Loaded Objects</div>';
   h+='<div class="small">Kinetic Die '+die+' (d6 → d8 at L11 → d10 at L18). Charge lasts 1 minute (10 minutes at L11, 1 hour at L18). Detonation: 2 dice per Charge as force, radius up to 5 ft per Charge (5-ft steps, down to a focused 0-ft discharge); you are unaffected, others Dex save for half. An ordinary charged object is destroyed when it detonates; the centered object takes maximum damage.</div>';
   h+='<div style="margin-top:8px">Object: <input id="kin-name" type="text" placeholder="Name" style="width:110px"> Scale: <select id="kin-scale"><option value="Token">Token</option><option value="Handheld">Handheld</option><option value="Set Piece">Set Piece</option><option value="Landmark">Landmark</option></select> Charges: <input id="kin-amt" type="number" min="1" value="1" style="width:60px"> <button id="kin-charge">Charge (CE = charges)</button></div>';
-  h+='<div class="small">Deposit limit per step: Token/Handheld PB ('+pb+'); Set Piece/Landmark '+(lvl>=11?'2×PB ('+(2*pb)+')':'PB ('+pb+') before L11')+'. 1 CE = 1 Charge. Bound Conduit capacity 2×PB ('+(2*pb)+').</div>';
+  h+='<div class="small">Deposit limit per step: Token/Handheld PB ('+pb+'); Set Piece/Landmark '+(lvl>=11?'2×PB ('+(2*pb)+')':'PB ('+pb+') before L11')+'. 1 CE = 1 Charge. Bound Conduit capacity 2×PB ('+(2*pb)+'). Total capacity: Token PB ('+pb+'), Handheld 2×PB ('+(2*pb)+'), Set Piece 4×PB ('+(4*pb)+'), Landmark uncapped.</div>';
   f.objects.forEach(function(o, idx){
     var conduit=o.bound?' · <b>Bound Conduit</b>':'';
     h+='<div class="adapt-slot"><b>'+o.name+'</b> ('+o.scale+') — '+o.charges+' Charge'+(o.charges!==1?'s':'')+', '+o.charges*2+die+' on detonation, radius up to '+(o.charges*5)+' ft'+conduit+'</div>';
@@ -6562,10 +6554,11 @@ function hasTen(){
   return (char.techniques||[]).some(function(t){ return t && t.id==='e035'; });
 }
 function tenState(st){
-  if(!st.ten) st.ten={roster:{dogW:{tamed:true},dogB:{tamed:true}}, manifested:[], fusions:[], worn:null, wheel:{active:false,used:false,tracks:[],advanceUsed:false,edgeUsed:false,quickUsed:0}, domain:{active:false,clones:0,copyUsed:false}, storage:[], mahoragaLR:0, rabbitFreeUsed:false};
+  if(!st.ten) st.ten={roster:{dogW:{tamed:true},dogB:{tamed:true}}, manifested:[], fusions:[], worn:null, wheel:{active:false,used:false,tracks:[],advanceUsed:false,edgeUsed:false,quickUsed:0}, domain:{active:false,clones:0,copyUsed:false}, storage:[], mahoragaLR:0, rabbitFreeUsed:false, wheelLockout:false};
   if(!st.ten.roster) st.ten.roster={dogW:{tamed:true},dogB:{tamed:true}};
   if(!st.ten.wheel) st.ten.wheel={active:false,used:false,tracks:[],advanceUsed:false,edgeUsed:false,quickUsed:0};
   if(!st.ten.domain) st.ten.domain={active:false,clones:0,copyUsed:false};
+  if(st.ten.wheelLockout==null) st.ten.wheelLockout=false;
   return st.ten;
 }
 function tenRosterEntry(f, key){
@@ -6621,7 +6614,7 @@ function tenCardHTML(st){
     var slotBlocked=spec.key!=='mahoraga' && f.manifested.some(function(e){ return e.key==='mahoraga'; });
     var pairFree=(spec.key==='dogW'||spec.key==='dogB') && f.manifested.some(function(e){ return e.key==='dogW'||e.key==='dogB'; });
     var gamaFree=spec.key==='gama' && f.manifested.some(function(e){ return e.key==='gama'; });
-    var manifestOk=canManifest && !mahoragaBlocked && !slotBlocked && (used<cap || pairFree || gamaFree);
+    var manifestOk=canManifest && !mahoragaBlocked && !slotBlocked && (used<cap || pairFree || gamaFree) && !(spec.key==='mahoraga' && f.wheelLockout);
     h+='<div class="adapt-slot"><b>'+spec.name+'</b> — '+cost+' CE · HP '+maxHp+' · AC '+spec.ac+' · '+status;
     h+='<div class="small">'+spec.note+'</div>';
     h+='<div style="margin-top:4px">';
@@ -6630,7 +6623,7 @@ function tenCardHTML(st){
       if(spec.key==='gama') h+='Manifest <input data-ten-gama-count type="number" min="1" max="4" value="1" style="width:45px"> toads ';
       h+='<button data-ten-manifest="'+spec.key+'"'+(manifestOk?'':' disabled')+'>Manifest ('+(f.domain.active?'0':(spec.key==='gama'?'1 CE each':cost+' CE'))+')</button> ';
     }
-    if(lvl>=8 && r.tamed && !r.destroyed && !r.passedOn && manCount===0 && !tenIsFused(f, spec.key)) h+='<button data-ten-wear="'+spec.key+'">Wear shadow ('+Math.max(1, Math.ceil(cost/2))+' CE, 1 min)</button>';
+    if(lvl>=8 && r.tamed && !r.destroyed && !r.passedOn && manCount===0 && !tenIsFused(f, spec.key) && !f.wheelLockout) h+='<button data-ten-wear="'+spec.key+'">Wear shadow ('+Math.max(1, Math.ceil(cost/2))+' CE, 1 min)</button>';
     if(spec.key==='rabbit' && r.tamed && !r.destroyed && !r.passedOn) h+=' <button data-ten-rabbit="'+spec.key+'">Singular rabbit (1 CE / free 1/long rest)</button>';
     h+='</div></div>';
   });
@@ -6656,7 +6649,7 @@ function tenCardHTML(st){
     var wspec=tenSpec(f.worn);
     h+='<div class="fifty-panel"><b>Shadow Wearing: '+wspec.name+' (1 min)</b><div class="small">Attacks use your CE attack bonus; saves use your CE save DC; uses your action economy. An expended once-per-activation ability returns only on a new activation. Not a second creature or separate HP pool. Ends early: unconscious, dismissed, or another form.</div><div style="margin-top:6px"><button id="ten-worn-end">End wearing</button></div></div>';
   }
-  if(lvl>=11 && f.manifested.filter(function(e){ return !e.copy; }).length>=2){
+  if(lvl>=11 && !f.wheelLockout && f.manifested.filter(function(e){ return !e.copy; }).length>=2){
     h+='<div style="margin-top:8px">Fuse (action, no extra CE): <select id="ten-fuse-a">'+f.manifested.filter(function(e){ return !e.copy; }).map(function(e, i){ return '<option value="'+i+'">'+tenSpec(e.key).name+'</option>'; }).join('')+'</select> + <select id="ten-fuse-b">'+f.manifested.filter(function(e){ return !e.copy; }).map(function(e, i){ return '<option value="'+i+'">'+tenSpec(e.key).name+'</option>'; }).join('')+'</select> as <input id="ten-fuse-name" type="text" placeholder="Fusion name (from the catalog)" style="width:150px"> HP <input id="ten-fuse-hp" type="number" min="1" value="" placeholder="0" style="width:70px"> <button id="ten-fuse">Fuse</button></div>';
     h+='<div class="small">Wells Unknown Abyss: one of fifteen predetermined recipes. Fusion occupies one slot; components can\'t exist separately. Undo as a bonus action (no HP regained). If the fusion reaches 0 HP, both components die permanently and qualify for Totality.</div>';
   }
@@ -6668,8 +6661,10 @@ function tenCardHTML(st){
   }
   if(lvl>=17){
     var mah=tenRosterEntry(f, 'mahoraga');
+    var mahBusy=f.manifested.some(function(e){ return e.key==='mahoraga'; }) || tenIsFused(f, 'mahoraga') || f.worn==='mahoraga';
     if(!f.wheel.active){
-      h+='<div style="margin-top:8px"><button id="ten-wheel"'+(mah.tamed && !mah.destroyed && !mah.passedOn && !f.wheel.used?'':' disabled')+'>Wheel Wearing — wear Mahoraga\'s shadow (bonus action, 10 CE, 1/long rest)</button></div>';
+      h+='<div style="margin-top:8px"><button id="ten-wheel"'+(mah.tamed && !mah.destroyed && !mah.passedOn && !f.wheel.used && !mahBusy && !f.wheelLockout?'':' disabled')+'>Wheel Wearing — wear Mahoraga\'s shadow (bonus action, 10 CE, 1/long rest)</button></div>';
+      if(f.wheelLockout) h+='<div class="fifty-panel"><b>Wheel-end lockout active:</b> no Shadow Wearing, Mahoraga, or fusions until the end of your next turn. <button id="ten-lockout-clear">Lockout ended</button></div>';
       h+='<div class="small">Prerequisite: Mahoraga tamed and available. 1 minute. Locks Mahoraga as source.</div>';
     } else {
       h+='<div class="fifty-panel"><b>Wheel Wearing active (1 min)</b><div class="small">Tracks maintained: '+f.wheel.tracks.length+' / '+pb+'. At end of your turn, advance one exposed track one turn (max once per round). 1 turn: advantage on saves/checks vs that effect. 2 turns: resistance, or advantage + limited removal. 3 turns: immunity (or ignore/counter) for the rest of Wheel Wearing. Quick Adaptation: reaction, 3 CE, advance one existing track immediately ('+pb+' per long rest).</div>';
@@ -6967,7 +6962,7 @@ function bindTrackers(hpMaxV, ceMaxV){
     if(st.jin){ st.jin.charges=0; st.jin.domain=false; }
     if(st.miracle){ st.miracle.blindUsed=false; st.miracle.domain=false; }
     if(st.visitors){ var vs=st.visitors; vs.swarm=false; vs.swarmHp=null; vs.dispersed=false; vs.freeReformUsed=false; vs.pileFreeUsed=false; vs.maxActive=false; }
-    if(st.hakoware){ var hk=st.hakoware; hk.loans=hk.loans.filter(function(l){ return !l.bankrupt; }); hk.bailoutUsed=false; }
+    if(st.hakoware){ var hk=st.hakoware; hk.loans=hk.loans.filter(function(l){ return !l.bankrupt; }); hk.loans.forEach(function(l){ l.garnishUsed=false; }); hk.bailoutUsed=false; }
     if(st.style){ var sy=st.style; sy.rankIdx=(char.level>=20?2:0); sy.riseUsed=false; sy.aIgnoreUsed=false; sy.trigger=false; sy.danteUsed=false; sy.sinTrigger=false; sy.sinRounds=0; sy.quadUsed=false; }
     if(st.kinetic) st.kinetic.objects=[];
     if(st.overdue){ st.overdue.books=[]; st.overdue.deniedUsed=false; st.overdue.specialUsed=false; }
@@ -7957,7 +7952,7 @@ function bindTrackers(hpMaxV, ceMaxV){
       var vented=Math.min(want, 30, f.bank);
       var dice=Math.max(0, Math.floor(vented/10));
       f.bank-=vented;
-      refresh(); toast('Backdraft: vented '+vented+' Pain → '+dice+'d6 fire (Dex save for half). Bank '+f.bank+'.');
+      refresh(); toast(dice>0?('Backdraft: vented '+vented+' Pain → '+dice+'d6 fire (Dex save for half). Bank '+f.bank+'.'):('Backdraft: vented '+vented+' Pain — under 10, so no damage dice (the dossier sets no minimum). Bank '+f.bank+'.'));
     });
     var au=$('pain-aura');
     if(au) au.addEventListener('click',function(){
@@ -8054,8 +8049,8 @@ function bindTrackers(hpMaxV, ceMaxV){
       f.charges-=n;
       var extra=(lvl>=11 && n>=3)?' Range +30 ft, deals thunder.':'';
       refresh();
-      if(form==='bludgeoning') toast('Explosive Power: 15-ft cone, Con save, '+(2*n)+'d6 bludgeoning per charge, prone on fail.'+extra);
-      else toast('Explosive Power: 30-ft line, Dex save, '+(2*n)+'d10 slashing per charge.'+extra);
+      if(form==='bludgeoning') toast('Explosive Power: 15-ft cone, Con save, 2d6 bludgeoning per charge ('+(2*n)+'d6 total for '+n+' charges), prone on fail.'+extra);
+      else toast('Explosive Power: 30-ft line, Dex save, 2d10 slashing per charge ('+(2*n)+'d10 total for '+n+' charges).'+extra);
     });
     var gv=$('jin-give');
     if(gv) gv.addEventListener('click',function(){
@@ -8068,7 +8063,7 @@ function bindTrackers(hpMaxV, ceMaxV){
       f.charges-=n; refresh(); toast('Gave '+n+' Jin charges to a touched creature.');
     });
     var dm=$('jin-domain');
-    if(dm) dm.addEventListener('click',function(){ f.domain=true; refresh(); toast('Hall of Divine Bagua — unlimited Jin charges inside.'); });
+    if(dm) dm.addEventListener('click',function(){ if(!spendOrToast(20)) return; f.domain=true; refresh(); toast('Hall of Divine Bagua — unlimited Jin charges inside (20 CE).'); });
     var de=$('jin-domain-end');
     if(de) de.addEventListener('click',function(){ f.domain=false; refresh(); });
   }
@@ -8301,12 +8296,13 @@ function bindTrackers(hpMaxV, ceMaxV){
     b.querySelectorAll('[data-hak-tick]').forEach(function(el){
       el.addEventListener('click',function(){
         var l=f.loans[+el.getAttribute('data-hak-tick')];
-        l.debt=Math.floor((l.debt+l.pending)*1.10);
+        var rate=f.predatory?1.15:1.10;
+        l.debt=Math.floor((l.debt+l.pending)*rate);
         l.pending=0;
         var bankrupted=l.debt>l.maxCE;
         if(bankrupted) l.bankrupt=true;
         refresh();
-        toast(bankrupted?'BANKRUPTCY — '+l.name+' can\'t spend CE until a long rest; Potclean has returned.':'Tick: debt '+l.debt+' (max CE '+l.maxCE+').');
+        toast(bankrupted?'BANKRUPTCY — '+l.name+' can\'t spend CE until a long rest; Potclean has returned.':'Tick ('+(f.predatory?'15%':'10%')+'): debt '+l.debt+' (max CE '+l.maxCE+').');
       });
     });
     b.querySelectorAll('[data-hak-gar-btn]').forEach(function(el){
@@ -8350,6 +8346,8 @@ function bindTrackers(hpMaxV, ceMaxV){
       f.loans.forEach(function(l){ l.garnishUsed=false; });
       refresh();
     });
+    var pr=$('hak-pred');
+    if(pr) pr.addEventListener('change',function(){ f.predatory=pr.checked; refresh(); });
   }
   bindHakoware();
   /* ── Style Devil rank, styles, guards, gauge (e110) ── */
@@ -8415,7 +8413,9 @@ function bindTrackers(hpMaxV, ceMaxV){
       var n=amtEl?parseInt(amtEl.value,10):NaN;
       if(isNaN(n) || n<=0){ toast('Enter Guards to spend.'); return; }
       if(n>f.guards){ toast('Only '+f.guards+' Guards stored.'); return; }
-      f.guards-=n; refresh(); toast('Spent '+n+' Guard'+(n>1?'s':'')+': +1 AC until the start of your next turn.');
+      var cap=lvl>=11?2*pb:pb;
+      var spent=Math.min(n, cap);
+      f.guards-=spent; refresh(); toast('Spent '+spent+' Guard'+(spent>1?'s':'')+': +'+spent+' AC until the start of your next turn.'+(n>cap?' (AC capped at '+(lvl>=11?'2×PB':'PB')+'.)':''));
     });
     var gh=$('style-guard-hit');
     if(gh) gh.addEventListener('click',function(){
@@ -8506,6 +8506,7 @@ function bindTrackers(hpMaxV, ceMaxV){
       var existing=null;
       f.objects.forEach(function(o){ if(o.name===name && o.scale===scale) existing=o; });
       if(existing && existing.bound && existing.charges+amt>2*pb){ toast('Bound Conduit capacity is 2×PB ('+(2*pb)+').'); return; }
+      if(existing && !existing.bound){ var totCap=scale==='Token'?pb:scale==='Handheld'?2*pb:scale==='Set Piece'?4*pb:Infinity; if(existing.charges+amt>totCap){ toast(scale+' total capacity is '+(totCap===Infinity?'unlimited':totCap)+' Charges.'); return; } }
       if(!spendOrToast(amt)) return;
       if(existing) existing.charges+=amt;
       else f.objects.push({name:name, scale:scale, charges:amt, bound:false});
@@ -8873,7 +8874,7 @@ function bindTrackers(hpMaxV, ceMaxV){
       f.manifested.splice(idx, 1);
       if(!e.copy){
         r.destroyed=true;
-        toast(tenSpec(e.key).name+' destroyed — permanent. It qualifies for the Totality ritual.');
+        toast(tenSpec(e.key).name+' destroyed — permanent.'+((e.key==='rabbit'||e.key==='mahoraga')?'':' It qualifies for the Totality ritual.'));
       }
       refresh();
     }
@@ -9013,7 +9014,7 @@ function bindTrackers(hpMaxV, ceMaxV){
         if(!fu) return;
         f.fusions.splice(idx, 1);
         [fu.compA, fu.compB].forEach(function(c){
-          f.manifested.push({key:c.key, hp:c.hp, maxHp:c.maxHp, copy:false, duringDomain:false, totality:!!c.totality});
+          f.manifested.push({key:c.key, hp:c.hp, maxHp:c.maxHp, copy:false, duringDomain:!!c.duringDomain, totality:!!c.totality});
         });
         refresh();
         var over=tenSlotsUsed(f)>cap;
@@ -9033,7 +9034,7 @@ function bindTrackers(hpMaxV, ceMaxV){
       if(!name){ toast('Enter the fusion\'s name (from the catalog).'); return; }
       if(isNaN(hp) || hp<1){ toast('Enter the fusion\'s HP (from the catalog).'); return; }
       f.manifested=f.manifested.filter(function(e){ return e!==a && e!==b2; });
-      f.fusions.push({name:name, hp:hp, maxHp:hp, compA:{key:a.key, hp:a.hp, maxHp:a.maxHp, totality:!!a.totality}, compB:{key:b2.key, hp:b2.hp, maxHp:b2.maxHp, totality:!!b2.totality}});
+      f.fusions.push({name:name, hp:hp, maxHp:hp, compA:{key:a.key, hp:a.hp, maxHp:a.maxHp, totality:!!a.totality, duringDomain:!!a.duringDomain}, compB:{key:b2.key, hp:b2.hp, maxHp:b2.maxHp, totality:!!b2.totality, duringDomain:!!b2.duringDomain}});
       refresh(); toast('Fused into '+name+' (1 slot).');
     });
     var tt=$('ten-totality');
@@ -9059,7 +9060,8 @@ function bindTrackers(hpMaxV, ceMaxV){
     var wh=$('ten-wheel');
     if(wh) wh.addEventListener('click',function(){
       var mah=tenRosterEntry(f, 'mahoraga');
-      if(!mah.tamed || mah.destroyed || mah.passedOn || f.wheel.used) return;
+      if(!mah.tamed || mah.destroyed || mah.passedOn || f.wheel.used || f.wheelLockout) return;
+      if(f.manifested.some(function(e){ return e.key==='mahoraga'; }) || tenIsFused(f, 'mahoraga') || f.worn==='mahoraga'){ toast('Mahoraga is already manifested, fused, or worn.'); return; }
       if(!spendOrToast(10)) return;
       f.wheel.active=true; f.wheel.used=true; f.wheel.tracks=[]; f.wheel.advanceUsed=false; f.wheel.edgeUsed=false; f.wheel.quickUsed=0;
       refresh(); toast('Wheel Wearing: Mahoraga\'s shadow worn (1 min).');
@@ -9113,7 +9115,7 @@ function bindTrackers(hpMaxV, ceMaxV){
     var wend=$('ten-wheel-end');
     if(wend) wend.addEventListener('click',function(){
       var completed=f.wheel.tracks.filter(function(t){ return t.turns>=3; }).length;
-      f.wheel.active=false; f.wheel.tracks=[];
+      f.wheel.active=false; f.wheel.tracks=[]; f.wheelLockout=true;
       var exh='';
       if(completed>=3){
         st.exhaustion=(st.exhaustion||0)+1;
@@ -9122,10 +9124,13 @@ function bindTrackers(hpMaxV, ceMaxV){
       }
       refresh(); toast('Wheel Wearing ends. No Shadow Wearing, Mahoraga, or fusions until the end of your next turn.'+exh);
     });
+    var lc=$('ten-lockout-clear');
+    if(lc) lc.addEventListener('click',function(){ f.wheelLockout=false; refresh(); toast('Wheel-end lockout lifted.'); });
     var dm=$('ten-domain');
     if(dm) dm.addEventListener('click',function(){
+      if(!spendOrToast(20)) return;
       f.domain.active=true;
-      refresh(); toast('Chimera Shadow Garden expanded.');
+      refresh(); toast('Chimera Shadow Garden expanded (20 CE).');
     });
     var cl=$('ten-clone');
     if(cl) cl.addEventListener('click',function(){
