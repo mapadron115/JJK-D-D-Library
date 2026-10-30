@@ -530,7 +530,7 @@ img{max-width:100%;height:auto}
 <body>
 <header class="topbar"><div class="shell nav">
   <a class="brand" href="index.html"><span class="brand-mark">呪</span><span>Ritual Archive</span></a>
-  <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html" class="is-current">Character Builder</a><a href="codex.html">Codex</a></nav>
+  <nav class="navlinks"><a href="rules.html">Field Guide</a><a href="builder.html" class="is-current">Character Builder</a><a href="codex.html">Codex</a><a href="manuscripts.html">Manuscripts</a><a href="tools/index.html">Tools</a><a href="bestiary/index.html">Bestiary</a><a href="scp/index.html">SCP Files</a></nav>
   <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
   <span class="doc-tag">Illustrated · Builder</span>
 </div></header>
@@ -586,7 +586,7 @@ img{max-width:100%;height:auto}
 <script src="data/codex_role_fixups.js?v=20260911a"></script>
 <script src="data/codex_inner_circle.js?v=20260911h"></script>
 <script src="data/library.js?v=20261030a"></script>
-<script src="data/dossier_levels.js?v=20261030f"></script>
+<script src="data/dossier_levels.js?v=20261030g"></script>
 <script src="data/technique_feats.js?v=20261030b"></script>
 <script src="data/codex_feats.js?v=20261021a"></script>
 <script src="data/class_features.js?v=20260926a"></script>
@@ -5331,7 +5331,7 @@ function exhCardHTML(st){
   h+='</span></div><p class="small">'+esc(EXHAUSTION_FX[ex]||'')+'</p>';
   h+='<div class="small" style="margin-top:4px"><b>Conditions</b></div><div class="cond-chips">';
   CONDITIONS.forEach(function(c){ h+='<button type="button" class="cond-chip'+((st.conditions||[]).indexOf(c)>=0?' is-on':'')+'" data-cond="'+c+'">'+c+'</button>'; });
-  h+='</div><p class="small" style="margin-top:4px;opacity:.7">V6: domain burnout inflicts 2 levels; breaking a binding vow inflicts 5 levels for 10 days; long rest removes 1 level.</p>';
+  h+='</div><p class="small" style="margin-top:4px;opacity:.7">Domain burnout inflicts 2 levels; breaking a binding vow inflicts 5 levels for 10 days; long rest removes 1 level.</p>';
   return h;
 }
 function injCardHTML(st){
