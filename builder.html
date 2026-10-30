@@ -1291,7 +1291,7 @@ var HR_VARIANTS = {
             'Cannot use features requiring CE; ineligible for Cursed Energy, Barrier, and Innate Technique feats.',
             'Auto-granted: Reverse Cursed Technique, Cursed Technique Reversal, Reverse Cursed Technique Output (1 RCE counts as 2 CE for these).',
             'You gain the Reversal of your innate technique instead of its normal features (reversal rendering is GM-adjudicated).',
-            'Cursed Strike becomes Reverse Cursed Strike: spend RCE up to your proficiency bonus on a hit, +2d6 radiant per RCE.'] },
+            'Cursed Strike becomes Reverse Cursed Strike: spend RCE on a hit, +2d6 radiant per RCE.'] },
   'limited-ce':{ name:'Limited Cursed Energy', short:'Limited CE',
     tag:'Less cursed energy, more body. Choose how deep the limitation goes \u2014 rows 1\u20134 stack.',
     points:['Each limitation grants physical increases (bonus ASI and/or HP per level).',
@@ -4684,7 +4684,7 @@ function hrSheetDetailsHTML(){
   var callout=function(t){ return '<p class="small" style="margin:6px 0 0"><b>GM adjudication:</b> '+esc(t)+'</p>'; };
   if(v==='rce'){
     html+='<p class="small" style="margin:6px 0 0"><b>Auto-granted feats:</b> Reverse Cursed Technique, Cursed Technique Reversal, Reverse Cursed Technique Output (1 RCE counts as 2 CE for these).</p>';
-    html+='<p class="small" style="margin:6px 0 0"><b>Reverse Cursed Strike</b> replaces Cursed Strike: on a hit with an unarmed strike or melee weapon attack, spend RCE up to your proficiency bonus to deal +2d6 radiant per RCE.</p>';
+    html+='<p class="small" style="margin:6px 0 0"><b>Reverse Cursed Strike</b> replaces Cursed Strike: on a hit with an unarmed strike or melee weapon attack, spend RCE to deal +2d6 radiant per RCE.</p>';
     html+=callout('Reversal rendering of the chosen technique — work with the GM until codex reversal content exists.');
     if(hrCEMax()<=0) html+=callout('Your RCE pool equals your normal CE maximum. The Heavenly Restriction class grants no Reserve Die, so with no levels in a CE-granting class (and no CE bonus) the pool is 0 and RCE features have nothing to spend — multiclass into a CE class, add a CE bonus (Step 8), or set a pool with your GM.');
   }
