@@ -245,53 +245,38 @@
 </section>
 <section class="chapter" data-tone="injury" id="injuries">
 <header class="chapter-head">
-<div><span class="kicker">System 3 • Critical Injury</span><h2 id="injuries-come-from-catastrophic-hits">Injuries come from catastrophic hits.</h2></div>
-<p>The original Constitution modifier × proficiency formula could become 0 and did not say whether damage accumulated. This version keys injury severity to the victim’s actual durability and checks one hit at a time.</p>
+<div><span class="kicker">System 3 • Critical Injury</span><h2 id="called-shots-and-the-limb-damage-table">Called shots and the Limb Damage Table.</h2></div>
+<p>Only specific features with limb-removing effects use this table &mdash; Calling Shots below, Execution Evasion below, and the Chaos Table's limb results. Removing a limb requires double the required damage.</p>
 </header>
 <div class="grid">
 <div aria-label="Critical injury sequence" class="sequence">
-<div><strong>Qualify the attack</strong>A limb-tagged feature, declared targeted strike, or catastrophic hazard can cause an injury. An ordinary targeted strike is declared before rolling and has disadvantage.</div>
-<div><strong>Measure one hit</strong>Use damage actually lost after resistance and temporary HP. Never accumulate damage across attacks.</div>
-<div><strong>Compare thresholds</strong>Break at 25% of maximum HP; sever at 50%. Round both thresholds up.</div>
-<div><strong>Make the save</strong>Roll Constitution against the attacker’s CE save DC, or <span class="formula">8 + PB + attack ability modifier</span> for a non-technique attack.</div>
+<div><strong>Aim the attack</strong>You can aim an attack at a body part instead of taking a clean shot. Take a &minus;5 penalty to the attack roll.</div>
+<div><strong>Beat the threshold</strong>If the attack's damage exceeds the creature's maximum hit die + its Constitution modifier, the creature is debilitated &mdash; shooting out an eye to blind it, breaking a leg to slow it, or whatever the fiction and the GM agree &mdash; or resolve it with the Limb Damage Table below.</div>
+<div><strong>Roll the part</strong>Roll a d6 to determine the struck part when a feature demands it.</div>
+<div><strong>Break or lose</strong>Meet the required damage to break the part. Removing a limb requires double the required damage.</div>
 </div>
-<article class="card half">
-<span class="term">Threshold result</span>
-<h3 id="break-sever-or-endure">Break, sever, or endure</h3>
-<ul>
-<li><strong>Below Break:</strong> no lasting injury.</li>
-<li><strong>Break to below Sever:</strong> failed save breaks the body part; success prevents the injury.</li>
-<li><strong>At or above Sever:</strong> failed save severs a limb; success breaks it instead.</li>
-</ul>
-<p>A broken limb does not escalate from repeated lesser hits. A later attack must independently meet the Sever threshold to remove it.</p>
-</article>
-<article class="card half">
-<span class="term">Legacy automatic injuries</span>
-<h3 id="still-respect-durability">Still respect durability</h3>
-<p>A feature that says it automatically breaks or severs a body part must still deal at least the Break threshold in one hit. If it lists no damage, a failed save can break the part only. It can sever without damage only if it expressly says so and the target is at or below 25% of its hit point maximum.</p>
-<p>A Black Flash can meet a threshold, but never severs merely because it is a Black Flash.</p>
-</article>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Body part</th><th>Broken or Major Wound</th><th>Severed or destroyed</th></tr></thead>
+<thead><tr><th>Roll</th><th>Body part</th><th>Required damage</th><th>Broken</th><th>Lost</th></tr></thead>
 <tbody>
-<tr><td><strong>Arm</strong></td><td>Disadvantage on attacks and checks using it. Cannot use two-handed weapons, a shield with that arm, or signs requiring both hands.</td><td>That arm cannot hold, attack, perform signs, or manipulate objects.</td></tr>
-<tr><td><strong>Leg</strong></td><td>Speed is halved; cannot Dash; disadvantage on Dexterity saves. With two broken legs, speed becomes 5 feet.</td><td>Speed becomes 10 feet and standing requires a support or prosthesis. With both legs gone, speed becomes 5 feet while crawling.</td></tr>
-<tr><td><strong>Eye</strong></td><td>Disadvantage on sight-based Perception and ranged attacks beyond 30 feet. Two injured eyes cause the blinded condition.</td><td>Same penalty until the eye is restored; losing both eyes causes blindness.</td></tr>
-<tr><td><strong>Head</strong></td><td><span class="pill">Major Wound</span> Stunned until the end of the target’s next turn, then disadvantage on Intelligence and Wisdom checks and Domain Stability or Technique Focus saves until repaired.</td><td>Cannot be destroyed while the target remains above 0 HP; use the Major Wound result.</td></tr>
-<tr><td><strong>Torso</strong></td><td><span class="pill">Major Wound</span> Hit point maximum is reduced by 25%, and Constitution saves are made with disadvantage until repaired. This maximum reduction does not stack.</td><td>Cannot be destroyed while the target remains above 0 HP; use the Major Wound result.</td></tr>
+<tr><td><strong>1</strong></td><td>Right leg</td><td>Con mod &times; level</td><td>Movement halved; can't jump.</td><td>You lose the leg.</td></tr>
+<tr><td><strong>2</strong></td><td>Left leg</td><td>Con mod &times; level</td><td>Movement halved; can't jump.</td><td>You lose the leg.</td></tr>
+<tr><td><strong>3</strong></td><td>Right arm</td><td>Con mod &times; level</td><td>Skill checks and attack rolls using this arm have disadvantage.</td><td>Skill checks and attack rolls with this arm are impossible.</td></tr>
+<tr><td><strong>4</strong></td><td>Left arm</td><td>Con mod &times; level</td><td>Skill checks and attack rolls using this arm have disadvantage.</td><td>Skill checks and attack rolls with this arm are impossible.</td></tr>
+<tr><td><strong>5</strong></td><td>Torso</td><td>Con mod &times; (level &times; 2)</td><td>Hit point maximum is halved.</td><td>The target dies, unless it can live without a torso.</td></tr>
+<tr><td><strong>6</strong></td><td>Head</td><td>Con mod &times; (level &times; 2)</td><td>The target is unconscious.</td><td>The target dies, unless it can live without a head.</td></tr>
 </tbody>
 </table>
 </div>
 <article class="card half">
-<span class="term">Fatal head or torso damage</span>
-<h3 id="only-at-0-hp">Only at 0 HP</h3>
-<p>If an attack that meets the Sever threshold reduces a creature to 0 HP and the failed injury save would destroy its head or torso, the creature dies unless it can survive without that body part. A creature with Legendary Resistance may spend one use to suffer the Major Wound and begin death saves instead.</p>
+<span class="term">Execution Evasion</span>
+<h3 id="sever-to-survive">Sever to survive</h3>
+<p>A creature that knows what the Executioner's Sword of e010 Deadly Sentencing does can take desperate action. When hit by the sword, it can use its reaction to sever one of its own limbs at the point of contact and avoid death. It takes damage equal to the required damage to remove that limb from the table above &mdash; this damage cannot be reduced in any way &mdash; and suffers the penalties of missing that limb as normal.</p>
 </article>
 <article class="card half">
 <span class="term">Recovery</span>
 <h3 id="healing-hp-is-not-repair">Healing HP is not repair</h3>
-<p>Ordinary healing restores HP but does not end an injury. With appropriate medical treatment, a broken limb heals after 7 days of downtime and a Major Wound after 14 days. A severed limb or destroyed eye does not naturally regrow. RCT uses the repair table above.</p>
+<p>Ordinary healing restores HP but does not end an injury. With appropriate medical treatment, a broken limb heals after 7 days of downtime and a head or torso injury after 14 days. A severed limb or destroyed eye does not naturally regrow. RCT repairs for limbs are in Section V of rules.html.</p>
 </article>
 </div>
 </section>
@@ -320,7 +305,7 @@
 <tbody>
 <tr><td><strong>Power</strong></td><td>Add damage dice equal to half the technique’s original damage dice, rounded up.</td><td>Uses the same die size. Counts as the attack’s one damage amplifier and does not copy flat damage or riders.</td></tr>
 <tr><td><strong>Reach</strong></td><td>Increase range, radius, cone length, or line length by 50%, rounded up to the nearest 5 feet.</td><td>Choose one measurement. Does not change touch range or independently increase every dimension.</td></tr>
-<tr><td><strong>Duration</strong></td><td>Increase a non-instant duration by 50%.</td><td>Technique Focus remains required. Does not extend a condition beyond the Core Glossary’s hard-control limits.</td></tr>
+<tr><td><strong>Duration</strong></td><td>Increase a non-instant duration by 50%.</td><td>Technique Focus remains required.</td></tr>
 <tr><td><strong>Pressure</strong></td><td>Gain +2 to its attack roll or +1 to its save DC.</td><td>Choose one. This obeys the core accuracy ceiling and never imposes disadvantage as well.</td></tr>
 </tbody>
 </table>
@@ -497,7 +482,7 @@
 <tr><td><strong>Support’s pool multiplied by CE modifier / doubled</strong></td><td>At Reverse Technique Understanding, add 5 × Support level to maximum Reserve. At Mastered Reverse Technique, instead add 10 × Support level.</td></tr>
 <tr><td><strong>Support feature heals another creature “instead of you”</strong></td><td>You may use your normal once-per-round RCT activation on a willing creature within reach at your current self-healing rate. A reaction must be triggered by that creature taking damage while it remains conscious.</td></tr>
 <tr><td><strong>RCT Output has no damage rate</strong></td><td>Once per turn on a qualifying unarmed or natural-weapon hit, spend 1–CE modifier CE and 10 Reserve per CE to add 1d10 radiant damage per CE against a listed Cursed Spirit, Undead, or Monstrosity.</td></tr>
-<tr><td><strong>Limb threshold = Constitution modifier × proficiency</strong></td><td>Break = 25% maximum HP; Sever = 50% maximum HP; one hit only. Use the revised injury save and effects.</td></tr>
+<tr><td>Limb threshold = Constitution modifier × proficiency</td><td>Use the Limb Damage Table: Calling Shots at &minus;5; damage exceeding max hit die + Con mod debilitates, or resolve with the table. Required damage Con mod &times; level (limbs) or Con mod &times; (level &times; 2) (torso/head); removing a limb requires double.</td></tr>
 <tr><td><strong>Maximum Output doubles CE / adds half the original attack bonus</strong></td><td>Pay the revised base-cost surcharge and choose Power, Reach, Duration, or Pressure.</td></tr>
 <tr><td><strong>Black Flash</strong></td><td>Project V3 procedure is retained: land a critical hit, roll a second unmodified d20, and on a natural 20 multiply the completed critical-hit damage by 3. The hit bypasses resistance, not immunity.</td></tr>
 <tr><td><strong>Zone</strong></td><td>Use the binary Zone chain: 1 minute, critical and confirmation ranges widen by 1 per natural Black Flash (floor 15–20), advantage + 1d4 on CE rolls; entering clears Burnout and restores the RCT pool.</td></tr>
@@ -506,7 +491,7 @@
 </table>
 </div>
 <div class="callout" style="--chapter: var(--gold)">
-<p><strong>Rule priority:</strong> a newly revised technique or class feature comes first, then this guide, then the Core Rules Glossary, then unaltered Project V3 text, then ordinary 5e. A specific feature overrides a baseline only where it clearly identifies the exception.</p>
+<p><strong>Rule priority:</strong> a newly revised technique or class feature comes first, then rules.html, then this guide, then unaltered Project V3 text, then ordinary 5e. A specific feature overrides a baseline only where it clearly identifies the exception.</p>
 </div>
 </div>
 </section>

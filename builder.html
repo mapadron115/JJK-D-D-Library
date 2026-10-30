@@ -585,7 +585,7 @@ img{max-width:100%;height:auto}
 <script src="data/codex.js?v=20261030a"></script>
 <script src="data/codex_role_fixups.js?v=20260911a"></script>
 <script src="data/codex_inner_circle.js?v=20260911h"></script>
-<script src="data/library.js?v=20261026a"></script>
+<script src="data/library.js?v=20261030a"></script>
 <script src="data/dossier_levels.js?v=20261030f"></script>
 <script src="data/technique_feats.js?v=20261030b"></script>
 <script src="data/codex_feats.js?v=20261021a"></script>
@@ -5312,8 +5312,8 @@ function btCardHTML(st){
       h+='<div class="bt-tier"><b>Positive Energy Pool</b> <span class="small">'+pc+' / '+pm+' HP (separate from RCT)</span>'+
        '<div class="tracker-controls"><input id="trkPosAmt" type="number" min="1" value="5" style="width:56px" aria-label="HP to draw">'+
        '<button type="button" class="btn" id="trkPosDraw">Draw (bonus action)</button>'+
-       '<button type="button" class="btn" id="trkPosReset">Refill</button></div>'+
-       '<p class="small" style="opacity:.7">Heal yourself; at 5th level, another creature you touch.</p></div>';
+       '</div>'+
+       '<p class="small" style="opacity:.7">Heal yourself; at 5th level, another creature you touch. Refills on long rest.</p></div>';
     }
     }
   }
@@ -7090,8 +7090,7 @@ function bindTrackers(hpMaxV, ceMaxV){
       st.posPool=cur-amt; setHp((st.hp==null?hpMaxV:st.hp)+amt);
       save(); renderBt(); toast('Positive Energy: drew '+amt+' HP ('+st.posPool+' left).');
     });
-    var pr=$('trkPosReset');
-    if(pr) pr.addEventListener('click',function(){ st.posPool=2*char.level; save(); renderBt(); toast('Positive Energy pool refilled.'); });
+
     var zm=$('trkZoneMinus');
     if(zm) zm.addEventListener('click',function(){ st.zoneRounds=Math.max(0,(st.zoneRounds||0)-1); if(!st.zoneRounds) st.zoneStacks=0; save(); renderBt(); if(!st.zoneRounds) toast('The Zone fades.'); });
     var ze=$('trkZoneEnd');
