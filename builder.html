@@ -7048,8 +7048,8 @@ function bindTrackers(hpMaxV, ceMaxV){
       var amt=Math.max(1,parseInt($('trkStrikeCe').value,10)||0);
       var cur=st.ce==null?ceMaxV:st.ce;
       if(cur<amt){ toast('Not enough CE.'); return; }
-      var dice=tier===1?'1d10':tier===2?'2d6':'2d8';
-      var roll=smallRoll(amt+dice), extra='';
+      var dn=tier===1?amt:2*amt, ds=tier===1?10:tier===2?6:8, dice=dn+'d'+ds;
+      var roll=smallRoll(dice), extra='';
       var wchk=$('trkWarChk');
       if(wchk&&wchk.checked){
         var wcap=2*P;
@@ -7057,8 +7057,8 @@ function bindTrackers(hpMaxV, ceMaxV){
         st.warStrike=(st.warStrike||0)+1; extra=' +'+cm+' (Warrior '+st.warStrike+'/'+wcap+')'; roll+=cm;
       }
       spendCe(amt); save();
-      var out=$('trkStrikeOut'); if(out) out.textContent='Last strike: +'+amt+dice+' necrotic = '+roll+extra+'.';
-      toast('Cursed Strike: +'+amt+dice+' necrotic ('+roll+').');
+      var out=$('trkStrikeOut'); if(out) out.textContent='Last strike: +'+dice+' necrotic = '+roll+extra+'.';
+      toast('Cursed Strike: +'+dice+' necrotic ('+roll+').');
     });
     var rb=$('trkReinfBtn');
     if(rb) rb.addEventListener('click',function(){
