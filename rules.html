@@ -511,7 +511,7 @@ b.k{font-family:var(--serif)}
 </div>
 <div class="sec-body">
 <h3>Black Flash — the procedure</h3>
-<p>Whenever a creature capable of using cursed energy lands a <b>critical hit with an attack</b>, roll a second <b>unmodified d20</b> before damage. On a <b>natural 20</b>, the attack becomes a Black Flash.</p>
+<p>Whenever a creature capable of using cursed energy lands a <b>critical hit with an attack</b>, roll a second <b>unmodified d20</b> before damage. On a roll within your <b>Black Flash confirmation range</b> — a natural 20 outside the Zone, wider while you are in it (see The Zone) — the attack becomes a Black Flash.</p>
 <ul>
 <li>There is <b>no universal once-per-turn or once-per-round limit</b> on attempts or successes. Every qualifying critical may attempt the confirmation roll.</li>
 <li>A saving throw, automatic hit, passive effect, initiative-20 Domain event, or manifestation attack does not qualify unless a specific feature explicitly creates a qualifying critical hit. Forced or expanded critical ranges qualify if the triggering feature permits Black Flash; an explicit restriction (such as Great Luck's non-qualifying critical) still wins.</li>
@@ -520,14 +520,19 @@ b.k{font-family:var(--serif)}
 <li><b>Defense:</b> the complete Black Flash hit ignores resistance to its damage types. Immunity still applies unless another feature separately ignores immunity.</li>
 </ul>
 <h3>The Zone</h3>
+<p>A natural Black Flash puts you in the Zone for <b>1 minute</b>. Each further natural Black Flash resets the duration to 1 minute and deepens your chain: your <b>critical range</b> and your <b>Black Flash confirmation range</b> each widen by 1, to a maximum widening of 5 (a floor of 15–20). The confirmation roll itself stays unmodified; only its success range widens.</p>
 <div class="table-wrap"><table class="rtable">
-<tr><th>Zone state</th><th>Confirmation range</th><th>Benefits</th></tr>
-<tr><td><b class="k">Outside the Zone</b></td><td>Natural 20</td><td>A natural Black Flash grants Stage 1 for 1 minute. Once per round, a natural Black Flash also restores CE equal to PB.</td></tr>
-<tr><td><b class="k">Stage 1 · Focused</b></td><td>19–20</td><td>Once per turn, add 1d4 to one CE attack roll, CE ability check, Technique Focus save, or Domain Stability save. Another natural Black Flash resets the duration and advances to Stage 2.</td></tr>
-<tr><td><b class="k">Stage 2 · Awakened</b></td><td>18–20</td><td>Retains the Stage 1 d4 — no further numerical stacking. Another natural Black Flash resets the 1-minute duration. Stage 2 is the ceiling.</td></tr>
+<tr><th>Chain (natural Black Flashes landed)</th><th>Critical range</th><th>Confirmation range</th></tr>
+<tr><td><b class="k">0</b> — no natural Black Flash yet in this Zone</td><td>20</td><td>20</td></tr>
+<tr><td><b class="k">1</b></td><td>19–20</td><td>19–20</td></tr>
+<tr><td><b class="k">2</b></td><td>18–20</td><td>18–20</td></tr>
+<tr><td><b class="k">3</b></td><td>17–20</td><td>17–20</td></tr>
+<tr><td><b class="k">4</b></td><td>16–20</td><td>16–20</td></tr>
+<tr><td><b class="k">5 or more</b></td><td>15–20</td><td>15–20</td></tr>
 </table></div>
-<p>Only genuine timing deepens the Zone: an automatic or forced Black Flash grants Stage 1 if you are outside the Zone and resets the current stage's duration if you are in it, but it never advances the Zone or restores CE. The feat <b>Blessed by Black Sparks</b> confirms on 18–20 after any qualifying critical; the Zone cannot improve it beyond 18–20.</p>
-<p><b>What the Zone does:</b> entering the Zone recovers Technique Burnout and restores the Reverse Cursed Energy pool. It never removes exhaustion or injuries by itself, and never creates a second Technique Focus slot. A separate explicit feature may still create its own exception.</p>
+<p><b>While you are in the Zone:</b> you have <b>advantage</b> on CE attack rolls, CE ability checks, Technique Focus saves, and Domain Stability saves, and you add <b>1d4</b> to every such roll. Once per round, a natural Black Flash also restores CE equal to your PB.</p>
+<p>Only genuine timing deepens the chain: an automatic or forced Black Flash puts you in the Zone if you are outside it and resets the duration if you are in it, but it never increases your chain and never restores CE. An RCT awakening likewise puts you in the Zone, or resets the duration if you are already in it, without changing your chain. The feat <b>Blessed by Black Sparks</b> confirms on 18–20 after any qualifying critical; while you are in the Zone, use the wider of your feat range and your chain range, to a maximum of 15–20.</p>
+<p><b>What the Zone does:</b> entering the Zone recovers Technique Burnout and restores the Reverse Cursed Energy pool. It never removes exhaustion or injuries by itself, and never creates a second Technique Focus slot. A separate explicit feature may still create its own exception. When the Zone ends — its duration expires, you end it, or you finish a long rest — your chain resets.</p>
 <h3>Maximum Output — overcharge one dimension</h3>
 <p>Maximum Output is the universal act of forcing an ordinary technique above its safe operating level. It is <b>not</b> a named Maximum Technique, and it no longer turns an attack bonus into an accuracy-breaking number.</p>
 <ul>
@@ -1029,7 +1034,7 @@ b.k{font-family:var(--serif)}
 <div class="cheat-card"><h4>Black Flash</h4><ul>
 <li>Critical → second unmodified d20 → nat 20 = <b>triple the completed critical</b> <i>(RA buff)</i></li>
 <li>Ignores resistance, not immunity; no per-round cap</li>
-<li>Zone: nat 20 → Stage 1 (19–20); → Stage 2 (18–20) · once/turn +1d4 to a CE roll · Zone recovers Burnout and RCT pool</li>
+<li>Zone: 1 minute · chain widens crit + confirmation by 1 per natural Black Flash (floor 15–20) · advantage + 1d4 on CE rolls · entering recovers Burnout and RCT pool</li>
 </ul></div>
 <div class="cheat-card"><h4>Maximum Output</h4><ul>
 <li>CE ability 20 + feature/breakthrough, L11+; bonus-action declare</li>

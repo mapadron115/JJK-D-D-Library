@@ -2673,13 +2673,13 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
 <section class="chapter" data-tone="flash" id="black-flash">
 <header class="chapter-head">
 <div><span class="kicker">System 5 • Black Flash</span><h2 id="the-original-miracle-stays-rare">The original miracle stays rare.</h2></div>
-<p>This campaign preserves Project V3's Black Flash procedure: first land a critical hit, then confirm the millionth-of-a-second alignment on a second d20. The Zone is revised separately so Black Flash never refills RCT or erases Technique Burnout.</p>
+<p>This campaign preserves Project V3's Black Flash procedure: first land a critical hit, then confirm the millionth-of-a-second alignment on a second d20. The Zone follows the revised chain below: entering it recovers Technique Burnout and restores the Reverse Cursed Energy pool.</p>
 </header>
 <div class="grid">
 <article class="card wide">
 <span class="term">Black Flash check</span>
 <h3 id="critical-hit-then-a-second-d20">Critical hit, then a second d20</h3>
-<p>Whenever a creature capable of using cursed energy lands a critical hit with an attack, roll a second unmodified d20 before damage. On a natural 20, the attack becomes a Black Flash.</p>
+<p>Whenever a creature capable of using cursed energy lands a critical hit with an attack, roll a second unmodified d20 before damage. On a roll within your Black Flash confirmation range — a natural 20 outside the Zone, wider while you are in it — the attack becomes a Black Flash.</p>
 <p>There is no universal once-per-turn or once-per-round limit on Black Flash attempts or successes. Every qualifying critical may attempt the confirmation roll. A saving throw, automatic hit, passive effect, initiative-20 Domain event, or manifestation attack does not qualify unless a specific feature explicitly creates a qualifying critical hit.</p>
 </article>
 <article class="card">
@@ -2706,28 +2706,36 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
 </article>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Zone state</th><th>Confirmation range</th><th>Benefits</th><th>How it changes</th></tr></thead>
+<thead><tr><th>Chain</th><th>Critical range</th><th>Confirmation range</th></tr></thead>
 <tbody>
-<tr><td><strong>Outside the Zone</strong></td><td>Natural 20</td><td>None.</td><td>A natural Black Flash grants Stage 1 for 1 minute. Once per round, a natural Black Flash also restores CE equal to PB, subject to any campaign recovery cap.</td></tr>
-<tr><td><strong>Stage 1 • Focused</strong></td><td>19–20</td><td>Once per turn, add 1d4 to one CE attack roll, CE ability check, Technique Focus save, or Domain Stability save.</td><td>Another natural Black Flash resets the duration and advances to Stage 2.</td></tr>
-<tr><td><strong>Stage 2 • Awakened</strong></td><td>18–20</td><td>Retains the Stage 1 d4. No further numerical stacking.</td><td>Another natural Black Flash resets the 1-minute duration. Stage 2 is the ceiling.</td></tr>
+<tr><td><strong>0</strong> — no natural Black Flash yet in this Zone</td><td>20</td><td>20</td></tr>
+<tr><td><strong>1</strong></td><td>19–20</td><td>19–20</td></tr>
+<tr><td><strong>2</strong></td><td>18–20</td><td>18–20</td></tr>
+<tr><td><strong>3</strong></td><td>17–20</td><td>17–20</td></tr>
+<tr><td><strong>4</strong></td><td>16–20</td><td>16–20</td></tr>
+<tr><td><strong>5 or more</strong></td><td>15–20</td><td>15–20</td></tr>
 </tbody>
 </table>
 </div>
 <article class="card half">
+<span class="term">While in the Zone</span>
+<h3 id="while-in-the-zone">Advantage and 1d4 on CE rolls</h3>
+<p>While you are in the Zone, you have advantage on CE attack rolls, CE ability checks, Technique Focus saves, and Domain Stability saves, and you add 1d4 to every such roll. Once per round, a natural Black Flash restores CE equal to your PB. Each natural Black Flash resets the 1-minute duration and widens your critical and confirmation ranges by 1, to a floor of 15–20. The confirmation roll itself stays unmodified; only its success range widens.</p>
+</article>
+<article class="card half">
 <span class="term">Blessed by Black Sparks</span>
 <h3 id="born-close-to-the-sparks">Born close to the sparks</h3>
-<p>After any qualifying critical hit, your Black Flash confirmation succeeds on 18–20. The Zone cannot improve this feat beyond 18–20.</p>
+<p>After any qualifying critical hit, your Black Flash confirmation succeeds on 18–20. While you are in the Zone, use the wider of your feat range and your chain range, to a maximum of 15–20.</p>
 </article>
 <article class="card half">
 <span class="term">Natural versus forced</span>
 <h3 id="only-genuine-timing-deepens-the-zone">Only genuine timing deepens the Zone</h3>
-<p>An automatic or forced Black Flash deals the normal Project V3 Black Flash damage and grants Stage 1 if you are outside the Zone. If already in the Zone, it only resets the current stage's duration. It does not advance the Zone or restore CE.</p>
+<p>An automatic or forced Black Flash deals the normal Project V3 Black Flash damage and puts you in the Zone if you are outside it. If already in the Zone, it only resets the 1-minute duration. It never increases your chain and never restores CE. An RCT awakening likewise puts you in the Zone, or resets the duration if you are already in it, without changing your chain.</p>
 </article>
 <article class="card full">
-<span class="term">What the Zone never does</span>
-<h3 id="no-free-regeneration-or-burnout-reset">No free regeneration or Burnout reset</h3>
-<p>Black Flash and the Zone never restore Healing Reserve, never end Technique Burnout, never remove exhaustion or injuries by themselves, and never create a second Technique Focus slot. A separate explicit feature may still create its own exception.</p>
+<span class="term">What the Zone does</span>
+<h3 id="burnout-and-rct-recover-on-entry">Burnout and RCT recover on entry</h3>
+<p>Entering the Zone recovers Technique Burnout and restores the Reverse Cursed Energy pool. Black Flash and the Zone never remove exhaustion or injuries by themselves, and never create a second Technique Focus slot. A separate explicit feature may still create its own exception.</p>
 </article>
 <article class="card half">
 <span class="term">Breakthroughs</span>
@@ -2759,7 +2767,7 @@ button.gfilter[aria-pressed="true"]{background:var(--accent,#d9565f);border-colo
 <tr><td><strong>Critical injuries</strong></td><td>Use the revised 25% maximum-HP Break and 50% Sever thresholds for generic called injuries. A named feature that explicitly breaks, severs, or removes a limb follows its own procedure.</td></tr>
 <tr><td><strong>Maximum Output</strong></td><td>Use the revised surcharge and Power / Reach / Duration / Pressure modes. Named Maximums, Domains, RCT, and other excluded pinnacle systems are not generically amplified.</td></tr>
 <tr><td><strong>Black Flash</strong></td><td>Preserve Project V3: critical hit → second unmodified d20 → natural 20 confirms → triple the completed critical-hit damage; bypass resistance, not immunity. No universal once-per-round cap.</td></tr>
-<tr><td><strong>The Zone</strong></td><td>Bounded at two stages. It improves Black Flash confirmation and grants the listed once-per-turn d4, but never restores Healing Reserve or automatically clears Burnout.</td></tr>
+<tr><td><strong>The Zone</strong></td><td>Binary chain: 1 minute, critical and confirmation ranges widen by 1 per natural Black Flash (floor 15–20), advantage + 1d4 on CE rolls; entering clears Burnout and restores the RCT pool.</td></tr>
 </tbody>
 </table></div>
 </section>

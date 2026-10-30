@@ -5318,8 +5318,8 @@ function btCardHTML(st){
     }
   }
   if(st.zoneRounds>0){
-    var zs=st.zoneStacks||1;
-    h+='<div class="zone-banner"><b>\u{1F525} THE ZONE \u2014 '+st.zoneRounds+' rounds left \u00b7 \u00d7'+zs+' stacked</b><p class="small">Advantage on attacks \u00b7 +'+zs+' crit range \u00b7 +'+zs+' black flash range \u00b7 burnout recovered \u00b7 RCT pool recovered.</p>'+
+    var zs=st.zoneStacks||0; var zr=Math.max(15,20-Math.min(zs,5)); var zrs=zr==20?'20':zr+'\u2013'+'20';
+    h+='<div class="zone-banner"><b>\u{1F525} THE ZONE \u2014 '+st.zoneRounds+' rounds left \u00b7 chain \u00d7'+zs+'</b><p class="small">Crit '+zrs+' \u00b7 Black Flash confirm '+zrs+' \u00b7 advantage + 1d4 on CE rolls \u00b7 burnout recovered \u00b7 RCT pool recovered.</p>'+
      '<div class="tracker-controls"><button type="button" class="btn" id="trkZoneMinus">\u22121 round</button><button type="button" class="btn" id="trkZoneEnd">End Zone</button></div></div>';
   }
   return h;
@@ -7027,7 +7027,7 @@ function bindTrackers(hpMaxV, ceMaxV){
       var m=rctMax(); if(m!=null) st.rct=m;
       save(); renderBt(); renderRct();
       var after=ceManipTier();
-      toast('\u26a1 Black flash! Entered the Zone (10 rounds, \u00d7'+st.zoneStacks+') \u2014 burnout recovered, RCT pool refilled.'+(after>before?' New understanding: '+CE_MANIP_NAMES[after]+'.':''));
+      toast('\u26a1 Black flash! Entered the Zone (10 rounds, chain \u00d7'+st.zoneStacks+') \u2014 burnout recovered, RCT pool refilled.'+(after>before?' New understanding: '+CE_MANIP_NAMES[after]+'.':''));
     });
     var aw=$('trkBtAwake');
     if(aw) aw.addEventListener('click',function(){
