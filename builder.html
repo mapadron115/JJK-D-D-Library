@@ -586,7 +586,7 @@ img{max-width:100%;height:auto}
 <script src="data/codex_role_fixups.js?v=20260911a"></script>
 <script src="data/codex_inner_circle.js?v=20260911h"></script>
 <script src="data/library.js?v=20261026a"></script>
-<script src="data/dossier_levels.js?v=20261030d"></script>
+<script src="data/dossier_levels.js?v=20261030e"></script>
 <script src="data/technique_feats.js?v=20261030b"></script>
 <script src="data/codex_feats.js?v=20261021a"></script>
 <script src="data/class_features.js?v=20260926a"></script>
@@ -4853,8 +4853,8 @@ function ceManipSheetHTML(){
   html+='<p><b>Awakened Understanding:</b> '+esc(CE_MANIP_NAMES[tier])+(tier===0?'<br><span class="small">Next: '+(t<1?'land a black flash or awaken RCT':'reach 16+ CE score (now '+ceScoreNow()+')')+' to unlock Skilled.</span>':'')+'</p>';
   if(tier>=1){
     html+='<ul style="margin:6px 0 0;padding-left:1.3em">';
-    html+='<li class="small"><b>Cursed Strike.</b> On a hit, spend up to '+(tier===1?P:(cm+P))+' CE: +'+(tier===1?'1d10':tier===2?'2d6':'2d8')+' necrotic damage per CE.'+(tier===3?' May also spend up to '+P+' CE to add to an attack roll.':'')+(char.classUnderstanding==='Warrior'?' <b>Warrior:</b> +'+cm+' necrotic, up to '+(2*P)+'\u00d7/day.':'')+'</li>';
-    html+='<li class="small"><b>Cursed Reinforcement.</b> As '+(tier===1?'an action':'an action, bonus action, or reaction')+', spend up to '+(tier===1?cm:(cm+P))+' CE: gain 5 temporary HP per CE'+(char.classUnderstanding==='Juggernaut'?' (10 per CE with Juggernaut understanding, '+P+'\u00d7/day)':'')+'.</li>';
+    html+='<li class="small"><b>Cursed Strike.</b> On a hit, spend CE: +'+(tier===1?'1d10':tier===2?'2d6':'2d8')+' necrotic damage per CE.'+(tier===3?' May also spend CE to add to an attack roll.':'')+(char.classUnderstanding==='Warrior'?' <b>Warrior:</b> +'+cm+' necrotic, up to '+(2*P)+'\u00d7/day.':'')+'</li>';
+    html+='<li class="small"><b>Cursed Reinforcement.</b> As '+(tier===1?'an action':'an action, bonus action, or reaction')+', spend CE: gain 5 temporary HP per CE'+(char.classUnderstanding==='Juggernaut'?' (10 per CE with Juggernaut understanding, '+P+'\u00d7/day)':'')+'.</li>';
     if(tier>=2) html+='<li class="small"><b>Efficiency.</b> Technique base CE costs reduced by '+(tier-1)+' (minimum 1).</li>';
     html+='</ul>';
   }
@@ -5010,8 +5010,8 @@ function qrAttackStats(){
   var tier=ceManipTier(), cm=ceModNow();
   var strike=null;
   if(hasCEPool()&&tier>=1){
-    strike={ die: tier===1?'1d10':tier===2?'2d6':'2d8', cap: tier===1?P:(cm+P),
-      rollOpt: tier===3?' May spend up to '+P+' CE to add to an attack roll.':'',
+    strike={ die: tier===1?'1d10':tier===2?'2d6':'2d8',
+      rollOpt: tier===3?' May spend CE to add to an attack roll.':'',
       war: char.classUnderstanding==='Warrior'?' Warrior: +'+cm+' necrotic, up to '+(2*P)+'×/day.':'' };
   }
   var md=null;
@@ -5117,7 +5117,7 @@ function qrCollect(){
   if(hasCEPool()){
     var t=atk.tier, P=atk.P, cm=atk.cm;
     if(t>=1){
-      var reinf='Spend up to '+(t===1?cm:(cm+P))+' CE → 5 temp HP per CE'+(char.classUnderstanding==='Juggernaut'?' (10/CE, '+P+'×/day)':'')+'.';
+      var reinf='Spend CE → 5 temp HP per CE'+(char.classUnderstanding==='Juggernaut'?' (10/CE, '+P+'×/day)':'')+'.';
       add('action','Cursed Reinforcement','CE Manipulation','Action',reinf);
       if(t>=2){
         add('bonus','Cursed Reinforcement','CE Manipulation','Bonus action',reinf);
@@ -5226,7 +5226,7 @@ function quickRefHTML(){
     html+='<div class="qr-one">↳ Unarmed: '+qrSigned(atk.toHit)+' to hit · '+esc(atk.martialDie)+qrSigned(atk.strM)+' bludgeoning</div>';
   html+='<div class="qr-one">↳ Ranged / finesse: '+qrSigned(atk.toHitR)+' to hit · weapon die '+qrSigned(atk.dexM)+'</div>';
   if(atk.strike)
-    html+='<div class="qr-one"><b>Cursed Strike</b> ('+esc(CE_MANIP_NAMES[atk.tier])+'): on a hit, +'+atk.strike.die+' necrotic per CE (up to '+atk.strike.cap+' CE).'+esc(atk.strike.rollOpt)+esc(atk.strike.war)+'</div>';
+    html+='<div class="qr-one"><b>Cursed Strike</b> ('+esc(CE_MANIP_NAMES[atk.tier])+'): on a hit, +'+atk.strike.die+' necrotic per CE.'+esc(atk.strike.rollOpt)+esc(atk.strike.war)+'</div>';
   /* bonus-action & reaction attacks granted by features/feats */
   B.bonus.concat(B.reaction).forEach(function(e){
     if(/make (one|an?) [^.]*attack/i.test(e.name+' '+e.one))
@@ -5292,12 +5292,12 @@ function btCardHTML(st){
   var next = tier>=3?'':tier===2?'Mastered at 8 breakthroughs':tier===1?'Advanced at 4 breakthroughs':(t<1?'Skilled at 1 breakthrough + 16 CE score':'Skilled needs 16+ CE score (now '+ceScoreNow()+')');
   h+='<p class="small" style="margin:6px 0"><b>'+esc(CE_MANIP_NAMES[tier])+'</b>'+(next?' <span style="opacity:.7">\u2014 next: '+esc(next)+'</span>':'')+'</p>';
   if(tier>=1){
-    var dice=tier===1?'1d10':tier===2?'2d6':'2d8', cap=tier===1?P:cm+P, rcap=tier===1?cm:cm+P;
-    h+='<div class="bt-tier"><b>Cursed Strike</b><p class="small">On a hit, spend CE &rarr; +'+dice+' necrotic per CE (max '+cap+' CE).</p>'+
+    var dice=tier===1?'1d10':tier===2?'2d6':'2d8';
+    h+='<div class="bt-tier"><b>Cursed Strike</b><p class="small">On a hit, spend CE &rarr; +'+dice+' necrotic per CE.</p>'+
      '<div class="tracker-controls"><input id="trkStrikeCe" type="number" min="1" value="1" style="width:56px" aria-label="CE for Cursed Strike">'+
      (char.classUnderstanding==='Warrior'?'<label class="small"><input type="checkbox" id="trkWarChk" checked> Warrior +'+cm+'</label>':'')+
      '<button type="button" class="btn" id="trkStrikeBtn">Strike</button></div><p class="small" id="trkStrikeOut"></p>'+
-     '<b>Cursed Reinforcement</b><p class="small">As '+(tier===1?'an action':'an action, bonus action, or reaction')+', spend CE &rarr; '+(char.classUnderstanding==='Juggernaut'?'10':'5')+' temp HP per CE (max '+rcap+' CE).'+(char.classUnderstanding==='Juggernaut'?' Juggernaut '+P+'\u00d7/day: '+(st.jugReinf||0)+'/'+P+' used.':'')+'</p>'+
+     '<b>Cursed Reinforcement</b><p class="small">As '+(tier===1?'an action':'an action, bonus action, or reaction')+', spend CE &rarr; '+(char.classUnderstanding==='Juggernaut'?'10':'5')+' temp HP per CE.'+(char.classUnderstanding==='Juggernaut'?' Juggernaut '+P+'\u00d7/day: '+(st.jugReinf||0)+'/'+P+' used.':'')+'</p>'+
      '<div class="tracker-controls"><input id="trkReinfCe" type="number" min="1" value="1" style="width:56px" aria-label="CE for reinforcement"><button type="button" class="btn" id="trkReinfBtn">Reinforce</button></div></div>';
     if(tier>=2) h+='<p class="small" style="margin-top:6px"><b>Efficiency:</b> technique CE costs \u2212'+(tier-1)+' (min 1) \u2014 apply when spending.</p>';
   }
@@ -7045,9 +7045,8 @@ function bindTrackers(hpMaxV, ceMaxV){
     var sb=$('trkStrikeBtn');
     if(sb) sb.addEventListener('click',function(){
       var tier=ceManipTier(); if(tier<1) return;
-      var P=pb(char.level), cm=ceModNow(), cap=tier===1?P:cm+P;
+      var P=pb(char.level), cm=ceModNow();
       var amt=Math.max(1,parseInt($('trkStrikeCe').value,10)||0);
-      if(amt>cap){ toast('Cursed Strike cap is '+cap+' CE.'); return; }
       var cur=st.ce==null?ceMaxV:st.ce;
       if(cur<amt){ toast('Not enough CE.'); return; }
       var dice=tier===1?'1d10':tier===2?'2d6':'2d8';
@@ -7065,9 +7064,8 @@ function bindTrackers(hpMaxV, ceMaxV){
     var rb=$('trkReinfBtn');
     if(rb) rb.addEventListener('click',function(){
       var tier=ceManipTier(); if(tier<1) return;
-      var P=pb(char.level), cm=ceModNow(), cap=tier===1?cm:cm+P;
+      var P=pb(char.level), cm=ceModNow();
       var amt=Math.max(1,parseInt($('trkReinfCe').value,10)||0);
-      if(amt>cap){ toast('Cursed Reinforcement cap is '+cap+' CE.'); return; }
       var cur=st.ce==null?ceMaxV:st.ce;
       if(cur<amt){ toast('Not enough CE.'); return; }
       var perHp=5, note='';
