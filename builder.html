@@ -586,8 +586,8 @@ img{max-width:100%;height:auto}
 <script src="data/codex_role_fixups.js?v=20260911a"></script>
 <script src="data/codex_inner_circle.js?v=20260911h"></script>
 <script src="data/library.js?v=20261026a"></script>
-<script src="data/dossier_levels.js?v=20261030a"></script>
-<script src="data/technique_feats.js?v=20261026c"></script>
+<script src="data/dossier_levels.js?v=20261030b"></script>
+<script src="data/technique_feats.js?v=20261030a"></script>
 <script src="data/codex_feats.js?v=20261021a"></script>
 <script src="data/class_features.js?v=20260926a"></script>
 <script src="data/class_choices.js?v=20260926a"></script>
@@ -2827,7 +2827,7 @@ function hrVariantOptsHTML(v){
     var cons=[
       ['softShell','Soft Shell','AC = 10 + CON modifier (min +0) while not wearing armor; no Unarmored Defense.','Harder Shell \u2014 8th: AC = 10 + PB + CON \u00B7 15th: 10 + PB + 2\u00D7CON'],
       ['weakCon','Weak Constitution','HP max \u2212(1\u20133 \u00D7 level) \u2014 choose severity below.','Strongest Constitution \u2014 8th: penalty ends, +(your chosen 1\u20133) \u00D7 level'],
-      ['lackingAffinity','Lacking Affinity','No Cursed Energy Affinity healing at 5th level.','Powerful Affinity \u2014 11th: spend CE up to CE modifier, regain 10 HP per CE (bonus action / reaction to damage)'],
+      ['lackingAffinity','Lacking Affinity','No Cursed Energy Affinity healing at 5th level.','Powerful Affinity \u2014 11th: spend CE, regain 10 HP per CE (bonus action / reaction to damage)'],
       ['noASI','No ASI','You do not gain your racial ASI.','Greater ASI \u2014 from 8th: an ASI becomes +3 to one score, +1 to three scores, or +2 and +1'],
       ['weakCE','Weak CE','Do not add your CE modifier to total CE.','Powerful CE \u2014 11th: add twice your CE modifier to total CE'],
       ['slow','Slow','Walking speed \u22125 or \u221210 ft \u2014 choose below.','Talented Sprinter \u2014 8th: walking speed +5 or +10 ft'],
@@ -4733,8 +4733,7 @@ function hrSheetDetailsHTML(){
     if(cl.length) html+='<p class="small" style="margin:6px 0 0"><b>Constraints \u2192 rebirth:</b> '+esc(cl.join('; '))+'. Rebirth auto-applies at 8th/11th level.</p>';
     else html+='<p class="small" style="margin:6px 0 0">No constraints selected.</p>';
     if(E.lackingAffinity&&char.level>=11){
-      var _paCeMod=char.ceAbility?mod(abilitiesAt(char.level)[char.ceAbility]||10):0;
-      html+='<p class="small" style="margin:6px 0 0"><b>Powerful Affinity:</b> spend CE up to your CE modifier ('+Math.max(0,_paCeMod)+') to regain 10 HP per CE spent, as a bonus action or a reaction to taking damage.</p>';
+      html+='<p class="small" style="margin:6px 0 0"><b>Powerful Affinity:</b> spend CE to regain 10 HP per CE spent, as a bonus action or a reaction to taking damage.</p>';
     }
     html+=callout('The GM may alter rebirth thresholds, trigger rebirth at story moments, or trade a constraint for its benefit at level 1.');
   }
