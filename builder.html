@@ -7002,8 +7002,7 @@ function bindTrackers(hpMaxV, ceMaxV){
     function setRct(v){ st.rct=Math.max(0,Math.min(m,v)); var i=$('trkRct'); if(i) i.value=st.rct; save(); }
     $('trkRct').addEventListener('change',function(e){ setRct(parseInt(e.target.value,10)||0); });
     $('trkRctHeal').addEventListener('click',function(){
-      var ceAmt=Math.max(1,parseInt($('trkRctCe').value,10)||0), cm=ceModNow(), per=rctPerCE();
-      if(ceAmt>cm){ toast('RCT healing is limited to '+cm+' CE per use (your CE modifier).'); return; }
+      var ceAmt=Math.max(1,parseInt($('trkRctCe').value,10)||0), per=rctPerCE();
       var cur=st.ce==null?ceMaxV:st.ce;
       if(cur<ceAmt){ toast('Not enough CE.'); return; }
       var pool=st.rct==null?m:st.rct;
